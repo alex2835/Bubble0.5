@@ -41,6 +41,11 @@ namespace Sandbox
         // Setup Platform/Renderer bindings
         ImGui_ImplSDL2_InitForOpenGL(window->window, window->gl_context);
         ImGui_ImplOpenGL3_Init(window->glsl_version);
+
+        Bubble::FramebufferSpecification spec;
+        spec.Width = 1280;
+        spec.Height = 720;
+        m_Framebuffer.Create(spec);
     }
 
     void ImGuiLayer::OnDetach()
@@ -53,6 +58,16 @@ namespace Sandbox
 
     void ImGuiLayer::OnUpdate()
     {
+        // set srean color
+        m_Framebuffer.Bind();
+        
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        m_Framebuffer.Unbind();
+
+
+
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(window->window);
@@ -85,8 +100,27 @@ namespace Sandbox
             ImGui::Text("counter = %d", counter);
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
             ImGui::End();
         }
+
+        // Veiw port
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+        ImGui::Begin("Viewport");
+        ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
+
+        if (m_FramebufferSize != *(glm::vec2*) & imguiViewportSize)
+        {
+            m_FramebufferSize = { imguiViewportSize.x, imguiViewportSize.y };
+            m_Framebuffer.Resize(imguiViewportSize.x, imguiViewportSize.y);
+        }
+
+        uint32_t textureId = m_Framebuffer.GetColorAttachmentRendererID();
+        ImGui::Image((void*)textureId, ImVec2{ m_FramebufferSize.x, m_FramebufferSize.y });
+        ImGui::End();
+        ImGui::PopStyleVar();
+
+
 
         // 3. Show another simple window.
         if (show_another_window)
@@ -98,16 +132,11 @@ namespace Sandbox
             ImGui::End();
         }
 
-
         // Rendering
         ImGui::Render();
-
-        ImGuiIO& io = ImGui::GetIO();
-        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+        
+        ImGuiIO& io = ImGui::GetIO();
         // Update and Render additional Platform Windows
         // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
         //  For this specific demo app we could also call SDL_GL_MakeCurrent(window, gl_context) directly)
