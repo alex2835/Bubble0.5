@@ -11,6 +11,9 @@
 // glew
 #include "GL/glew.h"
 
+// glm
+#include "glm/glm.hpp"
+
 // imgui
 #include "imgui.h"
 #include "imgui_impl_sdl.h"

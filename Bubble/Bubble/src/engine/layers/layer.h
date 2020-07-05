@@ -6,7 +6,7 @@ namespace Bubble
 {
 	struct Layer
 	{
-		std::string name;
+		std::string m_Name;
 
 		Layer(const std::string& name = "Layer");
 		virtual ~Layer();

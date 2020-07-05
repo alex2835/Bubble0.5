@@ -7,8 +7,8 @@ namespace Bubble
 {
 	struct Application
 	{
-		LayerArray layer_array;
-		Window* window;
+		static Window* s_Window;
+		LayerArray m_LayerArray;
 
 		Application(Window* window = NULL);
 		virtual ~Application();
@@ -18,8 +18,11 @@ namespace Bubble
 		void emplace_layer(int id, Layer* layer);
 		void swap_layers(int id_1, int id_2);
 
-		void setWindow(Window* window);
-		void run();
+		void Run();
+
+
+		static Window* GetWindow();
+		static void SetWindow(Window* window);
 	};
 
 	Application* create_application();

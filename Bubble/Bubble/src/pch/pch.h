@@ -8,10 +8,12 @@
 // glew
 #include "GL/glew.h"
 
+// glm
+#include "glm/glm.hpp"
+
 // spdlog
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
-
 
 // imgui
 #include "imgui.h"
@@ -21,6 +23,4 @@
 // SDL
 #include "SDL2/SDL.h"
 
-// glm
-#include "glm/glm.hpp"
 

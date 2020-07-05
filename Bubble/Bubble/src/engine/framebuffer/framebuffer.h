@@ -1,14 +1,14 @@
 #pragma once
 
-#include "GL/glew.h"
-#include <cstdint>
-#include <cassert>]
+//#include "GL/glew.h"
+//#include <cstdint>
+//#include <cassert>
 
 namespace Bubble
 {
 	struct FramebufferSpecification
 	{
-		int Width, Height;
+		glm::ivec2 Size;
 		int Samples = 1;
 		bool SwapChainTarget = false;
 	};
@@ -29,7 +29,8 @@ namespace Bubble
 		void Unbind();
 		void Invalidate();
 
-		void Resize(uint32_t width, uint32_t height);
+		const glm::ivec2& GetSize() const;
+		void Resize(const glm::ivec2& size);
 
 		uint32_t GetColorAttachmentRendererID();
 		const FramebufferSpecification& GetSpecification() const;

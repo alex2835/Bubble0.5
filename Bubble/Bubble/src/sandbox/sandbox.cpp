@@ -10,12 +10,9 @@ namespace Sandbox
 {
     struct Sandbox : Bubble::Application
     {
-        Sandbox()
+        Sandbox() : Application(new SDL_WINDOW())
         {
-            sdl_window* window = new sdl_window();
-
-            setWindow(window);
-            push_layer(new ImGuiLayer(window));
+            push_layer(new ImGuiLayer());
         }
 
         ~Sandbox()

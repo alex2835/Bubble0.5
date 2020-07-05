@@ -7,22 +7,27 @@
 namespace Sandbox
 {
 
-    struct sdl_window : Bubble::Window
+    struct SDL_WINDOW : Bubble::Window
     {
-        SDL_Window* window;
-        SDL_GLContext gl_context;
+        SDL_Window* m_Window;
+        SDL_GLContext m_GL_Context;
+        
         const char* glsl_version = "#version 130";
-        bool open = true;
-        bool closing = false;
+        bool m_Open = true;
+        bool m_Closing = false;
 
-        sdl_window();
+        SDL_WINDOW();
 
         bool isOpen() override;
         
-        int getWindth() override;
-        int getHeight() override;
+        int GetWindth() override;
+        int GetHeight() override;
 
-        bool PollEvent(SDL_Event& event);
+        SDL_Window* GetWindow();
+        SDL_GLContext GetContext();
+        const char* GetGLSLVersion();
+
+        bool PollEvent(SDL_Event& event) override;
         void OnEvent(SDL_Event& event) override;
 
         void OnUpdate() override;

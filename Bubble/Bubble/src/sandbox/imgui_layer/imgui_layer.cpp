@@ -7,10 +7,10 @@ namespace Sandbox
 {
     static void imgui_docking();
 
-    ImGuiLayer::ImGuiLayer(sdl_window* window)
+    ImGuiLayer::ImGuiLayer()
         :
         Layer("ImGui"),
-        window(window)
+        m_Window((SDL_WINDOW*)Bubble::Application::GetWindow())
     {}
 
     void ImGuiLayer::OnAttach()
@@ -39,12 +39,12 @@ namespace Sandbox
         }
 
         // Setup Platform/Renderer bindings
-        ImGui_ImplSDL2_InitForOpenGL(window->window, window->gl_context);
-        ImGui_ImplOpenGL3_Init(window->glsl_version);
+        ImGui_ImplSDL2_InitForOpenGL(m_Window->GetWindow(), m_Window->GetContext());
+        ImGui_ImplOpenGL3_Init(m_Window->GetGLSLVersion());
 
+        // Create frame buffer for viewport
         Bubble::FramebufferSpecification spec;
-        spec.Width = 1280;
-        spec.Height = 720;
+        spec.Size = { 1280, 720 };
         m_Framebuffer.Create(spec);
     }
 
@@ -58,19 +58,16 @@ namespace Sandbox
 
     void ImGuiLayer::OnUpdate()
     {
-        // set srean color
+        // set screan color
         m_Framebuffer.Bind();
-        
         glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
-        
         m_Framebuffer.Unbind();
-
 
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window->window);
+        ImGui_ImplSDL2_NewFrame(m_Window->GetWindow());
         ImGui::NewFrame();
 
         // activate docking
@@ -109,14 +106,15 @@ namespace Sandbox
         ImGui::Begin("Viewport");
         ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
 
-        if (m_FramebufferSize != *(glm::vec2*) & imguiViewportSize)
+        glm::vec2  FramebufferSize = m_Framebuffer.GetSize();
+        if (FramebufferSize != *(glm::vec2*) & imguiViewportSize)
         {
-            m_FramebufferSize = { imguiViewportSize.x, imguiViewportSize.y };
-            m_Framebuffer.Resize(imguiViewportSize.x, imguiViewportSize.y);
+            //m_FramebufferSize = { imguiViewportSize.x, imguiViewportSize.y };
+            m_Framebuffer.Resize({ imguiViewportSize.x, imguiViewportSize.y } );
         }
 
         uint32_t textureId = m_Framebuffer.GetColorAttachmentRendererID();
-        ImGui::Image((void*)textureId, ImVec2{ m_FramebufferSize.x, m_FramebufferSize.y });
+        ImGui::Image((void*)textureId, ImVec2{ FramebufferSize.x, FramebufferSize.y });
         ImGui::End();
         ImGui::PopStyleVar();
 
@@ -156,7 +154,8 @@ namespace Sandbox
     }
 
 
-
+    
+    // Proccess docking stuff
     static void imgui_docking()
     {
         static bool* p_open = new bool(true);

@@ -1,4 +1,5 @@
 
+#include "pch.h"
 #include "framebuffer.h"
 
 namespace Bubble
@@ -37,7 +38,7 @@ namespace Bubble
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Specification.Width, m_Specification.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Specification.Size.x, m_Specification.Size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -45,7 +46,7 @@ namespace Bubble
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
-		glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_Specification.Width, m_Specification.Height);
+		glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_Specification.Size.x, m_Specification.Size.y);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
 		assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE && "Framebuffer is incomplete!");
@@ -56,7 +57,7 @@ namespace Bubble
 	void Framebuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
+		glViewport(0, 0, m_Specification.Size.x, m_Specification.Size.y);
 	}
 
 	void Framebuffer::Unbind()
@@ -64,15 +65,18 @@ namespace Bubble
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void Framebuffer::Resize(uint32_t width, uint32_t height)
+	const glm::ivec2& Framebuffer::GetSize() const 
+	{
+		return m_Specification.Size;
+	}
+
+	void Framebuffer::Resize(const glm::ivec2& size)
 	{
 		// we dont need actually resize it
-		if ((width & height) == 0)
+		if ((size.x & size.y ) == 0)
 			return;
 
-		m_Specification.Width = width;
-		m_Specification.Height = height;
-
+		m_Specification.Size = size;
 		Invalidate();
 	}
 

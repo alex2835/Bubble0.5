@@ -4,63 +4,73 @@
 
 namespace Bubble
 {
-    Application::Application(Window* window) : window(window) {}
+    Window* Application::s_Window = NULL;
+
+    Application::Application(Window* window)
+    {
+        s_Window = window;
+    }
 
     Application::~Application() 
     {
-        delete window;
+        delete s_Window;
     }
 
     // ================== Layers ======================
 	void Application::push_layer(Layer* layer)
 	{
-		layer_array.push_back(layer);
+		m_LayerArray.push_back(layer);
 	}
 
 	void Application::emplace_layer(int id, Layer* layer)
 	{
-		layer_array.emplace(id, layer);
+        m_LayerArray.emplace(id, layer);
 	}
 
     void Application::remove_layer(int id)
     {
-        layer_array.remove(id);
+        m_LayerArray.remove(id);
     }
 
 	void Application::swap_layers(int id_1, int id_2)
 	{
-		layer_array.swap(id_1, id_2);
+        m_LayerArray.swap(id_1, id_2);
 	}
-	
 
+   
     // =================== Window ====================
-    void Application::setWindow(Window* window)
+    void Application::SetWindow(Window* window)
     {
-        this->window = window;
+        s_Window = window;
+    }
+
+    Window* Application::GetWindow()
+    {
+        return s_Window;
     }
 
 
     // =================== Run ===================
-	void Application::run()
+	void Application::Run()
 	{
-        while (window && window->isOpen())
+        while (s_Window && s_Window->isOpen())
         {
             // Send events
             SDL_Event event;
-            while (window->PollEvent(event))
+            while (s_Window->PollEvent(event))
             {
-                for (auto& layer : layer_array.layers)
+                for (auto& layer : m_LayerArray)
                     layer->OnEvent(event);
                 
-                window->OnEvent(event);
+                s_Window->OnEvent(event);
             }
             
             // Update layers
-            for (auto& layer : layer_array.layers)
+            for (auto& layer : m_LayerArray)
                 layer->OnUpdate();
 
             // render window
-            window->OnUpdate();
+            s_Window->OnUpdate();
         }
 	}
 
