@@ -54,9 +54,6 @@ namespace Bubble
                 
                 window->OnEvent(event);
             }
-
-            // Window has been closed
-            if (!window->isOpen()) break;
             
             // Update layers
             for (auto& layer : layer_array.layers)

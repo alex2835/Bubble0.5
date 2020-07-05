@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <memory>
 
+// glew
+#include "GL/glew.h"
+
 // spdlog
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"

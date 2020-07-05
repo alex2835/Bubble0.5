@@ -48,10 +48,16 @@
     <ClCompile Include="src\engine\log\log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\pch\pch.cpp">
+    <ClCompile Include="src\sandbox\sandbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\sandbox\sandbox.cpp">
+    <ClCompile Include="src\pch\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sandbox\sdl_window\sdl_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sandbox\imgui_layer\imgui_layer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,13 +101,19 @@
     <ClInclude Include="src\engine\log\log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\pch\pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\window\window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pch\pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sandbox\sdl_window\sdl_window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sandbox\imgui_layer\imgui_layer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

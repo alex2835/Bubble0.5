@@ -1,6 +1,5 @@
 #pragma once
 
-
 extern Bubble::Application* create_application();
 
 
