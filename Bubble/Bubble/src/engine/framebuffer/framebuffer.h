@@ -20,6 +20,10 @@ namespace Bubble
 		FramebufferSpecification m_Specification;
 
 		Framebuffer() = default;
+		Framebuffer(const Framebuffer&) = delete;
+		Framebuffer(Framebuffer&& other);
+		Framebuffer& operator = (Framebuffer&& other);
+
 		Framebuffer(const FramebufferSpecification& spec);
 		void Create(const FramebufferSpecification& spec);
 
@@ -35,6 +39,5 @@ namespace Bubble
 		uint32_t GetColorAttachmentRendererID();
 		const FramebufferSpecification& GetSpecification() const;
 
-		//static Framebuffer Create(const FramebufferSpecification& spec);
 	};
 }

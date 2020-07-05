@@ -45,7 +45,7 @@ namespace Sandbox
         // Create frame buffer for viewport
         Bubble::FramebufferSpecification spec;
         spec.Size = { 1280, 720 };
-        m_Framebuffer.Create(spec);
+        m_Framebuffer = Bubble::Framebuffer(spec);
     }
 
     void ImGuiLayer::OnDetach()
