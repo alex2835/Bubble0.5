@@ -2,17 +2,36 @@ cmake_minimum_required(VERSION 3.12)
 project(Bubble VERSION 0.0.0)
 
 
-file(GLOB SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+# engine moduels
+set(ENGINE_APPLICATION
+    src/engine/application/application.cpp
+    src/engine/application/application.h
 )
+
+set(ENGINE_FRAMEBUFFER
+    src/engine/framebuffer/framebuffer.cpp
+    src/engine/framebuffer/framebuffer.h
+)
+
+set(ENGINE_LAYERS
+    src/engine/layers/layer.cpp
+    src/engine/layers/layer.h
+    src/engine/layers/layer_array.cpp
+    src/engine/layers/layer_array.h
+)
+
+set(ENGINE_LOG
+    src/engine/log/log.cpp
+    src/engine/log/log.h
+)
+
 
 set(SOURCES
     #engine
-    src/engine/application/application.cpp
-    src/engine/framebuffer/framebuffer.cpp
-    src/engine/layers/layer.cpp
-    src/engine/layers/layer_array.cpp
-    src/engine/log/log.cpp
+    ${ENGINE_APPLICATION}
+    ${ENGINE_FRAMEBUFFER}
+    ${ENGINE_LAYERS}
+    ${ENGINE_LOG}
     
     #sendbox
     src/sandbox/sandbox.cpp
@@ -28,10 +47,6 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/imgui/imgui_impl_opengl3.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/imgui/imgui_impl_sdl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/imgui/imgui_widgets.cpp
-)
-
-set(HEADERS
-
 )
 
 add_executable(bubble ${SOURCES} ${HEADERS})
@@ -100,7 +115,7 @@ endif()
 if (WIN32)
     target_include_directories(
         bubble
-        PRIBATE
+        PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL2/include_win32
     )
 
