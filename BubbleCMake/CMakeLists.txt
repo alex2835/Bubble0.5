@@ -1,18 +1,25 @@
 cmake_minimum_required(VERSION 3.12)
-project(Bubble VERSION 1.0.0)
+project(Bubble VERSION 0.0.0)
+
+
+file(GLOB SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+)
 
 set(SOURCES
     #engine
-    application/application.cpp
-    frambuffer/framebuffer.cpp
-    layers/layer.cpp
-    layers/layer_array.cpp
-    log/log.cpp
-
+    src/engine/application/application.cpp
+    src/engine/framebuffer/framebuffer.cpp
+    src/engine/layers/layer.cpp
+    src/engine/layers/layer_array.cpp
+    src/engine/log/log.cpp
+    
     #sendbox
-    sandbox.cpp
-    imgui_layer/imgui_layer.cpp
-    sdl_window/sdl_window.cpp
+    src/sandbox/sandbox.cpp
+    src/sandbox/imgui_layer/imgui_layer.cpp
+    src/sandbox/sdl_window/sdl_window.cpp
+
+    #${SOURCE_FILES}
 
     #imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/imgui/imgui.cpp
@@ -35,7 +42,7 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
-# add libraries
+# include directories
 target_include_directories(
     bubble 
     PRIVATE
@@ -44,9 +51,17 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/sandbox
 
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/GLEW/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL2/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glm/include
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/spdlog/include
+)
+
+# source directories
+target_sources(
+    bubble
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/engine
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/sandbox
 )
 
 target_link_directories(
@@ -57,20 +72,38 @@ target_link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glew/lib
 )
 
+
+#SET(GCC_COVERAGE_COMPILE_FLAGS "-m32")
+
+
 if (APPLE)
+
+    target_include_directories(
+        bubble
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL2/include_macos
+    )
+    
     target_link_libraries(
         bubble
-        libglfw3.a
+        libSDL2-2.0.dylib
         libGLEW.a
         "-framework OpenGL"
         "-framework IOKit"
         "-framework Cocoa"
         "-framework Carbon"
+        
     )
 endif()
 
 
 if (WIN32)
+    target_include_directories(
+        bubble
+        PRIBATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL2/include_win32
+    )
+
     target_link_libraries(
         bubble
         SDL2.dll
