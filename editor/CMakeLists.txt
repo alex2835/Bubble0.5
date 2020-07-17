@@ -11,13 +11,19 @@ set(EDITOR_SDL_WINDOW
     sdl_window/sdl_window.h
 )
 
+set(EDITOR_VIEWPORT
+    viewport/viewport.cpp
+    viewport/viewport.h
+)
+
 set(SOURCES
     editor.cpp
     ${EDITOR_IMGUI_LAYER}
     ${EDITOR_SDL_WINDOW}
-)
+    ${EDITOR_VIEWPORT}
+ )
 
-add_executable(Editor ${SOURCES})
+add_executable(Editor ${SOURCES} "viewport/viewports.h" "viewport/viewports.cpp")
 
 #engine
 target_link_libraries(Editor Engine)

@@ -1,27 +1,8 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <algorithm>
-
-// spdlog
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-
-// glew
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif 
-#include "GL/glew.h"
-
-// glm
-#include "glm/glm.hpp"
-
-// imgui
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl3.h"
-
+//#include <string>
+//#include <vector>
+//#include <algorithm>
 
 // engine
 #include "application/application.h"

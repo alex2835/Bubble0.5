@@ -26,7 +26,6 @@ set(ENGINE_LOG
 )
 
 set(SOURCES
-    #engine
     ${ENGINE_APPLICATION}
     ${ENGINE_FRAMEBUFFER}
     ${ENGINE_LAYERS}

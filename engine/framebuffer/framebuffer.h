@@ -22,6 +22,8 @@ namespace Bubble
 
 		Framebuffer() = default;
 		Framebuffer(const Framebuffer&) = delete;
+		Framebuffer& operator= (const Framebuffer&) = delete;
+
 		Framebuffer(Framebuffer&& other);
 		Framebuffer& operator = (Framebuffer&& other);
 

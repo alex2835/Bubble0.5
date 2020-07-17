@@ -1,9 +1,8 @@
 
-//#include "pch.h"
 #include "sdl_window.h"
 
 
-namespace Sandbox
+namespace Editor
 {
     SDL_WINDOW::SDL_WINDOW()
     {
@@ -26,7 +25,7 @@ namespace Sandbox
         SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
         SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
-        m_Window = SDL_CreateWindow("Dear ImGui SDL2+OpenGL3 example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+        m_Window = SDL_CreateWindow("Bubble editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
         m_GL_Context = SDL_GL_CreateContext(m_Window);
 
         SDL_GL_MakeCurrent(m_Window, m_GL_Context);

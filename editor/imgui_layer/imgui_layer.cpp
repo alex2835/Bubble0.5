@@ -1,9 +1,8 @@
 
-//#include "pch.h"
 #include "imgui_layer.h"
 
 
-namespace Sandbox
+namespace Editor
 {
     static void imgui_docking();
 
@@ -41,11 +40,6 @@ namespace Sandbox
         // Setup Platform/Renderer bindings
         ImGui_ImplSDL2_InitForOpenGL(m_Window->GetWindow(), m_Window->GetContext());
         ImGui_ImplOpenGL3_Init(m_Window->GetGLSLVersion());
-
-        // Create frame buffer for viewport
-        Bubble::FramebufferSpecification spec;
-        spec.Size = { 1280, 720 };
-        m_Framebuffer = Bubble::Framebuffer(spec);
     }
 
     void ImGuiLayer::OnDetach()
@@ -58,13 +52,6 @@ namespace Sandbox
 
     void ImGuiLayer::OnUpdate()
     {
-        // set screan color
-        m_Framebuffer.Bind();
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        m_Framebuffer.Unbind();
-
-
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(m_Window->GetWindow());
@@ -101,22 +88,38 @@ namespace Sandbox
             ImGui::End();
         }
 
-        // Veiw port
+        
+        // Veiwports
+        viewports.RemoveNotActiveViewports();
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-        ImGui::Begin("Viewport");
-        ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
-
-        glm::vec2  FramebufferSize = m_Framebuffer.GetSize();
-        if (FramebufferSize != *(glm::vec2*) & imguiViewportSize)
+        for (int i = 0; i < viewports.size(); i++)
         {
-            //m_FramebufferSize = { imguiViewportSize.x, imguiViewportSize.y };
-            m_Framebuffer.Resize({ imguiViewportSize.x, imguiViewportSize.y } );
-        }
+            bool isOpen = viewports.m_isOpen[i];
+            ImGui::Begin(viewports[i].m_Name.c_str(), &isOpen);
+            viewports.m_isOpen[i] = isOpen;
 
-        uint32_t textureId = m_Framebuffer.GetColorAttachmentRendererID();
-        ImGui::Image((void*)textureId, ImVec2{ FramebufferSize.x, FramebufferSize.y });
-        ImGui::End();
+            ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
+            glm::vec2 ViewportSize = viewports[i].GetSize();
+            if (ViewportSize != *(glm::vec2*)& imguiViewportSize)
+            {
+                viewports[i].Resize({ imguiViewportSize.x, imguiViewportSize.y });
+            }
+
+            uint32_t textureId = viewports[i].m_Framebuffer.GetColorAttachmentRendererID();
+            ImGui::Image((void*)textureId, ImVec2{ (float)viewports[i].GetSize().x, (float)viewports[i].GetSize().y });
+            ImGui::End();
+        }
         ImGui::PopStyleVar();
+
+        // set screan color
+        for (auto& viewport : viewports)
+        {
+            viewport.Bind();
+            glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+            glClear(GL_COLOR_BUFFER_BIT);
+            viewport.Unbind();
+        }
 
         // 3. Show another simple window.
         if (show_another_window)

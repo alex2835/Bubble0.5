@@ -16,6 +16,12 @@ namespace Bubble
 
 	Framebuffer::Framebuffer(Framebuffer&& other)
 	{
+		// clear
+		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
+
+		// rebind
 		m_RendererID = other.m_RendererID;
 		m_ColorAttachment = other.m_ColorAttachment;
 		m_DepthAttachment = other.m_DepthAttachment;
@@ -24,7 +30,6 @@ namespace Bubble
 		// make invalid
 		other.m_RendererID = 0;
 	}
-
 
 	Framebuffer& Framebuffer::operator= (Framebuffer&& other)
 	{

@@ -13,7 +13,7 @@
 
 #include "cassert"
 
-namespace Sandbox
+namespace Editor
 {
 
     struct SDL_WINDOW : Bubble::Window
