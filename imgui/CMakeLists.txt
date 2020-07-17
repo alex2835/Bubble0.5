@@ -21,16 +21,16 @@ set(IMGUI_HEADER
     imstb_truetype.h
 )
 
-add_library(imguiLib STATIC ${IMGUI_SOURCES} ${IMGUI_HEADERS})
+add_library(imgui STATIC ${IMGUI_SOURCES} ${IMGUI_HEADERS})
 
 target_include_directories(
-    imguiLib
+    imgui
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/GLEW/include
 
     if (APPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/SDL2/include_macos
     elseif(WIN32)
-       ${CMAKE_CURRENT_SOURCE_DIR}../dependencies/SDL2/include_win32
+       ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/SDL2/include_win32
     endif()
 )
