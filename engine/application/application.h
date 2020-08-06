@@ -7,23 +7,24 @@ namespace Bubble
 {
 	struct Application
 	{
-		static Window* s_Window;
-		LayerArray m_LayerArray;
-
+	public:
 		Application(Window* window = NULL);
 		virtual ~Application();
 
-		void push_layer(Layer* layer);
-		void remove_layer(int id);
-		void emplace_layer(int id, Layer* layer);
-		void swap_layers(int id_1, int id_2);
-
 		void Run();
 
+		void PushLayer(Layer* layer);
+		void InsertLayer(int id, Layer* layer);
+		void RemoveLayer(int id);
+		void SwapLayers(int id_1, int id_2);
 
 		static Window* GetWindow();
 		static void SetWindow(Window* window);
+
+	private:
+		static Window* s_Window;
+		LayerArray m_LayerArray;
 	};
 
-	Application* create_application();
+	Application* CreateApplication();
 }

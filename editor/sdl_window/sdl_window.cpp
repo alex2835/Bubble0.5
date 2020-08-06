@@ -9,7 +9,7 @@ namespace Editor
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
         {
             LOG_ERROR("Error: {0}\n", SDL_GetError());
-            m_Open = false;
+            m_IsOpen = false;
             return;
         }
         
@@ -25,23 +25,23 @@ namespace Editor
         SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
         SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
-        m_Window = SDL_CreateWindow("Bubble editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
-        m_GL_Context = SDL_GL_CreateContext(m_Window);
+        m_Window = SDL_CreateWindow("Bubble", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+        m_GLContext = SDL_GL_CreateContext(m_Window);
 
-        SDL_GL_MakeCurrent(m_Window, m_GL_Context);
+        SDL_GL_MakeCurrent(m_Window, m_GLContext);
         SDL_GL_SetSwapInterval(1); // Enable vsync
 
         if (int error = glewInit(); error != GLEW_OK)
         {
             LOG_ERROR("Error: {0}", "Glew init problem", glewGetErrorString(error));
-            m_Open = false;
+            m_IsOpen = false;
             return;
         }
     }
 
-    bool SDL_WINDOW::isOpen()
+    bool SDL_WINDOW::IsOpen()
     {
-        return m_Open;
+        return m_IsOpen;
     }
 
     int SDL_WINDOW::GetWindth()
@@ -63,9 +63,9 @@ namespace Editor
         return m_Window;
     }
 
-    SDL_GLContext SDL_WINDOW::GetContext()
+    SDL_GLContext SDL_WINDOW::GetGLContext()
     {
-        return m_GL_Context;
+        return m_GLContext;
     }
 
     const char* SDL_WINDOW::GetGLSLVersion()
@@ -81,28 +81,29 @@ namespace Editor
     void SDL_WINDOW::OnEvent(SDL_Event& event)
     {
         if (event.type == SDL_QUIT)
-            m_Closing = true;
+            m_ShouldClose = true;
 
         if (event.type == SDL_WINDOWEVENT &&
             event.window.event == SDL_WINDOWEVENT_CLOSE &&
             event.window.windowID == SDL_GetWindowID(m_Window))
         {
-            m_Closing = true;
+            m_ShouldClose = true;
         }
     }
 
     void SDL_WINDOW::OnUpdate()
     {
         SDL_GL_SwapWindow(m_Window);
-
-        if (m_Closing) 
+        if (m_ShouldClose)
+        {
             Close();
+        }
     }
 
     void SDL_WINDOW::Close()
     {
-        m_Open = false;
-        SDL_GL_DeleteContext(m_GL_Context);
+        m_IsOpen = false;
+        SDL_GL_DeleteContext(m_GLContext);
         SDL_DestroyWindow(m_Window);
     }
 

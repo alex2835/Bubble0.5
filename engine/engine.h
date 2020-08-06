@@ -1,9 +1,5 @@
 #pragma once
 
-//#include <string>
-//#include <vector>
-//#include <algorithm>
-
 // engine
 #include "application/application.h"
 #include "log/log.h"

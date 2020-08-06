@@ -5,6 +5,8 @@
 namespace Editor
 {
     static void imgui_docking();
+    static void viewports_controll();
+
 
     ImGuiLayer::ImGuiLayer()
         :
@@ -38,7 +40,7 @@ namespace Editor
         }
 
         // Setup Platform/Renderer bindings
-        ImGui_ImplSDL2_InitForOpenGL(m_Window->GetWindow(), m_Window->GetContext());
+        ImGui_ImplSDL2_InitForOpenGL(m_Window->GetWindow(), m_Window->GetGLContext());
         ImGui_ImplOpenGL3_Init(m_Window->GetGLSLVersion());
     }
 
@@ -59,6 +61,18 @@ namespace Editor
 
         // activate docking
         imgui_docking();
+
+        // Veiwports
+        viewports_controll();
+
+        // simple draw: screan color
+        for (auto& viewport : viewports)
+        {
+            viewport.Bind();
+            glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+            glClear(GL_COLOR_BUFFER_BIT);
+            viewport.Unbind();
+        }
 
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
@@ -88,38 +102,7 @@ namespace Editor
             ImGui::End();
         }
 
-        
-        // Veiwports
-        viewports.RemoveNotActiveViewports();
 
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-        for (int i = 0; i < viewports.size(); i++)
-        {
-            bool isOpen = viewports.m_isOpen[i];
-            ImGui::Begin(viewports[i].m_Name.c_str(), &isOpen);
-            viewports.m_isOpen[i] = isOpen;
-
-            ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
-            glm::vec2 ViewportSize = viewports[i].GetSize();
-            if (ViewportSize != *(glm::vec2*)& imguiViewportSize)
-            {
-                viewports[i].Resize({ imguiViewportSize.x, imguiViewportSize.y });
-            }
-
-            uint32_t textureId = viewports[i].m_Framebuffer.GetColorAttachmentRendererID();
-            ImGui::Image((void*)textureId, ImVec2{ (float)viewports[i].GetSize().x, (float)viewports[i].GetSize().y });
-            ImGui::End();
-        }
-        ImGui::PopStyleVar();
-
-        // set screan color
-        for (auto& viewport : viewports)
-        {
-            viewport.Bind();
-            glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-            glClear(GL_COLOR_BUFFER_BIT);
-            viewport.Unbind();
-        }
 
         // 3. Show another simple window.
         if (show_another_window)
@@ -155,6 +138,8 @@ namespace Editor
     }
 
 
+
+    // ============================= Docking =================================
     
     // Proccess docking stuff
     static void imgui_docking()
@@ -230,6 +215,31 @@ namespace Editor
         ImGui::End();
     }
 
+
+    // ================================== Viewports ====================================
+    static void viewports_controll()
+    {
+        viewports.RemoveNotActiveViewports();
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+
+        for (int i = 0; i < viewports.Size(); i++)
+        {
+            bool isOpen = viewports.m_IsOpen[i];
+            ImGui::Begin(viewports[i].GetName().c_str(), &isOpen);
+            viewports.m_IsOpen[i] = isOpen;
+
+            ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
+            glm::vec2 ViewportSize = viewports[i].Size();
+            if (ViewportSize != *(glm::vec2*) & imguiViewportSize)
+                viewports[i].Resize({ imguiViewportSize.x, imguiViewportSize.y });
+
+            uint32_t textureId = viewports[i].GetFramebuffer().GetColorAttachmentRendererID();
+            ImGui::Image((void*)textureId, ImVec2{ (float)viewports[i].Size().x, (float)viewports[i].Size().y });
+            ImGui::End();
+        }
+
+        ImGui::PopStyleVar();
+    }
 
 }
 

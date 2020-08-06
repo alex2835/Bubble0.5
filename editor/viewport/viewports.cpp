@@ -3,36 +3,56 @@
 
 namespace Editor
 {
-	void ImGuiViewports::erase(int idx)
+	void ImGuiViewports::Erase(int idx)
 	{
 		m_Viewports.erase(m_Viewports.begin() + idx);
-		m_isOpen.erase(m_isOpen.begin() + idx);
+		m_IsOpen.erase(m_IsOpen.begin() + idx);
 	}
 
-	// Name must be unique
-	void ImGuiViewports::push_back(Viewport&& viewport)
+	void ImGuiViewports::Push(Viewport&& viewport)
 	{
+		std::string name = viewport.GetName();
+		auto viewport_iterator = begin();
+
+		while (viewport_iterator != end())
+		{
+			viewport_iterator = std::find_if(begin(), end(),
+				[&name](const Viewport& viewport)
+				{
+					return name == viewport.GetName();
+				}
+			);
+
+			// Viewport with this name already exist
+			if (viewport_iterator != end())
+			{
+				name += "*";
+			}
+		}
+
+		if (name != viewport.GetName())
+		{
+			viewport.Rename(name);
+		}
+
 		m_Viewports.push_back(std::move(viewport));
-		m_isOpen.push_back(true);
+		m_IsOpen.push_back(true);
 	}
 
-	void ImGuiViewports::push_back(int width, int height)
-	{
-		Viewport viewport(width, height, "Viewport" + std::to_string(m_NameNumber++));
-		m_Viewports.push_back(std::move(viewport));
-		m_isOpen.push_back(true);
-	}
-
-	int ImGuiViewports::size()
+	int ImGuiViewports::Size()
 	{
 		return m_Viewports.size();
 	}
 
 	void ImGuiViewports::RemoveNotActiveViewports()
 	{
-		for (int i = 0; i < size(); i++)
-			if (!m_isOpen[i])
-				erase(i);
+		for (int i = 0; i < Size(); i++)
+		{
+			if (!m_IsOpen[i])
+			{
+				Erase(i);
+			}
+		}
 	}
 
 	Viewport& ImGuiViewports::operator[] (int idx)

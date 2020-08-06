@@ -9,10 +9,6 @@ namespace Bubble
 	std::shared_ptr<spdlog::logger> Log::client_logger;
 	std::shared_ptr<spdlog::logger> Log::core_logger;
 
-	Log::Log() {}
-
-	Log::~Log() {}
-
 	void Log::init()
 	{
 		spdlog::set_pattern("%^[%T] %n: %v%$");

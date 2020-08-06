@@ -10,7 +10,7 @@ namespace Bubble
 	{
 		virtual ~Window() {};
 
-		virtual bool isOpen() = 0;
+		virtual bool IsOpen() = 0;
 		virtual void Close() = 0;
 
 		virtual int GetWindth() = 0;

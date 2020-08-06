@@ -8,27 +8,26 @@ namespace Bubble
 {
 	struct Log
 	{
+		Log() = default;
+		~Log() = default;
+		
+		static void init();
+		
+		inline static std::shared_ptr<spdlog::logger>& GetLogger() { return client_logger; }
+		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return core_logger; }
+
+	private:
 		static std::shared_ptr<spdlog::logger> client_logger;
 		static std::shared_ptr<spdlog::logger> core_logger;
-
-		Log();
-
-		~Log();
-
-		static void init();
-
-		inline static std::shared_ptr<spdlog::logger>& get_logger() { return client_logger; }
-		inline static std::shared_ptr<spdlog::logger>& get_core_logger() { return core_logger; }
 	};
 }
 
-#define LOG_CORE_TRACE(...) ::Bubble::Log::get_core_logger()->trace(__VA_ARGS__)
-#define LOG_CORE_INFO(...)  ::Bubble::Log::get_core_logger()->info(__VA_ARGS__)
-#define LOG_CORE_WARN(...)  ::Bubble::Log::get_core_logger()->warn(__VA_ARGS__)
-#define LOG_CORE_ERROR(...) ::Bubble::Log::get_core_logger()->error(__VA_ARGS__)
+#define LOG_CORE_TRACE(...) ::Bubble::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define LOG_CORE_INFO(...)  ::Bubble::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define LOG_CORE_WARN(...)  ::Bubble::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define LOG_CORE_ERROR(...) ::Bubble::Log::GetCoreLogger()->error(__VA_ARGS__)
 
-
-#define LOG_TRACE(...) ::Bubble::Log::get_logger()->trace(__VA_ARGS__)
-#define LOG_INFO(...)  ::Bubble::Log::get_logger()->info(__VA_ARGS__)
-#define LOG_WARN(...)  ::Bubble::Log::get_logger()->warn(__VA_ARGS__)
-#define LOG_ERROR(...) ::Bubble::Log::get_logger()->error(__VA_ARGS__)
+#define LOG_TRACE(...) ::Bubble::Log::GetLogger()->trace(__VA_ARGS__)
+#define LOG_INFO(...)  ::Bubble::Log::GetLogger()->info(__VA_ARGS__)
+#define LOG_WARN(...)  ::Bubble::Log::GetLogger()->warn(__VA_ARGS__)
+#define LOG_ERROR(...) ::Bubble::Log::GetLogger()->error(__VA_ARGS__)

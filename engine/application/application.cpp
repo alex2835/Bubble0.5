@@ -6,6 +6,7 @@ namespace Bubble
 {
     Window* Application::s_Window = NULL;
 
+    // ======================= Contructor =========================
     Application::Application(Window* window)
     {
         s_Window = window;
@@ -16,29 +17,29 @@ namespace Bubble
         delete s_Window;
     }
 
-    // ================== Layers ======================
-	void Application::push_layer(Layer* layer)
+    // ================== Layer controls ======================
+	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerArray.push_back(layer);
 	}
 
-	void Application::emplace_layer(int id, Layer* layer)
+	void Application::InsertLayer(int id, Layer* layer)
 	{
         m_LayerArray.emplace(id, layer);
 	}
 
-    void Application::remove_layer(int id)
+    void Application::RemoveLayer(int id)
     {
         m_LayerArray.remove(id);
     }
 
-	void Application::swap_layers(int id_1, int id_2)
+	void Application::SwapLayers(int id_1, int id_2)
 	{
         m_LayerArray.swap(id_1, id_2);
 	}
 
    
-    // =================== Window ====================
+    // =================== Window controls ====================
     void Application::SetWindow(Window* window)
     {
         s_Window = window;
@@ -50,10 +51,10 @@ namespace Bubble
     }
 
 
-    // =================== Run ===================
+    // ======================= Run ========================
 	void Application::Run()
 	{
-        while (s_Window && s_Window->isOpen())
+        while (s_Window && s_Window->IsOpen())
         {
             // Send events
             SDL_Event event;
@@ -61,7 +62,7 @@ namespace Bubble
             {
                 for (auto& layer : m_LayerArray)
                     layer->OnEvent(event);
-                
+            
                 s_Window->OnEvent(event);
             }
             
@@ -69,7 +70,7 @@ namespace Bubble
             for (auto& layer : m_LayerArray)
                 layer->OnUpdate();
 
-            // render window
+            // Update window
             s_Window->OnUpdate();
         }
 	}

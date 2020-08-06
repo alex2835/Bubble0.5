@@ -14,31 +14,32 @@ namespace Bubble
 		Invalidate();
 	}
 
-	Framebuffer::Framebuffer(Framebuffer&& other)
+	Framebuffer::Framebuffer(Framebuffer&& other) noexcept
 	{
-		// clear
+		// Rebind
+		m_RendererID = other.m_RendererID;
+		m_ColorAttachment = other.m_ColorAttachment;
+		m_DepthAttachment = other.m_DepthAttachment;
+		m_Specification = other.m_Specification;
+
+		// Make invalid
+		other.m_RendererID = 0;
+	}
+
+	Framebuffer& Framebuffer::operator= (Framebuffer&& other) noexcept
+	{
+		// Clear
 		glDeleteFramebuffers(1, &m_RendererID);
 		glDeleteTextures(1, &m_ColorAttachment);
 		glDeleteTextures(1, &m_DepthAttachment);
 
-		// rebind
+		// Rebind
 		m_RendererID = other.m_RendererID;
 		m_ColorAttachment = other.m_ColorAttachment;
 		m_DepthAttachment = other.m_DepthAttachment;
 		m_Specification = other.m_Specification;
-
-		// make invalid
-		other.m_RendererID = 0;
-	}
-
-	Framebuffer& Framebuffer::operator= (Framebuffer&& other)
-	{
-		m_RendererID = other.m_RendererID;
-		m_ColorAttachment = other.m_ColorAttachment;
-		m_DepthAttachment = other.m_DepthAttachment;
-		m_Specification = other.m_Specification;
-
-		// make invalid
+		
+		// Make invalid
 		other.m_RendererID = 0;
 		return *this;
 	}
@@ -69,10 +70,7 @@ namespace Bubble
 			glDeleteTextures(1, &m_DepthAttachment);
 		}
 
-
-		//glCreateFramebuffers(1, &m_RendererID);
 		glGenFramebuffers(1, &m_RendererID);
-		
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 
 		// Color
@@ -98,8 +96,9 @@ namespace Bubble
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
-		// check
+		// Check
 		assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE && "Framebuffer is incomplete!");
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
@@ -114,17 +113,19 @@ namespace Bubble
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	const glm::ivec2& Framebuffer::GetSize() const 
+	const glm::ivec2& Framebuffer::Size() const 
 	{
 		return m_Specification.Size;
 	}
 
 	void Framebuffer::Resize(const glm::ivec2& size)
 	{
-		// we dont need actually resize it
-		if ((size.x & size.y ) == 0)
+		// We don't need resize it
+		if ((size.x & size.y) == 0)
+		{
 			return;
-
+		}
+		
 		m_Specification.Size = size;
 		Invalidate();
 	}

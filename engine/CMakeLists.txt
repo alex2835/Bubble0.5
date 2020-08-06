@@ -14,7 +14,6 @@ set(ENGINE_FRAMEBUFFER
 )
 
 set(ENGINE_LAYERS
-    layers/layer.cpp
     layers/layer.h
     layers/layer_array.cpp
     layers/layer_array.h

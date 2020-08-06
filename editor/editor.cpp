@@ -1,5 +1,6 @@
 
 #include "SDL2/SDL.h"
+
 #include "engine.h"
 
 #include "sdl_window/sdl_window.h"
@@ -8,6 +9,7 @@
 
 namespace Editor
 {
+    // Temp: Create new viewport by pressing space
     struct TestLayer : Bubble::Layer
     {
         TestLayer(): Layer("test layer") {};
@@ -19,17 +21,19 @@ namespace Editor
         {
             if (event.type == SDL_EventType::SDL_KEYDOWN
                 && event.key.keysym.sym == SDLK_SPACE)
-                viewports.push_back(200, 100);
+                viewports.Push(Viewport(200, 100));
         }
     };
+
 
     struct Editor : Bubble::Application
     {
         Editor() : Application(new SDL_WINDOW())
         {
-            viewports.push_back(Viewport(200, 100));
-            push_layer(new TestLayer());
-            push_layer(new ImGuiLayer());
+            viewports.Push(Viewport(200, 100));
+
+            PushLayer(new TestLayer());
+            PushLayer(new ImGuiLayer());
         }
 
         ~Editor()
@@ -40,8 +44,10 @@ namespace Editor
 
 }
 
-// Mainloop embedded in application class
-Bubble::Application* Bubble::create_application()
+/*
+    Will be called in embeded main loop
+*/
+Bubble::Application* Bubble::CreateApplication()
 {
     return new Editor::Editor();
 }

@@ -5,25 +5,25 @@
 
 namespace Bubble
 {
-	void LayerArray::push_back(Layer* layer)
+	void LayerArray::Push(Layer* layer)
 	{
 		m_Layers.emplace_back(layer);
 		layer->OnAttach();
 	}
 
-	void LayerArray::remove(int id)
+	void LayerArray::Remove(int id)
 	{
 		m_Layers[id]->OnDetach();
 		m_Layers.erase(m_Layers.begin() + id);
 	}
 
-	void LayerArray::emplace(int id, Layer* layer)
+	void LayerArray::Emplace(int id, Layer* layer)
 	{
 		m_Layers.emplace(m_Layers.begin() + id, layer);
 		layer->OnAttach();
 	}
 
-	void LayerArray::swap(int id_1, int id_2)
+	void LayerArray::Swap(int id_1, int id_2)
 	{
 		std::swap(m_Layers[id_1], m_Layers[id_2]);
 	}
@@ -33,5 +33,4 @@ namespace Bubble
 		return m_Layers[id];
 	}
 
-	LayerArray::~LayerArray() {}
 }
