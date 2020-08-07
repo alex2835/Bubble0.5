@@ -2,33 +2,38 @@ cmake_minimum_required(VERSION 3.12)
 
 project(engine VERSION 0.0.0)
 
-# engine files
+# Engine core
 set(ENGINE_APPLICATION
-    application/application.cpp
-    application/application.h
-)
-
-set(ENGINE_FRAMEBUFFER
-    framebuffer/framebuffer.cpp
-    framebuffer/framebuffer.h
+    core/application/application.cpp
+    core/application/application.h
 )
 
 set(ENGINE_LAYERS
-    layers/layer.h
-    layers/layer_array.cpp
-    layers/layer_array.h
+    core/layers/layer.cpp
+    core/layers/layer.h
+    core/layers/layer_array.cpp
+    core/layers/layer_array.h
 )
 
 set(ENGINE_LOG
-    log/log.cpp
-    log/log.h
+    core/log/log.cpp
+    core/log/log.h
 )
+
+# Renderer
+set(ReNDERER_FRAMEBUFFER
+    renderer/framebuffer/framebuffer.cpp
+    renderer/framebuffer/framebuffer.h
+)
+
+
 
 set(SOURCES
     ${ENGINE_APPLICATION}
-    ${ENGINE_FRAMEBUFFER}
     ${ENGINE_LAYERS}
     ${ENGINE_LOG}
+
+    ${ReNDERER_FRAMEBUFFER}
 )
 
 add_library(Engine STATIC ${SOURCES})
@@ -43,6 +48,7 @@ set_target_properties(
 target_include_directories(
     Engine 
     PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/core
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/GLEW/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glm/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/spdlog/include

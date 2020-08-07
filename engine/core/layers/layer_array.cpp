@@ -1,5 +1,4 @@
 
-//#include "pch.h"
 #include "layer_array.h"
 
 
@@ -17,7 +16,7 @@ namespace Bubble
 		m_Layers.erase(m_Layers.begin() + id);
 	}
 
-	void LayerArray::Emplace(int id, Layer* layer)
+	void LayerArray::Insert(int id, Layer* layer)
 	{
 		m_Layers.emplace(m_Layers.begin() + id, layer);
 		layer->OnAttach();

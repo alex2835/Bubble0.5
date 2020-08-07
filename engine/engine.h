@@ -1,11 +1,13 @@
 #pragma once
 
-// engine
-#include "application/application.h"
-#include "log/log.h"
-#include "entry_point.h"
-#include "layers/layer.h"
-#include "layers/layer_array.h"
-#include "window/window.h"
-#include "framebuffer/framebuffer.h"
+// Engine core
+#include "core/application/application.h"
+#include "core/log/log.h"
+#include "core/layers/layer.h"
+#include "core/layers/layer_array.h"
+#include "core/window/window.h"
+#include "core/base.h"
+
+// Renderer
+#include "renderer/framebuffer/framebuffer.h"
 

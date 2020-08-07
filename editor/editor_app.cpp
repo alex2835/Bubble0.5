@@ -2,9 +2,10 @@
 #include "SDL2/SDL.h"
 
 #include "engine.h"
+#include "entry_point.h"
 
 #include "sdl_window/sdl_window.h"
-#include "imgui_layer/imgui_layer.h"
+#include "editor_layer/editor_layer.h"
 #include "viewport/viewports.h"
 
 namespace Editor
@@ -26,17 +27,17 @@ namespace Editor
     };
 
 
-    struct Editor : Bubble::Application
+    struct EditorApp : Bubble::Application
     {
-        Editor() : Application(new SDL_WINDOW())
+        EditorApp() : Application(new SDL_WINDOW())
         {
             viewports.Push(Viewport(200, 100));
 
             PushLayer(new TestLayer());
-            PushLayer(new ImGuiLayer());
+            PushLayer(new EditorLayer());
         }
 
-        ~Editor()
+        ~EditorApp()
         {
             SDL_Quit();
         }
@@ -49,6 +50,6 @@ namespace Editor
 */
 Bubble::Application* Bubble::CreateApplication()
 {
-    return new Editor::Editor();
+    return new Editor::EditorApp();
 }
 

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "glm/glm.hpp"
 #include <cstdint>
 #include <cassert>
+
+#include "glm/glm.hpp"
 
 
 namespace Bubble

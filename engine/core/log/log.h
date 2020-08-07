@@ -1,5 +1,7 @@
 #pragma once
 
+#include "base.h"
+
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
@@ -13,12 +15,12 @@ namespace Bubble
 		
 		static void init();
 		
-		inline static std::shared_ptr<spdlog::logger>& GetLogger() { return client_logger; }
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return core_logger; }
+		inline static Ref<spdlog::logger>& GetLogger() { return client_logger; }
+		inline static Ref<spdlog::logger>& GetCoreLogger() { return core_logger; }
 
 	private:
-		static std::shared_ptr<spdlog::logger> client_logger;
-		static std::shared_ptr<spdlog::logger> core_logger;
+		static Ref<spdlog::logger> client_logger;
+		static Ref<spdlog::logger> core_logger;
 	};
 }
 

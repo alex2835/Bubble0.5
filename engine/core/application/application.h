@@ -1,14 +1,15 @@
 #pragma once
 
-#include "../layers/layer_array.h"
-#include "../window/window.h"
+#include "layers/layer_array.h"
+#include "window/window.h"
+
 
 namespace Bubble
 {
 	struct Application
 	{
 	public:
-		Application(Window* window = NULL);
+		Application(Window* window = nullptr);
 		virtual ~Application();
 
 		void Run();

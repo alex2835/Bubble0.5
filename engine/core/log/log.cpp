@@ -1,13 +1,11 @@
 
-//#include "pch.h"
-
 #include "log.h"
 
 
 namespace Bubble
 {
-	std::shared_ptr<spdlog::logger> Log::client_logger;
-	std::shared_ptr<spdlog::logger> Log::core_logger;
+	Ref<spdlog::logger> Log::client_logger;
+	Ref<spdlog::logger> Log::core_logger;
 
 	void Log::init()
 	{

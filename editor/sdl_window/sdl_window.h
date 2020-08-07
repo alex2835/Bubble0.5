@@ -1,17 +1,17 @@
 #pragma once
 
-#include "window/window.h"
 #include <SDL2/SDL.h>
-#include "log/log.h"
+
+#include "core/window/window.h"
+#include "core/log/log.h"
 
 #ifndef GLEW_STATIC
 #define GLEW_STATIC
 #endif 
-
-#define GLEW_STATIC
 #include "GL/glew.h"
 
 #include "cassert"
+
 
 namespace Editor
 {

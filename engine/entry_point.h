@@ -2,7 +2,11 @@
 
 #include <vector>
 
+#include "application/application.h"
+#include "log/log.h"
 
+
+// Implementation on client side
 extern Bubble::Application* CreateApplication();
 
 

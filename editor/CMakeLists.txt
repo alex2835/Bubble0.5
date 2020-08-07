@@ -2,9 +2,15 @@ cmake_minimum_required(VERSION 3.12)
 project(Editor VERSION 0.0.0)
 
 
-set(EDITOR_IMGUI_LAYER
-    imgui_layer/imgui_layer.cpp
-    imgui_layer/imgui_layer.h
+
+set(EDITOR_LAYER
+    editor_layer/editor_layer.cpp
+    editor_layer/editor_layer.h
+)
+
+set(EDITOR_GUI
+    imgui_controll/imgui_controll.cpp
+    imgui_controll/imgui_controll.h
 )
 
 set(EDITOR_SDL_WINDOW
@@ -20,8 +26,9 @@ set(EDITOR_VIEWPORT
 )
 
 set(SOURCES
-    editor.cpp
-    ${EDITOR_IMGUI_LAYER}
+    "editor_app.cpp"
+    ${EDITOR_GUI}
+    ${EDITOR_LAYER}
     ${EDITOR_SDL_WINDOW}
     ${EDITOR_VIEWPORT}
  )
@@ -44,6 +51,7 @@ set_target_properties(
 target_include_directories(
     Editor 
     PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine
     ${CMAKE_CURRENT_SOURCE_DIR}/../imgui
 )

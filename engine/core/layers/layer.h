@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SDL2/SDL_events.h"
-
 #include <string>
+
+#include "SDL2/SDL_events.h"
 
 
 namespace Bubble
@@ -11,8 +11,8 @@ namespace Bubble
 	{
 		std::string m_Name;
 
-		Layer(const std::string& name = "Layer") : m_Name(name) {}
-		virtual ~Layer() {};
+		Layer(const std::string& name = "Layer");
+		virtual ~Layer() = default;
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}

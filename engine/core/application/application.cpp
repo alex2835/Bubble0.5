@@ -1,6 +1,6 @@
 
-//#include "pch.h"
 #include "application.h"
+
 
 namespace Bubble
 {
@@ -20,22 +20,22 @@ namespace Bubble
     // ================== Layer controls ======================
 	void Application::PushLayer(Layer* layer)
 	{
-		m_LayerArray.push_back(layer);
+		m_LayerArray.Push(layer);
 	}
 
 	void Application::InsertLayer(int id, Layer* layer)
 	{
-        m_LayerArray.emplace(id, layer);
+        m_LayerArray.Insert(id, layer);
 	}
 
     void Application::RemoveLayer(int id)
     {
-        m_LayerArray.remove(id);
+        m_LayerArray.Remove(id);
     }
 
 	void Application::SwapLayers(int id_1, int id_2)
 	{
-        m_LayerArray.swap(id_1, id_2);
+        m_LayerArray.Swap(id_1, id_2);
 	}
 
    
