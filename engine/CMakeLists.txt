@@ -31,6 +31,20 @@ set(RENDERER_BUFFER
     renderer/buffer/buffer.cpp
 )
 
+set (RENDERER_SHADER
+    renderer/shader/shader.h
+    renderer/shader/shader.cpp
+)
+
+set (RENDERER_CAMERA
+    renderer/camera/camera.h
+    renderer/camera/camera.cpp
+)
+
+set (RENDERER_OPENGL_ASSERT
+    renderer/gl_assert/gl_assert.h
+)
+
 
 set(SOURCES
     ${ENGINE_APPLICATION}
@@ -38,6 +52,9 @@ set(SOURCES
     ${ENGINE_LOG}
 
     ${RENDERER_FRAMEBUFFER}
+    ${RENDERER_SHADER}
+    ${RENDERER_CAMERA}
+    ${RENDERER_OPENGL_ASSERT}
 )
 
 add_library(Engine STATIC ${SOURCES})

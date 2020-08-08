@@ -26,7 +26,7 @@ namespace Editor
 	void EditorLayer::OnUpdate()
 	{
         // test draw
-        m_ViewportArray[0].Bind();
+        //m_ViewportArray[0].Bind();
 
         float triangle_vertices[3 * 3] =
         {
@@ -34,8 +34,6 @@ namespace Editor
              0.5f, -0.5f, 0.0f,
              0.0f,  0.5f, 0.0f,
         };
-
-
 
 
 
@@ -64,13 +62,13 @@ namespace Editor
 
 
         // Temp: fill screen color
-        //for (auto& viewport : m_ViewportArray)
-        //{
-        //    viewport.Bind();
-        //    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        //    glClear(GL_COLOR_BUFFER_BIT);
-        //    viewport.Unbind();
-        //}
+        for (auto& viewport : m_ViewportArray)
+        {
+            viewport.Bind();
+            glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+            glClear(GL_COLOR_BUFFER_BIT);
+            viewport.Unbind();
+        }
 
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
