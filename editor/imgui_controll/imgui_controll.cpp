@@ -8,9 +8,9 @@ namespace Editor
     static void imgui_multi_viewports();
 
 
-    ImGuiControll::ImGuiControll()
+    ImGuiControll::ImGuiControll(SDL_WINDOW* window)
         :
-        m_Window((SDL_WINDOW*)Bubble::Application::GetWindow())
+        m_Window(window)
     {}
 
     void ImGuiControll::OnAttach()
@@ -68,6 +68,7 @@ namespace Editor
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+        // Multi windows rendering
         imgui_multi_viewports();
     }
 

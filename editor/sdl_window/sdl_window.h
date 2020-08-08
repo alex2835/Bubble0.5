@@ -5,19 +5,20 @@
 #include "core/window/window.h"
 #include "core/log/log.h"
 
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif 
-#include "GL/glew.h"
-
 #include "cassert"
 
 
 namespace Editor
 {
-
     struct SDL_WINDOW : Bubble::Window
     {
+    private:
+        SDL_Window* m_Window;
+        SDL_GLContext m_GLContext;
+        const char* glsl_version = "#version 330";
+        bool m_IsOpen = true;
+        bool m_ShouldClose = false;
+
     public:
         SDL_WINDOW();
 
@@ -35,13 +36,5 @@ namespace Editor
 
         void OnUpdate() override;
         void Close() override;
-
-    private:
-        SDL_Window* m_Window;
-        SDL_GLContext m_GLContext;
-        const char* glsl_version = "#version 330";
-        bool m_IsOpen = true;
-        bool m_ShouldClose = false;
     };
-
 }

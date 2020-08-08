@@ -51,9 +51,9 @@ namespace Editor
 		return m_Name;
 	}
 
-	void Viewport::Rename(const std::string& new_name)
+	void Viewport::SetName(const std::string& name)
 	{
-		m_Name = new_name;
+		m_Name = name;
 	}
 
 	Bubble::Framebuffer& Viewport::GetFramebuffer()

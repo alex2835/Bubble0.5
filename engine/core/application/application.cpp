@@ -17,7 +17,7 @@ namespace Bubble
         delete s_Window;
     }
 
-    // ================== Layer controls ======================
+    // ===================== Layer controls ======================
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerArray.Push(layer);

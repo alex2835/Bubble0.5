@@ -21,16 +21,16 @@ set(EDITOR_SDL_WINDOW
 set(EDITOR_VIEWPORT
     viewport/viewport.cpp
     viewport/viewport.h
-    viewport/viewports.cpp
-    viewport/viewports.h
+    viewport/viewport_array.cpp
+    viewport/viewport_array.h
 )
 
 set(SOURCES
     "editor_app.cpp"
     ${EDITOR_GUI}
     ${EDITOR_LAYER}
-    ${EDITOR_SDL_WINDOW}
     ${EDITOR_VIEWPORT}
+    ${EDITOR_SDL_WINDOW}
  )
 
 add_executable(Editor ${SOURCES})

@@ -1,9 +1,5 @@
 
-//#include "pch.h"
 #include "framebuffer.h"
-
-#define GLEW_STATIC
-#include "GL/glew.h"
 
 
 namespace Bubble
@@ -24,23 +20,30 @@ namespace Bubble
 
 		// Make invalid
 		other.m_RendererID = 0;
+		other.m_ColorAttachment = 0;
+		other.m_DepthAttachment = 0;
 	}
 
 	Framebuffer& Framebuffer::operator= (Framebuffer&& other) noexcept
 	{
-		// Clear
-		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(1, &m_ColorAttachment);
-		glDeleteTextures(1, &m_DepthAttachment);
+		if (this != &other)
+		{
+			// Clear
+			glDeleteFramebuffers(1, &m_RendererID);
+			glDeleteTextures(1, &m_ColorAttachment);
+			glDeleteTextures(1, &m_DepthAttachment);
 
-		// Rebind
-		m_RendererID = other.m_RendererID;
-		m_ColorAttachment = other.m_ColorAttachment;
-		m_DepthAttachment = other.m_DepthAttachment;
-		m_Specification = other.m_Specification;
-		
-		// Make invalid
-		other.m_RendererID = 0;
+			// Rebind
+			m_RendererID = other.m_RendererID;
+			m_ColorAttachment = other.m_ColorAttachment;
+			m_DepthAttachment = other.m_DepthAttachment;
+			m_Specification = other.m_Specification;
+
+			// Make invalid
+			other.m_RendererID = 0;
+			other.m_ColorAttachment = 0;
+			other.m_DepthAttachment = 0;
+		}
 		return *this;
 	}
 
@@ -53,22 +56,16 @@ namespace Bubble
 
 	Framebuffer::~Framebuffer()
 	{
-		if (m_RendererID)
-		{
-			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(1, &m_ColorAttachment);
-			glDeleteTextures(1, &m_DepthAttachment);
-		}
+		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
 	void Framebuffer::Invalidate()
 	{
-		if (m_RendererID)
-		{
-			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(1, &m_ColorAttachment);
-			glDeleteTextures(1, &m_DepthAttachment);
-		}
+		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
 
 		glGenFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
@@ -121,7 +118,7 @@ namespace Bubble
 	void Framebuffer::Resize(const glm::ivec2& size)
 	{
 		// We don't need resize it
-		if ((size.x & size.y) == 0)
+		if ((size.x * size.y) == 0)
 		{
 			return;
 		}

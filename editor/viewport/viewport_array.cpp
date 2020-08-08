@@ -1,15 +1,15 @@
 
-#include "viewports.h"
+#include "viewport_array.h"
 
 namespace Editor
 {
-	void ImGuiViewports::Erase(int idx)
+	void ViewportArray::Erase(int idx)
 	{
 		m_Viewports.erase(m_Viewports.begin() + idx);
 		m_IsOpen.erase(m_IsOpen.begin() + idx);
 	}
 
-	void ImGuiViewports::Push(Viewport&& viewport)
+	void ViewportArray::Push(Viewport&& viewport)
 	{
 		std::string name = viewport.GetName();
 		auto viewport_iterator = begin();
@@ -32,19 +32,19 @@ namespace Editor
 
 		if (name != viewport.GetName())
 		{
-			viewport.Rename(name);
+			viewport.SetName(name);
 		}
 
 		m_Viewports.push_back(std::move(viewport));
 		m_IsOpen.push_back(true);
 	}
 
-	int ImGuiViewports::Size()
+	int ViewportArray::Size()
 	{
 		return m_Viewports.size();
 	}
 
-	void ImGuiViewports::RemoveNotActiveViewports()
+	void ViewportArray::RemoveNotActiveViewports()
 	{
 		for (int i = 0; i < Size(); i++)
 		{
@@ -55,14 +55,11 @@ namespace Editor
 		}
 	}
 
-	Viewport& ImGuiViewports::operator[] (int idx)
+	Viewport& ViewportArray::operator[] (int idx)
 	{
 		return m_Viewports[idx];
 	}
 	
-	std::vector<Viewport>::iterator ImGuiViewports::begin() { return m_Viewports.begin(); }
-	std::vector<Viewport>::iterator ImGuiViewports::end() { return m_Viewports.end(); }
-
-	// Global variable definition
-	ImGuiViewports viewports;
+	std::vector<Viewport>::iterator ViewportArray::begin() { return m_Viewports.begin(); }
+	std::vector<Viewport>::iterator ViewportArray::end() { return m_Viewports.end(); }
 }

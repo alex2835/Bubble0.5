@@ -1,10 +1,10 @@
 #pragma once
 
-#include <vector>
-#include <memory>
-
 #include "base.h"
 #include "layer.h"
+
+#include <vector>
+#include <memory>
 
 
 namespace Bubble

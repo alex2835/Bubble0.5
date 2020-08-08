@@ -1,9 +1,6 @@
 #pragma once
 
-#include "engine.h"
-
 #include "sdl_window/sdl_window.h"
-#include "viewport/viewports.h"
 
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
@@ -16,11 +13,12 @@ namespace Editor
     {
         SDL_WINDOW* m_Window;
 
-        ImGuiControll();
+        ImGuiControll(SDL_WINDOW* window);
 
         void OnAttach();
         void OnDetach();
 
+        // Imgui scope
         void Begin();
         void End();
 

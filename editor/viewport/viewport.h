@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine.h"
+#include "framebuffer/framebuffer.h"
 
 #include <string>
 
@@ -9,6 +9,10 @@ namespace Editor
 {
 	struct Viewport
 	{
+	private:
+		std::string m_Name;
+		Bubble::Framebuffer m_Framebuffer;
+
 	public:
 		Viewport() = default;
 		Viewport(int width, int height, const std::string& name = "Viewport");
@@ -26,12 +30,8 @@ namespace Editor
 		void Resize(const glm::ivec2& size);
 
 		const std::string& GetName() const;
-		void Rename(const std::string& NewName);
+		void SetName(const std::string& name);
 
 		Bubble::Framebuffer& GetFramebuffer();
-
-	private:
-		std::string m_Name;
-		Bubble::Framebuffer m_Framebuffer;
 	};
 }

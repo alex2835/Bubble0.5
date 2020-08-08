@@ -1,13 +1,17 @@
 #pragma once
 
-#include "layers/layer_array.h"
 #include "window/window.h"
+#include "layers/layer_array.h"
 
 
 namespace Bubble
 {
 	struct Application
 	{
+	private:
+		static Window* s_Window;
+		LayerArray m_LayerArray;
+		
 	public:
 		Application(Window* window = nullptr);
 		virtual ~Application();
@@ -21,10 +25,6 @@ namespace Bubble
 
 		static Window* GetWindow();
 		static void SetWindow(Window* window);
-
-	private:
-		static Window* s_Window;
-		LayerArray m_LayerArray;
 	};
 
 	Application* CreateApplication();

@@ -7,7 +7,7 @@
 
 namespace Editor
 {
-	struct ImGuiViewports
+	struct ViewportArray
 	{
 		std::vector<Viewport> m_Viewports;
 		std::vector<bool> m_IsOpen;
@@ -23,7 +23,4 @@ namespace Editor
 		std::vector<Viewport>::iterator begin();
 		std::vector<Viewport>::iterator end();
 	};
-
-	// Global variable
-	extern ImGuiViewports viewports;
 }

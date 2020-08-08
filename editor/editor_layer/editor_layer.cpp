@@ -1,15 +1,21 @@
 
 #include "editor_layer.h"
-#include "imgui_controll/imgui_controll.h"
 
 namespace Editor
 {
     static void viewports_controll();
 
+    EditorLayer::EditorLayer()
+        :
+        m_ImGuiControll((SDL_WINDOW*)Bubble::Application::GetWindow())
+    {}
 
 	void EditorLayer::OnAttach()
 	{
         m_ImGuiControll.OnAttach();
+
+        // Temp:: test viewport
+		m_ViewportArray.Push(Viewport(200, 100));
 	}
 
 	void EditorLayer::OnDetach()
@@ -19,19 +25,52 @@ namespace Editor
 	
 	void EditorLayer::OnUpdate()
 	{
+        // test draw
+        m_ViewportArray[0].Bind();
+
+        float triangle_vertices[3 * 3] =
+        {
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.0f,  0.5f, 0.0f,
+        };
+
+
+
+
+
         m_ImGuiControll.Begin();
 
-        // Veiwports (temp)
-        viewports_controll();
+        // Temp: Veiwports control
+		m_ViewportArray.RemoveNotActiveViewports();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
-        // simple draw: screan color (temp)
-        for (auto& viewport : viewports)
-        {
-            viewport.Bind();
-            glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-            glClear(GL_COLOR_BUFFER_BIT);
-            viewport.Unbind();
-        }
+		for (int i = 0; i < m_ViewportArray.Size(); i++)
+		{
+			bool isOpen = m_ViewportArray.m_IsOpen[i];
+			ImGui::Begin(m_ViewportArray[i].GetName().c_str(), &isOpen);
+            m_ViewportArray.m_IsOpen[i] = isOpen;
+
+			ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
+			glm::vec2 ViewportSize = m_ViewportArray[i].Size();
+			if (ViewportSize != *(glm::vec2*) & imguiViewportSize)
+                m_ViewportArray[i].Resize({ imguiViewportSize.x, imguiViewportSize.y });
+
+			uint32_t textureId = m_ViewportArray[i].GetFramebuffer().GetColorAttachmentRendererID();
+			ImGui::Image((void*)textureId, ImVec2{ (float)m_ViewportArray[i].Size().x, (float)m_ViewportArray[i].Size().y });
+			ImGui::End();
+		}
+		ImGui::PopStyleVar();
+
+
+        // Temp: fill screen color
+        //for (auto& viewport : m_ViewportArray)
+        //{
+        //    viewport.Bind();
+        //    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        //    glClear(GL_COLOR_BUFFER_BIT);
+        //    viewport.Unbind();
+        //}
 
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
@@ -61,7 +100,7 @@ namespace Editor
             ImGui::End();
         }
 
-        // 3. Show another simple window.
+        // Temp: 3. Show another simple window.
         if (show_another_window)
         {
             ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
@@ -76,34 +115,12 @@ namespace Editor
 
 	void EditorLayer::OnEvent(SDL_Event& event)
 	{
+        // Temp: add viewport by pressing space
+		if (event.type == SDL_EventType::SDL_KEYDOWN
+			&& event.key.keysym.sym == SDLK_SPACE)
+			m_ViewportArray.Push(Viewport(200, 200));
+
         m_ImGuiControll.OnEvent(event);
 	}
-
-
-    // ================================== Viewports ====================================
-    static void viewports_controll()
-    {
-        viewports.RemoveNotActiveViewports();
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-
-        for (int i = 0; i < viewports.Size(); i++)
-        {
-            bool isOpen = viewports.m_IsOpen[i];
-            ImGui::Begin(viewports[i].GetName().c_str(), &isOpen);
-            viewports.m_IsOpen[i] = isOpen;
-
-            ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
-            glm::vec2 ViewportSize = viewports[i].Size();
-            if (ViewportSize != *(glm::vec2*) & imguiViewportSize)
-                viewports[i].Resize({ imguiViewportSize.x, imguiViewportSize.y });
-
-            uint32_t textureId = viewports[i].GetFramebuffer().GetColorAttachmentRendererID();
-            ImGui::Image((void*)textureId, ImVec2{ (float)viewports[i].Size().x, (float)viewports[i].Size().y });
-            ImGui::End();
-        }
-
-        ImGui::PopStyleVar();
-    }
-
 
 }
