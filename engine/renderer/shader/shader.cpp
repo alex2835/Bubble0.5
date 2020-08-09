@@ -71,7 +71,7 @@ namespace Bubble
                     // free recourses
 					glDeleteShader(vertexShader);
 
-                    LOG_CORE_ERROR("VERTEX SHADER ERROR:", m_Name, "\n" ,  log);
+                    LOG_CORE_ERROR("VERTEX SHADER ERROR: {0} \n {1}", m_Name, log);
 					throw std::runtime_error("Shader compilation failed");
                 }
             }
@@ -98,7 +98,7 @@ namespace Bubble
 					glDeleteShader(vertexShader);
 					glDeleteShader(fragmentShader);
 
-                    LOG_CORE_ERROR("FRAGMENT SHADER ERROR:", m_Name, "\n", log);
+                    LOG_CORE_ERROR("FRAGMENT SHADER ERROR: {0} \n {1}", m_Name, log);
 					throw std::runtime_error("Shader compilation failed");
                 }
             }
@@ -127,7 +127,7 @@ namespace Bubble
 						glDeleteShader(vertexShader);
 						glDeleteShader(fragmentShader);
 
-                        LOG_CORE_ERROR("GEOMETRY SHADER ERROR:", m_Name, "\n", log);
+                        LOG_CORE_ERROR("GEOMETRY SHADER ERROR: {0} \n {1}", m_Name, log);
 						throw std::runtime_error("Shader compilation failed");
                     }
                 }
@@ -163,7 +163,7 @@ namespace Bubble
 					glDeleteShader(fragmentShader);
                     glDeleteProgram(m_ShaderID);
 
-                    LOG_CORE_ERROR("LINLING SHADER ERROR: ", m_Name, "\n", log);
+                    LOG_CORE_ERROR("LINLING SHADER ERROR: {0} \n {1}", m_Name, log);
                     throw std::runtime_error("Shader compilation failed");
                 }
             }
@@ -184,7 +184,7 @@ namespace Bubble
             int unifrom_id = glGetUniformLocation(m_ShaderID, uniform_name.c_str());
             if (unifrom_id == -1)
             {
-                LOG_CORE_ERROR("Shader: {0} doesn't have uniform: {1}", m_Name, uniform_name);
+                LOG_CORE_WARN("Shader: {0} doesn't have uniform: {1}", m_Name, uniform_name);
             }
             m_UniformCache[uniform_name] = unifrom_id;
             return unifrom_id;
@@ -201,11 +201,12 @@ namespace Bubble
             CompileShaders(vertexSource, fragmentSource, geometry);
         }
 
-		Shader::Shader(const std::string& vertex,
+		Shader::Shader(const std::string& name,
+                       const std::string& vertex,
                        const std::string& fragment,
                        const std::string& geometry /*= std::string()*/)
+            : m_Name(name)
 		{
-            m_Name = "No name";
             CompileShaders(vertex, fragment, geometry);
 		}
 

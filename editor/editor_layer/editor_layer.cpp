@@ -63,7 +63,7 @@ namespace Bubble
 			}
 		)";
 
-		m_Shader = CreateScope<Shader>(vertexSrc, fragmentSrc);
+		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
 
 	}
 

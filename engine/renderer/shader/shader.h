@@ -30,7 +30,8 @@ namespace Bubble
     public:
         Shader(const std::string& path);
 
-        Shader(const std::string& vertex,
+        Shader(const std::string& name,
+               const std::string& vertex,
                const std::string& fragment,
                const std::string& geometry = std::string());
 
