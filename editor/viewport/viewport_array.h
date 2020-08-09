@@ -7,8 +7,9 @@
 
 namespace Bubble
 {
-	struct ViewportArray
+	class ViewportArray
 	{
+	public:
 		std::vector<Viewport> m_Viewports;
 		std::vector<bool> m_IsOpen;
 

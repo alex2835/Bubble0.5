@@ -27,9 +27,9 @@ namespace Bubble
 		std::swap(m_Layers[id_1], m_Layers[id_2]);
 	}
 
-	std::unique_ptr<Layer>& LayerArray::operator [] (int id)
+	Layer* LayerArray::operator [] (int id)
 	{
-		return m_Layers[id];
+		return m_Layers[id].get();
 	}
 
 }

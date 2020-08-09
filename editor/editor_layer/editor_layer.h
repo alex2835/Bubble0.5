@@ -8,9 +8,8 @@
 
 namespace Bubble
 {
-	struct EditorLayer : Layer
+	class EditorLayer : public Layer
 	{
-	private:
 		ImGuiControll m_ImGuiControll;
 		ViewportArray m_ViewportArray;
 

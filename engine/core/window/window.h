@@ -5,8 +5,9 @@
 
 namespace Bubble
 {
-	struct Window
+	class Window
 	{
+	public:
 		virtual ~Window() {};
 
 		virtual bool IsOpen() = 0;

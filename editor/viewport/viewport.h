@@ -7,9 +7,8 @@
 
 namespace Bubble
 {
-	struct Viewport
+	class Viewport
 	{
-	private:
 		std::string m_Name;
 		Framebuffer m_Framebuffer;
 

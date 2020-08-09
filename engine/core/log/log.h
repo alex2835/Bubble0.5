@@ -8,19 +8,18 @@
 
 namespace Bubble
 {
-	struct Log
+	class Log
 	{
-		Log() = default;
-		~Log() = default;
+		static Ref<spdlog::logger> client_logger;
+		static Ref<spdlog::logger> core_logger;
+
+	public:
+		Log() = delete;
 		
 		static void init();
 		
 		inline static Ref<spdlog::logger>& GetLogger() { return client_logger; }
 		inline static Ref<spdlog::logger>& GetCoreLogger() { return core_logger; }
-
-	private:
-		static Ref<spdlog::logger> client_logger;
-		static Ref<spdlog::logger> core_logger;
 	};
 }
 

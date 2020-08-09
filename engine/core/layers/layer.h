@@ -7,8 +7,9 @@
 
 namespace Bubble
 {
-	struct Layer
+	class Layer
 	{
+	public:
 		std::string m_Name;
 
 		Layer(const std::string& name = "Layer");

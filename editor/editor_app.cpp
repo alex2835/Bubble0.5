@@ -9,8 +9,9 @@
 
 namespace Bubble
 {
-    struct EditorApp : Application
+    class EditorApp : public Application
     {
+    public:
         EditorApp() : Application(new SDL_WINDOW())
         {
             PushLayer(new EditorLayer((SDL_WINDOW*)m_Window.get()));

@@ -9,10 +9,11 @@
 
 namespace Bubble
 {
-	struct LayerArray
+	class LayerArray
 	{
 		std::vector<Scope<Layer>> m_Layers;
 
+	public:
 		void Push(Layer* layer);
 		void Remove(int id);
 		void Insert(int id, Layer* layer);
@@ -21,7 +22,7 @@ namespace Bubble
 		std::vector<Scope<Layer>>::iterator begin() { return m_Layers.begin(); }
 		std::vector<Scope<Layer>>::iterator end() { return m_Layers.end(); }
 
-		std::unique_ptr<Layer>& operator [] (int id);
+		Layer* operator [] (int id);
 		
 		~LayerArray() = default;
 	};

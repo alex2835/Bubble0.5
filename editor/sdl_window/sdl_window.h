@@ -10,9 +10,8 @@
 
 namespace Bubble
 {
-    struct SDL_WINDOW : Bubble::Window
+    class SDL_WINDOW: public Window
     {
-    private:
         SDL_Window* m_Window;
         SDL_GLContext m_GLContext;
         const char* glsl_version = "#version 330";

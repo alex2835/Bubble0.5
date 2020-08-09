@@ -28,8 +28,9 @@ namespace Bubble
     const static float SENSITIVTY = 0.25f;
     const static float FOV = PI / 4;
     
-    struct Camera
+    class Camera
     {
+    public:
         // Camera Attributes
         glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 m_Front = glm::vec3(0.0f, 0.0f, -1.0f);

@@ -7,7 +7,7 @@
 
 namespace Bubble
 {
-	struct Application
+	class Application
 	{
 	protected:
 		Scope<Window> m_Window;

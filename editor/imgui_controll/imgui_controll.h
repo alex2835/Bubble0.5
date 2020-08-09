@@ -9,10 +9,11 @@
 
 namespace Bubble
 {
-    struct ImGuiControll
+    class ImGuiControll
     {
         SDL_WINDOW* m_Window;
 
+    public:
         ImGuiControll(SDL_WINDOW* window);
 
         void OnAttach();

@@ -16,9 +16,8 @@
 
 namespace Bubble
 {
-    struct Shader
+    class Shader
     {
-	private:
         uint32_t m_ShaderID;
         std::string m_Name;
 		std::unordered_map<std::string, int> m_UniformCache;

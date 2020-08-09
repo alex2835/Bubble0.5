@@ -57,8 +57,9 @@ namespace Bubble
 	}
 
 
-	struct BufferElement
+	class BufferElement
 	{
+	public:
 		std::string m_Name;
 		GLSLDataType m_Type;
 		uint32_t m_Size;

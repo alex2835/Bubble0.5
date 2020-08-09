@@ -17,9 +17,8 @@ namespace Bubble
 		bool SwapChainTarget = false;
 	};
 
-	struct Framebuffer
+	class Framebuffer
 	{
-	private:
 		uint32_t m_RendererID = 0;
 		uint32_t m_ColorAttachment = 0;
 		uint32_t m_DepthAttachment = 0;
