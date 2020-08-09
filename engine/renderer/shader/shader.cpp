@@ -175,7 +175,7 @@ namespace Bubble
 
         int Shader::GetUni(const std::string& uniform_name)
         {
-            Bind();
+            glUseProgram(m_ShaderID);
             if (m_UniformCache.find(uniform_name) != m_UniformCache.end())
             {
                 return m_UniformCache[uniform_name];

@@ -60,6 +60,11 @@ namespace Bubble
 		return m_Viewports[idx];
 	}
 	
+	char& ViewportArray::IsOpen(int idx)
+	{
+		return m_IsOpen[idx];
+	}
+
 	std::vector<Viewport>::iterator ViewportArray::begin() { return m_Viewports.begin(); }
 	std::vector<Viewport>::iterator ViewportArray::end() { return m_Viewports.end(); }
 }

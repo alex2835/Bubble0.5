@@ -9,10 +9,10 @@ namespace Bubble
 {
 	class ViewportArray
 	{
-	public:
 		std::vector<Viewport> m_Viewports;
-		std::vector<bool> m_IsOpen;
+		std::vector<char> m_IsOpen;
 
+	public:
 		void Erase(int idx);
 		void Push(Viewport&& viewport);
 		int Size();
@@ -20,6 +20,7 @@ namespace Bubble
 		void RemoveNotActiveViewports();
 		
 		Viewport& operator[] (int idx);
+		char& IsOpen(int idx);
 
 		std::vector<Viewport>::iterator begin();
 		std::vector<Viewport>::iterator end();

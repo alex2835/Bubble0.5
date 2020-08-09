@@ -18,6 +18,11 @@ namespace Bubble
 		bool show_another_window = false;
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+		Scope<VertexArray> m_VertexArray;
+		Ref<VertexBuffer> m_VertexBuffer;
+		Ref<IndexBuffer> m_IndexBuffer;
+		Scope<Shader> m_Shader;
+
 	public:
 		EditorLayer(SDL_WINDOW* window);
 		void OnAttach() override;

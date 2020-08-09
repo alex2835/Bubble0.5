@@ -11,4 +11,5 @@
 // Renderer
 #include "renderer/framebuffer/framebuffer.h"
 #include "renderer/buffer/buffer.h"
+#include "renderer/vertex_array/vertex_array.h"
 #include "renderer/shader/shader.h"

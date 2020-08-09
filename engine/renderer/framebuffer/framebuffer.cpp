@@ -74,7 +74,7 @@ namespace Bubble
 		glGenTextures(1, &m_ColorAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
-			m_Specification.Size.x, m_Specification.Size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+			GetWidth(), GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachment, 0);
@@ -83,7 +83,7 @@ namespace Bubble
 		glGenTextures(1, &m_DepthAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-			m_Specification.Size.x, m_Specification.Size.x, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+			GetWidth(), GetWidth(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
@@ -93,16 +93,26 @@ namespace Bubble
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
-		// Check
-		assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE && "Framebuffer is incomplete!");
+		// Something going wrong
+		BUBBLE_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	int Framebuffer::GetWidth()
+	{
+		return m_Specification.Size.x;
+	}
+
+	int Framebuffer::GetHeight()
+	{
+		return m_Specification.Size.y;
 	}
 
 	void Framebuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-		glViewport(0, 0, m_Specification.Size.x, m_Specification.Size.y);
+		glViewport(0, 0, GetWidth(), GetHeight());
 	}
 
 	void Framebuffer::Unbind()
@@ -110,7 +120,7 @@ namespace Bubble
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	const glm::ivec2& Framebuffer::Size() const 
+	glm::ivec2 Framebuffer::Size() const
 	{
 		return m_Specification.Size;
 	}
@@ -122,7 +132,6 @@ namespace Bubble
 		{
 			return;
 		}
-		
 		m_Specification.Size = size;
 		Invalidate();
 	}

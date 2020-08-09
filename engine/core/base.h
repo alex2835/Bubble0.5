@@ -3,8 +3,19 @@
 #define GLEW_STATIC
 #include "GL/glew.h"
 
-#include <memory>
+#include "log/log.h"
 
+#include <memory>
+#include <cassert>
+
+
+#ifdef BUBBLE_ASSERT_UNABLE
+#define BUBBLE_ASSERT(x, ...)
+#define BUBBLE_CORE_ASSERT(x, ...)
+#else
+#define BUBBLE_ASSERT(x, ...) { if(!(x)) { LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); assert(false) } }
+#define BUBBLE_CORE_ASSERT(x, ...) { if(!(x)) { LOG_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); assert(false); } }
+#endif
 
 #define BIT(x) (1 << x)
 
@@ -25,5 +36,4 @@ namespace Bubble
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
-
 }

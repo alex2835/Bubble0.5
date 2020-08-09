@@ -41,10 +41,14 @@ set (RENDERER_CAMERA
     renderer/camera/camera.cpp
 )
 
+set (RENDERER_VERTEX_ARRAY
+    "renderer/vertex_array/vertex_array.h"
+    "renderer/vertex_array/vertex_array.cpp"
+)
+
 set (RENDERER_OPENGL_ASSERT
     renderer/gl_assert/gl_assert.h
 )
-
 
 set(SOURCES
     ${ENGINE_APPLICATION}
@@ -56,6 +60,7 @@ set(SOURCES
     ${RENDERER_CAMERA}
     ${RENDERER_BUFFER}
     ${RENDERER_OPENGL_ASSERT}
+    ${RENDERER_VERTEX_ARRAY}
 )
 
 add_library(Engine STATIC ${SOURCES})

@@ -13,69 +13,29 @@ namespace Bubble
 
         // Temp: test viewport
 		m_ViewportArray.Push(Viewport(200, 100));
-	}
 
-	void EditorLayer::OnDetach()
-	{
-        m_ImGuiControll.OnDetach();
-	}
-	
-	void EditorLayer::OnUpdate()
-	{
-        // test triangle draw
-        
+		// Temp: Draw stuff
+
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
 			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		static int preapare_flag = 1;
+		m_VertexArray = CreateScope<VertexArray>();
+		m_VertexBuffer = CreateRef<VertexBuffer>(vertices, sizeof(vertices));
 
-		static uint32_t vertex_array = 0;
+		BufferLayout layout = {
+			{ GLSLDataType::Float3, "a_Position" },
+			{ GLSLDataType::Float4, "a_Color" }
+		};
+		m_VertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
-			if (vertex_array == 0)
-			{
-				glGenVertexArrays(1, &vertex_array);
-				glBindVertexArray(vertex_array);
-			}
+		uint32_t indices[3] = { 0, 1, 2 };
+		m_IndexBuffer = CreateRef<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
 
-			static VertexBuffer vertex_buffer(vertices, sizeof(vertices));
-
-			{
-				BufferLayout layout = {
-					{ GLSLDataType::Float3, "a_Position" },
-					{ GLSLDataType::Float4, "a_Color" }
-				};
-
-				vertex_buffer.SetLayout(layout);
-			}
-
-
-			if (preapare_flag)
-			{
-				glBindVertexArray(vertex_array);
-				preapare_flag = 0;
-
-				uint32_t index = 0;
-				const auto& layout = vertex_buffer.GetLayout();
-				for (const auto& element : layout)
-				{
-					glcall(glEnableVertexAttribArray(index));
- 					glcall(glVertexAttribPointer(index,
-						element.GetComponentCount(),
-						GLSLDataTypeToOpenGLBaseType(element.m_Type),
-						element.m_Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(),
-						(const void*)element.m_Offset));
-					index++;
-				}
-			}
-
-			uint32_t indices[3] = { 0, 1, 2 };
-			static IndexBuffer index_buffer(indices, sizeof(indices) / sizeof(uint32_t));
-
-			std::string vertexSrc = R"(
+		std::string vertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
@@ -90,7 +50,7 @@ namespace Bubble
 			}
 		)";
 
-			std::string fragmentSrc = R"(
+		std::string fragmentSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
@@ -103,19 +63,31 @@ namespace Bubble
 			}
 		)";
 
-		static Shader shader(vertexSrc, fragmentSrc);
+		m_Shader = CreateScope<Shader>(vertexSrc, fragmentSrc);
+
+	}
+
+	void EditorLayer::OnDetach()
+	{
+        m_ImGuiControll.OnDetach();
+	}
+	
+	void EditorLayer::OnUpdate()
+	{
+        // Temp: Test triangle draw
 
 		m_ViewportArray[0].Bind();
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		shader.Bind();
-		glBindVertexArray(vertex_array);
-		glDrawElements(GL_TRIANGLES, index_buffer.GetCount(), GL_UNSIGNED_INT, nullptr);
+		m_Shader->Bind();
+		m_VertexArray->Bind();
+		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 		glBindVertexArray(0);
 		m_ViewportArray[0].Unbind();
+
 
 
 		m_ImGuiControll.Begin();
@@ -126,16 +98,16 @@ namespace Bubble
 
 		for (int i = 0; i < m_ViewportArray.Size(); i++)
 		{
-			bool isOpen = m_ViewportArray.m_IsOpen[i];
-			ImGui::Begin(m_ViewportArray[i].GetName().c_str(), &isOpen);
-            m_ViewportArray.m_IsOpen[i] = isOpen;
+			ImGui::Begin(m_ViewportArray[i].GetName().c_str(), (bool*)&m_ViewportArray.IsOpen(i));
 
-			ImVec2 imguiViewportSize = ImGui::GetContentRegionAvail();
-			glm::vec2 ViewportSize = m_ViewportArray[i].Size();
-			if (ViewportSize != *(glm::vec2*) & imguiViewportSize)
-                m_ViewportArray[i].Resize({ imguiViewportSize.x, imguiViewportSize.y });
-
+			ImVec2 imgui_viewport_size = ImGui::GetContentRegionAvail();
+			glm::vec2 fViewportSize = m_ViewportArray[i].Size();
+			if (fViewportSize != *(glm::vec2*) & imgui_viewport_size)
+			{
+				m_ViewportArray[i].Resize({ imgui_viewport_size.x, imgui_viewport_size.y });
+			}
 			uint32_t textureId = m_ViewportArray[i].GetFramebuffer().GetColorAttachmentRendererID();
+
 			ImGui::Image((void*)textureId, ImVec2{ (float)m_ViewportArray[i].Size().x, (float)m_ViewportArray[i].Size().y });
 			ImGui::End();
 		}

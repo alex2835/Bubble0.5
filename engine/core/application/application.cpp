@@ -42,11 +42,13 @@ namespace Bubble
                 }
                 m_Window->OnEvent(event);
             }
+
             // Update layers
             for (auto& layer : m_LayerArray)
             {
                 layer->OnUpdate();
             }
+
             // Update window
             m_Window->OnUpdate();
         }

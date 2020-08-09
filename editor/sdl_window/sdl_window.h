@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "core/base.h"
 #include "core/window/window.h"
-#include "core/log/log.h"
 
 #include "cassert"
 

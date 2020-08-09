@@ -1,25 +1,24 @@
 #pragma once
 
-#include "base.h"
-
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
+#include <memory>
 
 namespace Bubble
 {
 	class Log
 	{
-		static Ref<spdlog::logger> client_logger;
-		static Ref<spdlog::logger> core_logger;
+		static std::shared_ptr<spdlog::logger> client_logger;
+		static std::shared_ptr<spdlog::logger> core_logger;
 
 	public:
 		Log() = delete;
 		
 		static void init();
 		
-		inline static Ref<spdlog::logger>& GetLogger() { return client_logger; }
-		inline static Ref<spdlog::logger>& GetCoreLogger() { return core_logger; }
+		static std::shared_ptr<spdlog::logger>& GetLogger() { return client_logger; }
+		static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return core_logger; }
 	};
 }
 

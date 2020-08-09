@@ -14,27 +14,6 @@ namespace Bubble
 		None, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
 	};
 
-	inline GLenum GLSLDataTypeToOpenGLBaseType(GLSLDataType type)
-	{
-		switch (type)
-		{
-			case GLSLDataType::Float:    return GL_FLOAT;
-			case GLSLDataType::Float2:   return GL_FLOAT;
-			case GLSLDataType::Float3:   return GL_FLOAT;
-			case GLSLDataType::Float4:   return GL_FLOAT;
-			case GLSLDataType::Mat3:     return GL_FLOAT;
-			case GLSLDataType::Mat4:     return GL_FLOAT;
-			case GLSLDataType::Int:      return GL_INT;
-			case GLSLDataType::Int2:     return GL_INT;
-			case GLSLDataType::Int3:     return GL_INT;
-			case GLSLDataType::Int4:     return GL_INT;
-			case GLSLDataType::Bool:     return GL_BOOL;
-		}
-
-		assert("Unknown ShaderDataType!");
-		return 0;
-	}
-
 	static uint32_t GLSLDataTypeSize(GLSLDataType type)
 	{
 		switch (type)
@@ -52,34 +31,34 @@ namespace Bubble
 		case GLSLDataType::Bool:     return 1;
 		}
 
-		assert("Unknown GLSLDataType!");
+		BUBBLE_CORE_ASSERT(false, "Unknown GLSLDataType!");
 		return 0;
 	}
 
 
-	class BufferElement
+	struct BufferElement
 	{
 	public:
-		std::string m_Name;
-		GLSLDataType m_Type;
-		uint32_t m_Size;
-		size_t m_Offset;
-		bool m_Normalized;
+		std::string Name;
+		GLSLDataType Type;
+		uint32_t Size;
+		size_t Offset;
+		bool Normalized;
 
 		BufferElement() = default;
 
 		BufferElement(GLSLDataType type, const std::string & name, bool normalized = false)
 			: 
-			m_Name(name),
-			m_Type(type),
-			m_Size(GLSLDataTypeSize(type)),
-			m_Offset(0),
-			m_Normalized(normalized)
+			Name(name),
+			Type(type),
+			Size(GLSLDataTypeSize(type)),
+			Offset(0),
+			Normalized(normalized)
 		{}
 
 		uint32_t GetComponentCount() const
 		{
-			switch (m_Type)
+			switch (Type)
 			{
 				case GLSLDataType::Float:   return 1;
 				case GLSLDataType::Float2:  return 2;
@@ -94,7 +73,7 @@ namespace Bubble
 				case GLSLDataType::Bool:    return 1;
 			}
 
-			assert("Unknown GLSLDataType!");
+			BUBBLE_CORE_ASSERT(false, "Unknown GLSLDataType!");
 			return 0;
 		}
 	};
@@ -128,8 +107,8 @@ namespace Bubble
 			size_t offset = 0;
 			for (auto& element : m_Elements)
 			{
-				element.m_Offset = offset;
-				offset += element.m_Size;
+				element.Offset = offset;
+				offset += element.Size;
 			}
 			m_Stride = offset;
 		}
