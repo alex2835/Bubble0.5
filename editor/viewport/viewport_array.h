@@ -5,7 +5,7 @@
 #include <vector>
 
 
-namespace Editor
+namespace Bubble
 {
 	struct ViewportArray
 	{

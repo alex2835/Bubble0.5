@@ -2,7 +2,7 @@
 #include "viewport.h"
 
 
-namespace Editor
+namespace Bubble
 {
 	Viewport::Viewport(int width, int height, const std::string& name)
 		:
@@ -56,7 +56,7 @@ namespace Editor
 		m_Name = name;
 	}
 
-	Bubble::Framebuffer& Viewport::GetFramebuffer()
+	Framebuffer& Viewport::GetFramebuffer()
 	{
 		return m_Framebuffer;
 	}

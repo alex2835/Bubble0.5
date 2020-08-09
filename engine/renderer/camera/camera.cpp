@@ -7,10 +7,9 @@ namespace Bubble
    
     // Constructor with vectors
     Camera::Camera(const glm::vec3& position, float yaw, float pitch, const glm::vec3& up)
-        :
-        m_MaxSpeed(MAX_SPEED),
-        m_MouseSensitivity(SENSITIVTY),
-        m_Fov(FOV)
+        : m_MaxSpeed(MAX_SPEED),
+          m_MouseSensitivity(SENSITIVTY),
+          m_Fov(FOV)
     {
         m_Position = position;
         m_WorldUp = up;
@@ -22,10 +21,9 @@ namespace Bubble
 
     // Constructor with scalar values
     Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-        :
-        m_MaxSpeed(MAX_SPEED),
-        m_MouseSensitivity(SENSITIVTY),
-        m_Fov(FOV)
+        : m_MaxSpeed(MAX_SPEED),
+          m_MouseSensitivity(SENSITIVTY),
+          m_Fov(FOV)
     {
         m_Position = glm::vec3(posX, posY, posZ);
         m_WorldUp = glm::vec3(upX, upY, upZ);

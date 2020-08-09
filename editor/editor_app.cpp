@@ -7,13 +7,13 @@
 #include "sdl_window/sdl_window.h"
 #include "editor_layer/editor_layer.h"
 
-namespace Editor
+namespace Bubble
 {
-    struct EditorApp : Bubble::Application
+    struct EditorApp : Application
     {
         EditorApp() : Application(new SDL_WINDOW())
         {
-            PushLayer(new EditorLayer());
+            PushLayer(new EditorLayer((SDL_WINDOW*)m_Window.get()));
         }
 
         ~EditorApp()
@@ -26,8 +26,7 @@ namespace Editor
 /*
     Will be called in embedded main loop
 */
-Bubble::Application* Bubble::CreateApplication()
+Bubble::Application* CreateApplication()
 {
-    return new Editor::EditorApp();
+    return new Bubble::EditorApp();
 }
-

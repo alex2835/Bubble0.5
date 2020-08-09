@@ -7,7 +7,7 @@
 #include "imgui_impl_sdl.h"
 
 
-namespace Editor
+namespace Bubble
 {
     struct ImGuiControll
     {

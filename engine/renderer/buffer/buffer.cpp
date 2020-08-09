@@ -1,6 +1,7 @@
 
 #include "buffer.h"
 
+
 namespace Bubble
 {
 	// ==================== Vertex buffer ======================
@@ -31,6 +32,7 @@ namespace Bubble
 		m_RendererID = other.m_RendererID;
 		m_Layout = std::move(other.m_Layout);
 		other.m_RendererID = 0;
+		return *this;
 	}
 
 	VertexBuffer::~VertexBuffer()
@@ -68,13 +70,11 @@ namespace Bubble
 	// ===================== Index buffer ======================== 
 
 	IndexBuffer::IndexBuffer(uint32_t* indices, uint32_t count)
+		: m_Count(count)
 	{
 		glGenBuffers(1, &m_RendererID);
-
-		// GL_ELEMENT_ARRAY_BUFFER is not valid without an actively bound VAO
-		// Binding with GL_ARRAY_BUFFER allows the data to be loaded regardless of VAO state. 
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 	}
 
 	IndexBuffer::IndexBuffer(IndexBuffer&& other) noexcept
@@ -93,6 +93,7 @@ namespace Bubble
 			m_Count = other.m_Count;
 			other.m_RendererID = 0;
 			other.m_Count = 0;
+			return *this;
 		}
 	}
 

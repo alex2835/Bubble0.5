@@ -35,7 +35,8 @@ namespace Bubble
                const std::string& fragment,
                const std::string& geometry = std::string());
 
-        void Use();
+        void Bind();
+        void Unbind();
 
         // lone int 
         void SetUni1i(const std::string& name, const int& val);

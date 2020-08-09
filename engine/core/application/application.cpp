@@ -4,20 +4,10 @@
 
 namespace Bubble
 {
-    Window* Application::s_Window = NULL;
-
-    // ======================= Contructor =========================
     Application::Application(Window* window)
-    {
-        s_Window = window;
-    }
+        : m_Window(window)
+    {}
 
-    Application::~Application() 
-    {
-        delete s_Window;
-    }
-
-    // ===================== Layer controls ======================
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerArray.Push(layer);
@@ -38,40 +28,27 @@ namespace Bubble
         m_LayerArray.Swap(id_1, id_2);
 	}
 
-   
-    // =================== Window controls ====================
-    void Application::SetWindow(Window* window)
-    {
-        s_Window = window;
-    }
-
-    Window* Application::GetWindow()
-    {
-        return s_Window;
-    }
-
-
-    // ======================= Run ========================
 	void Application::Run()
 	{
-        while (s_Window && s_Window->IsOpen())
+        while (m_Window && m_Window->IsOpen())
         {
-            // Send events
+            // Retrieve and send events
             SDL_Event event;
-            while (s_Window->PollEvent(event))
+            while (m_Window->PollEvent(event))
             {
                 for (auto& layer : m_LayerArray)
+                {
                     layer->OnEvent(event);
-            
-                s_Window->OnEvent(event);
+                }
+                m_Window->OnEvent(event);
             }
-            
             // Update layers
             for (auto& layer : m_LayerArray)
+            {
                 layer->OnUpdate();
-
+            }
             // Update window
-            s_Window->OnUpdate();
+            m_Window->OnUpdate();
         }
 	}
 

@@ -175,7 +175,7 @@ namespace Bubble
 
         int Shader::GetUni(const std::string& uniform_name)
         {
-            Use();
+            Bind();
             if (m_UniformCache.find(uniform_name) != m_UniformCache.end())
             {
                 return m_UniformCache[uniform_name];
@@ -209,10 +209,15 @@ namespace Bubble
             CompileShaders(vertex, fragment, geometry);
 		}
 
-		void Shader::Use()
-        {
+		void Shader::Bind()
+		{
             glUseProgram(m_ShaderID);
-        }
+		}
+
+		void Shader::Unbind()
+		{
+            glUseProgram(0);
+		}
 
         // lone int 
         void Shader::SetUni1i(const std::string& m_Name, const int& val)

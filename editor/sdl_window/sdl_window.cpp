@@ -2,18 +2,17 @@
 #include "sdl_window.h"
 
 
-namespace Editor
+namespace Bubble
 {
     SDL_WINDOW::SDL_WINDOW()
     {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
         {
-            LOG_ERROR("Error: {0}\n", SDL_GetError());
-            m_IsOpen = false;
-            return;
-        }
+            LOG_ERROR("Error: ", SDL_GetError());
+			throw std::runtime_error("Window can't be created");
+		}
         
-        // GL 3.0 + GLSL 130
+        // GL 3.3 + GLSL 330
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -33,29 +32,28 @@ namespace Editor
 
         if (int error = glewInit(); error != GLEW_OK)
         {
-            LOG_ERROR("Error: {0}", "Glew init problem", glewGetErrorString(error));
-            m_IsOpen = false;
-            return;
+            LOG_ERROR("Error: Glew init ", glewGetErrorString(error));
+            throw std::runtime_error("Window can't be created");
         }
     }
 
-    bool SDL_WINDOW::IsOpen()
-    {
+	bool SDL_WINDOW::IsOpen()
+	{
         return m_IsOpen;
-    }
+	}
 
-    int SDL_WINDOW::GetWindth()
+	int SDL_WINDOW::GetWindth()
     {
-        int w = 0, h = 0;
-        SDL_GetWindowSize(m_Window, &w, &h);
-        return w;
+        int width = 0, height = 0;
+        SDL_GetWindowSize(m_Window, &width, &height);
+        return width;
     }
 
     int SDL_WINDOW::GetHeight()
     {
-        int w = 0, h = 0;
-        SDL_GetWindowSize(m_Window, &w, &h);
-        return h;
+		int width = 0, height = 0;
+        SDL_GetWindowSize(m_Window, &width, &height);
+        return height;
     }
 
     SDL_Window* SDL_WINDOW::GetWindow()
@@ -81,8 +79,9 @@ namespace Editor
     void SDL_WINDOW::OnEvent(SDL_Event& event)
     {
         if (event.type == SDL_QUIT)
+        {
             m_ShouldClose = true;
-
+        }
         if (event.type == SDL_WINDOWEVENT &&
             event.window.event == SDL_WINDOWEVENT_CLOSE &&
             event.window.windowID == SDL_GetWindowID(m_Window))

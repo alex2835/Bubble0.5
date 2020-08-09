@@ -1,5 +1,6 @@
 #pragma once
 
+#include "base.h"
 #include "window/window.h"
 #include "layers/layer_array.h"
 
@@ -8,13 +9,13 @@ namespace Bubble
 {
 	struct Application
 	{
-	private:
-		static Window* s_Window;
+	protected:
+		Scope<Window> m_Window;
 		LayerArray m_LayerArray;
 		
 	public:
 		Application(Window* window = nullptr);
-		virtual ~Application();
+		virtual ~Application() {}
 
 		void Run();
 
@@ -22,10 +23,5 @@ namespace Bubble
 		void InsertLayer(int id, Layer* layer);
 		void RemoveLayer(int id);
 		void SwapLayers(int id_1, int id_2);
-
-		static Window* GetWindow();
-		static void SetWindow(Window* window);
 	};
-
-	Application* CreateApplication();
 }

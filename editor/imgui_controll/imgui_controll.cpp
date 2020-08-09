@@ -2,15 +2,14 @@
 #include "imgui_controll.h"
 
 
-namespace Editor
+namespace Bubble
 {
     static void imgui_docking();
     static void imgui_multi_viewports();
 
 
     ImGuiControll::ImGuiControll(SDL_WINDOW* window)
-        :
-        m_Window(window)
+        : m_Window(window)
     {}
 
     void ImGuiControll::OnAttach()

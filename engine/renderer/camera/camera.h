@@ -11,13 +11,13 @@ enum class CameraMovement {
     NO_DIRECTION
 };
 
-
 namespace Bubble
 {
+	const float PI = 3.14159265359f;
+
     template <typename T>
     inline int sgn(T num) { return (num > T(0)) - (num < T(0)); }
 
-    const float PI = 3.14159265359f;
 
     // Default camera values
     const static float YAW = -PI / 2;
@@ -30,7 +30,6 @@ namespace Bubble
     
     struct Camera
     {
-    public:
         // Camera Attributes
         glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 m_Front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -39,7 +38,7 @@ namespace Bubble
         glm::vec3 m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
         // Euler Angles
-        float m_Yaw = -PI / 2;
+        float m_Yaw = -PI / 2.0f;
         float m_Pitch = 0;
 
         // Camera options
@@ -59,24 +58,21 @@ namespace Bubble
 
         // Constructor with vectors
         Camera(const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.0f),
-            float yaw = YAW,
-            float pitch = PITCH,
-            const glm::vec3& up = glm::vec3(0.0f, 1.0f, 0.0f)
+               float yaw = YAW,
+               float pitch = PITCH,
+               const glm::vec3& up = glm::vec3(0.0f, 1.0f, 0.0f)
         );
-
 
         // Constructor with scalar values
         Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
         glm::mat4 GetLookatMat();
-
         glm::mat4 GetPprojectionMat(int WindowWidth, int WindowHeight);
         
         void ProcessKeyboard(CameraMovement direction, float deltaTime);
         
         void ProcessMouseMovement(float xMousePos, float yMousePos);
         void ProcessMouseMovementShift(float xoffset, float yoffset);
-
         void ProcessMouseScroll(float yoffset);
       
         void UpdateCameraVectors();

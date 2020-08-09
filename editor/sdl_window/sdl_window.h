@@ -8,7 +8,7 @@
 #include "cassert"
 
 
-namespace Editor
+namespace Bubble
 {
     struct SDL_WINDOW : Bubble::Window
     {

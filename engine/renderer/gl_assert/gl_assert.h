@@ -2,7 +2,7 @@
 
 #include "base.h"
 
-// error handler
+// Error handler
 #if _DEBUG
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define glcall(func) GLClearError();\

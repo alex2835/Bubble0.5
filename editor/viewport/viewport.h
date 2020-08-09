@@ -5,13 +5,13 @@
 #include <string>
 
 
-namespace Editor
+namespace Bubble
 {
 	struct Viewport
 	{
 	private:
 		std::string m_Name;
-		Bubble::Framebuffer m_Framebuffer;
+		Framebuffer m_Framebuffer;
 
 	public:
 		Viewport() = default;
@@ -32,6 +32,6 @@ namespace Editor
 		const std::string& GetName() const;
 		void SetName(const std::string& name);
 
-		Bubble::Framebuffer& GetFramebuffer();
+		Framebuffer& GetFramebuffer();
 	};
 }

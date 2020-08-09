@@ -14,6 +14,27 @@ namespace Bubble
 		None, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
 	};
 
+	inline GLenum GLSLDataTypeToOpenGLBaseType(GLSLDataType type)
+	{
+		switch (type)
+		{
+			case GLSLDataType::Float:    return GL_FLOAT;
+			case GLSLDataType::Float2:   return GL_FLOAT;
+			case GLSLDataType::Float3:   return GL_FLOAT;
+			case GLSLDataType::Float4:   return GL_FLOAT;
+			case GLSLDataType::Mat3:     return GL_FLOAT;
+			case GLSLDataType::Mat4:     return GL_FLOAT;
+			case GLSLDataType::Int:      return GL_INT;
+			case GLSLDataType::Int2:     return GL_INT;
+			case GLSLDataType::Int3:     return GL_INT;
+			case GLSLDataType::Int4:     return GL_INT;
+			case GLSLDataType::Bool:     return GL_BOOL;
+		}
+
+		assert("Unknown ShaderDataType!");
+		return 0;
+	}
+
 	static uint32_t GLSLDataTypeSize(GLSLDataType type)
 	{
 		switch (type)
@@ -117,7 +138,7 @@ namespace Bubble
 	class VertexBuffer
 	{
 	private:
-		uint32_t m_RendererID;
+		uint32_t m_RendererID = 0;
 		BufferLayout m_Layout;
 
 	public:
@@ -145,8 +166,8 @@ namespace Bubble
 	class IndexBuffer
 	{
 	private:
-		uint32_t m_RendererID;
-		uint32_t m_Count;
+		uint32_t m_RendererID = 0;
+		uint32_t m_Count = 0;
 
 	public:
 		IndexBuffer(uint32_t* indices, uint32_t count);

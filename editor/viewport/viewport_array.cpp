@@ -1,7 +1,7 @@
 
 #include "viewport_array.h"
 
-namespace Editor
+namespace Bubble
 {
 	void ViewportArray::Erase(int idx)
 	{
