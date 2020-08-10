@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#include "SDL2/SDL.h"
 
 #include "core/base.h"
 #include "core/window/window.h"
@@ -20,6 +20,7 @@ namespace Bubble
 
     public:
         SDL_WINDOW();
+        ~SDL_WINDOW();
 
         bool IsOpen() override;
         

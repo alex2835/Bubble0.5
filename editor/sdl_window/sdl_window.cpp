@@ -37,6 +37,12 @@ namespace Bubble
         }
     }
 
+	SDL_WINDOW::~SDL_WINDOW()
+	{
+		SDL_GL_DeleteContext(m_GLContext);
+		SDL_DestroyWindow(m_Window);
+	}
+
 	bool SDL_WINDOW::IsOpen()
 	{
         return m_IsOpen;
@@ -102,8 +108,6 @@ namespace Bubble
     void SDL_WINDOW::Close()
     {
         m_IsOpen = false;
-        SDL_GL_DeleteContext(m_GLContext);
-        SDL_DestroyWindow(m_Window);
     }
 
 }

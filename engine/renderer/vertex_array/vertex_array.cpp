@@ -26,7 +26,7 @@ namespace Bubble
 
 	VertexArray::VertexArray()
 	{
-		glGenVertexArrays(1, &m_RendererID);
+		glcall(glGenVertexArrays(1, &m_RendererID));
 	}
 
 	VertexArray::~VertexArray()
@@ -36,19 +36,19 @@ namespace Bubble
 
 	void VertexArray::Bind() const
 	{
-		glBindVertexArray(m_RendererID);
+		glcall(glBindVertexArray(m_RendererID));
 	}
 
 	void VertexArray::Unbind() const
 	{
-		glBindVertexArray(0);
+		glcall(glBindVertexArray(0));
 	}
 
 	void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
 		BUBBLE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
-		glBindVertexArray(m_RendererID);
+		glcall(glBindVertexArray(m_RendererID));
 		vertexBuffer->Bind();
 
 		const auto& layout = vertexBuffer->GetLayout();
@@ -66,13 +66,13 @@ namespace Bubble
 				case GLSLDataType::Int4:
 				case GLSLDataType::Bool:
 				{
-					glEnableVertexAttribArray(m_VertexBufferIndex);
-					glVertexAttribPointer(m_VertexBufferIndex,
+					glcall(glEnableVertexAttribArray(m_VertexBufferIndex));
+					glcall(glVertexAttribPointer(m_VertexBufferIndex,
 						element.GetComponentCount(),
 						GLSLDataTypeToOpenGLBaseType(element.Type),
 						element.Normalized ? GL_TRUE : GL_FALSE,
 						layout.GetStride(),
-						(const void*)element.Offset);
+						(const void*)element.Offset));
 					m_VertexBufferIndex++;
 					break;
 				}
@@ -82,14 +82,14 @@ namespace Bubble
 					uint32_t count = element.GetComponentCount();
 					for (uint32_t i = 0; i < count; i++)
 					{
-						glEnableVertexAttribArray(m_VertexBufferIndex);
-						glVertexAttribPointer(m_VertexBufferIndex,
+						glcall(glEnableVertexAttribArray(m_VertexBufferIndex));
+						glcall(glVertexAttribPointer(m_VertexBufferIndex,
 							count,
 							GLSLDataTypeToOpenGLBaseType(element.Type),
 							element.Normalized ? GL_TRUE : GL_FALSE,
 							layout.GetStride(),
-							(const void*)(sizeof(float) * count * i));
-						glVertexAttribDivisor(m_VertexBufferIndex, 1);
+							(const void*)(sizeof(float) * count * i)));
+						glcall(glVertexAttribDivisor(m_VertexBufferIndex, 1));
 						m_VertexBufferIndex++;
 					}
 					break;
@@ -103,7 +103,7 @@ namespace Bubble
 
 	void VertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
-		glBindVertexArray(m_RendererID);
+		glcall(glBindVertexArray(m_RendererID));
 		indexBuffer->Bind();
 		m_IndexBuffer = indexBuffer;
 	}

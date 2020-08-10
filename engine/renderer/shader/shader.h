@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gl_assert/gl_assert.h"
+#include "base.h"
 #include "log/log.h"
 
 #include "glm/glm.hpp"

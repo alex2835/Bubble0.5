@@ -20,6 +20,11 @@ set(ENGINE_LOG
     core/log/log.h
 )
 
+set(ENGINE_DELTATIME
+    core/delta_time/delta_time.cpp
+    core/delta_time/delta_time.h
+)
+
 # Renderer
 set(RENDERER_FRAMEBUFFER
     renderer/framebuffer/framebuffer.cpp
@@ -42,24 +47,21 @@ set (RENDERER_CAMERA
 )
 
 set (RENDERER_VERTEX_ARRAY
-    "renderer/vertex_array/vertex_array.h"
-    "renderer/vertex_array/vertex_array.cpp"
+    renderer/vertex_array/vertex_array.h
+    renderer/vertex_array/vertex_array.cpp
 )
 
-set (RENDERER_OPENGL_ASSERT
-    renderer/gl_assert/gl_assert.h
-)
 
 set(SOURCES
     ${ENGINE_APPLICATION}
     ${ENGINE_LAYERS}
     ${ENGINE_LOG}
+    ${ENGINE_DELTATIME}
 
     ${RENDERER_FRAMEBUFFER}
     ${RENDERER_SHADER}
     ${RENDERER_CAMERA}
     ${RENDERER_BUFFER}
-    ${RENDERER_OPENGL_ASSERT}
     ${RENDERER_VERTEX_ARRAY}
 )
 

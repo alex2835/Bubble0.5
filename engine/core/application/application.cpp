@@ -30,8 +30,10 @@ namespace Bubble
 
 	void Application::Run()
 	{
-        while (m_Window && m_Window->IsOpen())
+        while (m_Window.get() && m_Window->IsOpen())
         {
+            m_DeltaTime.Update(SDL_GetTicks() / 1000.0f);
+
             // Retrieve and send events
             SDL_Event event;
             while (m_Window->PollEvent(event))
@@ -46,7 +48,7 @@ namespace Bubble
             // Update layers
             for (auto& layer : m_LayerArray)
             {
-                layer->OnUpdate();
+                layer->OnUpdate(m_DeltaTime);
             }
 
             // Update window

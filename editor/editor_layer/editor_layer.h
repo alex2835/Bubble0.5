@@ -27,7 +27,7 @@ namespace Bubble
 		EditorLayer(SDL_WINDOW* window);
 		void OnAttach() override;
 		void OnDetach() override;
-		void OnUpdate() override;
+		void OnUpdate(DeltaTime delta_time) override;
 		void OnEvent(SDL_Event& event) override;
 	};
 }

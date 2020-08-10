@@ -3,6 +3,9 @@
 #include "base.h"
 #include "window/window.h"
 #include "layers/layer_array.h"
+#include "delta_time/delta_time.h"
+
+#include "SDL2/SDL_timer.h"
 
 
 namespace Bubble
@@ -12,6 +15,7 @@ namespace Bubble
 	protected:
 		Scope<Window> m_Window;
 		LayerArray m_LayerArray;
+		DeltaTime m_DeltaTime;
 		
 	public:
 		Application(Window* window = nullptr);

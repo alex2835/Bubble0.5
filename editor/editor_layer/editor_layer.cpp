@@ -72,7 +72,7 @@ namespace Bubble
         m_ImGuiControll.OnDetach();
 	}
 	
-	void EditorLayer::OnUpdate()
+	void EditorLayer::OnUpdate(DeltaTime delta_time)
 	{
         // Temp: Test triangle draw
 

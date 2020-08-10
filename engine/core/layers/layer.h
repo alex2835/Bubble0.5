@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL2/SDL_events.h"
+#include "delta_time/delta_time.h"
 
 #include <string>
 
@@ -17,7 +18,7 @@ namespace Bubble
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(DeltaTime delta_time) {}
 		virtual void OnEvent(SDL_Event& event) {}
 	};
 }

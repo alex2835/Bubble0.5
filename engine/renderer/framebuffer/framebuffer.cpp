@@ -67,12 +67,12 @@ namespace Bubble
 		glDeleteTextures(1, &m_ColorAttachment);
 		glDeleteTextures(1, &m_DepthAttachment);
 
-		glGenFramebuffers(1, &m_RendererID);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glcall(glGenFramebuffers(1, &m_RendererID));
+		glcall(glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID));
 
 		// Color
-		glGenTextures(1, &m_ColorAttachment);
-		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
+		glcall(glGenTextures(1, &m_ColorAttachment));
+		glcall(glBindTexture(GL_TEXTURE_2D, m_ColorAttachment));
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
 			GetWidth(), GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -80,8 +80,8 @@ namespace Bubble
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachment, 0);
 
 		// Depth
-		glGenTextures(1, &m_DepthAttachment);
-		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
+		glcall(glGenTextures(1, &m_DepthAttachment));
+		glcall(glBindTexture(GL_TEXTURE_2D, m_DepthAttachment));
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
 			GetWidth(), GetWidth(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -111,13 +111,13 @@ namespace Bubble
 
 	void Framebuffer::Bind()
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glcall(glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID));
 		glViewport(0, 0, GetWidth(), GetHeight());
 	}
 
 	void Framebuffer::Unbind()
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	}
 
 	glm::ivec2 Framebuffer::Size() const
@@ -128,7 +128,7 @@ namespace Bubble
 	void Framebuffer::Resize(const glm::ivec2& size)
 	{
 		// We don't need resize it
-		if ((size.x * size.y) == 0)
+		if ((size.x * size.y) <= 0)
 		{
 			return;
 		}

@@ -137,13 +137,13 @@ namespace Bubble
 			m_ShaderID = glCreateProgram();
 
 			// Link shaders
-            glAttachShader(m_ShaderID, vertexShader);
-            glAttachShader(m_ShaderID, fragmentShader);
+            glcall(glAttachShader(m_ShaderID, vertexShader));
+            glcall(glAttachShader(m_ShaderID, fragmentShader));
             if (geometry.size())
             {
-                glAttachShader(m_ShaderID, geometryShader);
+                glcall(glAttachShader(m_ShaderID, geometryShader));
             }
-            glLinkProgram(m_ShaderID);
+            glcall(glLinkProgram(m_ShaderID));
             
             {
                 GLint success;
@@ -167,6 +167,7 @@ namespace Bubble
                     throw std::runtime_error("Shader compilation failed");
                 }
             }
+
             // Now it's a part of shader program
             glDeleteShader(geometryShader);
             glDeleteShader(vertexShader);
@@ -175,7 +176,7 @@ namespace Bubble
 
         int Shader::GetUni(const std::string& uniform_name)
         {
-            glUseProgram(m_ShaderID);
+            glcall(glUseProgram(m_ShaderID));
             if (m_UniformCache.find(uniform_name) != m_UniformCache.end())
             {
                 return m_UniformCache[uniform_name];
@@ -212,7 +213,7 @@ namespace Bubble
 
 		void Shader::Bind()
 		{
-            glUseProgram(m_ShaderID);
+            glcall(glUseProgram(m_ShaderID));
 		}
 
 		void Shader::Unbind()
