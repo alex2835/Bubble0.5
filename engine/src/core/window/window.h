@@ -19,5 +19,7 @@ namespace Bubble
 		virtual bool PollEvent(SDL_Event& event) = 0;
 		virtual void OnEvent(SDL_Event& event) = 0;
 		virtual void OnUpdate() = 0;
+
+		virtual void SetVSync(bool mode) = 0;
 	};
 }

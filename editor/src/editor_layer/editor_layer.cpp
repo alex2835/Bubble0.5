@@ -121,7 +121,6 @@ namespace Bubble
 		}
 		ImGui::PopStyleVar();
 
-
         // Temp: fill screen color
         //for (auto& viewport : m_ViewportArray)
         //{

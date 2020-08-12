@@ -110,4 +110,9 @@ namespace Bubble
         m_IsOpen = false;
     }
 
+	void SDL_WINDOW::SetVSync(bool mode)
+	{
+        SDL_GL_SetSwapInterval(mode);
+	}
+
 }

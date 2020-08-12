@@ -36,5 +36,7 @@ namespace Bubble
 
         void OnUpdate() override;
         void Close() override;
+
+        void SetVSync(bool mode) override;
     };
 }

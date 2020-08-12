@@ -8,11 +8,11 @@ endif()
 if(CMAKE_BUILD_TYPE MATCHES Debug)
 	message("--- Debug ---")
 	#set release compiler flags 
-	SET(GCC_COVERAGE_COMPILE_FLAGS "-O0 -Wall")
+	SET(GCC_COVERAGE_COMPILE_FLAGS "-O0 -Wall -MP")
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
 	message("--- Release ---")
 	#set release compiler flags 
-	set(CMAKE_CXX_FLAGS "-O2 -Wall")
+	set(CMAKE_CXX_FLAGS "-O2 -Wall -MP")
 	set(CMAKE_INSTALL_PREFIX "/build/Release")
 else()
 	message(FATAL_ERROR "Please set variable: CMAKE_BUILD_TYPE (Debug or Release)")
