@@ -16,6 +16,7 @@ set(ENGINE_LAYERS
 )
 
 set(ENGINE_LOG
+    src/core/log/spdlog.cpp
     src/core/log/log.cpp
     src/core/log/log.h
 )
@@ -57,7 +58,7 @@ set (RENDERER_TEXTURE
 )
 
 set (STB_IMAGE
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/stb_image/stb_image.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/stb_image/stb_image.cpp
 )
 
 
@@ -83,6 +84,10 @@ set_target_properties(
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
+
+
+target_link_libraries(Engine spdlog)
+
 
 # include directories
 target_include_directories(

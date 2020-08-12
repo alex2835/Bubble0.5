@@ -53,13 +53,8 @@ target_include_directories(
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../imgui  
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/imgui  
 )
-
-#add_custom_command(TARGET Editor POST_BUILD							# Adds a post-build event to MyTest
-#     COMMAND ${CMAKE_COMMAND} -E copy_if_different					# which executes "cmake - E copy_if_different..."
-#         ${PROJECT_SOURCE_DIR}/resources   # <--this is in-file
-#         $<TARGET_FILE_DIR:Editor>)									# <--this is out-file path
 
 
 add_custom_command(TARGET Editor PRE_BUILD
