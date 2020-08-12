@@ -2,7 +2,7 @@
 
 #include "SDL2/SDL.h"
 
-#include "core/base.h"
+#include "renderer/renderer_base.h"
 #include "core/window/window.h"
 
 #include "cassert"

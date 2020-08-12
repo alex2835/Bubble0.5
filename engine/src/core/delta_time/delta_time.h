@@ -14,6 +14,8 @@ namespace Bubble
 		
 		float GetSeconds();
 		float GetMillisecond();
+		
+		float GetTime();
 	};
 
 }

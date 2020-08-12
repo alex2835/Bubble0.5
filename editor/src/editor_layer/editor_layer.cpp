@@ -15,11 +15,11 @@ namespace Bubble
 		m_ViewportArray.Push(Viewport(200, 100));
 
 		// Temp: Draw stuff
-
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+		float vertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		m_VertexArray = CreateScope<VertexArray>();
@@ -27,25 +27,29 @@ namespace Bubble
 
 		BufferLayout layout = {
 			{ GLSLDataType::Float3, "a_Position" },
-			{ GLSLDataType::Float4, "a_Color" }
+			{ GLSLDataType::Float2, "a_TexCoords" }
 		};
 		m_VertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
-		uint32_t indices[3] = { 0, 1, 2 };
+		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0};
 		m_IndexBuffer = CreateRef<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
+
+		m_Texture = CreateRef<Texture2D>("resources/bubble.jpg");
 
 		std::string vertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
+			layout(location = 1) in vec2 a_TexCoord;
+			
 			out vec3 v_Position;
-			out vec4 v_Color;
+			out vec2 v_TexCoord;
+			
 			void main()
 			{
 				v_Position = a_Position;
-				v_Color = a_Color;
+				v_TexCoord = a_TexCoord;
 				gl_Position = vec4(a_Position, 1.0);	
 			}
 		)";
@@ -55,16 +59,17 @@ namespace Bubble
 			
 			layout(location = 0) out vec4 color;
 			in vec3 v_Position;
-			in vec4 v_Color;
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
 			void main()
 			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
-				color = v_Color;
+				color = texture(u_Texture, v_TexCoord);
 			}
 		)";
 
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
-
 	}
 
 	void EditorLayer::OnDetach()
@@ -75,7 +80,6 @@ namespace Bubble
 	void EditorLayer::OnUpdate(DeltaTime delta_time)
 	{
         // Temp: Test triangle draw
-
 		m_ViewportArray[0].Bind();
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1);
@@ -83,6 +87,10 @@ namespace Bubble
 
 		m_Shader->Bind();
 		m_VertexArray->Bind();
+
+		m_Texture->Bind();
+		m_Shader->SetUni1i("u_Texture", 0);
+
 		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 		glBindVertexArray(0);

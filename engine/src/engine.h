@@ -13,3 +13,4 @@
 #include "renderer/buffer/buffer.h"
 #include "renderer/vertex_array/vertex_array.h"
 #include "renderer/shader/shader.h"
+#include "renderer/texture/texture.h"

@@ -21,6 +21,7 @@ namespace Bubble
 		Scope<VertexArray> m_VertexArray;
 		Ref<VertexBuffer> m_VertexBuffer;
 		Ref<IndexBuffer> m_IndexBuffer;
+		Ref<Texture2D> m_Texture;
 		Scope<Shader> m_Shader;
 
 	public:

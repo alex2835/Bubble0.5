@@ -4,29 +4,29 @@ project(Editor VERSION 0.0.0)
 
 
 set(EDITOR_LAYER
-    editor_layer/editor_layer.cpp
-    editor_layer/editor_layer.h
+    src/editor_layer/editor_layer.cpp
+    src/editor_layer/editor_layer.h
 )
 
 set(EDITOR_GUI
-    imgui_controll/imgui_controll.cpp
-    imgui_controll/imgui_controll.h
+    src/imgui_controll/imgui_controll.cpp
+    src/imgui_controll/imgui_controll.h
 )
 
 set(EDITOR_SDL_WINDOW
-    sdl_window/sdl_window.cpp
-    sdl_window/sdl_window.h
+    src/sdl_window/sdl_window.cpp
+    src/sdl_window/sdl_window.h
 )
 
 set(EDITOR_VIEWPORT
-    viewport/viewport.cpp
-    viewport/viewport.h
-    viewport/viewport_array.cpp
-    viewport/viewport_array.h
+    src/viewport/viewport.cpp
+    src/viewport/viewport.h
+    src/viewport/viewport_array.cpp
+    src/viewport/viewport_array.h
 )
 
 set(SOURCES
-    "editor_app.cpp"
+    "src/editor_app.cpp"
     ${EDITOR_GUI}
     ${EDITOR_LAYER}
     ${EDITOR_VIEWPORT}
@@ -51,10 +51,21 @@ set_target_properties(
 target_include_directories(
     Editor 
     PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../engine
-    ${CMAKE_CURRENT_SOURCE_DIR}/../imgui
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/../imgui  
 )
+
+#add_custom_command(TARGET Editor POST_BUILD							# Adds a post-build event to MyTest
+#     COMMAND ${CMAKE_COMMAND} -E copy_if_different					# which executes "cmake - E copy_if_different..."
+#         ${PROJECT_SOURCE_DIR}/resources   # <--this is in-file
+#         $<TARGET_FILE_DIR:Editor>)									# <--this is out-file path
+
+
+add_custom_command(TARGET Editor PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${PROJECT_SOURCE_DIR}/resources
+                       $<TARGET_FILE_DIR:Editor>/resources)
 
 # put dll with exe
 if (WIN32)

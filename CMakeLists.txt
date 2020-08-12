@@ -9,9 +9,9 @@ elseif (CMAKE_BUILD_TYPE MATCHES Release)
 	message("--- Release ---")
 	#set release compiler flags 
 	set(CMAKE_CXX_FLAGS "-O2 -Wall")
-	set(CMAKE_INSTALL_PREFIX ${IMGUI_SOURCES}"/build/Release")
+	set(CMAKE_INSTALL_PREFIX "/build/Release")
 else()
-	message(FATAL_ERROR "Not Debug and not Release : " ${CMAKE_BUILD_TYPE})
+	message(FATAL_ERROR "Please set variable: CMAKE_BUILD_TYPE (Debug or Release)")
 endif()
 
 # append compiler flags

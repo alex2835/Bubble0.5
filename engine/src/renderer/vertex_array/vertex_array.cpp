@@ -108,4 +108,14 @@ namespace Bubble
 		m_IndexBuffer = indexBuffer;
 	}
 
+	const std::vector<Bubble::Ref<Bubble::VertexBuffer>>& VertexArray::GetVertexBuffers() const
+	{
+		return m_VertexBuffers;
+	}
+
+	const Bubble::Ref<Bubble::IndexBuffer>& VertexArray::GetIndexBuffer() const
+	{
+		return m_IndexBuffer;
+	}
+
 }

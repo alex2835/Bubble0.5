@@ -98,7 +98,7 @@ namespace Bubble
 					glDeleteShader(vertexShader);
 					glDeleteShader(fragmentShader);
 
-                    LOG_CORE_ERROR("FRAGMENT SHADER ERROR: {0} \n {1}", m_Name, log);
+                    LOG_CORE_ERROR("FRAGMENT SHADER ERROR: : {0} \n {1}", m_Name, log);
 					throw std::runtime_error("Shader compilation failed");
                 }
             }

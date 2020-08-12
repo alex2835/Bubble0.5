@@ -3,7 +3,6 @@
 
 namespace Bubble
 {
-
 	void Bubble::DeltaTime::Update(float current_time)
 	{
 		m_Deltatime = current_time - m_LastTime;
