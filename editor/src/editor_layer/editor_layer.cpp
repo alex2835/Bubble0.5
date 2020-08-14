@@ -22,7 +22,7 @@ namespace Bubble
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
-		m_VertexArray = CreateScope<VertexArray>();
+		m_VertexArray = CreateRef<VertexArray>();
 		m_VertexBuffer = CreateRef<VertexBuffer>(vertices, sizeof(vertices));
 
 		BufferLayout layout = {
@@ -34,6 +34,7 @@ namespace Bubble
 
 		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0};
 		m_IndexBuffer = CreateRef<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
 		m_Texture = CreateRef<Texture2D>("resources/bubble.jpg");
 
@@ -79,21 +80,19 @@ namespace Bubble
 	
 	void EditorLayer::OnUpdate(DeltaTime delta_time)
 	{
-        // Temp: Test triangle draw
-		m_ViewportArray[0].Bind();
-
-		glClearColor(0.1f, 0.1f, 0.1f, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
+        // Temp: Test image
+		Renderer::SetViewport(m_ViewportArray[0].GetFramebuffer());
+		Renderer::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+		Renderer::Clear();
 
 		m_Shader->Bind();
-		m_VertexArray->Bind();
 
 		m_Texture->Bind();
 		m_Shader->SetUni1i("u_Texture", 0);
 
-		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+		Renderer::DrawIndexed(m_VertexArray);
 
-		glBindVertexArray(0);
+		m_VertexArray->Unbind();
 		m_ViewportArray[0].Unbind();
 
 

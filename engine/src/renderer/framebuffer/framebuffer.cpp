@@ -99,23 +99,23 @@ namespace Bubble
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	int Framebuffer::GetWidth()
+	int Framebuffer::GetWidth() const
 	{
 		return m_Specification.Size.x;
 	}
 
-	int Framebuffer::GetHeight()
+	int Framebuffer::GetHeight() const
 	{
 		return m_Specification.Size.y;
 	}
 
-	void Framebuffer::Bind()
+	void Framebuffer::Bind() const
 	{
 		glcall(glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID));
 		glViewport(0, 0, GetWidth(), GetHeight());
 	}
 
-	void Framebuffer::Unbind()
+	void Framebuffer::Unbind() const
 	{
 		glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	}

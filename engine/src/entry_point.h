@@ -1,9 +1,9 @@
 #pragma once
 
-#include <vector>
-
 #include "application/application.h"
 #include "log/log.h"
+
+#include <vector>
 
 
 // Implementation on client side

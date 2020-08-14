@@ -37,12 +37,12 @@ namespace Bubble
 
 		~Framebuffer();
 
-		void Bind();
-		void Unbind();
+		void Bind() const;
+		void Unbind() const;
 		void Invalidate();
 
-		int GetWidth();
-		int GetHeight();
+		int GetWidth() const;
+		int GetHeight() const;
 		glm::ivec2 Size() const;
 		void Resize(const glm::ivec2& size);
 

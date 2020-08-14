@@ -13,15 +13,11 @@ elseif (CMAKE_BUILD_TYPE MATCHES Release)
 	message("--- Release ---")
 	#set release compiler flags 
 	set(CMAKE_CXX_FLAGS "-O2 -Wall -MP")
-	set(CMAKE_INSTALL_PREFIX "/build/Release")
+	#set(CMAKE_INSTALL_PREFIX "/build/Release")
 else()
 	message(FATAL_ERROR "Please set variable: CMAKE_BUILD_TYPE (Debug or Release)")
 endif()
 
-# append compiler flags
-#SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
-#SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
-#add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 add_subdirectory(dependencies/spdlog)
 add_subdirectory(dependencies/imgui)

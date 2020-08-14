@@ -61,6 +61,11 @@ set (STB_IMAGE
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/stb_image/stb_image.cpp
 )
 
+set(RENDERER_RENDERER
+    src/renderer/renderer/renderer.h
+    src/renderer/renderer/renderer.cpp
+)
+
 
 set(SOURCES
     ${ENGINE_APPLICATION}
@@ -74,6 +79,7 @@ set(SOURCES
     ${RENDERER_BUFFER}
     ${RENDERER_VERTEX_ARRAY}
     ${RENDERER_TEXTURE}
+    ${RENDERER_RENDERER}
     ${STB_IMAGE}
 )
 
