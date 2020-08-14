@@ -71,6 +71,9 @@ namespace Bubble
 		)";
 
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
+
+		m_Entity = m_Registry.create();
+		m_Registry.emplace<Position>(m_Entity, Position{1, 1});
 	}
 
 	void EditorLayer::OnDetach()
@@ -95,8 +98,23 @@ namespace Bubble
 		m_VertexArray->Unbind();
 		m_ViewportArray[0].Unbind();
 
+		// Temp: Entt test
+		// get all entities with that have position component
+		auto view = m_Registry.view<Position>();
+
+		for (auto entity : view)
+		{
+			Position& position = view.get<Position>(entity);
+			position.x += 1;
+			position.y += 2;
+		}
+
+		// direct access by id
+		Position& position = m_Registry.get<Position>(m_Entity);
+		LOG_TRACE("Entity position: {0} {1}", position.x, position.y);
 
 
+		// ================= Imgui ================
 		m_ImGuiControll.Begin();
 
         // Temp: Veiwports control

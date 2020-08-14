@@ -16,3 +16,6 @@
 #include "renderer/texture/texture.h"
 #include "renderer/renderer/renderer.h"
 #include "renderer/renderer_base.h"
+
+// Scene
+#include "scene/scene.h"

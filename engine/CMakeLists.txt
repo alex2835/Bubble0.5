@@ -61,9 +61,16 @@ set (STB_IMAGE
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/stb_image/stb_image.cpp
 )
 
-set(RENDERER_RENDERER
+set(RENDERER
     src/renderer/renderer/renderer.h
     src/renderer/renderer/renderer.cpp
+)
+
+
+# Scene
+set(SCENE
+    src/scene/scene.h
+    src/scene/scene.cpp
 )
 
 
@@ -79,8 +86,10 @@ set(SOURCES
     ${RENDERER_BUFFER}
     ${RENDERER_VERTEX_ARRAY}
     ${RENDERER_TEXTURE}
-    ${RENDERER_RENDERER}
+    ${RENDERER}
     ${STB_IMAGE}
+
+    ${SCENE}
 )
 
 add_library(Engine STATIC ${SOURCES})
@@ -105,6 +114,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/GLEW/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glm/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/spdlog/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/entt/include
 )
 
 # libraris directories
