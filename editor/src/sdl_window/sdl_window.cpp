@@ -86,23 +86,19 @@ namespace Bubble
     {
         if (event.type == SDL_QUIT)
         {
-            m_ShouldClose = true;
+            m_IsOpen = false;
         }
         if (event.type == SDL_WINDOWEVENT &&
             event.window.event == SDL_WINDOWEVENT_CLOSE &&
             event.window.windowID == SDL_GetWindowID(m_Window))
         {
-            m_ShouldClose = true;
+            m_IsOpen = false;
         }
     }
 
     void SDL_WINDOW::OnUpdate()
     {
         SDL_GL_SwapWindow(m_Window);
-        if (m_ShouldClose)
-        {
-            Close();
-        }
     }
 
     void SDL_WINDOW::Close()

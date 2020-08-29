@@ -16,7 +16,6 @@ namespace Bubble
         SDL_GLContext m_GLContext;
         const char* glsl_version = "#version 330";
         bool m_IsOpen = true;
-        bool m_ShouldClose = false;
 
     public:
         SDL_WINDOW();

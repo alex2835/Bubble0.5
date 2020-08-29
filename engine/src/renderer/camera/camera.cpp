@@ -103,7 +103,7 @@ namespace Bubble
 			m_Pitch = -PI / 2.0f + 0.1f;
 
         // Update Front, Right and Up Vectors using the updated Euler angles
-		UpdateCameraVectors();
+		//UpdateCameraVectors();
 	}
 
     void Camera::ProcessMouseMovementShift(float xoffset, float yoffset)
@@ -122,7 +122,7 @@ namespace Bubble
             m_Pitch = -PI / 2.0f + 0.1f;
 
         // Update Front, Right and Up Vectors using the updated Euler angles
-        UpdateCameraVectors();
+        //UpdateCameraVectors();
     }
 
 
