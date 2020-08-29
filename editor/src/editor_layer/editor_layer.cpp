@@ -1,6 +1,5 @@
 
 #include "editor_layer.h"
-#include "scripts/test_script.h"
 
 
 namespace Bubble

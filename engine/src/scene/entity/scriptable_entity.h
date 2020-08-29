@@ -5,12 +5,11 @@
 
 namespace Bubble
 {
-	class ScriptableEntity
+	struct ScriptableEntity
 	{
 		Entity m_Entity;
 		friend class Scene;
 
-	public:
 		virtual ~ScriptableEntity() {}
 
 		template<typename T>

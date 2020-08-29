@@ -33,7 +33,7 @@ set(SOURCES
     ${EDITOR_SDL_WINDOW}
  )
 
-add_executable(Editor ${SOURCES})
+add_executable(Editor ${SOURCES} "src/editor_layer/camera_component/camera_componenet.h" "src/editor_layer/camera_component/camera_script.h")
 
 #engine
 target_link_libraries(Editor Engine)
