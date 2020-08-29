@@ -26,7 +26,7 @@ namespace Bubble
 
 
 /*
-    Will be called in embedded main loop
+	Will be called in main loop
 */
 Bubble::Application* CreateApplication()
 {

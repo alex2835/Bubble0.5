@@ -24,14 +24,14 @@ namespace Bubble
 		Ref<Texture2D> m_Texture;
 		Scope<Shader> m_Shader;
 
-		entt::registry m_Registry;
-		entt::entity m_Entity;
+		Ref<Scene> m_Scene;
+		Entity m_Entity;
 
 	public:
 		EditorLayer(SDL_WINDOW* window);
 		void OnAttach() override;
 		void OnDetach() override;
-		void OnUpdate(DeltaTime delta_time) override;
+		void OnUpdate(DeltaTime dt) override;
 		void OnEvent(SDL_Event& event) override;
 	};
 }

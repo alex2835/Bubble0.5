@@ -1,21 +1,34 @@
+#pragma once
 
-#include "core/base.h"
+#include "base.h"
+#include "delta_time/delta_time.h"
+
 #include "entt/entt.hpp"
+
 
 namespace Bubble
 {
-	struct Position {
-		float x;
-		float y;
-	};
-
-	struct Velocity {
-		float dx;
-		float dy;
-	};
+	class Entity;
 
 	class Scene
 	{
+		entt::registry m_Registry;
+		friend class Entity;
+
+	public:
+		Scene();
+		~Scene();
+
+		Entity CreateEntity(const std::string& name = std::string());
+
+		void OnUpdate(DeltaTime delta_time);
+		void OnViewportResize(uint32_t width, uint32_t height);
+
+		template <typename ...Args>
+		auto GetView()
+		{
+			return m_Registry.view<Args...>();
+		}
 
 	};
 }

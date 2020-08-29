@@ -73,6 +73,20 @@ set(SCENE
     src/scene/scene.cpp
 )
 
+set(SCENE_ENTITY
+    src/scene/entity/Entity.h
+    src/scene/entity/Entity.cpp
+)
+
+set(SCENE_COMPONENTS
+    src/scene/components/basic_components.h
+)
+
+set(SCENE_SCRIPTABLE_ENTITY
+    src/scene/entity/scriptable_entity.h
+    #src/scene/scripts/test_script.h
+)
+
 
 set(SOURCES
     ${ENGINE_APPLICATION}
@@ -90,6 +104,8 @@ set(SOURCES
     ${STB_IMAGE}
 
     ${SCENE}
+    ${SCENE_ENTITY}
+    ${SCENE_SCRIPTABLE_ENTITY}
 )
 
 add_library(Engine STATIC ${SOURCES})
@@ -110,6 +126,7 @@ target_include_directories(
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core
     ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/scene
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/stb_image
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/GLEW/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glm/include

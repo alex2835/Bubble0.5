@@ -1,5 +1,7 @@
 
 #include "editor_layer.h"
+#include "scripts/test_script.h"
+
 
 namespace Bubble
 {
@@ -12,7 +14,7 @@ namespace Bubble
         m_ImGuiControll.OnAttach();
 
         // Temp: test viewport
-		m_ViewportArray.Push(Viewport(200, 100));
+		m_ViewportArray.Push(Viewport(800, 600));
 
 		// Temp: Draw stuff
 		float vertices[5 * 4] = {
@@ -72,8 +74,10 @@ namespace Bubble
 
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
 
-		m_Entity = m_Registry.create();
-		m_Registry.emplace<Position>(m_Entity, Position{1, 1});
+		// Temp: Scene
+		m_Scene = CreateRef<Scene>();
+		m_Entity = m_Scene->CreateEntity("TestEntity");
+		m_Entity.AddComponent<NativeScriptComponent>().Bind<TestScript>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -81,7 +85,7 @@ namespace Bubble
         m_ImGuiControll.OnDetach();
 	}
 	
-	void EditorLayer::OnUpdate(DeltaTime delta_time)
+	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
         // Temp: Test image
 		Renderer::SetViewport(m_ViewportArray[0].GetFramebuffer());
@@ -100,18 +104,21 @@ namespace Bubble
 
 		// Temp: Entt test
 		// get all entities with that have position component
-		auto view = m_Registry.view<Position>();
+		//auto view = m_Scene->GetView<Position>();
+		//
+		//for (auto entity : view)
+		//{
+		//	Position& position = view.get<Position>(entity);
+		//	position.x += 1;
+		//	position.y += 2;
+		//}
+		//
+		//// direct access by id
+		//Position& position = m_Entity.GetComponent<Position>();
+		//LOG_TRACE("Entity position: {0} {1}", position.x, position.y);
 
-		for (auto entity : view)
-		{
-			Position& position = view.get<Position>(entity);
-			position.x += 1;
-			position.y += 2;
-		}
 
-		// direct access by id
-		Position& position = m_Registry.get<Position>(m_Entity);
-		LOG_TRACE("Entity position: {0} {1}", position.x, position.y);
+		m_Scene->OnUpdate(dt);
 
 
 		// ================= Imgui ================
@@ -191,9 +198,9 @@ namespace Bubble
 	void EditorLayer::OnEvent(SDL_Event& event)
 	{
         // Temp: add viewport by pressing space
-		if (event.type == SDL_EventType::SDL_KEYDOWN
-			&& event.key.keysym.sym == SDLK_SPACE)
-			m_ViewportArray.Push(Viewport(200, 200));
+		//if (event.type == SDL_EventType::SDL_KEYDOWN
+		//	&& event.key.keysym.sym == SDLK_SPACE)
+		//	m_ViewportArray.Push(Viewport(200, 200));
 
         m_ImGuiControll.OnEvent(event);
 	}
