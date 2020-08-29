@@ -1,7 +1,10 @@
 #pragma once
 
+#include "delta_time/delta_time.h"
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+
 
 enum class CameraMovement {
     FORWARD,
@@ -51,12 +54,10 @@ namespace Bubble
         float m_Fov = FOV;
         float m_DeltaFov = 0.05f;
 
-        // Last mouse position
-        float m_MouseX = 0.5f;
-        float m_MouseY = 0.5f;
+        float m_LastMouseX = 0.5f;
+        float m_LastMouseY = 0.5f;
 
-        bool m_NewFrame = true;
-
+        
         // Constructor with vectors
         Camera(const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.0f),
                float yaw = YAW,
@@ -68,9 +69,9 @@ namespace Bubble
         Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
         glm::mat4 GetLookatMat();
-        glm::mat4 GetPprojectionMat(int WindowWidth, int WindowHeight);
+        glm::mat4 GetPprojectionMat(int WindowWidth, int WindowHeight, float near = 0.1f, float far = 120.0f);
         
-        void ProcessKeyboard(CameraMovement direction, float deltaTime);
+        void ProcessKeyboard(CameraMovement direction, DeltaTime dt);
         
         void ProcessMouseMovement(float xMousePos, float yMousePos);
         void ProcessMouseMovementShift(float xoffset, float yoffset);

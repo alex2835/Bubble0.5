@@ -77,7 +77,7 @@ namespace Bubble
 		// Temp: Scene
 		m_Scene = CreateRef<Scene>();
 		m_Entity = m_Scene->CreateEntity("TestEntity");
-		m_Entity.AddComponent<NativeScriptComponent>().Bind<TestScript>();
+		//m_Entity.AddComponent<NativeScriptComponent>().Bind<TestScript>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -87,6 +87,9 @@ namespace Bubble
 	
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
+		// Scene update
+		m_Scene->OnUpdate(dt);
+
         // Temp: Test image
 		Renderer::SetViewport(m_ViewportArray[0].GetFramebuffer());
 		Renderer::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
@@ -101,24 +104,6 @@ namespace Bubble
 
 		m_VertexArray->Unbind();
 		m_ViewportArray[0].Unbind();
-
-		// Temp: Entt test
-		// get all entities with that have position component
-		//auto view = m_Scene->GetView<Position>();
-		//
-		//for (auto entity : view)
-		//{
-		//	Position& position = view.get<Position>(entity);
-		//	position.x += 1;
-		//	position.y += 2;
-		//}
-		//
-		//// direct access by id
-		//Position& position = m_Entity.GetComponent<Position>();
-		//LOG_TRACE("Entity position: {0} {1}", position.x, position.y);
-
-
-		m_Scene->OnUpdate(dt);
 
 
 		// ================= Imgui ================

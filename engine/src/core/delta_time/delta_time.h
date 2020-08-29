@@ -13,9 +13,7 @@ namespace Bubble
 		void Update(float current_time);
 		
 		float GetSeconds();
-		float GetMillisecond();
-		
-		float GetTime();
+		float GetMilliseconds();
 	};
 
 }

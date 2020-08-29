@@ -14,7 +14,7 @@ namespace Bubble
 		return m_Deltatime;
 	}
 
-	float Bubble::DeltaTime::GetMillisecond()
+	float Bubble::DeltaTime::GetMilliseconds()
 	{
 		return m_Deltatime * 1000.0f;
 	}
