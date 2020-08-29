@@ -69,7 +69,7 @@ namespace Bubble
         Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
         glm::mat4 GetLookatMat();
-        glm::mat4 GetPprojectionMat(int WindowWidth, int WindowHeight, float near = 0.1f, float far = 120.0f);
+        glm::mat4 GetPprojectionMat(int window_width, int window_height, float near = 0.1f, float far = 120.0f);
         
         void ProcessKeyboard(CameraMovement direction, DeltaTime dt);
         

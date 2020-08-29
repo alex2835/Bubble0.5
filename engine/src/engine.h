@@ -7,6 +7,7 @@
 #include "core/layers/layer.h"
 #include "core/layers/layer_array.h"
 #include "core/window/window.h"
+#include "core/input/input.h"
 
 // Renderer
 #include "renderer/renderer_base.h"

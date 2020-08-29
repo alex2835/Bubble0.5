@@ -99,7 +99,7 @@ namespace Bubble
 		m_Texture->Bind();
 		m_Shader->SetUni1i("u_Texture", 0);
 
-		Renderer::DrawIndexed(m_VertexArray);
+		Renderer::DrawIndex(m_VertexArray);
 
 		m_VertexArray->Unbind();
 		m_ViewportArray[0].Unbind();
@@ -117,11 +117,11 @@ namespace Bubble
 			ImGui::Begin(m_ViewportArray[i].GetName().c_str(), (bool*)&m_ViewportArray.IsOpen(i));
 
 			ImVec2 imgui_viewport_size = ImGui::GetContentRegionAvail();
-			glm::vec2 fViewportSize = m_ViewportArray[i].Size();
-			if (fViewportSize != *(glm::vec2*) & imgui_viewport_size)
-			{
+			glm::vec2 viewport_size = m_ViewportArray[i].Size();
+
+			if (viewport_size != *(glm::vec2*) & imgui_viewport_size)
 				m_ViewportArray[i].Resize({ imgui_viewport_size.x, imgui_viewport_size.y });
-			}
+
 			uint32_t textureId = m_ViewportArray[i].GetFramebuffer().GetColorAttachmentRendererID();
 
 			ImGui::Image((void*)textureId, ImVec2{ (float)m_ViewportArray[i].Size().x, (float)m_ViewportArray[i].Size().y });

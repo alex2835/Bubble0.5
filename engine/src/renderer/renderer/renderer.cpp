@@ -34,7 +34,7 @@ namespace Bubble
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void Renderer::DrawIndexed(const Ref<VertexArray>& vertex_array, DrawType draw_type, uint32_t index_count)
+	void Renderer::DrawIndex(const Ref<VertexArray>& vertex_array, DrawType draw_type, uint32_t index_count)
 	{
 		vertex_array->Bind();
 		uint32_t opengl_draw_type = 0;

@@ -6,7 +6,9 @@ namespace Bubble
 {
     Application::Application(Window* window)
         : m_Window(window)
-    {}
+    {
+        Input::SetWindow(window);
+    }
 
 	void Application::PushLayer(Layer* layer)
 	{
@@ -43,6 +45,7 @@ namespace Bubble
                     layer->OnEvent(event);
                 }
                 m_Window->OnEvent(event);
+                Input::OnEvent(event);
             }
 
             // Update layers

@@ -20,6 +20,6 @@ namespace Bubble
 
 		static void Clear();
 
-		static void DrawIndexed(const Ref<VertexArray>& vertexArray, DrawType draw_type = DrawType::TRIANGLES, uint32_t count = 0);
+		static void DrawIndex(const Ref<VertexArray>& vertexArray, DrawType draw_type = DrawType::TRIANGLES, uint32_t count = 0);
 	};
 }

@@ -39,9 +39,9 @@ namespace Bubble
         return glm::lookAt(m_Position, m_Position + m_Front, m_Up);
     }
 
-    glm::mat4 Camera::GetPprojectionMat(int WindowWidth, int WindowHeight, float near, float far)
+    glm::mat4 Camera::GetPprojectionMat(int window_width, int window_height, float near, float far)
     {
-        float aspect = (float)WindowWidth / WindowHeight;
+        float aspect = (float)window_width / window_height;
         return glm::perspective<float>(m_Fov, aspect, near, far);
     }
 

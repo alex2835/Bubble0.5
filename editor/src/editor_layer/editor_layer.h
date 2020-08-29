@@ -12,6 +12,7 @@ namespace Bubble
 	{
 		ImGuiControll m_ImGuiControll;
 		ViewportArray m_ViewportArray;
+		Ref<Scene> m_Scene;
 
 		// Temp:
 		bool show_demo_window = true;
@@ -24,7 +25,6 @@ namespace Bubble
 		Ref<Texture2D> m_Texture;
 		Scope<Shader> m_Shader;
 
-		Ref<Scene> m_Scene;
 		Entity m_Entity;
 
 	public:

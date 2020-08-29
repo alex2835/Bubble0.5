@@ -25,15 +25,21 @@ set(EDITOR_VIEWPORT
     src/viewport/viewport_array.h
 )
 
+set(SCENE_CAMERA
+    src/scene_camera/scene_camera_controller.cpp
+    src/scene_camera/scene_camera_controller.h
+)
+
 set(SOURCES
     "src/editor_app.cpp"
     ${EDITOR_GUI}
     ${EDITOR_LAYER}
     ${EDITOR_VIEWPORT}
     ${EDITOR_SDL_WINDOW}
+    ${SCENE_CAMERA}
  )
 
-add_executable(Editor ${SOURCES} "src/editor_layer/camera_component/camera_componenet.h" "src/editor_layer/camera_component/camera_script.h")
+add_executable(Editor ${SOURCES})
 
 #engine
 target_link_libraries(Editor Engine)

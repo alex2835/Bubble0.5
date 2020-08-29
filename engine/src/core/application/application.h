@@ -4,6 +4,7 @@
 #include "window/window.h"
 #include "layers/layer_array.h"
 #include "delta_time/delta_time.h"
+#include "input/input.h"
 
 #include "SDL2/SDL_timer.h"
 
