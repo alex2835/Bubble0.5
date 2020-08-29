@@ -50,25 +50,16 @@ namespace Bubble
 		
 	}
 
-	// SDLK_a, SDLK_1, ...
 	bool Input::IsKeyPressed(SDL_Keycode code)
 	{
 		return s_KeyMap[code];
 	}
 
-	// SDLK_a, SDLK_1, ...
 	bool Input::IsKeyClick(SDL_Keycode code)
 	{
 		return s_KeyMap[code] == 1;
 	}
 
-	/*
-		SDL_BUTTON_LEFT
-		SDL_BUTTON_MIDDLE
-		SDL_BUTTON_RIGHT
-		SDL_BUTTON_X1
-		SDL_BUTTON_X2
-	*/
 	bool Input::IsMouseButtonPressed(int button)
 	{
 		return s_MouseKeyMap[button];
@@ -100,6 +91,27 @@ namespace Bubble
 		return (float)s_MousePosY / height;
 	}
 
+	glm::vec2 Input::fGetMouseRelPosition()
+	{
+		int width, height;
+		SDL_GetWindowSize(s_Window, &width, &height);
+		return glm::vec2((float)s_MouseRelPosX / width, (float)s_MouseRelPosY / height);
+	}
+
+	float Input::fGetMouseRelX()
+	{
+		int width, height;
+		SDL_GetWindowSize(s_Window, &width, &height);
+		return (float)s_MouseRelPosX / width;
+	}
+
+	float Input::fGetMouseRelY()
+	{
+		int width, height;
+		SDL_GetWindowSize(s_Window, &width, &height);
+		return (float)s_MouseRelPosY / height;
+	}
+
 	int Input::GetMouseX()
 	{
 		return s_MousePosX;
@@ -108,6 +120,21 @@ namespace Bubble
 	int Input::GetMouseY()
 	{
 		return s_MousePosY;
+	}
+
+	glm::ivec2 Input::GetMouseRelPosition()
+	{
+		return glm::ivec2(s_MouseRelPosX, s_MouseRelPosY);
+	}
+
+	int Input::GetMouseRelX()
+	{
+		return s_MouseRelPosX;
+	}
+
+	int Input::GetMouseRelY()
+	{
+		return s_MouseRelPosY;
 	}
 
 	int Input::GetMouseWheelOffset()

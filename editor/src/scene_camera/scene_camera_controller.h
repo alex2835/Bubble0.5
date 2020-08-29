@@ -1,5 +1,6 @@
 #pragma once
 
+#include "input/input.h"
 #include "camera/camera.h"
 #include "delta_time/delta_time.h"
 
