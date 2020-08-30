@@ -108,7 +108,7 @@ set(SOURCES
     ${SCENE_SCRIPTABLE_ENTITY}
 )
 
-add_library(Engine STATIC ${SOURCES} "src/core/input/input.h" "src/core/input/input.cpp")
+add_library(Engine STATIC ${SOURCES} "src/core/input/input.h" "src/core/input/input.cpp" "src/renderer/mesh/mesh.h" "src/renderer/mesh/mesh.cpp")
 
 set_target_properties(
     Engine PROPERTIES

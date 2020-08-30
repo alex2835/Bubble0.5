@@ -122,8 +122,9 @@ namespace Bubble
 		BufferLayout m_Layout;
 
 	public:
+		VertexBuffer() = default;
 		VertexBuffer(uint32_t size);
-		VertexBuffer(float* vertices, uint32_t size);
+		VertexBuffer(void* vertices, uint32_t size);
 
 		VertexBuffer(const VertexBuffer&) = delete;
 		VertexBuffer& operator=(const VertexBuffer&) = delete;
@@ -150,6 +151,7 @@ namespace Bubble
 		uint32_t m_Count = 0;
 
 	public:
+		IndexBuffer() = default;
 		IndexBuffer(uint32_t* indices, uint32_t count);
 
 		IndexBuffer(const IndexBuffer&) = delete;

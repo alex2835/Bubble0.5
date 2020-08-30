@@ -13,7 +13,7 @@ namespace Bubble
 		glcall(glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW));
 	}
 
-	VertexBuffer::VertexBuffer(float* vertices, uint32_t size)
+	VertexBuffer::VertexBuffer(void* vertices, uint32_t size)
 	{
 		glcall(glGenBuffers(1, &m_RendererID));
 		glcall(glBindBuffer(GL_ARRAY_BUFFER, m_RendererID));

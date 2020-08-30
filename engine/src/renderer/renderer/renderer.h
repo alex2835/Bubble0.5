@@ -2,12 +2,18 @@
 #include "renderer_base.h"
 #include "vertex_array/vertex_array.h"
 #include "framebuffer/framebuffer.h"
+#include "shader/shader.h"
+#include "mesh/mesh.h"
+
 #include "glm/glm.hpp"
 
 
 namespace Bubble
 {
 	enum class DrawType { LINES, TRIANGLES };
+
+	static const char* const texture_type_names[] = { "material.diffuse", "material.specular", "material.normal", "material.height" };
+
 
 	class Renderer
 	{
@@ -21,5 +27,7 @@ namespace Bubble
 		static void Clear();
 
 		static void DrawIndex(const Ref<VertexArray>& vertexArray, DrawType draw_type = DrawType::TRIANGLES, uint32_t count = 0);
+
+		static void DrawMesh(const Ref<Mesh>& mesh, const Ref<Shader>& shader, DrawType draw_type);
 	};
 }

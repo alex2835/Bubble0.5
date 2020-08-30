@@ -1,6 +1,8 @@
+#pragma once
 
 #include "renderer_base.h"
 #include "glm/vec4.hpp"
+
 
 namespace Bubble
 {

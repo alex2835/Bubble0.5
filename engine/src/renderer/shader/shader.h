@@ -37,6 +37,7 @@ namespace Bubble
 
         void Bind();
         void Unbind();
+        void ActivateTexture(int slot);
 
         // lone int 
         void SetUni1i(const std::string& name, const int& val);
