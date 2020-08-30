@@ -41,7 +41,7 @@ set(SOURCES
 
 add_executable(Editor ${SOURCES})
 
-#engine
+# engine
 target_link_libraries(Editor Engine)
 
 # imgui

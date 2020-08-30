@@ -116,9 +116,19 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
-#target_link_libraries(Engine assimp::assimp)
+# OpenGL
+find_package( OpenGL REQUIRED )
+include_directories( ${OPENGL_INCLUDE_DIRS} )
+target_link_libraries(Engine ${OPENGL_LIBRARIES} )
+
+target_link_libraries(Engine assimp)
 target_link_libraries(Engine spdlog)
 
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    target_link_libraries(Engine glewd)
+else()
+    target_link_libraries(Engine glew)
+endif()
 
 # include directories
 target_include_directories(
@@ -128,19 +138,20 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer
     ${CMAKE_CURRENT_SOURCE_DIR}/src/scene
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/stb_image
-    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/GLEW/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glew/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glm/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/spdlog/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/entt/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/assimp/include
 )
 
+
 # libraris directories
 target_link_directories(
     Engine 
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/SDL2/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glew/lib
+    ${CMAKE_CURRENT_BINARY_DIR}/../lib
 )
 
 
@@ -155,7 +166,7 @@ if (APPLE)
     target_link_libraries(
         Engine
         libSDL2-2.0.dylib
-        libGLEW.a
+        #libGLEW.a
         "-framework OpenGL"
         "-framework IOKit"
         "-framework Cocoa"
@@ -176,8 +187,8 @@ if (WIN32)
         SDL2.dll
         SDL2.lib
         SDL2main.lib
-        glew32s.lib
-        opengl32.lib
+        #glew32s.lib
+        #opengl32.lib
 )
 
 endif()

@@ -23,10 +23,19 @@ endif()
 set(BUILD_SHARED_LIBS OFF)
 set(DASSIMP_BUILD_ASSIMP_TOOLS OFF)
 
+# Glew flags
+set( GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE )
+set( GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE )
+set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE )
+
+set(glew-cmake_BUILD_STATIC ON)
+set(glew-cmake_BUILD_SHARED OFF)
+#set(GLEW_USE_STATIC_LIBS TRUE)
 
 add_subdirectory(editor)
 add_subdirectory(engine)
 
+add_subdirectory(dependencies/glew)
 add_subdirectory(dependencies/assimp)
 add_subdirectory(dependencies/spdlog)
 add_subdirectory(dependencies/imgui)
