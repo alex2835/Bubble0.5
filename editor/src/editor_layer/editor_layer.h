@@ -5,6 +5,7 @@
 #include "viewport/viewport_array.h"
 #include "imgui_controll/imgui_controll.h"
 #include "sdl_window/sdl_window.h"
+#include "scene_camera/scene_camera_controller.h"
 
 namespace Bubble
 {
@@ -13,6 +14,8 @@ namespace Bubble
 		ImGuiControll m_ImGuiControll;
 		ViewportArray m_ViewportArray;
 		Ref<Scene> m_Scene;
+
+		SceneCameraController m_SceneCamera;
 
 		// Temp:
 		bool show_demo_window = true;
@@ -28,7 +31,7 @@ namespace Bubble
 		Entity m_Entity;
 
 	public:
-		EditorLayer(SDL_WINDOW* window);
+		EditorLayer();
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate(DeltaTime dt) override;

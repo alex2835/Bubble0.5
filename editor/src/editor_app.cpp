@@ -14,7 +14,7 @@ namespace Bubble
     public:
         EditorApp() : Application(new SDL_WINDOW())
         {
-            PushLayer(new EditorLayer((SDL_WINDOW*)m_Window.get()));
+            PushLayer(new EditorLayer());
         }
 
         ~EditorApp()

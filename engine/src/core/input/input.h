@@ -4,6 +4,7 @@
 #include "SDL2/SDL_events.h"
 
 #include "window/window.h"
+#include "application/application.h"
 
 
 namespace Bubble
@@ -19,18 +20,16 @@ namespace Bubble
 		static int s_MouseRelPosX;
 		static int s_MouseRelPosY;
 
-		static SDL_Window* s_Window;
-
 	public:
-		static void SetWindow(Window* window) { s_Window = (SDL_Window*)window; }
 		static void OnEvent(SDL_Event& event);
 		
-		// SDLK_a, SDLK_1, ...
+		// Codes: SDLK_a, SDLK_1, ...
 		static bool IsKeyPressed(SDL_Keycode code);
-		// SDLK_a, SDLK_1, ...
+		// Codes: SDLK_a, SDLK_1, ...
 		static bool IsKeyClick(SDL_Keycode code);
 
 		/*
+		*	Codes:
 			SDL_BUTTON_LEFT
 			SDL_BUTTON_MIDDLE
 			SDL_BUTTON_RIGHT
@@ -47,6 +46,7 @@ namespace Bubble
 		static int GetMouseRelX();
 		static int GetMouseRelY();
 
+		// return values between 0.0f and 1.0f
 		static glm::vec2 fGetMousePosition();
 		static float fGetMouseX();
 		static float fGetMouseY();

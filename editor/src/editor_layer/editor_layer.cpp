@@ -4,9 +4,7 @@
 
 namespace Bubble
 {
-    EditorLayer::EditorLayer(SDL_WINDOW* window)
-        : m_ImGuiControll(window)
-    {}
+    EditorLayer::EditorLayer() {}
 
 	void EditorLayer::OnAttach()
 	{
@@ -88,6 +86,10 @@ namespace Bubble
 	{
 		// Scene update
 		m_Scene->OnUpdate(dt);
+
+		// Scene camera update
+		m_SceneCamera.OnUpdate(dt);
+
 
         // Temp: Test image
 		Renderer::SetViewport(m_ViewportArray[0].GetFramebuffer());

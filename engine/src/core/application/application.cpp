@@ -4,10 +4,12 @@
 
 namespace Bubble
 {
+    Window* Application::s_CurrentWindow = nullptr;
+
     Application::Application(Window* window)
         : m_Window(window)
     {
-        Input::SetWindow(window);
+        Application::s_CurrentWindow = window;
     }
 
 	void Application::PushLayer(Layer* layer)
@@ -28,6 +30,11 @@ namespace Bubble
 	void Application::SwapLayers(int id_1, int id_2)
 	{
         m_LayerArray.Swap(id_1, id_2);
+	}
+
+	Window* Application::GetWindow()
+	{
+        return s_CurrentWindow;
 	}
 
 	void Application::Run()

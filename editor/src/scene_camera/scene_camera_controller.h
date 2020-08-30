@@ -4,6 +4,8 @@
 #include "camera/camera.h"
 #include "delta_time/delta_time.h"
 
+#include "SDL2/SDL.h"
+
 namespace Bubble
 {
 	const static float MAX_SPEED = 20.0f;
@@ -30,14 +32,13 @@ namespace Bubble
 		void OnUpdate(DeltaTime dt);
 
 		glm::mat4 GetLookatMat();
-		glm::mat4 GetPprojectionMat(int WindowWidth, int WindowHeight, float near = 0.1f, float far = 120.0f);
+		glm::mat4 GetPprojectionMat(int WindowWidth, int WindowHeight, float near_plane = 0.1f, float far_plane = 120.0f);
 
 	private:
-
 		void ProcessKeyboard(CameraMovement direction, DeltaTime dt);
 		void ProcessMouseMovement(float xMousePos, float yMousePos);
 		void ProcessMouseMovementShift(float xoffset, float yoffset);
 		void ProcessMouseScroll(float yoffset);
-
 	};
+
 }

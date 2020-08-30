@@ -23,8 +23,9 @@ namespace Bubble
 
         bool IsOpen() override;
         
-        int GetWindth() override;
+        int GetWidth() override;
         int GetHeight() override;
+        glm::ivec2 GetSize() override;
 
         SDL_Window* GetWindow();
         SDL_GLContext GetGLContext();

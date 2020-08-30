@@ -7,10 +7,10 @@ namespace Bubble
 	// Process scene camera movement
 	void SceneCameraController::OnUpdate(DeltaTime dt)
 	{
-		if (Input::IsMouseButtonPressed(SDL_BUTTON_LEFT))
+		if (Input::IsMouseButtonPressed(SDL_BUTTON_RIGHT))
 		{
 			// Catch cursor
-			SDL_CaptureMouse(SDL_TRUE);
+			SDL_SetRelativeMouseMode(SDL_TRUE);
 
 			// speed x
 			if (Input::IsKeyPressed(SDLK_w))
@@ -60,7 +60,7 @@ namespace Bubble
 		}
 		else {
 			// Release cursor
-			SDL_CaptureMouse(SDL_FALSE);
+			SDL_SetRelativeMouseMode(SDL_FALSE);
 		}
 	}
 
@@ -69,9 +69,9 @@ namespace Bubble
 		return m_Camera.GetLookatMat();
 	}
 
-	glm::mat4 SceneCameraController::GetPprojectionMat(int window_width, int window_height, float near, float far)
+	glm::mat4 SceneCameraController::GetPprojectionMat(int window_width, int window_height, float near_plane, float far_plane)
 	{
-		return m_Camera.GetPprojectionMat(window_width, window_height, near, far);
+		return m_Camera.GetPprojectionMat(window_width, window_height, near_plane, far_plane);
 	}
 
 
@@ -132,8 +132,6 @@ namespace Bubble
 		if (m_Camera.Pitch < -PI / 2.0f + 0.1f)
 			m_Camera.Pitch = -PI / 2.0f + 0.1f;
 
-		// Update Front, Right and Up Vectors using the updated Euler angles
-		//UpdateCameraVectors();
 	}
 
 	void SceneCameraController::ProcessMouseMovementShift(float xoffset, float yoffset)
@@ -151,8 +149,6 @@ namespace Bubble
 		if (m_Camera.Pitch < -PI / 2.0f + 0.1f)
 			m_Camera.Pitch = -PI / 2.0f + 0.1f;
 
-		// Update Front, Right and Up Vectors using the updated Euler angles
-		//UpdateCameraVectors();
 	}
 
 

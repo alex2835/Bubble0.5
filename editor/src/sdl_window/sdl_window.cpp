@@ -48,7 +48,7 @@ namespace Bubble
         return m_IsOpen;
 	}
 
-	int SDL_WINDOW::GetWindth()
+	int SDL_WINDOW::GetWidth()
     {
         int width = 0, height = 0;
         SDL_GetWindowSize(m_Window, &width, &height);
@@ -62,7 +62,14 @@ namespace Bubble
         return height;
     }
 
-    SDL_Window* SDL_WINDOW::GetWindow()
+	glm::ivec2 SDL_WINDOW::GetSize()
+	{
+		int width = 0, height = 0;
+		SDL_GetWindowSize(m_Window, &width, &height);
+        return glm::ivec2(width, height);
+	}
+
+	SDL_Window* SDL_WINDOW::GetWindow()
     {
         return m_Window;
     }

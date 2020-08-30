@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL2/SDL_events.h"
+#include "glm/glm.hpp"
 
 
 namespace Bubble
@@ -13,8 +14,9 @@ namespace Bubble
 		virtual bool IsOpen() = 0;
 		virtual void Close() = 0;
 
-		virtual int GetWindth() = 0;
+		virtual int GetWidth() = 0;
 		virtual int GetHeight() = 0;
+		virtual glm::ivec2 GetSize() = 0;
 
 		virtual bool PollEvent(SDL_Event& event) = 0;
 		virtual void OnEvent(SDL_Event& event) = 0;

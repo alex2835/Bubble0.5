@@ -13,8 +13,6 @@ namespace Bubble
 	int Input::s_MouseRelPosX;
 	int Input::s_MouseRelPosY;
 
-	SDL_Window* Input::s_Window;
-
 	void Input::OnEvent(SDL_Event& event)
 	{
 		switch (event.type)
@@ -72,43 +70,37 @@ namespace Bubble
 
 	glm::vec2 Input::fGetMousePosition()
 	{
-		int width, height;
-		SDL_GetWindowSize(s_Window, &width, &height);
-		return glm::vec2((float)s_MousePosX / width, (float)s_MousePosY / height);
+		glm::vec2 window_size = Application::GetWindow()->GetSize();
+		return glm::vec2((float)s_MousePosX / window_size.x, (float)s_MousePosY / window_size.y);
 	}
 
 	float Input::fGetMouseX()
 	{
-		int width, height;
-		SDL_GetWindowSize(s_Window, &width, &height);
+		int width = Application::GetWindow()->GetWidth();
 		return (float)s_MousePosX / width;
 	}
 
 	float Input::fGetMouseY()
 	{
-		int width, height;
-		SDL_GetWindowSize(s_Window, &width, &height);
+		int height = Application::GetWindow()->GetHeight();
 		return (float)s_MousePosY / height;
 	}
 
 	glm::vec2 Input::fGetMouseRelPosition()
 	{
-		int width, height;
-		SDL_GetWindowSize(s_Window, &width, &height);
-		return glm::vec2((float)s_MouseRelPosX / width, (float)s_MouseRelPosY / height);
+		glm::vec2 window_size = Application::GetWindow()->GetSize();
+		return glm::vec2((float)s_MouseRelPosX / window_size.x, (float)s_MouseRelPosY / window_size.y);
 	}
 
 	float Input::fGetMouseRelX()
 	{
-		int width, height;
-		SDL_GetWindowSize(s_Window, &width, &height);
+		int width = Application::GetWindow()->GetWidth();
 		return (float)s_MouseRelPosX / width;
 	}
 
 	float Input::fGetMouseRelY()
 	{
-		int width, height;
-		SDL_GetWindowSize(s_Window, &width, &height);
+		int height = Application::GetWindow()->GetHeight();
 		return (float)s_MouseRelPosY / height;
 	}
 

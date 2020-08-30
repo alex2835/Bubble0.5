@@ -7,12 +7,12 @@ namespace Bubble
     static void imgui_docking();
     static void imgui_multi_viewports();
 
+	ImGuiControll::ImGuiControll()
+	{
+        m_Window = (SDL_WINDOW*)Application::GetWindow();
+	}
 
-    ImGuiControll::ImGuiControll(SDL_WINDOW* window)
-        : m_Window(window)
-    {}
-
-    void ImGuiControll::OnAttach()
+	void ImGuiControll::OnAttach()
     {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
