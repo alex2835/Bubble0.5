@@ -12,14 +12,21 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
 	message("--- Release ---")
 	#set release compiler flags 
-	set(CMAKE_CXX_FLAGS "-O2 -Wall -MP")
+	set(CMAKE_CXX_FLAGS "-O2 -MP /EHsc")
 	#set(CMAKE_INSTALL_PREFIX "/build/Release")
 else()
 	message(FATAL_ERROR "Please set variable: CMAKE_BUILD_TYPE (Debug or Release)")
 endif()
 
 
+# Assimp flags
+set(BUILD_SHARED_LIBS OFF)
+set(DASSIMP_BUILD_ASSIMP_TOOLS OFF)
+
+
+add_subdirectory(editor)
+add_subdirectory(engine)
+
+add_subdirectory(dependencies/assimp)
 add_subdirectory(dependencies/spdlog)
 add_subdirectory(dependencies/imgui)
-add_subdirectory(engine)
-add_subdirectory(editor)

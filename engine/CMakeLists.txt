@@ -116,7 +116,7 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
-
+#target_link_libraries(Engine assimp::assimp)
 target_link_libraries(Engine spdlog)
 
 
@@ -132,6 +132,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glm/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/spdlog/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/entt/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/assimp/include
 )
 
 # libraris directories
