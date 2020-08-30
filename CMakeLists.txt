@@ -12,7 +12,7 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
 	message("--- Release ---")
 	#set release compiler flags 
-	set(CMAKE_CXX_FLAGS "-O2 -MP /EHsc")
+	set(CMAKE_CXX_FLAGS "-O2 -MP ")
 	#set(CMAKE_INSTALL_PREFIX "/build/Release")
 else()
 	message(FATAL_ERROR "Please set variable: CMAKE_BUILD_TYPE (Debug or Release)")
@@ -30,12 +30,13 @@ set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE )
 
 set(glew-cmake_BUILD_STATIC ON)
 set(glew-cmake_BUILD_SHARED OFF)
-#set(GLEW_USE_STATIC_LIBS TRUE)
+set(GLEW_USE_STATIC_LIBS TRUE)
+add_subdirectory(dependencies/glew)
 
 add_subdirectory(editor)
 add_subdirectory(engine)
 
-add_subdirectory(dependencies/glew)
+
 add_subdirectory(dependencies/assimp)
 add_subdirectory(dependencies/spdlog)
 add_subdirectory(dependencies/imgui)
