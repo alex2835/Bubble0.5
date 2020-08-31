@@ -221,10 +221,6 @@ namespace Bubble
             glUseProgram(0);
 		}
 
-		void Shader::ActivateTexture(int slot)
-		{
-            glActiveTexture(GL_TEXTURE0 + slot);
-		}
 
 		// lone int 
         void Shader::SetUni1i(const std::string& m_Name, const int& val)

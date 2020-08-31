@@ -1,6 +1,7 @@
 #pragma once
 
 #include "renderer_base.h"
+#include "texture/texture.h"
 #include "log/log.h"
 
 #include "glm/glm.hpp"
@@ -37,8 +38,7 @@ namespace Bubble
 
         void Bind();
         void Unbind();
-        void ActivateTexture(int slot);
-
+        
         // lone int 
         void SetUni1i(const std::string& name, const int& val);
 

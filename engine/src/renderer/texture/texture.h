@@ -47,6 +47,7 @@ namespace Bubble
 		void SetData(void* data, uint32_t size);
 
 		void Bind(uint32_t slot = 0) const;
+		static void UnbindAll() { glActiveTexture(GL_TEXTURE0); }
 
 		bool operator==(const Texture2D& other) const
 		{

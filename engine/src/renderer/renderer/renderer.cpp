@@ -64,17 +64,20 @@ namespace Bubble
 
 	void Renderer::DrawMesh(const Ref<Mesh>& mesh, const Ref<Shader>& shader, DrawType draw_type)
 	{
-		// bind appropriate textures
-		uint32_t diffuseNr = 1;
-		uint32_t specularNr = 1;
-		uint32_t normalNr = 1;
-		uint32_t heightNr = 1;
+		Renderer::DrawMesh(*mesh.get(), shader, draw_type);
+	}
 
-		int index = 0;
-		for (const MeshTexture& texture : mesh->GetTextures())
+	void Renderer::DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type)
+	{
+		// Bind appropriate textures
+		uint32_t diffuseNr = 0;
+		uint32_t specularNr = 0;
+		uint32_t normalNr = 0;
+		uint32_t heightNr = 0;
+
+		int slot = 0;
+		for (const MeshTexture& texture : mesh.GetTextures())
 		{
-			shader->ActivateTexture(index);
-			
 			int number;
 			TextureType type = texture.type;
 			if (type == TextureType::DIFFUSE) {
@@ -92,20 +95,25 @@ namespace Bubble
 			else {
 				BUBBLE_CORE_ASSERT(false, "Invalid texture type");
 			}
-		
-			shader->SetUni1i(texture_type_names[(int)type] + std::to_string(number), index);
-			texture.Bind();
+
+			shader->SetUni1i(TextureNameLookup[(int)type] + std::to_string(number), slot);
+			texture.Bind(slot);
+			slot++;
 		}
-		
-		// Temp
-		shader->SetUni1i("material.shininess", mesh->shininess);
-		
-		// draw mesh
-		mesh->VertexArray.Bind();
-		glDrawElements(OpenGLDrawType(draw_type), mesh->Indices->size(), GL_UNSIGNED_INT, 0);
-		
-		// always good practice to set everything back to defaults once configured.
-		glActiveTexture(GL_TEXTURE0);
+
+		// Draw mesh
+		mesh.VertexArray.Bind();
+		glDrawElements(OpenGLDrawType(draw_type), mesh.Indices->size(), GL_UNSIGNED_INT, 0);
+
+		Texture2D::UnbindAll();
+	}
+
+	void Renderer::DrawModel(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type)
+	{
+		for (const auto& mesh : model->GetMeshes())
+		{
+			Renderer::DrawMesh(mesh, shader, draw_type);
+		}
 	}
 
 }

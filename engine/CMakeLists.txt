@@ -26,6 +26,11 @@ set(ENGINE_DELTATIME
     src/core/delta_time/delta_time.h
 )
 
+set(ENGINE_INPUT
+    src/core/input/input.h
+    src/core/input/input.cpp
+)
+
 # Renderer
 set(RENDERER_FRAMEBUFFER
     src/renderer/framebuffer/framebuffer.cpp
@@ -66,6 +71,12 @@ set(RENDERER
     src/renderer/renderer/renderer.cpp
 )
 
+set(RENDERER_MODEL
+    src/renderer/model/mesh.h
+    src/renderer/model/mesh.cpp
+    src/renderer/model/model.h
+)
+
 
 # Scene
 set(SCENE
@@ -84,7 +95,6 @@ set(SCENE_COMPONENTS
 
 set(SCENE_SCRIPTABLE_ENTITY
     src/scene/entity/scriptable_entity.h
-    #src/scene/scripts/test_script.h
 )
 
 
@@ -93,6 +103,7 @@ set(SOURCES
     ${ENGINE_LAYERS}
     ${ENGINE_LOG}
     ${ENGINE_DELTATIME}
+    ${ENGINE_INPUT}
 
     ${RENDERER_FRAMEBUFFER}
     ${RENDERER_SHADER}
@@ -102,13 +113,14 @@ set(SOURCES
     ${RENDERER_TEXTURE}
     ${RENDERER}
     ${STB_IMAGE}
+    ${RENDERER_MODEL}
 
     ${SCENE}
     ${SCENE_ENTITY}
     ${SCENE_SCRIPTABLE_ENTITY}
 )
 
-add_library(Engine STATIC ${SOURCES} "src/core/input/input.h" "src/core/input/input.cpp" "src/renderer/mesh/mesh.h" "src/renderer/mesh/mesh.cpp")
+add_library(Engine STATIC ${SOURCES})
 
 set_target_properties(
     Engine PROPERTIES
@@ -157,6 +169,7 @@ target_link_directories(
 )
 
 
+# SDL
 if (APPLE)
 
     target_include_directories(
@@ -168,7 +181,6 @@ if (APPLE)
     target_link_libraries(
         Engine
         libSDL2-2.0.dylib
-        #libGLEW.a
         "-framework OpenGL"
         "-framework IOKit"
         "-framework Cocoa"
@@ -189,8 +201,6 @@ if (WIN32)
         SDL2.dll
         SDL2.lib
         SDL2main.lib
-        #glew32s.lib
-        #opengl32.lib
 )
 
 endif()

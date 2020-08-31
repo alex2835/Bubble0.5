@@ -33,20 +33,17 @@ namespace Bubble
 		Ref<std::vector<uint32_t>> Indices;
 		Ref<std::vector<MeshTexture>> Textures;
 
-		// Temp
-		int shininess = 32;
-
 		Mesh(const Ref<std::vector<Vertex>>& vertices,
 			 const Ref<std::vector<uint32_t>>& indices,
 			 const Ref<std::vector<MeshTexture>>& textures);
 
-		Mesh(const Mesh&) = default;
-		Mesh& operator= (const Mesh&) = default;
+		Mesh(const Mesh&) = delete;
+		Mesh& operator= (const Mesh&) = delete;
 
-		Mesh(Mesh&&) = default;
-		Mesh& operator= (Mesh&&) = default;
+		Mesh(Mesh&&) noexcept = default;
+		Mesh& operator= (Mesh&&) noexcept = default;
 
-		const std::vector<MeshTexture>& GetTextures() { return *Textures.get(); }
+		const std::vector<MeshTexture>& GetTextures() const { return *Textures.get(); }
 	};
 
 }
