@@ -8,14 +8,16 @@ namespace Bubble
 {
 	class Model
 	{
-		std::vector<Mesh> m_Meshes;
-	
 	public:
+		std::vector<Mesh> Meshes;
+	
 		Model() = default;
+		
+		Model(const Model&) = delete;
+		Model& operator= (const Model&) = delete;
+
 		Model(Model&&) = default;
 		Model& operator= (Model&&) = default;
-
-		const std::vector<Mesh>& GetMeshes() { return m_Meshes; }
 	};
 
 }

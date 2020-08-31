@@ -110,7 +110,7 @@ namespace Bubble
 
 	void Renderer::DrawModel(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type)
 	{
-		for (const auto& mesh : model->GetMeshes())
+		for (const auto& mesh : model->Meshes)
 		{
 			Renderer::DrawMesh(mesh, shader, draw_type);
 		}

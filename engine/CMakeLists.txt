@@ -120,7 +120,7 @@ set(SOURCES
     ${SCENE_SCRIPTABLE_ENTITY}
 )
 
-add_library(Engine STATIC ${SOURCES})
+add_library(Engine STATIC ${SOURCES} "src/renderer/model/model_loader.cpp")
 
 set_target_properties(
     Engine PROPERTIES

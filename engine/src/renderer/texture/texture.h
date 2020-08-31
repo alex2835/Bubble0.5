@@ -22,7 +22,6 @@ namespace Bubble
 
 	class Texture2D
 	{
-		std::string m_Path;
 		uint32_t m_Width = 0;
 		uint32_t m_Height = 0;
 		uint32_t m_RendererID = 0;

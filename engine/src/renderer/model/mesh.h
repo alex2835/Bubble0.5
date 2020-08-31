@@ -24,6 +24,10 @@ namespace Bubble
 	struct MeshTexture : public Texture2D
 	{
 		TextureType type;
+
+		MeshTexture() = default;
+		MeshTexture(const std::string& path) 
+			: Texture2D(path) {}
 	};
 
 	struct Mesh
@@ -40,8 +44,8 @@ namespace Bubble
 		Mesh(const Mesh&) = delete;
 		Mesh& operator= (const Mesh&) = delete;
 
-		Mesh(Mesh&&) noexcept = default;
-		Mesh& operator= (Mesh&&) noexcept = default;
+		Mesh(Mesh&&) = default;
+		Mesh& operator= (Mesh&&) = default;
 
 		const std::vector<MeshTexture>& GetTextures() const { return *Textures.get(); }
 	};

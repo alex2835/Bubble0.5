@@ -29,15 +29,13 @@ namespace Bubble {
 	}
 
 	Texture2D::Texture2D(const std::string& path, const Texture2DSpecification& spec)
-		: m_Path(path)
 	{
 		stbi_set_flip_vertically_on_load(spec.Flip);
 		int width, height, channels;
 		stbi_uc* data = nullptr;
 		
 		data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		if (data == nullptr)
-		{
+		if (data == nullptr) {
 			throw std::runtime_error("Failed to load image!\nPath: " + path);
 		}
 
@@ -90,8 +88,7 @@ namespace Bubble {
 	}
 
 	Texture2D::Texture2D(Texture2D&& other) noexcept
-		: m_Path(std::move(other.m_Path)),
-		  m_Width(other.m_Width),
+		: m_Width(other.m_Width),
 		  m_Height(other.m_Height),
 		  m_DataFormat(other.m_DataFormat),
 		  m_InternalFormat(other.m_InternalFormat)
@@ -105,7 +102,6 @@ namespace Bubble {
 	{
 		glDeleteTextures(1, &m_RendererID);
 
-		m_Path = std::move(other.m_Path);
 		m_Width = other.m_Width;
 		m_Height = other.m_Height;
 		m_DataFormat = other.m_DataFormat;
@@ -126,16 +122,13 @@ namespace Bubble {
 	void Texture2D::SetData(void* data, uint32_t size)
 	{
 		uint32_t bpp = 0;
-		if (m_DataFormat == GL_RGBA)
-		{
+		if (m_DataFormat == GL_RGBA) {
 			bpp = 4;
 		}
-		else if (m_DataFormat == GL_RGB)
-		{
+		else if (m_DataFormat == GL_RGB) {
 			bpp = 3;
 		}
-		else if (m_DataFormat == GL_RED)
-		{
+		else if (m_DataFormat == GL_RED) {
 			bpp = 1;
 		}
 
