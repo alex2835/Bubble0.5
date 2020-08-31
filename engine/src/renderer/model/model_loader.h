@@ -14,8 +14,8 @@ namespace Bubble
 	class ModelLoader
 	{
 		static std::vector<std::pair<std::string, Ref<Model>>> s_LoadedModels;
-		static std::vector<std::pair<std::string, Ref<MeshTexture>>> s_LoadedTextures; // Not used
-
+		static std::vector<std::pair<std::string, Ref<MeshTexture>>> s_LoadedTextures; // Not used yet
+		 
 	public:
 		static Ref<Model> StaticModel(const std::string& path);
 		

@@ -26,8 +26,7 @@ namespace Bubble
 		TextureType type;
 
 		MeshTexture() = default;
-		MeshTexture(const std::string& path) 
-			: Texture2D(path) {}
+		MeshTexture(const std::string& path);
 	};
 
 	struct Mesh

@@ -4,6 +4,10 @@
 
 namespace Bubble
 {
+	MeshTexture::MeshTexture(const std::string& path)
+		: Texture2D(path) {}
+
+
 	Mesh::Mesh(const Ref<std::vector<Vertex>>& vertices,
 			   const Ref<std::vector<uint32_t>>& indices,
 			   const Ref<std::vector<MeshTexture>>& textures)
@@ -20,10 +24,9 @@ namespace Bubble
 			{ GLSLDataType::Float3, "Bitangent" }
 		};
 
+		auto index_buffer = CreateRef<IndexBuffer>(Indices->data(), Indices->size());
 		auto vertex_buffer = CreateRef<VertexBuffer>(Vertices->data(), sizeof(Vertex) * Vertices->size());
 		vertex_buffer->SetLayout(layout);
-
-		auto index_buffer = CreateRef<IndexBuffer>(Indices->data(), Indices->size());
 
 		VertexArray.AddVertexBuffer(vertex_buffer);
 		VertexArray.SetIndexBuffer(index_buffer);

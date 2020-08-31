@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	}
 	catch (const std::exception& e)
 	{
-		LOG_CORE_ERROR("Exception has been trigered: {0}", e.what());
+		LOG_CORE_ERROR("Exception has been trigered:\n {0}", e.what());
 	}
 
 	return 0;

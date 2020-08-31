@@ -24,4 +24,5 @@ namespace Bubble
 		const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const;
 		const Ref<IndexBuffer>& GetIndexBuffer() const;
 	};
+
 }

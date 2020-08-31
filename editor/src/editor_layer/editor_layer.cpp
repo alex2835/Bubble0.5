@@ -70,11 +70,11 @@ namespace Bubble
 		)";
 
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
+		m_ShaderPhong = CreateScope<Shader>("C:\\Users\\lol\\Desktop\\bubble\\engine\\src\\content\\shaders\\phong.glsl");
 
 		// Temp: Scene
 		m_Scene = CreateRef<Scene>();
 		m_Entity = m_Scene->CreateEntity("TestEntity");
-		//m_Entity.AddComponent<NativeScriptComponent>().Bind<TestScript>();
 	}
 
 	void EditorLayer::OnDetach()
