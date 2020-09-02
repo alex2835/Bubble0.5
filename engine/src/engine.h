@@ -17,6 +17,7 @@
 #include "renderer/shader/shader.h"
 #include "renderer/texture/texture.h"
 #include "renderer/renderer/renderer.h"
+#include "renderer/model/model_loader.h"
 
 // Scene
 #include "scene.h"

@@ -5,22 +5,20 @@
 namespace Bubble
 {
 	std::vector<std::pair<std::string, Ref<Model>>>  ModelLoader::s_LoadedModels;
-	std::vector<std::pair<std::string, Ref<MeshTexture>>> ModelLoader::s_LoadedTextures;
-
+	
 
 	Ref<Model> ModelLoader::StaticModel(const std::string& path)
 	{
-		Model model;
-
 		for (const auto& stored_model : s_LoadedModels) {
 			if (stored_model.first == path) {
 				return stored_model.second;
 			}
 		}
+		auto model = CreateRef<Model>();
+		s_LoadedModels.push_back(std::make_pair(path, model));
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
-
 		if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) || !scene->mRootNode)
 		{
 			throw std::runtime_error("ERROR::ASSIMP\n" + std::string(importer.GetErrorString()));
@@ -28,11 +26,9 @@ namespace Bubble
 
 		// process ASSIMP's root node recursively
 		//model.Meshes.reserve(scene->mNumMeshes);
-		ProcessNode(model, scene->mRootNode, scene);
+		ProcessNode(*model, scene->mRootNode, scene);
 
-		auto model_ref = CreateRef<Model>(std::move(model));
-		s_LoadedModels.push_back(std::make_pair(path, model_ref));
-		return model_ref;
+		return model;
 	}
 
 	// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
@@ -143,7 +139,7 @@ namespace Bubble
 	{
 		// retrieve the directory path of the filepath
 		const std::string& path = s_LoadedModels.back().first;
-		std::string directory = path.substr(0, path.find_last_of('/'));
+		std::string directory = path.substr(0, path.find_last_of('/') + 1);
 	
 		for (int i = 0; i < mat->GetTextureCount(type); i++)
 		{

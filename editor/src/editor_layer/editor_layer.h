@@ -27,7 +27,9 @@ namespace Bubble
 		Ref<IndexBuffer> m_IndexBuffer;
 		Ref<Texture2D> m_Texture;
 		Scope<Shader> m_Shader;
-		Scope<Shader> m_ShaderPhong;
+
+		Ref<Shader> m_ShaderPhong;
+		Ref<Model> m_NanoSuit;
 
 		Entity m_Entity;
 

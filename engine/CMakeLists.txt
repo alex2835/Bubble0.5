@@ -128,19 +128,21 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
-# OpenGL
-find_package( OpenGL REQUIRED )
-include_directories( ${OPENGL_INCLUDE_DIRS} )
-target_link_libraries(Engine ${OPENGL_LIBRARIES} )
+## OpenGL
+#find_package( OpenGL REQUIRED )
+#include_directories( ${OPENGL_INCLUDE_DIRS} )
+#target_link_libraries(Engine ${OPENGL_LIBRARIES} )
+#
+#if (CMAKE_BUILD_TYPE MATCHES Debug)
+#    target_link_libraries(Engine glewd)
+#else()
+#    target_link_libraries(Engine glew)
+#endif()
 
 target_link_libraries(Engine assimp)
 target_link_libraries(Engine spdlog)
 
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    target_link_libraries(Engine glewd)
-else()
-    target_link_libraries(Engine glew)
-endif()
+
 
 
 
@@ -165,11 +167,10 @@ target_link_directories(
     Engine 
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/SDL2/lib
-    ${CMAKE_CURRENT_BINARY_DIR}/../lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glew/lib
 )
 
 
-# SDL
 if (APPLE)
 
     target_include_directories(
@@ -181,6 +182,7 @@ if (APPLE)
     target_link_libraries(
         Engine
         libSDL2-2.0.dylib
+        libGLEW.a
         "-framework OpenGL"
         "-framework IOKit"
         "-framework Cocoa"
@@ -201,6 +203,8 @@ if (WIN32)
         SDL2.dll
         SDL2.lib
         SDL2main.lib
+        glew32s.lib
+        opengl32.lib
 )
 
 endif()

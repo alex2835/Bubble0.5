@@ -15,6 +15,13 @@ namespace Bubble
 		VertexArray();
 		~VertexArray();
 
+		VertexArray(const VertexArray&) = delete;
+		VertexArray& operator=(const VertexArray&) = delete;
+
+		VertexArray(VertexArray&&);
+		VertexArray& operator=(VertexArray&&);
+
+
 		void Bind() const;
 		void Unbind() const;
 

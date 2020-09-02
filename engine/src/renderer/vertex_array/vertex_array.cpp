@@ -27,11 +27,37 @@ namespace Bubble
 	VertexArray::VertexArray()
 	{
 		glcall(glGenVertexArrays(1, &m_RendererID));
+		LOG_CORE_TRACE("vertex gen: {0} , {1}", m_RendererID, (uint64_t)&m_RendererID);
+	}
+
+	VertexArray::VertexArray(VertexArray&& other)
+	{
+		m_RendererID = other.m_RendererID;
+		m_VertexBufferIndex = other.m_VertexBufferIndex;
+		m_VertexBuffers = std::move(other.m_VertexBuffers);
+		m_IndexBuffer = std::move(other.m_IndexBuffer);
+		other.m_RendererID = 0;
+		other.m_VertexBufferIndex = 0;
+	}
+
+	VertexArray& VertexArray::operator=(VertexArray&& other)
+	{
+		if (this != &other)
+		{
+			m_RendererID = other.m_RendererID;
+			m_VertexBufferIndex = other.m_VertexBufferIndex;
+			m_VertexBuffers = std::move(other.m_VertexBuffers);
+			m_IndexBuffer = std::move(other.m_IndexBuffer);
+			other.m_RendererID = 0;
+			other.m_VertexBufferIndex = 0;
+		}
+		return *this;
 	}
 
 	VertexArray::~VertexArray()
 	{
 		glDeleteVertexArrays(1, &m_RendererID);
+		LOG_CORE_ERROR("Oh no: {0}", m_RendererID);
 	}
 
 	void VertexArray::Bind() const
@@ -48,7 +74,7 @@ namespace Bubble
 	{
 		BUBBLE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
-		glcall(glBindVertexArray(m_RendererID));
+		Bind();
 		vertexBuffer->Bind();
 
 		const auto& layout = vertexBuffer->GetLayout();
@@ -99,13 +125,15 @@ namespace Bubble
 			}
 		}
 		m_VertexBuffers.push_back(vertexBuffer);
+		Unbind();
 	}
 
 	void VertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
-		glcall(glBindVertexArray(m_RendererID));
+		Bind();
 		indexBuffer->Bind();
 		m_IndexBuffer = indexBuffer;
+		Unbind();
 	}
 
 	const std::vector<Bubble::Ref<Bubble::VertexBuffer>>& VertexArray::GetVertexBuffers() const

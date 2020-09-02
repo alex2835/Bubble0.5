@@ -129,8 +129,8 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
     float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
     
     // combine results
-    vec3 ambient = light.ambient;//* vec3(texture(material.diffuse0, v_TexCoords));
-    vec3 diffuse = light.diffuse * diff;// * vec3(texture(material.diffuse0, v_TexCoords));
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse0, v_TexCoords));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse0, v_TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specular0, v_TexCoords));
 
     //return lighting;
@@ -154,8 +154,8 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // combine results
-    vec3 ambient = light.ambient;// * vec3(texture(material.diffuse0, v_TexCoords));
-    vec3 diffuse = light.diffuse;// * diff * vec3(texture(material.diffuse0, v_TexCoords));
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse0, v_TexCoords));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse0, v_TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specular0, v_TexCoords));
     ambient *= attenuation;
     diffuse *= attenuation;
@@ -185,8 +185,8 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
     // combine results
-    vec3 ambient = light.ambient;// * vec3(texture(material.diffuse0, v_TexCoords));
-    vec3 diffuse = light.diffuse * diff;// * vec3(texture(material.diffuse0, v_TexCoords));
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse0, v_TexCoords));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse0, v_TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specular0, v_TexCoords));
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;

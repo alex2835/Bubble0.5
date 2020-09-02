@@ -24,6 +24,8 @@ namespace Bubble
 		m_VertexArray = CreateRef<VertexArray>();
 		m_VertexBuffer = CreateRef<VertexBuffer>(vertices, sizeof(vertices));
 
+		
+
 		BufferLayout layout = {
 			{ GLSLDataType::Float3, "a_Position" },
 			{ GLSLDataType::Float2, "a_TexCoords" }
@@ -70,7 +72,9 @@ namespace Bubble
 		)";
 
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
-		m_ShaderPhong = CreateScope<Shader>("C:\\Users\\lol\\Desktop\\bubble\\engine\\src\\content\\shaders\\phong.glsl");
+		
+		m_ShaderPhong = CreateRef<Shader>("C:\\Users\\lol\\Desktop\\bubble\\engine\\src\\content\\shaders\\phong.glsl");
+		m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
 
 		// Temp: Scene
 		m_Scene = CreateRef<Scene>();
@@ -89,7 +93,6 @@ namespace Bubble
 
 		// Scene camera update
 		m_SceneCamera.OnUpdate(dt);
-
 
         // Temp: Test image
 		Renderer::SetViewport(m_ViewportArray[0].GetFramebuffer());

@@ -36,6 +36,7 @@ namespace Bubble
 		Ref<std::vector<uint32_t>> Indices;
 		Ref<std::vector<MeshTexture>> Textures;
 
+		Mesh() = default;
 		Mesh(const Ref<std::vector<Vertex>>& vertices,
 			 const Ref<std::vector<uint32_t>>& indices,
 			 const Ref<std::vector<MeshTexture>>& textures);

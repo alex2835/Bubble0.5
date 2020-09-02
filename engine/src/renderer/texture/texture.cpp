@@ -91,6 +91,7 @@ namespace Bubble {
 		: m_Width(other.m_Width),
 		  m_Height(other.m_Height),
 		  m_DataFormat(other.m_DataFormat),
+		  m_RendererID(other.m_RendererID),
 		  m_InternalFormat(other.m_InternalFormat)
 	{
 		other.m_Width = 0;
@@ -100,17 +101,18 @@ namespace Bubble {
 
 	Texture2D& Texture2D::operator=(Texture2D&& other) noexcept
 	{
-		glDeleteTextures(1, &m_RendererID);
-
-		m_Width = other.m_Width;
-		m_Height = other.m_Height;
-		m_DataFormat = other.m_DataFormat;
-		m_InternalFormat = other.m_InternalFormat;
-
-		other.m_Width = 0;
-		other.m_Height = 0;
-		other.m_RendererID = 0;
-
+		if (this != &other)
+		{
+			glDeleteTextures(1, &m_RendererID);
+			m_Width = other.m_Width;
+			m_Height = other.m_Height;
+			m_DataFormat = other.m_DataFormat;
+			m_RendererID = other.m_RendererID;
+			m_InternalFormat = other.m_InternalFormat;
+			other.m_Width = 0;
+			other.m_Height = 0;
+			other.m_RendererID = 0;
+		}
 		return *this;
 	}
 
