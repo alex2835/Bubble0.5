@@ -11,7 +11,7 @@ namespace Bubble
         m_ImGuiControll.OnAttach();
 
         // Temp: test viewport
-		m_ViewportArray.Push(Viewport(800, 600));
+		m_ViewportArray.Push(Viewport(800, 800));
 
 		// Temp: Draw stuff
 		float vertices[5 * 4] = {
@@ -20,19 +20,16 @@ namespace Bubble
 			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
-
 		m_VertexArray = CreateRef<VertexArray>();
 		m_VertexBuffer = CreateRef<VertexBuffer>(vertices, sizeof(vertices));
-
 		
-
 		BufferLayout layout = {
 			{ GLSLDataType::Float3, "a_Position" },
 			{ GLSLDataType::Float2, "a_TexCoords" }
 		};
 		m_VertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-
+		
 		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0};
 		m_IndexBuffer = CreateRef<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
@@ -81,11 +78,13 @@ namespace Bubble
 		m_Entity = m_Scene->CreateEntity("TestEntity");
 	}
 
+
 	void EditorLayer::OnDetach()
 	{
         m_ImGuiControll.OnDetach();
 	}
 	
+
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// Scene update
@@ -106,9 +105,9 @@ namespace Bubble
 
 		Renderer::DrawIndex(m_VertexArray);
 
-		m_VertexArray->Unbind();
-		m_ViewportArray[0].Unbind();
+		
 
+		Framebuffer::BindDefault();
 
 		// ================= Imgui ================
 		m_ImGuiControll.Begin();
@@ -134,18 +133,11 @@ namespace Bubble
 		}
 		ImGui::PopStyleVar();
 
-        // Temp: fill screen color
-        //for (auto& viewport : m_ViewportArray)
-        //{
-        //    viewport.Bind();
-        //    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        //    glClear(GL_COLOR_BUFFER_BIT);
-        //    viewport.Unbind();
-        //}
 
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+        if (show_demo_window) {
+			ImGui::ShowDemoWindow(&show_demo_window);
+		}
 
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
         {
@@ -186,11 +178,6 @@ namespace Bubble
 
 	void EditorLayer::OnEvent(SDL_Event& event)
 	{
-        // Temp: add viewport by pressing space
-		//if (event.type == SDL_EventType::SDL_KEYDOWN
-		//	&& event.key.keysym.sym == SDLK_SPACE)
-		//	m_ViewportArray.Push(Viewport(200, 200));
-
         m_ImGuiControll.OnEvent(event);
 	}
 

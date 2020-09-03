@@ -48,5 +48,7 @@ namespace Bubble
 
 		uint32_t GetColorAttachmentRendererID();
 		const FramebufferSpecification& GetSpecification() const;
+
+		static void BindDefault() { glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
 	};
 }

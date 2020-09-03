@@ -19,7 +19,6 @@ namespace Bubble
 			case GLSLDataType::Int4:     return GL_INT;
 			case GLSLDataType::Bool:     return GL_BOOL;
 		}
-
 		BUBBLE_CORE_ASSERT(false, "Unknown GLSLDataType!");
 		return 0;
 	}
@@ -27,7 +26,6 @@ namespace Bubble
 	VertexArray::VertexArray()
 	{
 		glcall(glGenVertexArrays(1, &m_RendererID));
-		LOG_CORE_TRACE("vertex gen: {0} , {1}", m_RendererID, (uint64_t)&m_RendererID);
 	}
 
 	VertexArray::VertexArray(VertexArray&& other)
@@ -57,7 +55,6 @@ namespace Bubble
 	VertexArray::~VertexArray()
 	{
 		glDeleteVertexArrays(1, &m_RendererID);
-		LOG_CORE_ERROR("Oh no: {0}", m_RendererID);
 	}
 
 	void VertexArray::Bind() const
@@ -100,8 +97,7 @@ namespace Bubble
 						layout.GetStride(),
 						(const void*)element.Offset));
 					m_VertexBufferIndex++;
-					break;
-				}
+				}break;
 				case GLSLDataType::Mat3:
 				case GLSLDataType::Mat4:
 				{
@@ -118,10 +114,10 @@ namespace Bubble
 						glcall(glVertexAttribDivisor(m_VertexBufferIndex, 1));
 						m_VertexBufferIndex++;
 					}
-					break;
-				}
-				default:
+				}break;
+				default: {
 					BUBBLE_CORE_ASSERT(false, "Unknown GLSLDataType!");
+				}
 			}
 		}
 		m_VertexBuffers.push_back(vertexBuffer);

@@ -249,11 +249,11 @@ namespace Bubble
         // float matrices
         void Shader::SetUniMat3(const std::string& m_Name, const glm::mat3& val)
         {
-            glUniformMatrix3fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val));
+            glcall(glUniformMatrix3fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val)));
         }
         void Shader::SetUniMat4(const std::string& m_Name, const glm::mat4& val)
         {
-            glUniformMatrix4fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val));
+            glcall(glUniformMatrix4fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val)));
         }
 
 }
