@@ -4,15 +4,14 @@
 
 namespace Bubble
 {
-
 	BaseMaterial::BaseMaterial(const glm::vec3& ambient,
 							   const glm::vec3& diffuse,
 							   const glm::vec3& specular,
-							   int Shininess)
+							   int shininess)
 		: Ambient(ambient),
 		  Diffuse(diffuse),
 		  Specular(specular),
-		  Shininess(Shininess)
+		  Shininess(shininess)
 	{}
 
 }

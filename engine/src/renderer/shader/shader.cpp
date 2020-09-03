@@ -6,7 +6,8 @@ namespace Bubble
 {
         void Shader::ParseShaders(const std::string& path, std::string& vertex, std::string& fragment, std::string& geometry)
         {
-            enum Type { NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2 } type = NONE;
+            enum ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2 };
+            ShaderType type = NONE;
             
             std::ifstream stream(path);
             if (!stream.is_open())
@@ -34,12 +35,10 @@ namespace Bubble
                         type = GEOMETRY;
                     }
                 }
-                else if (type == NONE)
-                {
+                else if (type == NONE) {
                     continue;
                 }
-                else
-                {
+                else {
                     shaders[type] << line << '\n';
                 }
             }
@@ -48,28 +47,28 @@ namespace Bubble
             geometry = shaders[GEOMETRY].str();
         }
 
-        void Shader::CompileShaders(const std::string& vertexSource, const std::string& fragmentSource, const std::string& geometry)
+        void Shader::CompileShaders(const std::string& vertex_source, const std::string& fragment_source, const std::string& geometry_source)
         {
             // Vertex shaders
-            GLint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            const char* cvertexSource = vertexSource.c_str();
-            glShaderSource(vertexShader, 1, &cvertexSource, NULL);
-            glCompileShader(vertexShader);
+            GLint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+            const char* cvertex_source = vertex_source.c_str();
+            glcall(glShaderSource(vertex_shader, 1, &cvertex_source, NULL));
+            glcall(glCompileShader(vertex_shader));
             {
                 GLint success;
-                glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+                glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
                 if (!success)
                 {
-                    GLint maxLength = 0;
-                    glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
+                    GLint max_length = 0;
+                    glGetShaderiv(vertex_shader, GL_INFO_LOG_LENGTH, &max_length);
 
                     std::string log;
-                    log.resize(maxLength);
-                    glGetShaderInfoLog(vertexShader, maxLength, &maxLength, (GLchar*)log.data());
-                    glDeleteShader(vertexShader);
+                    log.resize(max_length);
+                    glGetShaderInfoLog(vertex_shader, max_length, &max_length, (GLchar*)log.data());
+                    glDeleteShader(vertex_shader);
 
-                    // free recourses
-					glDeleteShader(vertexShader);
+                    // free resources
+					glDeleteShader(vertex_shader);
 
                     LOG_CORE_ERROR("VERTEX SHADER ERROR: {0} \n {1}", m_Name, log);
 					throw std::runtime_error("Shader compilation failed");
@@ -77,26 +76,26 @@ namespace Bubble
             }
             
             // Fragment shader
-            GLint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            const char* cfragmentSource = fragmentSource.c_str();
-            glShaderSource(fragmentShader, 1, &cfragmentSource, NULL);
-            glCompileShader(fragmentShader);
+            GLint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+            const char* cfragment_source = fragment_source.c_str();
+            glcall(glShaderSource(fragment_shader, 1, &cfragment_source, NULL));
+            glcall(glCompileShader(fragment_shader));
             {
                 GLint success;
-                glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+                glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
                 if (!success)
                 {
-                    GLint maxLength = 0;
+                    GLint max_length = 0;
 					std::string log;
 
-                    glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
-                    log.resize(maxLength);
-                    glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, (GLchar*)log.data());
-                    glDeleteShader(fragmentShader);
+                    glGetShaderiv(fragment_shader, GL_INFO_LOG_LENGTH, &max_length);
+                    log.resize(max_length);
+                    glGetShaderInfoLog(fragment_shader, max_length, &max_length, (GLchar*)log.data());
+                    glDeleteShader(fragment_shader);
 
 					// free recourses
-					glDeleteShader(vertexShader);
-					glDeleteShader(fragmentShader);
+					glDeleteShader(vertex_shader);
+					glDeleteShader(fragment_shader);
 
                     LOG_CORE_ERROR("FRAGMENT SHADER ERROR: : {0} \n {1}", m_Name, log);
 					throw std::runtime_error("Shader compilation failed");
@@ -104,44 +103,43 @@ namespace Bubble
             }
             
             // Geometry shader
-            GLint geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-            if (geometry.size())
+            GLint geometry_shader = glCreateShader(GL_GEOMETRY_SHADER);
+            if (geometry_source.size())
             {
-                const char* cgeometrySource = geometry.c_str();
-                glShaderSource(geometryShader, 1, &cgeometrySource, NULL);
-                glCompileShader(geometryShader);
+                const char* cgeometry_source = geometry_source.c_str();
+                glcall(glShaderSource(geometry_shader, 1, &cgeometry_source, NULL));
+                glcall(glCompileShader(geometry_shader));
                 {
                     GLint success;
-                    glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &success);
+                    glGetShaderiv(geometry_shader, GL_COMPILE_STATUS, &success);
                     if (!success)
                     {
-                        GLint maxLength = 0;
+                        GLint max_length = 0;
 						std::string log;
 
-                        glGetShaderiv(geometryShader, GL_INFO_LOG_LENGTH, &maxLength);
-                        log.resize(maxLength);
-                        glGetShaderInfoLog(geometryShader, maxLength, &maxLength, (GLchar*)log.data());
+                        glGetShaderiv(geometry_shader, GL_INFO_LOG_LENGTH, &max_length);
+                        log.resize(max_length);
+                        glGetShaderInfoLog(geometry_shader, max_length, &max_length, (GLchar*)log.data());
 
-						// free recourses
-						glDeleteShader(geometryShader);
-						glDeleteShader(vertexShader);
-						glDeleteShader(fragmentShader);
+						// free resources
+						glDeleteShader(geometry_shader);
+						glDeleteShader(vertex_shader);
+						glDeleteShader(fragment_shader);
 
                         LOG_CORE_ERROR("GEOMETRY SHADER ERROR: {0} \n {1}", m_Name, log);
 						throw std::runtime_error("Shader compilation failed");
                     }
                 }
             }
-
 			// Shader program
 			m_ShaderID = glCreateProgram();
 
 			// Link shaders
-            glcall(glAttachShader(m_ShaderID, vertexShader));
-            glcall(glAttachShader(m_ShaderID, fragmentShader));
-            if (geometry.size())
+            glcall(glAttachShader(m_ShaderID, vertex_shader));
+            glcall(glAttachShader(m_ShaderID, fragment_shader));
+            if (geometry_source.size())
             {
-                glcall(glAttachShader(m_ShaderID, geometryShader));
+                glcall(glAttachShader(m_ShaderID, geometry_shader));
             }
             glcall(glLinkProgram(m_ShaderID));
             
@@ -150,17 +148,17 @@ namespace Bubble
                 glGetProgramiv(m_ShaderID, GL_COMPILE_STATUS, &success);
                 if (!success)
                 {
-                    GLint maxLength = 0;
+                    GLint max_length = 0;
 					std::string log;
 
-                    glGetShaderiv(geometryShader, GL_INFO_LOG_LENGTH, &maxLength);
-                    log.resize(maxLength);
-                    glGetProgramInfoLog(m_ShaderID, maxLength, NULL, (GLchar*)log.data());
+                    glGetShaderiv(geometry_shader, GL_INFO_LOG_LENGTH, &max_length);
+                    log.resize(max_length);
+                    glGetProgramInfoLog(m_ShaderID, max_length, NULL, (GLchar*)log.data());
 
-                    // free recourses
-					glDeleteShader(geometryShader);
-					glDeleteShader(vertexShader);
-					glDeleteShader(fragmentShader);
+                    // free resources
+					glDeleteShader(geometry_shader);
+					glDeleteShader(vertex_shader);
+					glDeleteShader(fragment_shader);
                     glDeleteProgram(m_ShaderID);
 
                     LOG_CORE_ERROR("LINLING SHADER ERROR: {0} \n {1}", m_Name, log);
@@ -169,9 +167,9 @@ namespace Bubble
             }
 
             // Now it's a part of shader program
-            glDeleteShader(geometryShader);
-            glDeleteShader(vertexShader);
-            glDeleteShader(fragmentShader);
+            glDeleteShader(geometry_shader);
+            glDeleteShader(vertex_shader);
+            glDeleteShader(fragment_shader);
         }
 
         int Shader::GetUni(const std::string& uniform_name)
@@ -218,7 +216,7 @@ namespace Bubble
 
 		void Shader::Unbind()
 		{
-            glUseProgram(0);
+            glcall(glUseProgram(0));
 		}
 
 
@@ -233,14 +231,17 @@ namespace Bubble
         {
             glcall(glUniform1f(GetUni(m_Name), val));
         }
+
         void Shader::SetUni2f(const std::string& m_Name, const glm::vec2& val)
         {
             glcall(glUniform2f(GetUni(m_Name), val.x, val.y));
         }
+
         void Shader::SetUni3f(const std::string& m_Name, const glm::vec3& val)
         {
             glcall(glUniform3f(GetUni(m_Name), val.x, val.y, val.z));
         }
+
         void Shader::SetUni4f(const std::string& m_Name, const glm::vec4& val)
         {
             glcall(glUniform4f(GetUni(m_Name), val.x, val.y, val.z, val.w));
@@ -251,6 +252,7 @@ namespace Bubble
         {
             glcall(glUniformMatrix3fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val)));
         }
+
         void Shader::SetUniMat4(const std::string& m_Name, const glm::mat4& val)
         {
             glcall(glUniformMatrix4fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val)));

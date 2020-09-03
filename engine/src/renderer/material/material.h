@@ -14,6 +14,7 @@ namespace Bubble
 		BaseMaterial(const glm::vec3& ambient,
 					 const glm::vec3& diffuse,
 					 const glm::vec3& specular,
-					 int Shininess = 32);
+					 int shininess = 32);
 	};
+
 }

@@ -56,7 +56,9 @@ namespace Bubble
 	{
 		Light light;
 		light.Type = LightType::PointLight;
-
+		light.SetDistance(distance);
+		light.Color = color;
+		return light;
 	}
 
 	Light Light::CreateSpotLight(const glm::vec3& position,
@@ -66,7 +68,15 @@ namespace Bubble
 								 float outer_cutoff,
 								 const glm::vec3& color)
 	{
-
+		Light light;
+		light.Type = LightType::SpotLight;
+		light.Position = position;
+		light.Direction = direction;
+		light.SetDistance(distance);
+		light.CutOff = cutoff;
+		light.OuterCutOff = outer_cutoff;
+		light.Color = color;
+		return light;
 	}
 
 }

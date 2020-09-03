@@ -25,7 +25,7 @@ namespace Bubble
 
     private:
         void ParseShaders(const std::string& path, std::string& vertex, std::string& fragment, std::string& geometry);
-        void CompileShaders(const std::string& vertexSource, const std::string& fragmentSource, const std::string& geometry);
+        void CompileShaders(const std::string& vertex_source, const std::string& fragment_source, const std::string& geometry_source);
         int GetUni(const std::string& name);
 
     public:
