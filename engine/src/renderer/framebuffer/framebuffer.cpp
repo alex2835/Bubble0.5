@@ -1,5 +1,6 @@
 
 #include "framebuffer.h"
+#include "application/application.h"
 
 
 namespace Bubble
@@ -139,6 +140,13 @@ namespace Bubble
 	const FramebufferSpecification& Framebuffer::GetSpecification() const
 	{
 		return m_Specification;
+	}
+
+	void Framebuffer::BindDefault()
+	{
+		glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+		glm::ivec2 window_size = Application::GetWindow()->GetSize();
+		glViewport(0, 0, window_size.x, window_size.y);
 	}
 
 	uint32_t Framebuffer::GetColorAttachmentRendererID()

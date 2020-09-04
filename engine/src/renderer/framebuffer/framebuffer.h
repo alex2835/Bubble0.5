@@ -3,7 +3,6 @@
 #include "renderer_base.h"
 
 #include "glm/glm.hpp"
-
 #include <cstdint>
 #include <cassert>
 
@@ -49,6 +48,6 @@ namespace Bubble
 		uint32_t GetColorAttachmentRendererID();
 		const FramebufferSpecification& GetSpecification() const;
 
-		static void BindDefault() { glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
+		static void BindDefault();
 	};
 }

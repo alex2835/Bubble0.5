@@ -71,7 +71,7 @@ namespace Bubble
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
 		
 		// Temp: setup mesh
-		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, 1.0f, 1.0f)));
+		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
 		m_ShaderPhong = CreateRef<Shader>("C:\\Users\\lol\\Desktop\\bubble\\engine\\src\\content\\shaders\\phong.glsl");
 		m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
 
@@ -108,11 +108,10 @@ namespace Bubble
 
 			uint32_t textureId = m_ViewportArray[i].GetFramebuffer().GetColorAttachmentRendererID();
 
-			ImGui::Image((void*)textureId, ImVec2{ (float)m_ViewportArray[i].Size().x, (float)m_ViewportArray[i].Size().y });
+			ImGui::Image((void*)textureId, ImVec2{ (float)m_ViewportArray[i].Size().x, (float)m_ViewportArray[i].Size().y }, ImVec2(1, 1), ImVec2(0, 0));
 			ImGui::End();
 		}
 		ImGui::PopStyleVar();
-
 
 		ImGui::Begin("Global light");
 		ImGui::SliderFloat3("Direction", (float*)&m_Lights[0].Direction, -1, 1);
@@ -147,7 +146,6 @@ namespace Bubble
 		glm::mat4 model(1.0f);
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0, 0));
 
 		m_Lights.ApplyLights(m_ShaderPhong);
 		m_ShaderPhong->SetUniMat4("u_Model", model);

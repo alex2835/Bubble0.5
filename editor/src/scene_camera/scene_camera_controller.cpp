@@ -51,10 +51,10 @@ namespace Bubble
 
 			// move
 			m_Camera.Position += m_Camera.Front * SpeedX * dt.GetSeconds();
-			m_Camera.Position += m_Camera.Right * SpeedY * dt.GetSeconds();
+			m_Camera.Position -= m_Camera.Right * SpeedY * dt.GetSeconds();
 
-			ProcessMouseMovementShift(Input::fGetMouseRelX(), Input::fGetMouseRelY());
-			ProcessMouseScroll(Input::GetMouseWheelOffset());
+			ProcessMouseMovementShift(-Input::fGetMouseRelX(), -Input::fGetMouseRelY());
+			ProcessMouseScroll(-Input::GetMouseWheelOffset());
 
 			m_Camera.UpdateCameraVectors();
 		}
