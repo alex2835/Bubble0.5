@@ -37,31 +37,31 @@ namespace Bubble
 		for (int i = 0; i < m_Lights.size(); i++)
 		{
 			const Light& light = m_Lights[i];
-			sprintf_s(light_id, "lights[%d]", i);
+			sprintf(light_id, "lights[%d]", i);
 			
-			sprintf_s(buffer, "%s.type", light_id);
+			sprintf(buffer, "%s.type", light_id);
 			shader->SetUni1i(buffer, (int)light.Type);
-			sprintf_s(buffer, "%s.direction", light_id);
+			sprintf(buffer, "%s.direction", light_id);
 			shader->SetUni3f(buffer, light.Direction);
-			sprintf_s(buffer, "%s.position", light_id);
+			sprintf(buffer, "%s.position", light_id);
 			shader->SetUni3f(buffer, light.Position);
 			
-			sprintf_s(buffer, "%s.constant", light_id);
+			sprintf(buffer, "%s.constant", light_id);
 			shader->SetUni1f(buffer, light.Constant);
-			sprintf_s(buffer, "%s.linear", light_id);
+			sprintf(buffer, "%s.linear", light_id);
 			shader->SetUni1f(buffer, light.Linear);
-			sprintf_s(buffer, "%s.quadratic", light_id);
+			sprintf(buffer, "%s.quadratic", light_id);
 			shader->SetUni1f(buffer, light.Quadratic);
 		
-			sprintf_s(buffer, "%s.cutOff", light_id);
+			sprintf(buffer, "%s.cutOff", light_id);
 			shader->SetUni1f(buffer, light.CutOff);
-			sprintf_s(buffer, "%s.outerCutOff", light_id);
+			sprintf(buffer, "%s.outerCutOff", light_id);
 			shader->SetUni1f(buffer, light.OuterCutOff);
 		
-			sprintf_s(buffer, "%s.color", light_id);
+			sprintf(buffer, "%s.color", light_id);
 			shader->SetUni3f(buffer, light.Color);
 
-			sprintf_s(buffer, "%s.brightness", light_id);
+			sprintf(buffer, "%s.brightness", light_id);
 			shader->SetUni1f(buffer, light.Brightness);
 		}
 		shader->SetUni1i("nLights", m_Lights.size());

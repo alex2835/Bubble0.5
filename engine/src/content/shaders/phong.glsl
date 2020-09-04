@@ -84,7 +84,7 @@ void main()
     vec3 norm = normalize(v_Normal);
     vec3 view_dir = normalize(u_ViewPos - v_FragPos);
 
-    vec3 result;
+    vec3 result = vec3(0.0f);
     for (int i = 0; i < nLights; i++)
     {
         switch (lights[i].type)
