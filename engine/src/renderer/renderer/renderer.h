@@ -11,7 +11,6 @@
 namespace Bubble
 {
 	enum class DrawType { LINES, TRIANGLES };
-	static const char* const TextureNameLookup[] = { "material.diffuse", "material.specular", "material.normal", "material.height" };
 
 	class Renderer
 	{

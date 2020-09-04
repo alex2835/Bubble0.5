@@ -19,7 +19,7 @@ namespace Bubble
 				{0.007f	 ,0.0002f  } , // 600	
 				{0.0014f ,0.000007f} };// 3250
 
-	// Take distance between 0 and 1.0f (where 0 = 7m and 1.0f= 3250m)
+	// Take distance between 0 and 1.0f (where 0 = 7m and 1.0f = 3250m)
 	static std::pair<float, float> GetAttenuationConstans(float distance)
 	{
 		float index = distance * 11.0f; // 11 is array size

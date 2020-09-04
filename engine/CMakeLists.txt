@@ -45,6 +45,7 @@ set(RENDERER
 set(RENDERING_STUFF
     src/renderer/light/light.h
     src/renderer/light/light.cpp
+    src/renderer/light/light_array.h
     src/renderer/material/material.h
     src/renderer/material/material.cpp
 )

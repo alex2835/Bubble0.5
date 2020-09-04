@@ -50,11 +50,9 @@ namespace Bubble
 		// data to fill
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
-		std::vector<MeshTexture> textures;
 	
 		vertices.reserve(mesh->mNumVertices);
 		indices.reserve(mesh->mNumFaces);
-		textures.reserve(5);
 	
 		// Walk through each of the mesh's vertices
 		for (int i = 0; i < mesh->mNumVertices; i++)
@@ -104,7 +102,7 @@ namespace Bubble
 	
 			vertices.push_back(vertex);
 		}
-	
+		
 		// now walk through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 		for (int i = 0; i < mesh->mNumFaces; i++)
 		{
@@ -114,41 +112,59 @@ namespace Bubble
 				indices.push_back(face.mIndices[j]);
 			}
 		}
-	
+		
 		// process materials
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	
-		// 1. diffuse maps
-		LoadMaterialTextures(textures, material, aiTextureType_DIFFUSE, TextureType::DIFFUSE);
-		// 2. specular maps
-		LoadMaterialTextures(textures, material, aiTextureType_SPECULAR, TextureType::SPECULAR);
-		// 3. normal maps
-		LoadMaterialTextures(textures, material, aiTextureType_HEIGHT, TextureType::NORMAL);
-		// 4. height maps
-		LoadMaterialTextures(textures, material, aiTextureType_AMBIENT, TextureType::HEIGHT);
-	
+		aiMaterial* assimp_material = scene->mMaterials[mesh->mMaterialIndex];
+		DefaultMaterial material = LoadMaterialTextures(assimp_material);
+
 		auto vertices_ref = CreateRef<std::vector<Vertex>>(std::move(vertices));
 		auto indices_ref = CreateRef<std::vector<uint32_t>>(std::move(indices));
-		auto textures_ref = CreateRef<std::vector<MeshTexture>>(std::move(textures));
-		return Mesh(vertices_ref, indices_ref, textures_ref);
+		
+		return Mesh(std::move(material), vertices_ref, indices_ref);
 	}
 	
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.
 	// the required info is returned as a Texture struct.
-	void ModelLoader::LoadMaterialTextures(std::vector<MeshTexture>& textures, aiMaterial* mat, aiTextureType type, TextureType texture_type)
+	DefaultMaterial ModelLoader::LoadMaterialTextures(aiMaterial* mat)
 	{
-		// retrieve the directory path of the filepath
-		const std::string& path = s_LoadedModels.back().first;
-		std::string directory = path.substr(0, path.find_last_of('/') + 1);
-	
-		for (int i = 0; i < mat->GetTextureCount(type); i++)
+		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT };
+		
+		DefaultMaterial material;
+		for (int i = 0; i < 3; i++)
 		{
-			aiString str;
-			mat->GetTexture(type, i, &str);
+			// retrieve the directory path of the filepath
+			const std::string& path = s_LoadedModels.back().first;
+			std::string directory = path.substr(0, path.find_last_of('/') + 1);
 			
-			MeshTexture texture(directory + str.C_Str());
-			texture.type = texture_type;
-			textures.push_back(std::move(texture));
+			for (int i = 0; i < 3; i++)
+			{
+				for (int j = 0; j < mat->GetTextureCount(types[i]); j++)
+				{
+					aiString str;
+					mat->GetTexture(types[i], j, &str);
+
+					switch (types[i])
+					{
+						case aiTextureType_DIFFUSE:
+							material.DiffuseMaps.push_back(directory + str.C_Str());
+							break;
+						case aiTextureType_SPECULAR:
+							material.SpecularMaps.push_back(directory + str.C_Str());
+							break;
+						case aiTextureType_HEIGHT:
+							material.NormalMaps.push_back(directory + str.C_Str());
+							break;
+					}
+				}
+			}
+			// Necessary maps
+			if (material.DiffuseMaps.size() == 0) {
+				material.DiffuseMaps.push_back(Texture2D(glm::vec4(1.0f)));
+			}
+			if (material.SpecularMaps.size() == 0) {
+				material.SpecularMaps.push_back(Texture2D(glm::vec4(1.0f)));
+			}
+			return material;
 		}
 	}
 

@@ -4,16 +4,12 @@
 
 namespace Bubble
 {
-	MeshTexture::MeshTexture(const std::string& path)
-		: Texture2D(path) {}
-
-
-	Mesh::Mesh(const Ref<std::vector<Vertex>>& vertices,
-			   const Ref<std::vector<uint32_t>>& indices,
-			   const Ref<std::vector<MeshTexture>>& textures)
-		: Vertices(vertices),
-		  Indices(indices),
-		  Textures(textures)
+	Mesh::Mesh(DefaultMaterial&& material,
+			   const Ref<std::vector<Vertex>>& vertices,
+			   const Ref<std::vector<uint32_t>>& indices)
+		: Material(std::move(material)),
+		  Vertices(vertices),
+		  Indices(indices)
 	{
 		BufferLayout layout
 		{

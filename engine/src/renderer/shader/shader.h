@@ -19,14 +19,14 @@ namespace Bubble
 {
     class Shader
     {
+		std::string m_Name;
         uint32_t m_ShaderID;
-        std::string m_Name;
-		std::unordered_map<std::string, int> m_UniformCache;
+		mutable std::unordered_map<std::string, int> m_UniformCache;
 
     private:
         void ParseShaders(const std::string& path, std::string& vertex, std::string& fragment, std::string& geometry);
         void CompileShaders(const std::string& vertex_source, const std::string& fragment_source, const std::string& geometry_source);
-        int GetUni(const std::string& name);
+        int GetUni(const std::string& name) const;
 
     public:
         Shader(const std::string& path);
@@ -36,21 +36,21 @@ namespace Bubble
                const std::string& fragment,
                const std::string& geometry = std::string());
 
-        void Bind();
-        void Unbind();
+        void Bind() const;
+        void Unbind() const;
         
         // lone int 
-        void SetUni1i(const std::string& name, const int& val);
+        void SetUni1i(const std::string& name, const int& val) const;
 
         // float vec
-        void SetUni1f(const std::string& name, const float& val);
-        void SetUni2f(const std::string& name, const glm::vec2& val);
-        void SetUni3f(const std::string& name, const glm::vec3& val);
-        void SetUni4f(const std::string& name, const glm::vec4& val);
+        void SetUni1f(const std::string& name, const float& val) const;
+        void SetUni2f(const std::string& name, const glm::vec2& val) const;
+        void SetUni3f(const std::string& name, const glm::vec3& val) const;
+        void SetUni4f(const std::string& name, const glm::vec4& val) const;
 
         // float matrices
-        void SetUniMat3(const std::string& name, const glm::mat3& val);
-        void SetUniMat4(const std::string& name, const glm::mat4& val);
+        void SetUniMat3(const std::string& name, const glm::mat3& val) const;
+        void SetUniMat4(const std::string& name, const glm::mat4& val) const;
 
     };
 }

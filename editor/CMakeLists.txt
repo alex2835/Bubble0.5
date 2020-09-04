@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.12)
 project(Editor VERSION 0.0.0)
 
 
-
 set(EDITOR_LAYER
     src/editor_layer/editor_layer.cpp
     src/editor_layer/editor_layer.h
@@ -39,24 +38,24 @@ set(SOURCES
     ${SCENE_CAMERA}
  )
 
-add_executable(Editor ${SOURCES})
+add_executable(Bubble ${SOURCES})
 
 # engine
-target_link_libraries(Editor Engine)
+target_link_libraries(Bubble Engine)
 
 # imgui
-target_link_libraries(Editor imgui)
+target_link_libraries(Bubble imgui)
 
 
 set_target_properties(
-    Editor PROPERTIES
+    Bubble PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
 # include directories
 target_include_directories(
-    Editor 
+    Bubble
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine/src
@@ -64,15 +63,15 @@ target_include_directories(
 )
 
 
-add_custom_command(TARGET Editor PRE_BUILD
+add_custom_command(TARGET Bubble PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        ${PROJECT_SOURCE_DIR}/resources
-                       $<TARGET_FILE_DIR:Editor>/resources)
+                       $<TARGET_FILE_DIR:Bubble>/resources)
 
 # put dll with exe
 if (WIN32)
-    add_custom_command(TARGET Editor POST_BUILD							# Adds a post-build event to MyTest
+    add_custom_command(TARGET Bubble POST_BUILD							# Adds a post-build event to MyTest
         COMMAND ${CMAKE_COMMAND} -E copy_if_different					# which executes "cmake - E copy_if_different..."
             "${PROJECT_SOURCE_DIR}/../dependencies/SDL2/lib/SDL2.dll"   # <--this is in-file
-            $<TARGET_FILE_DIR:Editor>)									# <--this is out-file path
+            $<TARGET_FILE_DIR:Bubble>)									# <--this is out-file path
 endif()

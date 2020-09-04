@@ -32,10 +32,10 @@ namespace Bubble
 
 		static Light CreateDirLight(const glm::vec3& direction, const glm::vec3& color = glm::vec3(1.0f));
 		
-		// distance between 0 and 1.0f (where 1.0f is 3500m)
+		// distance between 0 and 1.0f (where 1.0f is 3250m)
 		static Light CreatePointLight(const glm::vec3& position, float distance = 0.1f, const glm::vec3& color = glm::vec3(1.0f));
 		
-		// distance between 0 and 1.0f (where 1.0f is 3500m)
+		// distance between 0 and 1.0f (where 1.0f is 3250m)
 		// cutoff and outer_cutoff in degrees
 		static Light CreateSpotLight(const glm::vec3& position, 
 									 const glm::vec3& direction,

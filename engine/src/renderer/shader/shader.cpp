@@ -172,7 +172,7 @@ namespace Bubble
             glDeleteShader(fragment_shader);
         }
 
-        int Shader::GetUni(const std::string& uniform_name)
+        int Shader::GetUni(const std::string& uniform_name) const
         {
             glcall(glUseProgram(m_ShaderID));
             if (m_UniformCache.find(uniform_name) != m_UniformCache.end())
@@ -209,51 +209,51 @@ namespace Bubble
             CompileShaders(vertex, fragment, geometry);
 		}
 
-		void Shader::Bind()
+		void Shader::Bind() const
 		{
             glcall(glUseProgram(m_ShaderID));
 		}
 
-		void Shader::Unbind()
+		void Shader::Unbind() const
 		{
             glcall(glUseProgram(0));
 		}
 
 
 		// lone int 
-        void Shader::SetUni1i(const std::string& m_Name, const int& val)
+        void Shader::SetUni1i(const std::string& m_Name, const int& val) const
         {
             glcall(glUniform1i(GetUni(m_Name), val));
         }
 
         // float vec
-        void Shader::SetUni1f(const std::string& m_Name, const float& val)
+        void Shader::SetUni1f(const std::string& m_Name, const float& val) const
         {
             glcall(glUniform1f(GetUni(m_Name), val));
         }
 
-        void Shader::SetUni2f(const std::string& m_Name, const glm::vec2& val)
+        void Shader::SetUni2f(const std::string& m_Name, const glm::vec2& val) const
         {
             glcall(glUniform2f(GetUni(m_Name), val.x, val.y));
         }
 
-        void Shader::SetUni3f(const std::string& m_Name, const glm::vec3& val)
+        void Shader::SetUni3f(const std::string& m_Name, const glm::vec3& val) const
         {
             glcall(glUniform3f(GetUni(m_Name), val.x, val.y, val.z));
         }
 
-        void Shader::SetUni4f(const std::string& m_Name, const glm::vec4& val)
+        void Shader::SetUni4f(const std::string& m_Name, const glm::vec4& val) const
         {
             glcall(glUniform4f(GetUni(m_Name), val.x, val.y, val.z, val.w));
         }
 
         // float matrices
-        void Shader::SetUniMat3(const std::string& m_Name, const glm::mat3& val)
+        void Shader::SetUniMat3(const std::string& m_Name, const glm::mat3& val) const
         {
             glcall(glUniformMatrix3fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val)));
         }
 
-        void Shader::SetUniMat4(const std::string& m_Name, const glm::mat4& val)
+        void Shader::SetUniMat4(const std::string& m_Name, const glm::mat4& val) const
         {
             glcall(glUniformMatrix4fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val)));
         }

@@ -21,7 +21,7 @@ namespace Bubble
 	private:
 		static void ProcessNode(Model& model, aiNode* node, const aiScene* scene);
 		static Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-		static void LoadMaterialTextures(std::vector<MeshTexture>& textures, aiMaterial* mat, aiTextureType type, TextureType texture_type);
+		static DefaultMaterial LoadMaterialTextures(aiMaterial* mat);
 	};
 	
 }

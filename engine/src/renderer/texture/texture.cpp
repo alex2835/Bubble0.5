@@ -4,7 +4,21 @@
 #include "stb_image.h"
 
 
-namespace Bubble {
+namespace Bubble
+{
+	Texture2D::Texture2D(const glm::vec4& color)
+	{
+		glcall(glGenTextures(1, &m_RendererID));
+		glcall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
+		glcall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &color));
+
+		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+
+		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+	}
+
 
 	Texture2D::Texture2D(uint32_t width, uint32_t height, const Texture2DSpecification& spec)
 		: m_Width(width), m_Height(height)
@@ -27,6 +41,7 @@ namespace Bubble {
 			glcall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, (float*)&spec.BorderColor));
 		}
 	}
+
 
 	Texture2D::Texture2D(const std::string& path, const Texture2DSpecification& spec)
 	{

@@ -3,6 +3,7 @@
 #include "buffer/buffer.h"
 #include "texture/texture.h"
 #include "vertex_array/vertex_array.h"
+#include "material/material.h"
 
 #include "glm/glm.hpp"
 #include <vector>
@@ -19,35 +20,23 @@ namespace Bubble
 		glm::vec3 Bitangent;
 	};
 
-	enum class TextureType { DIFFUSE, SPECULAR, NORMAL, HEIGHT };
-
-	struct MeshTexture : public Texture2D
-	{
-		TextureType type;
-
-		MeshTexture() = default;
-		MeshTexture(const std::string& path);
-	};
-
 	struct Mesh
 	{
 		VertexArray VertexArray;
+		DefaultMaterial Material;
 		Ref<std::vector<Vertex>> Vertices;
 		Ref<std::vector<uint32_t>> Indices;
-		Ref<std::vector<MeshTexture>> Textures;
-
+		
 		Mesh() = default;
-		Mesh(const Ref<std::vector<Vertex>>& vertices,
-			 const Ref<std::vector<uint32_t>>& indices,
-			 const Ref<std::vector<MeshTexture>>& textures);
+		Mesh(DefaultMaterial&& Material,
+			 const Ref<std::vector<Vertex>>& vertices,
+			 const Ref<std::vector<uint32_t>>& indices);
 
 		Mesh(const Mesh&) = delete;
 		Mesh& operator= (const Mesh&) = delete;
 
 		Mesh(Mesh&&) = default;
 		Mesh& operator= (Mesh&&) = default;
-
-		const std::vector<MeshTexture>& GetTextures() const { return *Textures.get(); }
 	};
 
 }

@@ -69,42 +69,8 @@ namespace Bubble
 
 	void Renderer::DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type)
 	{
-		// Bind appropriate textures
-		uint32_t diffuseNr = 0;
-		uint32_t specularNr = 0;
-		uint32_t normalNr = 0;
-		uint32_t heightNr = 0;
-
-		int slot = 0;
-		for (const MeshTexture& texture : mesh.GetTextures())
-		{
-			int number;
-			TextureType type = texture.type;
-			if (type == TextureType::DIFFUSE) {
-				number = diffuseNr++;
-			}
-			else if (type == TextureType::SPECULAR) {
-				number = specularNr++;
-			}
-			else if (type == TextureType::NORMAL) {
-				number = normalNr++;
-			}
-			else if (type == TextureType::HEIGHT) {
-				number = heightNr++;
-			}
-			else {
-				BUBBLE_CORE_ASSERT(false, "Invalid texture type");
-			}
-
-			shader->SetUni1i(TextureNameLookup[(int)type] + std::to_string(number), slot);
-			texture.Bind(slot);
-			slot++;
-		}
-
-		// Draw mesh
 		mesh.VertexArray.Bind();
 		glDrawElements(OpenGLDrawType(draw_type), mesh.Indices->size(), GL_UNSIGNED_INT, 0);
-
 		Texture2D::UnbindAll();
 	}
 
