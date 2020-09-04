@@ -70,6 +70,8 @@ namespace Bubble
 
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
 		
+		// Temp: setup mesh
+		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, 1.0f, 1.0f)));
 		m_ShaderPhong = CreateRef<Shader>("C:\\Users\\lol\\Desktop\\bubble\\engine\\src\\content\\shaders\\phong.glsl");
 		m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
 
@@ -111,6 +113,12 @@ namespace Bubble
 		}
 		ImGui::PopStyleVar();
 
+
+		ImGui::Begin("Global light");
+		ImGui::SliderFloat3("Direction", (float*)&m_Lights[0].Direction, -1, 1);
+		ImGui::End();
+
+
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow();
         m_ImGuiControll.End();
@@ -122,25 +130,40 @@ namespace Bubble
 		// Scene camera update
 		m_SceneCamera.OnUpdate(dt);
 
-		// Temp: Test image
 		Renderer::SetViewport(m_ViewportArray[0].GetFramebuffer());
 		Renderer::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 		Renderer::Clear();
+		
+		// Temp: Test image
+		//m_Shader->Bind();
+		//m_Texture->Bind();
+		//m_Shader->SetUni1i("u_Texture", 0);
+		//Renderer::DrawIndex(m_VertexArray);
 
-		m_Shader->Bind();
+		// Temp: Draw test mesh
+		glm::ivec2 window_size = m_ViewportArray[0].Size();
+		glm::mat4 projection = m_SceneCamera.GetPprojectionMat(window_size.x, window_size.y);
+		glm::mat4 view = m_SceneCamera.GetLookatMat();
+		glm::mat4 model(1.0f);
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0, 0));
 
-		m_Texture->Bind();
-		m_Shader->SetUni1i("u_Texture", 0);
+		m_Lights.ApplyLights(m_ShaderPhong);
+		m_ShaderPhong->SetUniMat4("u_Model", model);
+		m_ShaderPhong->SetUniMat4("u_View", view);
+		m_ShaderPhong->SetUniMat4("u_Projection", projection);
 
-		Renderer::DrawIndex(m_VertexArray);
-
-
-
+		Renderer::DrawModel(m_NanoSuit, m_ShaderPhong);
 	}
 
 	void EditorLayer::OnEvent(SDL_Event& event)
 	{
         m_ImGuiControll.OnEvent(event);
+
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+			Application::GetWindow()->Close();
+		}
 	}
 
 }

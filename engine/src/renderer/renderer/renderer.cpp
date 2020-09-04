@@ -27,6 +27,7 @@ namespace Bubble
 		//glEnable(GL_BLEND);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
 	}
 
 
@@ -70,6 +71,7 @@ namespace Bubble
 	void Renderer::DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type)
 	{
 		mesh.VertexArray.Bind();
+		mesh.Material.Set(shader);
 		glDrawElements(OpenGLDrawType(draw_type), mesh.Indices->size(), GL_UNSIGNED_INT, 0);
 		Texture2D::UnbindAll();
 	}

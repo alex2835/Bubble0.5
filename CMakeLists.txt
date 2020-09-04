@@ -7,13 +7,12 @@ endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
 	message("--- Debug ---")
-	#set release compiler flags 
+	#set debug compiler flags 
 	SET(GCC_COVERAGE_COMPILE_FLAGS "-O0 -Wall -MP ")
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
 	message("--- Release ---")
 	#set release compiler flags 
 if (WIN32)
-	# Windows flags
 	set(CMAKE_CXX_FLAGS "-O2 -MP -EHsc")
 else()
 	set(CMAKE_CXX_FLAGS "-O2 -MP")
@@ -34,8 +33,7 @@ set(DASSIMP_BUILD_ASSIMP_TOOLS OFF)
 #set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE )
 #set(glew-cmake_BUILD_STATIC ON)
 #set(glew-cmake_BUILD_SHARED OFF)
-##set(GLEW_USE_STATIC_LIBS TRUE)
-#
+#set(GLEW_USE_STATIC_LIBS TRUE)
 #add_subdirectory(dependencies/glew)
 
 add_subdirectory(editor)

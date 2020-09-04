@@ -30,7 +30,7 @@ namespace Bubble
 		  Shininess(shininess)
 	{}
 
-	void DefaultMaterial::Set(const Ref<Shader>& shader)
+	void DefaultMaterial::Set(const Ref<Shader>& shader) const
 	{
 		int slot = 0;
 		for (int i = 0; i < DiffuseMaps.size(); i++)
@@ -50,6 +50,8 @@ namespace Bubble
 			shader->SetUni1i("material.normal" + std::to_string(i), slot);
 			NormalMaps[i].Bind(slot++);
 		}
+
+		shader->SetUni1i("material.shininess", Shininess);
 	}
 
 }

@@ -43,7 +43,7 @@ namespace Bubble
 		DefaultMaterial(DefaultMaterial&&) = default;
 		DefaultMaterial& operator=(DefaultMaterial&&) = default;
 
-		void Set(const Ref<Shader>& shader);
+		void Set(const Ref<Shader>& shader) const;
 	};
 
 	// PBR material and so on

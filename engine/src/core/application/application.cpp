@@ -39,8 +39,11 @@ namespace Bubble
 
 	void Application::Run()
 	{
+        Renderer::Init();
+
         while (m_Window.get() && m_Window->IsOpen())
         {
+			Input::NewFrame();
             m_DeltaTime.Update(SDL_GetTicks() / 1000.0f);
 
             // Retrieve and send events

@@ -24,6 +24,7 @@ namespace Bubble
 		Ref<Texture2D> m_Texture;
 		Scope<Shader> m_Shader;
 
+		LightArray m_Lights;
 		Ref<Shader> m_ShaderPhong;
 		Ref<Model> m_NanoSuit;
 

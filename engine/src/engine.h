@@ -18,9 +18,10 @@
 #include "renderer/texture/texture.h"
 #include "renderer/renderer/renderer.h"
 #include "renderer/model/model_loader.h"
+#include "renderer/light/light_array.h"
 
 // Scene
-#include "scene.h"
-#include "entity/entity.h"
-#include "components/basic_components.h"
-#include "entity/scriptable_entity.h"
+#include "scene/scene.h"
+#include "scene/entity/entity.h"
+#include "scene/components/basic_components.h"
+#include "scene/entity/scriptable_entity.h"

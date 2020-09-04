@@ -22,7 +22,8 @@ namespace Bubble
 				break;
 
 			case SDL_KEYDOWN:
-				s_KeyMap[event.key.keysym.sym] = 1 + event.key.repeat;
+				if (event.key.keysym.sym < 128)
+					s_KeyMap[event.key.keysym.sym] = 1 + event.key.repeat;
 				break;
 
 			case SDL_MOUSEWHEEL:
@@ -134,6 +135,12 @@ namespace Bubble
 		int temp = s_MouseWheelOffset;
 		s_MouseWheelOffset = 0;
 		return temp;
+	}
+
+	void Input::NewFrame()
+	{
+		Input::s_MouseRelPosX = 0.0f;
+		Input::s_MouseRelPosY = 0.0f;
 	}
 
 }

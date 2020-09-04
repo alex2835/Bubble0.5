@@ -10,7 +10,7 @@ namespace Bubble
 {
 	const static float MAX_SPEED = 20.0f;
 	const static float DELTA_SPEED = 1.0f;
-	const static float SENSITIVTY = 0.25f;
+	const static float SENSITIVTY = 4.25f;
 
 
 	class SceneCameraController

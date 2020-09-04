@@ -47,7 +47,7 @@ namespace Bubble
 	{
 		Light light;
 		light.Type = LightType::DirLight;
-		light.Direction = direction;
+		light.Direction = glm::normalize(direction);
 		light.Color = color;
 		return light;
 	}
@@ -71,7 +71,7 @@ namespace Bubble
 		Light light;
 		light.Type = LightType::SpotLight;
 		light.Position = position;
-		light.Direction = direction;
+		light.Direction = glm::normalize(direction);
 		light.SetDistance(distance);
 		light.CutOff = cutoff;
 		light.OuterCutOff = outer_cutoff;

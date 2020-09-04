@@ -56,5 +56,8 @@ namespace Bubble
 		static float fGetMouseRelY();
 
 		static int GetMouseWheelOffset();
+
+		// Flush all relative information
+		static void NewFrame();
 	};
 }

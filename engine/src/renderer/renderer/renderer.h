@@ -1,3 +1,4 @@
+#pragma once
 
 #include "renderer_base.h"
 #include "vertex_array/vertex_array.h"
@@ -22,8 +23,8 @@ namespace Bubble
 		static void Clear();
 
 		static void DrawIndex(const Ref<VertexArray>& vertexArray, DrawType draw_type = DrawType::TRIANGLES, uint32_t count = 0);
-		static void DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type);
-		static void DrawMesh(const Ref<Mesh>& mesh, const Ref<Shader>& shader, DrawType draw_type);
-		static void DrawModel(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type);
+		static void DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
+		static void DrawMesh(const Ref<Mesh>& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
+		static void DrawModel(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
 	};
 }
