@@ -54,9 +54,9 @@ namespace Bubble
 			shader->SetUni1f(buffer, light.Quadratic);
 		
 			sprintf(buffer, "%s.cutOff", light_id);
-			shader->SetUni1f(buffer, light.CutOff);
+			shader->SetUni1f(buffer, cosf(glm::radians(light.CutOff)));
 			sprintf(buffer, "%s.outerCutOff", light_id);
-			shader->SetUni1f(buffer, light.OuterCutOff);
+			shader->SetUni1f(buffer, cosf(glm::radians(light.OuterCutOff)));
 		
 			sprintf(buffer, "%s.color", light_id);
 			shader->SetUni3f(buffer, light.Color);

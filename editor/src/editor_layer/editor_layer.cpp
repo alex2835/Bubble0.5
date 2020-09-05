@@ -71,7 +71,9 @@ namespace Bubble
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
 		
 		// Temp: setup mesh
-		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
+		//m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
+		m_Lights.push_back(Light::CreateSpotLight());
+
 		m_ShaderPhong = CreateRef<Shader>("C:\\Users\\lol\\Desktop\\bubble\\engine\\src\\content\\shaders\\phong.glsl");
 		m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
 
@@ -113,8 +115,15 @@ namespace Bubble
 		}
 		ImGui::PopStyleVar();
 
-		ImGui::Begin("Global light");
-		ImGui::SliderFloat3("Direction", (float*)&m_Lights[0].Direction, -1, 1);
+		//ImGui::Begin("Global light");
+		//ImGui::SliderFloat3("Direction", (float*)&m_Lights[0].Direction, -1, 1);
+		//ImGui::End();
+		ImGui::Begin("Flashlight");
+			ImGui::SliderFloat("Distance", (float*)&m_Lights[0].Distance, 0.0f, 1.0f);
+			ImGui::SliderFloat("Cutoff", (float*)&m_Lights[0].CutOff, 0.0f, 20.0f);
+			ImGui::SliderFloat("OuterCutoff", (float*)&m_Lights[0].OuterCutOff, 0.0f, 20.0f);
+			ImGui::ColorEdit3("Color", (float*)&m_Lights[0].Color);
+			ImGui::SliderFloat("Brightness", &m_Lights[0].Brightness, 0.0f, 1.0f);
 		ImGui::End();
 
 
@@ -139,13 +148,17 @@ namespace Bubble
 		//m_Shader->SetUni1i("u_Texture", 0);
 		//Renderer::DrawIndex(m_VertexArray);
 
+		m_Lights[0].Position = m_SceneCamera.m_Camera.Position;
+		m_Lights[0].Direction = m_SceneCamera.m_Camera.Front;
+		m_Lights[0].SetDistance(m_Lights[0].Distance);
+
 		// Temp: Draw test mesh
 		glm::ivec2 window_size = m_ViewportArray[0].Size();
 		glm::mat4 projection = m_SceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = m_SceneCamera.GetLookatMat();
 		glm::mat4 model(1.0f);
-		model = glm::scale(model, glm::vec3(0.2f));
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+		model = glm::scale(model, glm::vec3(1.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
 
 		m_Lights.ApplyLights(m_ShaderPhong);
 		m_ShaderPhong->SetUniMat4("u_Model", model);

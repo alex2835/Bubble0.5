@@ -13,7 +13,7 @@ namespace Bubble
 	const static float SENSITIVTY = 4.25f;
 
 
-	class SceneCameraController
+	struct SceneCameraController
 	{
 		Camera m_Camera;
 		float m_LastMouseX = 0.5f;

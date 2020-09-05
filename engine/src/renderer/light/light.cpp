@@ -25,10 +25,10 @@ namespace Bubble
 		float index = distance * 11.0f; // 11 is array size
 		float lower_coef = index - floor(index);
 		float hight_coef = 1.0f - (index - floor(index));
-		
+
 		int nIndex = index;
-		auto first = AttenuationLookup[nIndex];
-		auto second = AttenuationLookup[(nIndex + 1) % 11];
+		auto first = AttenuationLookup[__min(nIndex, 11)];
+		auto second = AttenuationLookup[__min((nIndex + 1), 11)];
 
 		// linear interpolation
 		return { first.first * lower_coef + second.first * hight_coef,
