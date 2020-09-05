@@ -71,11 +71,13 @@ namespace Bubble
 		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
 		
 		// Temp: setup mesh
-		//m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
 		m_Lights.push_back(Light::CreateSpotLight());
+		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
+
 
 		m_ShaderPhong = CreateRef<Shader>("C:\\Users\\lol\\Desktop\\bubble\\engine\\src\\content\\shaders\\phong.glsl");
 		m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
+		m_GrassPlane = ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj");
 
 		// Temp: Scene
 		m_Scene = CreateRef<Scene>();
@@ -115,9 +117,10 @@ namespace Bubble
 		}
 		ImGui::PopStyleVar();
 
-		//ImGui::Begin("Global light");
-		//ImGui::SliderFloat3("Direction", (float*)&m_Lights[0].Direction, -1, 1);
-		//ImGui::End();
+		ImGui::Begin("Global light");
+			ImGui::SliderFloat3("Direction", (float*)&m_Lights[1].Direction, -1.0f, 1.0f);
+			ImGui::SliderFloat("Brightness", (float*)&m_Lights[1].Brightness, 0.0f, 1.0f);
+		ImGui::End();
 		ImGui::Begin("Flashlight");
 			ImGui::SliderFloat("Distance", (float*)&m_Lights[0].Distance, 0.0f, 1.0f);
 			ImGui::SliderFloat("Cutoff", (float*)&m_Lights[0].CutOff, 0.0f, 20.0f);
@@ -145,6 +148,7 @@ namespace Bubble
 		// Temp: Test image
 		//m_Shader->Bind();
 		//m_Texture->Bind();
+		//m_GrassPlane->Meshes[0].Material.DiffuseMaps[0].Bind();
 		//m_Shader->SetUni1i("u_Texture", 0);
 		//Renderer::DrawIndex(m_VertexArray);
 
@@ -157,7 +161,7 @@ namespace Bubble
 		glm::mat4 projection = m_SceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = m_SceneCamera.GetLookatMat();
 		glm::mat4 model(1.0f);
-		model = glm::scale(model, glm::vec3(1.0f));
+		model = glm::scale(model, glm::vec3(0.7f));
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
 
 		m_Lights.ApplyLights(m_ShaderPhong);
@@ -166,6 +170,13 @@ namespace Bubble
 		m_ShaderPhong->SetUniMat4("u_Projection", projection);
 
 		Renderer::DrawModel(m_NanoSuit, m_ShaderPhong);
+
+		model = glm::scale(model, glm::vec3(1.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -7.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+		m_ShaderPhong->SetUniMat4("u_Model", model);
+
+		Renderer::DrawModel(m_GrassPlane, m_ShaderPhong);
 	}
 
 	void EditorLayer::OnEvent(SDL_Event& event)

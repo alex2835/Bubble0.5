@@ -105,7 +105,8 @@ void main()
         }
     }
     result += diff_spec.xyz * vec3(texture(material.diffuse0, v_TexCoords));
-    result += diff_spec.w * vec3(texture(material.specular0, v_TexCoords));
+    vec4 spec = texture(material.specular0, v_TexCoords);
+    result += vec3(diff_spec.w * (spec.x + spec.y + spec.z) / 3);
     
     // Hard code ambient
     clamp(result, vec3(0.1f), vec3(1.0f));

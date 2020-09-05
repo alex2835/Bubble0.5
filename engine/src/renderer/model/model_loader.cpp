@@ -86,9 +86,9 @@ namespace Bubble
 				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 			}
 	
-			// tangent
 			if (mesh->mTangents)
 			{
+				// tangent
 				vector.x = mesh->mTangents[i].x;
 				vector.y = mesh->mTangents[i].y;
 				vector.z = mesh->mTangents[i].z;
@@ -164,6 +164,13 @@ namespace Bubble
 			if (material.SpecularMaps.size() == 0) {
 				material.SpecularMaps.push_back(Texture2D(glm::vec4(1.0f)));
 			}
+
+			float shininess;
+			if (AI_SUCCESS != aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &shininess))
+			{
+				material.Shininess = shininess;
+			}
+
 			return material;
 		}
 	}

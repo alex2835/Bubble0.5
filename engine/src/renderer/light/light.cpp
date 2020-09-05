@@ -43,6 +43,13 @@ namespace Bubble
 		Quadratic = quadratic;
 	}
 
+	void Light::SetDistance()
+	{
+		auto [linear, quadratic] = GetAttenuationConstans(Distance);
+		Linear = linear;
+		Quadratic = quadratic;
+	}
+
 	Light Light::CreateDirLight(const glm::vec3& direction, const glm::vec3& color)
 	{
 		Light light;
