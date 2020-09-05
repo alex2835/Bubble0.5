@@ -34,7 +34,7 @@ namespace Bubble
 		m_IndexBuffer = CreateRef<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-		m_Texture = CreateRef<Texture2D>("resources/bubble.jpg");
+		m_Texture = CreateRef<Texture2D>("./resources/bubble.jpg");
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -75,9 +75,9 @@ namespace Bubble
 		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
 
 
-		m_ShaderPhong = CreateRef<Shader>("C:\\Users\\lol\\Desktop\\bubble\\engine\\src\\content\\shaders\\phong.glsl");
-		m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
-		m_GrassPlane = ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj");
+		m_ShaderPhong = CreateRef<Shader>("./resources/shaders/phong.glsl");
+		m_NanoSuit = ModelLoader::StaticModel("./resources/crysis/nanosuit.obj");
+		m_GrassPlane = ModelLoader::StaticModel("./resources/grass_plane/grass_plane.obj");
 
 		// Temp: Scene
 		m_Scene = CreateRef<Scene>();

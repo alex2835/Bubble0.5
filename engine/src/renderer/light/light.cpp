@@ -27,8 +27,8 @@ namespace Bubble
 		float lower_coef = 1.0f - (index - floor(index));
 
 		int nIndex = index;
-		auto first = AttenuationLookup[__min(nIndex, 11)];
-		auto second = AttenuationLookup[__min((nIndex + 1), 11)];
+		auto first = AttenuationLookup[std::min(nIndex, 11)];
+		auto second = AttenuationLookup[std::min((nIndex + 1), 11)];
 
 		// linear interpolation
 		return { first.first * lower_coef + second.first * hight_coef,

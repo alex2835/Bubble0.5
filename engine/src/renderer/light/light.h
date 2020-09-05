@@ -2,7 +2,7 @@
 
 #include "glm/glm.hpp"
 #include <utility>
-
+#include <algorithm>
 
 namespace Bubble
 {
