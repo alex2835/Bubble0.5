@@ -23,8 +23,8 @@ namespace Bubble
 	static std::pair<float, float> GetAttenuationConstans(float distance)
 	{
 		float index = distance * 11.0f; // 11 is array size
-		float lower_coef = index - floor(index);
-		float hight_coef = 1.0f - (index - floor(index));
+		float hight_coef = index - floor(index);
+		float lower_coef = 1.0f - (index - floor(index));
 
 		int nIndex = index;
 		auto first = AttenuationLookup[__min(nIndex, 11)];
