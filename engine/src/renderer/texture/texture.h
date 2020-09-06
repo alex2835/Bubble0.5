@@ -11,7 +11,7 @@ namespace Bubble
 		uint32_t InternalFormat = GL_RGBA8;
 		uint32_t DataFormat = GL_RGBA;
 		uint32_t MinFiler = GL_LINEAR;
-		uint32_t MagFilter = GL_NEAREST;
+		uint32_t MagFilter = GL_LINEAR;
 		uint32_t WrapS = GL_REPEAT;
 		uint32_t WrapT = GL_REPEAT;
 		glm::vec4 BorderColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);

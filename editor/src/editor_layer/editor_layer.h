@@ -26,8 +26,10 @@ namespace Bubble
 
 		LightArray m_Lights;
 		Ref<Shader> m_ShaderPhong;
+		Ref<Shader> m_ShaderPhongDiscard;
 		Ref<Model> m_NanoSuit;
 		Ref<Model> m_GrassPlane;
+		Ref<Model> m_Tree;
 
 		Entity m_Entity;
 

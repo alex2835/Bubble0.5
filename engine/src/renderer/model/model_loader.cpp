@@ -127,7 +127,7 @@ namespace Bubble
 	// the required info is returned as a Texture struct.
 	DefaultMaterial ModelLoader::LoadMaterialTextures(aiMaterial* mat)
 	{
-		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT };
+		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT, aiTextureType_NORMALS };
 		
 		DefaultMaterial material;
 		for (int i = 0; i < 3; i++)
@@ -152,6 +152,9 @@ namespace Bubble
 							material.SpecularMaps.push_back(directory + str.C_Str());
 							break;
 						case aiTextureType_HEIGHT:
+							material.NormalMaps.push_back(directory + str.C_Str());
+							break;
+						case aiTextureType_NORMALS:
 							material.NormalMaps.push_back(directory + str.C_Str());
 							break;
 					}

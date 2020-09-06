@@ -76,8 +76,10 @@ namespace Bubble
 
 
 		m_ShaderPhong = CreateRef<Shader>("./resources/shaders/phong.glsl");
+		m_ShaderPhongDiscard = CreateRef<Shader>("./resources/shaders/phong_discard.glsl");
 		m_NanoSuit = ModelLoader::StaticModel("./resources/crysis/nanosuit.obj");
 		m_GrassPlane = ModelLoader::StaticModel("./resources/grass_plane/grass_plane.obj");
+		m_Tree = ModelLoader::StaticModel("./resources/Tree/Tree.obj");
 
 		// Temp: Scene
 		m_Scene = CreateRef<Scene>();
@@ -93,7 +95,6 @@ namespace Bubble
 
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
-		Framebuffer::BindDefault();
 		m_ImGuiControll.Begin();
 
         // Temp: Veiwports control
@@ -160,22 +161,33 @@ namespace Bubble
 		glm::ivec2 window_size = m_ViewportArray[0].Size();
 		glm::mat4 projection = m_SceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = m_SceneCamera.GetLookatMat();
-		glm::mat4 model(1.0f);
-		model = glm::scale(model, glm::vec3(0.7f));
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
-
+		
 		m_Lights.ApplyLights(m_ShaderPhong);
-		m_ShaderPhong->SetUniMat4("u_Model", model);
+		m_Lights.ApplyLights(m_ShaderPhongDiscard);
+
 		m_ShaderPhong->SetUniMat4("u_View", view);
 		m_ShaderPhong->SetUniMat4("u_Projection", projection);
 
+		m_ShaderPhongDiscard->SetUniMat4("u_View", view);
+		m_ShaderPhongDiscard->SetUniMat4("u_Projection", projection);
+
+		glm::mat4 model(1.0f);
+		model = glm::scale(model, glm::vec3(0.7f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
+		m_ShaderPhong->SetUniMat4("u_Model", model);
 		Renderer::DrawModel(m_NanoSuit, m_ShaderPhong);
 
-		model = glm::scale(model, glm::vec3(1.0f));
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(10.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f));
+		m_ShaderPhongDiscard->SetUniMat4("u_Model", model);
+		Renderer::DrawModel(m_Tree, m_ShaderPhongDiscard);
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.3f));
 		model = glm::translate(model, glm::vec3(0.0f, -7.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 		m_ShaderPhong->SetUniMat4("u_Model", model);
-
 		Renderer::DrawModel(m_GrassPlane, m_ShaderPhong);
 	}
 

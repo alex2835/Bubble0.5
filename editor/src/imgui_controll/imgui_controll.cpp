@@ -52,6 +52,8 @@ namespace Bubble
 
     void ImGuiControll::Begin()
     {
+		Framebuffer::BindDefault();
+
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(m_Window->GetWindow());
