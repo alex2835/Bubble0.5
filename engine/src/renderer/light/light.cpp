@@ -62,6 +62,7 @@ namespace Bubble
 	Light Light::CreatePointLight(const glm::vec3& position, float distance, const glm::vec3& color)
 	{
 		Light light;
+		light.Position = position;
 		light.Type = LightType::PointLight;
 		light.SetDistance(distance);
 		light.Color = color;

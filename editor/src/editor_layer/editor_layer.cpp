@@ -73,6 +73,7 @@ namespace Bubble
 		// Temp: setup mesh
 		m_Lights.push_back(Light::CreateSpotLight());
 		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
+		m_Lights.push_back(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f)));
 
 
 		m_ShaderPhong = CreateRef<Shader>("./resources/shaders/phong.glsl");
@@ -121,6 +122,7 @@ namespace Bubble
 		ImGui::Begin("Global light");
 			ImGui::SliderFloat3("Direction", (float*)&m_Lights[1].Direction, -1.0f, 1.0f);
 			ImGui::SliderFloat("Brightness", (float*)&m_Lights[1].Brightness, 0.0f, 1.0f);
+			ImGui::ColorEdit3("Color", (float*)&m_Lights[1].Color);
 		ImGui::End();
 		ImGui::Begin("Flashlight");
 			ImGui::SliderFloat("Distance", (float*)&m_Lights[0].Distance, 0.0f, 1.0f);
@@ -128,6 +130,11 @@ namespace Bubble
 			ImGui::SliderFloat("OuterCutoff", (float*)&m_Lights[0].OuterCutOff, 0.0f, 20.0f);
 			ImGui::ColorEdit3("Color", (float*)&m_Lights[0].Color);
 			ImGui::SliderFloat("Brightness", &m_Lights[0].Brightness, 0.0f, 1.0f);
+		ImGui::End();
+		ImGui::Begin("PointLight");
+			ImGui::SliderFloat("Distance", (float*)&m_Lights[2].Distance, 0.0f, 1.0f);
+			ImGui::ColorEdit3("Color", (float*)&m_Lights[2].Color);
+			ImGui::SliderFloat("Brightness", &m_Lights[2].Brightness, 0.0f, 1.0f);
 		ImGui::End();
 
 
@@ -155,7 +162,8 @@ namespace Bubble
 
 		m_Lights[0].Position = m_SceneCamera.m_Camera.Position;
 		m_Lights[0].Direction = m_SceneCamera.m_Camera.Front;
-		m_Lights[0].SetDistance(m_Lights[0].Distance);
+		m_Lights[0].SetDistance();
+		m_Lights[2].SetDistance();
 
 		// Temp: Draw test mesh
 		glm::ivec2 window_size = m_ViewportArray[0].Size();

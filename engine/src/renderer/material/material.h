@@ -24,17 +24,18 @@ namespace Bubble
 		void Set(const Ref<Shader>& shader);
 	};
 
+
 	struct DefaultMaterial
 	{
-		std::vector<Texture2D> DiffuseMaps;
-		std::vector<Texture2D> SpecularMaps;
-		std::vector<Texture2D> NormalMaps;
+		Texture2D DiffuseMaps;
+		Texture2D SpecularMaps;
+		Texture2D NormalMaps;
 		int Shininess = 32;
 
 		DefaultMaterial() = default;
-		DefaultMaterial(std::vector<Texture2D>&& diffuse_maps,
-						std::vector<Texture2D>&& specular_maps,
-						std::vector<Texture2D>&& normal_maps,
+		DefaultMaterial(Texture2D&& diffuse_maps,
+						Texture2D&& specular_maps,
+						Texture2D&& normal_maps,
 						int shininess = 32);
 
 		DefaultMaterial(const DefaultMaterial&) = delete;
@@ -45,6 +46,30 @@ namespace Bubble
 
 		void Set(const Ref<Shader>& shader) const;
 	};
+
+
+	struct ExpandedMaterial
+	{
+		std::vector<Texture2D> DiffuseMaps;
+		std::vector<Texture2D> SpecularMaps;
+		std::vector<Texture2D> NormalMaps;
+		int Shininess = 32;
+
+		ExpandedMaterial() = default;
+		ExpandedMaterial(std::vector<Texture2D>&& diffuse_maps,
+						 std::vector<Texture2D>&& specular_maps,
+						 std::vector<Texture2D>&& normal_maps,
+						 int shininess = 32);
+
+		ExpandedMaterial(const ExpandedMaterial&) = delete;
+		ExpandedMaterial& operator=(const ExpandedMaterial&) = delete;
+
+		ExpandedMaterial(ExpandedMaterial&&) = default;
+		ExpandedMaterial& operator=(ExpandedMaterial&&) = default;
+
+		void Set(const Ref<Shader>& shader) const;
+	};
+
 
 	// PBR material and so on
 
