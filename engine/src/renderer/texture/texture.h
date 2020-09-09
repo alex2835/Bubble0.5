@@ -29,6 +29,7 @@ namespace Bubble
 
 	public:
 		// Create 1x1 texture
+		Texture2D() = default;
 		Texture2D(const glm::vec4& color);
 		Texture2D(uint32_t width, uint32_t height, const Texture2DSpecification& spec = {});
 		Texture2D(const std::string& path, const Texture2DSpecification& spec = {});

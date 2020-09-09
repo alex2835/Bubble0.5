@@ -16,11 +16,13 @@ namespace Bubble
 	{
 		// Just a pointer
 		static Window* s_CurrentWindow;
+		static std::string* s_CurrentDir;
 	protected:
 		// Resource
 		Scope<Window> m_Window;
 		LayerArray m_LayerArray;
 		DeltaTime m_DeltaTime;
+		std::string m_CurrentDir;
 		
 	public:
 		Application(Window* window = nullptr);
@@ -34,5 +36,9 @@ namespace Bubble
 		void SwapLayers(int id_1, int id_2);
 
 		static Window* GetWindow();
+
+		// Take path to executable
+		void SetCurrentDir(const std::string& path);
+		static const std::string& GetCurrentDir();
 	};
 }

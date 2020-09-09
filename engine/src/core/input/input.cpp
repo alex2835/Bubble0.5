@@ -18,7 +18,8 @@ namespace Bubble
 		switch (event.type)
 		{
 			case SDL_KEYUP:
-				s_KeyMap[event.key.keysym.sym] = 0;
+				if (event.key.keysym.sym < 128)
+					s_KeyMap[event.key.keysym.sym] = 0;
 				break;
 
 			case SDL_KEYDOWN:

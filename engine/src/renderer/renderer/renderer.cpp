@@ -84,4 +84,13 @@ namespace Bubble
 		}
 	}
 
+	void Renderer::DrawSkybox(const Ref<Skybox>& skybox, const Ref<Shader>& shader)
+	{
+		glDepthFunc(GL_LEQUAL);
+		shader->Bind();
+		skybox->Bind();
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDepthFunc(GL_LESS);
+	}
+
 }

@@ -5,6 +5,7 @@
 #include "framebuffer/framebuffer.h"
 #include "shader/shader.h"
 #include "model/model.h"
+#include "skybox/skybox.h"
 
 #include "glm/glm.hpp"
 
@@ -26,5 +27,7 @@ namespace Bubble
 		static void DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
 		static void DrawMesh(const Ref<Mesh>& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
 		static void DrawModel(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
+
+		static void DrawSkybox(const Ref<Skybox>& model, const Ref<Shader>& shader);
 	};
 }

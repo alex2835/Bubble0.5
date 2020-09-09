@@ -16,11 +16,11 @@ int main(int argc, char* argv[])
 	try
 	{
 		Bubble::Application* app = CreateApplication();
+		app->SetCurrentDir(argv[0]);
 		app->Run();
 		delete app;
 	}
-	catch (const std::exception& e)
-	{
+	catch (const std::exception& e) {
 		LOG_CORE_ERROR("Exception has been trigered:\n {0}", e.what());
 	}
 

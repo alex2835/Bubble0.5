@@ -35,19 +35,25 @@ set(RENDERER
     src/renderer/texture/texture.cpp
     src/renderer/renderer/renderer.h
     src/renderer/renderer/renderer.cpp
-    src/renderer/model/mesh.h
-    src/renderer/model/mesh.cpp
-    src/renderer/model/model.h
-    src/renderer/model/model_loader.cpp
 )
 
 # Rendering stuff
 set(RENDERING_STUFF
+    src/renderer/model/mesh.h
+    src/renderer/model/mesh.cpp
+    src/renderer/model/model.h
+    src/renderer/model/model_loader.cpp
     src/renderer/light/light.h
     src/renderer/light/light.cpp
     src/renderer/light/light_array.h
     src/renderer/material/material.h
     src/renderer/material/material.cpp
+
+    src/renderer/cubemap/cubemap.h
+    src/renderer/cubemap/cubemap.cpp
+    src/renderer/skybox/skybox.cpp
+    src/renderer/skybox/skybox.h
+
 )
 
 # Scene

@@ -28,6 +28,7 @@ namespace Bubble
 		void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
 		void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer);
 
+		const uint32_t GetID() const { return m_RendererID; }
 		const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const;
 		const Ref<IndexBuffer>& GetIndexBuffer() const;
 	};

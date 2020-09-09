@@ -119,6 +119,7 @@ namespace Bubble
 	{
 	private:
 		uint32_t m_RendererID = 0;
+		uint32_t m_Size = 0;
 		BufferLayout m_Layout;
 
 	public:
@@ -141,6 +142,8 @@ namespace Bubble
 		 
 		const BufferLayout& GetLayout() const;
 		void SetLayout(const BufferLayout& layout);
+
+		uint32_t GetSize() { return m_Size; }
 	};
 
 	

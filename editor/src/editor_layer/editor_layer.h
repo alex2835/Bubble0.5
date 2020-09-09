@@ -31,6 +31,9 @@ namespace Bubble
 		Ref<Model> m_GrassPlane;
 		Ref<Model> m_Tree;
 
+		Ref<Shader> m_ShaderSkybox;
+		Ref<Skybox> m_Skybox;
+
 		Entity m_Entity;
 
 	public:

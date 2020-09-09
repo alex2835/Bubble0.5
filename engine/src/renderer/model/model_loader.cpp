@@ -24,8 +24,8 @@ namespace Bubble
 			throw std::runtime_error("ERROR::ASSIMP\n" + std::string(importer.GetErrorString()));
 		}
 
-		// process ASSIMP's root node recursively
-		//model.Meshes.reserve(scene->mNumMeshes);
+		// Process ASSIMP's root node recursively
+		model->Meshes.reserve(scene->mNumMeshes);
 		ProcessNode(*model, scene->mRootNode, scene);
 
 		return model;
@@ -146,28 +146,30 @@ namespace Bubble
 					switch (types[i])
 					{
 						case aiTextureType_DIFFUSE:
-							material.DiffuseMaps.push_back(directory + str.C_Str());
+							material.Diffuse = Texture2D(directory + str.C_Str());
 							break;
 						case aiTextureType_SPECULAR:
-							material.SpecularMaps.push_back(directory + str.C_Str());
-							break;
-						case aiTextureType_HEIGHT:
-							material.NormalMaps.push_back(directory + str.C_Str());
+							material.Specular = Texture2D(directory + str.C_Str());
 							break;
 						case aiTextureType_NORMALS:
-							material.NormalMaps.push_back(directory + str.C_Str());
+							material.Normal = Texture2D(directory + str.C_Str());
 							break;
+						//case aiTextureType_HEIGHT:
+						//	material.Normal = Texture2D(directory + str.C_Str());
+						//	break;
+						default:
+							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", s_LoadedModels.back().first, str.C_Str());
 					}
 				}
 			}
 			// Necessary maps
-			if (material.DiffuseMaps.size() == 0) {
-				material.DiffuseMaps.push_back(Texture2D(glm::vec4(1.0f)));
+			if (material.Diffuse.GetHeight() == 0) {
+				material.Diffuse = Texture2D(Texture2D(glm::vec4(1.0f)));
 			}
-			if (material.SpecularMaps.size() == 0) {
-				material.SpecularMaps.push_back(Texture2D(glm::vec4(1.0f)));
+			if (material.Specular.GetHeight() == 0) {
+				material.Specular = Texture2D(Texture2D(glm::vec4(1.0f)));
 			}
-
+			
 			float shininess;
 			if (AI_SUCCESS != aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &shininess))
 			{

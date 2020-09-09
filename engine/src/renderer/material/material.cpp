@@ -20,33 +20,33 @@ namespace Bubble
 	}
 
 
-	DefaultMaterial::DefaultMaterial(Texture2D&& diffuse_maps,
-									 Texture2D&& specular_maps,
-									 Texture2D&& normal_maps,
+	DefaultMaterial::DefaultMaterial(Texture2D&& diffuse_map,
+									 Texture2D&& specular_map,
+									 Texture2D&& normal_map,
 									 int shininess)
-		: DiffuseMaps(std::move(diffuse_maps)),
-		  SpecularMaps(std::move(specular_maps)),
-		  NormalMaps(std::move(normal_maps)),
+		: Diffuse(std::move(diffuse_map)),
+		  Specular(std::move(specular_map)),
+		  Normal(std::move(normal_map)),
 		  Shininess(shininess)
 	{}
 
 	void DefaultMaterial::Set(const Ref<Shader>& shader) const
 	{
 		shader->SetUni1i("material.diffuse0", 0);
-		DiffuseMaps.Bind(0);
+		Diffuse.Bind(0);
 
 		shader->SetUni1i("material.specular0", 1);
-		SpecularMaps.Bind(1);
+		Specular.Bind(1);
 
 		shader->SetUni1i("material.normal0", 2);
-		NormalMaps.Bind(2);
+		Normal.Bind(2);
 
 		shader->SetUni1i("material.shininess", Shininess);
 	}
 
 
 
-	ExpandedMaterial::ExpandedMaterial(std::vector<Texture2D>&& diffuse_maps,
+	ExtendedMaterial::ExtendedMaterial(std::vector<Texture2D>&& diffuse_maps,
 									   std::vector<Texture2D>&& specular_maps,
 									   std::vector<Texture2D>&& normal_maps,
 									   int shininess)
@@ -56,7 +56,7 @@ namespace Bubble
 		  Shininess(shininess)
 	{}
 
-	void ExpandedMaterial::Set(const Ref<Shader>& shader) const
+	void ExtendedMaterial::Set(const Ref<Shader>& shader) const
 	{
 		int slot = 0;
 		for (int i = 0; i < DiffuseMaps.size(); i++)

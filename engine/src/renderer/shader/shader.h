@@ -52,5 +52,8 @@ namespace Bubble
         void SetUniMat3(const std::string& name, const glm::mat3& val) const;
         void SetUniMat4(const std::string& name, const glm::mat4& val) const;
 
+        static Ref<Shader> Open(const std::string& path);
+    private:
+        static std::vector<std::pair<std::string, Ref<Shader>>> s_OpenedShaders;
     };
 }

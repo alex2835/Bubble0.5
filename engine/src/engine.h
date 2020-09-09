@@ -19,6 +19,8 @@
 #include "renderer/renderer/renderer.h"
 #include "renderer/model/model_loader.h"
 #include "renderer/light/light_array.h"
+#include "renderer/cubemap/cubemap.h"
+#include "renderer/skybox/skybox.h"
 
 // Scene
 #include "scene/scene.h"

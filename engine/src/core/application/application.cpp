@@ -5,8 +5,10 @@
 namespace Bubble
 {
     Window* Application::s_CurrentWindow = nullptr;
+	std::string* Application::s_CurrentDir = nullptr;
 
-    Application::Application(Window* window)
+
+	Application::Application(Window* window)
         : m_Window(window)
     {
         Application::s_CurrentWindow = window;
@@ -35,6 +37,18 @@ namespace Bubble
 	Window* Application::GetWindow()
 	{
         return s_CurrentWindow;
+	}
+
+	void Application::SetCurrentDir(const std::string& path)
+	{
+        int path_size = std::min(path.find("/Bubble"), path.size());
+        m_CurrentDir = path.substr(0, path_size);
+        s_CurrentDir = &m_CurrentDir;
+	}
+
+	const std::string& Application::GetCurrentDir()
+	{
+        return *s_CurrentDir;
 	}
 
 	void Application::Run()

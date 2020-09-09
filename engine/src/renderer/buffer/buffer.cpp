@@ -7,6 +7,7 @@ namespace Bubble
 	// ==================== Vertex buffer ======================
 
 	VertexBuffer::VertexBuffer(uint32_t size)
+		: m_Size(size)
 	{
 		glcall(glGenBuffers(1, &m_RendererID));
 		glcall(glBindBuffer(GL_ARRAY_BUFFER, m_RendererID));
@@ -14,6 +15,7 @@ namespace Bubble
 	}
 
 	VertexBuffer::VertexBuffer(void* vertices, uint32_t size)
+		: m_Size(size)
 	{
 		glcall(glGenBuffers(1, &m_RendererID));
 		glcall(glBindBuffer(GL_ARRAY_BUFFER, m_RendererID));
@@ -24,6 +26,7 @@ namespace Bubble
 	{
 		m_RendererID = other.m_RendererID;
 		m_Layout = std::move(other.m_Layout);
+		m_Size = other.m_Size;
 		other.m_RendererID = 0;
 	}
 
@@ -31,7 +34,9 @@ namespace Bubble
 	{
 		m_RendererID = other.m_RendererID;
 		m_Layout = std::move(other.m_Layout);
+		m_Size = other.m_Size;
 		other.m_RendererID = 0;
+		other.m_Size = 0;
 		return *this;
 	}
 
