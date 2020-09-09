@@ -55,6 +55,11 @@ namespace Bubble
 	}
 
 
+	void Renderer::ClearDepth()
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+
 	void Renderer::DrawIndex(const Ref<VertexArray>& vertex_array, DrawType draw_type, uint32_t index_count)
 	{
 		vertex_array->Bind();

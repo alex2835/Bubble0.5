@@ -4,7 +4,9 @@
 
 namespace Bubble
 {
-    EditorLayer::EditorLayer() {}
+    EditorLayer::EditorLayer()
+		: m_SceneCamera(glm::vec3(0.0f, 5.0f, 0.0f))
+	{}
 
 	void EditorLayer::OnAttach()
 	{
@@ -84,7 +86,7 @@ namespace Bubble
 
 
 		// Temp: skybox
-		m_Skybox = CreateRef<Skybox>("resources/skybox");
+		m_Skybox = CreateRef<Skybox>("resources/skybox/2");
 		m_ShaderSkybox = Shader::Open("resources/shaders/skybox.glsl");
 
 		// Temp: Scene
@@ -155,8 +157,9 @@ namespace Bubble
 		m_SceneCamera.OnUpdate(dt);
 
 		Renderer::SetViewport(m_ViewportArray[0].GetFramebuffer());
-		Renderer::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
-		Renderer::Clear();
+		//Renderer::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+		//Renderer::Clear();
+		Renderer::ClearDepth();
 		
 		// Temp: Test image
 		//m_Shader->Bind();
@@ -206,6 +209,7 @@ namespace Bubble
 		
 		// Render skybox
 		m_ShaderSkybox->SetUniMat4("u_Projection", projection);
+		view = glm::rotate(view, glm::radians(Application::GetTime() * 0.5f), glm::vec3(0, 1, 0));
 		m_ShaderSkybox->SetUniMat4("u_View", glm::mat3(view));
 		m_ShaderSkybox->SetUni1f("u_Brightness", std::max(m_Lights[1].Brightness, 0.2f));
 		Renderer::DrawSkybox(m_Skybox, m_ShaderSkybox);

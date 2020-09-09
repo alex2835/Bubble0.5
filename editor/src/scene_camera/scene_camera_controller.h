@@ -29,6 +29,7 @@ namespace Bubble
 		float DeltaFov = 0.05f;
 
 	public:
+		SceneCameraController(const glm::vec3& position = glm::vec3(0.0f));
 		void OnUpdate(DeltaTime dt);
 
 		glm::mat4 GetLookatMat();

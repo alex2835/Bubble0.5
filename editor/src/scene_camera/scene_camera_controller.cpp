@@ -4,6 +4,10 @@
 
 namespace Bubble
 {
+	SceneCameraController::SceneCameraController(const glm::vec3& position)
+		: m_Camera(position)
+	{}
+
 	// Process scene camera movement
 	void SceneCameraController::OnUpdate(DeltaTime dt)
 	{
