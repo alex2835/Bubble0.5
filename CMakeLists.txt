@@ -26,7 +26,7 @@ endif()
 # Assimp flags
 set(BUILD_SHARED_LIBS OFF)
 set(DASSIMP_BUILD_ASSIMP_TOOLS OFF)
-add_definitions(-D_NO_DEBUG_HEAP=1)
+add_definitions(-D"_NO_DEBUG_HEAP=1")
 
 # Glew flags
 #set( GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE )

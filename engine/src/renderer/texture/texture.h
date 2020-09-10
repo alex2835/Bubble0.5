@@ -8,6 +8,8 @@ namespace Bubble
 {
 	struct Texture2DSpecification
 	{
+		uint32_t Width = 0;
+		uint32_t Height = 0;
 		uint32_t InternalFormat = GL_RGBA8;
 		uint32_t DataFormat = GL_RGBA;
 		uint32_t MinFiler = GL_LINEAR;
@@ -28,10 +30,10 @@ namespace Bubble
 		uint32_t m_InternalFormat = 0, m_DataFormat = 0;
 
 	public:
+		//Texture2D() = default;
 		// Create 1x1 texture
-		Texture2D() = default;
 		Texture2D(const glm::vec4& color);
-		Texture2D(uint32_t width, uint32_t height, const Texture2DSpecification& spec = {});
+		Texture2D(const Texture2DSpecification& spec = {});
 		Texture2D(const std::string& path, const Texture2DSpecification& spec = {});
 
 		Texture2D(const Texture2D&) = delete;
@@ -51,9 +53,9 @@ namespace Bubble
 		void Bind(uint32_t slot = 0) const;
 		static void UnbindAll() { glActiveTexture(GL_TEXTURE0); }
 
-		bool operator==(const Texture2D& other) const
-		{
-			return m_RendererID == other.m_RendererID;
-		}
+		bool operator==(const Texture2D& other) const {return m_RendererID == other.m_RendererID;}
+
+		// Don't forget to remove char*
+		static std::tuple<uint8_t*, Texture2DSpecification> OpenRawImage(const std::string& path);
 	};
 }

@@ -32,7 +32,7 @@ namespace Bubble
 		m_VertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		
-		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0};
+		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0 };
 		m_IndexBuffer = CreateRef<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
@@ -86,7 +86,7 @@ namespace Bubble
 
 
 		// Temp: skybox
-		m_Skybox = CreateRef<Skybox>("resources/skybox/2");
+		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
 		m_ShaderSkybox = Shader::Open("resources/shaders/skybox.glsl");
 
 		// Temp: Scene
@@ -144,6 +144,9 @@ namespace Bubble
 			ImGui::SliderFloat("Brightness", &m_Lights[2].Brightness, 0.0f, 1.0f);
 		ImGui::End();
 
+		ImGui::Begin("Info");
+			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
 
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow();

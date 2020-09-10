@@ -16,7 +16,7 @@ namespace Bubble
 			// Catch cursor
 			SDL_SetRelativeMouseMode(SDL_TRUE);
 
-			// speed x
+			// Speed x
 			if (Input::IsKeyPressed(SDLK_w))
 			{
 				SpeedX = SpeedX < MaxSpeed ? SpeedX + DeltaSpeed : MaxSpeed;
@@ -29,7 +29,7 @@ namespace Bubble
 				SpeedX = fabs(SpeedX) < 0.01f ? SpeedX = 0 : SpeedX - sgn(SpeedX) * DeltaSpeed;
 			}
 
-			// speed y
+			// Speed y
 			if (Input::IsKeyPressed(SDLK_d))
 			{
 				SpeedY = SpeedY < MaxSpeed ? SpeedY + DeltaSpeed : MaxSpeed;
@@ -42,7 +42,7 @@ namespace Bubble
 				SpeedY = fabs(SpeedY) < 0.01f ? SpeedY = 0 : SpeedY - sgn(SpeedY) * DeltaSpeed;
 			}
 
-			// clamp
+			// Clamp
 			if (fabs(SpeedX) > MaxSpeed)
 			{
 				SpeedX = sgn(SpeedX) * MaxSpeed;
@@ -53,7 +53,7 @@ namespace Bubble
 				SpeedY = sgn(SpeedY) * MaxSpeed;
 			}
 
-			// move
+			// Move
 			m_Camera.Position += m_Camera.Front * SpeedX * dt.GetSeconds();
 			m_Camera.Position -= m_Camera.Right * SpeedY * dt.GetSeconds();
 
@@ -65,6 +65,12 @@ namespace Bubble
 		else {
 			// Release cursor
 			SDL_SetRelativeMouseMode(SDL_FALSE);
+
+			// Inertia
+			SpeedX = fabs(SpeedX) < 0.01f ? SpeedX = 0 : SpeedX - sgn(SpeedX) * DeltaSpeed;
+			SpeedY = fabs(SpeedY) < 0.01f ? SpeedY = 0 : SpeedY - sgn(SpeedY) * DeltaSpeed;
+			m_Camera.Position += m_Camera.Front * SpeedX * dt.GetSeconds();
+			m_Camera.Position -= m_Camera.Right * SpeedY * dt.GetSeconds();
 		}
 	}
 

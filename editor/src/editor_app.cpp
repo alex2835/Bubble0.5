@@ -25,9 +25,7 @@ namespace Bubble
 }
 
 
-/*
-	Will be called in main loop
-*/
+// Will be called in main loop
 Bubble::Application* CreateApplication()
 {
     return new Bubble::EditorApp();

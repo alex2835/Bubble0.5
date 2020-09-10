@@ -20,15 +20,16 @@ namespace Bubble
 	}
 
 
-	Texture2D::Texture2D(uint32_t width, uint32_t height, const Texture2DSpecification& spec)
-		: m_Width(width), m_Height(height)
+	Texture2D::Texture2D(const Texture2DSpecification& spec)
+		: m_Width(spec.Width),
+		  m_Height(spec.Height)
 	{
 		m_InternalFormat = spec.InternalFormat;
 		m_DataFormat = spec.DataFormat;
 
 		glcall(glGenTextures(1, &m_RendererID));
 		glcall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
-		glcall(glTexImage2D(GL_TEXTURE_2D, 0, spec.InternalFormat, width, height, 0, spec.DataFormat, GL_UNSIGNED_BYTE, nullptr));
+		glcall(glTexImage2D(GL_TEXTURE_2D, 0, spec.InternalFormat, spec.Width, spec.Height, 0, spec.DataFormat, GL_UNSIGNED_BYTE, nullptr));
 		
 		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, spec.MinFiler));
 		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, spec.MagFilter));
@@ -158,4 +159,44 @@ namespace Bubble
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_RendererID);
 	}
+
+	std::tuple<uint8_t*, Texture2DSpecification>
+		Texture2D::OpenRawImage(const std::string& path)
+	{
+		//stbi_set_flip_vertically_on_load(spec.Flip);
+		Texture2DSpecification spec;
+
+		int width, height, channels;
+		uint8_t* data = nullptr;
+
+		data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		
+		if (data == nullptr) {
+			throw std::runtime_error("Failed to load image!\nPath: " + path);
+		}
+		spec.Width = width;
+		spec.Height = height;
+
+		if (channels == 1)
+		{
+			spec.InternalFormat = GL_R8;
+			spec.DataFormat = GL_RED;
+		}
+		else if (channels == 3)
+		{
+			spec.InternalFormat = GL_RGB8;
+			spec.DataFormat = GL_RGB;
+		}
+		else if (channels == 4)
+		{
+			spec.InternalFormat = GL_RGBA8;
+			spec.DataFormat = GL_RGBA;
+		}
+		else {
+			BUBBLE_CORE_ASSERT(spec.InternalFormat & spec.DataFormat, "Format not supported!");
+		}
+		
+		return { data, spec };
+	}
+
 }
