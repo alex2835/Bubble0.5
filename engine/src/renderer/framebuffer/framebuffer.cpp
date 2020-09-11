@@ -126,12 +126,13 @@ namespace Bubble
 		return m_Specification.Size;
 	}
 
-	void Framebuffer::Resize(const glm::ivec2& size)
+	void Framebuffer::Resize(glm::ivec2 size)
 	{
-		// We don't need resize it
-		if ((size.x * size.y) <= 0)
-		{
+		if ((size.x * size.y) <= 0) {
 			return;
+		}
+		else if (size.x < size.y) {
+			size.x = size.y;
 		}
 		m_Specification.Size = size;
 		Invalidate();

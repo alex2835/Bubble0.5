@@ -114,8 +114,9 @@ namespace Bubble
 			ImVec2 imgui_viewport_size = ImGui::GetContentRegionAvail();
 			glm::vec2 viewport_size = m_ViewportArray[i].Size();
 
-			if (viewport_size != *(glm::vec2*) & imgui_viewport_size)
+			if (viewport_size != *(glm::vec2*) & imgui_viewport_size) {
 				m_ViewportArray[i].Resize({ imgui_viewport_size.x, imgui_viewport_size.y });
+			}
 
 			uint32_t textureId = m_ViewportArray[i].GetFramebuffer().GetColorAttachmentRendererID();
 
