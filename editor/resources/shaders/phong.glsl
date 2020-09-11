@@ -83,7 +83,10 @@ void main()
 {
     vec3 norm = normalize(v_Normal);
     vec3 view_dir = normalize(u_ViewPos - v_FragPos);
-
+    
+    vec4 texel_diff = texture(material.diffuse0, v_TexCoords);
+    if (texel_diff.a < 0.001f) discard;
+    
     vec3 result = vec3(0.0f);
     vec4 diff_spec = vec4(0.0f);
 
@@ -104,7 +107,7 @@ void main()
                 break;
         }
     }
-    result += diff_spec.xyz * vec3(texture(material.diffuse0, v_TexCoords));
+    result += diff_spec.xyz * vec3(texel_diff);
     vec4 spec = texture(material.specular0, v_TexCoords);
     result += vec3(diff_spec.w * (spec.x + spec.y + spec.z) / 3);
     

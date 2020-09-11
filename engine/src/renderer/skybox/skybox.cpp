@@ -97,24 +97,18 @@ namespace Bubble
 		// 0-left 1-front 2-right 3-back
 		for (int i = 0; i < 4; i++) {
 			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width * channels; x += channels) {
-					memmove(&data[i][y * width * channels + x], &orig_data[(y + height) * orig_spec.Width * channels + x + width * channels * i], channels);
-				}
+					memmove(&data[i][y * width * channels], &orig_data[(y + height) * orig_spec.Width * channels + width * channels * i], width * channels);
 			}
 		}
 		// 4-top
 		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width * channels; x += channels) {
-				memmove(&data[4][y * width * channels + x], &orig_data[(y + height * 2) * orig_spec.Width * channels + x + width * channels], channels);
-			}
+				memmove(&data[4][y * width * channels], &orig_data[(y + height * 2) * orig_spec.Width * channels + width * channels], width * channels);
 		}
 		// 5-bottom
 		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width * channels; x += channels) {
-				memmove(&data[5][y * width * channels + x], &orig_data[y * orig_spec.Width * channels + x + width * channels], channels);
-			}
+				memmove(&data[5][y * width * channels], &orig_data[y * orig_spec.Width * channels + width * channels], width * channels);
 		}
-		// right, left, top, bottom, front, back
+		// Sort to: right, left, top, bottom, front, back
 		std::swap(data[0], data[2]);
 		std::swap(data[1], data[2]);
 		std::swap(data[2], data[4]);

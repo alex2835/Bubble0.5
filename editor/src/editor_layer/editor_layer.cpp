@@ -77,9 +77,7 @@ namespace Bubble
 		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
 		m_Lights.push_back(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f)));
 
-
 		m_ShaderPhong = Shader::Open("resources/shaders/phong.glsl");
-		m_ShaderPhongDiscard = Shader::Open("resources/shaders/phong_discard.glsl");
 		m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
 		m_GrassPlane = ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj");
 		m_Tree = ModelLoader::StaticModel("resources/Tree/Tree.obj");
@@ -182,13 +180,8 @@ namespace Bubble
 		glm::mat4 view = m_SceneCamera.GetLookatMat();
 		
 		m_Lights.ApplyLights(m_ShaderPhong);
-		m_Lights.ApplyLights(m_ShaderPhongDiscard);
-
 		m_ShaderPhong->SetUniMat4("u_View", view);
 		m_ShaderPhong->SetUniMat4("u_Projection", projection);
-
-		m_ShaderPhongDiscard->SetUniMat4("u_View", view);
-		m_ShaderPhongDiscard->SetUniMat4("u_Projection", projection);
 
 		glm::mat4 model(1.0f);
 		model = glm::scale(model, glm::vec3(0.7f));
@@ -199,8 +192,8 @@ namespace Bubble
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(10.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(5.0f));
-		m_ShaderPhongDiscard->SetUniMat4("u_Model", model);
-		Renderer::DrawModel(m_Tree, m_ShaderPhongDiscard);
+		m_ShaderPhong->SetUniMat4("u_Model", model);
+		Renderer::DrawModel(m_Tree, m_ShaderPhong);
 
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.3f));
@@ -209,7 +202,6 @@ namespace Bubble
 		m_ShaderPhong->SetUniMat4("u_Model", model);
 		Renderer::DrawModel(m_GrassPlane, m_ShaderPhong);
 
-		
 		// Render skybox
 		m_ShaderSkybox->SetUniMat4("u_Projection", projection);
 		view = glm::rotate(view, glm::radians(Application::GetTime() * 0.5f), glm::vec3(0, 1, 0));
