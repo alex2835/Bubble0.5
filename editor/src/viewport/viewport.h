@@ -11,6 +11,8 @@ namespace Bubble
 	{
 		std::string m_Name;
 		Framebuffer m_Framebuffer;
+		glm::ivec2 m_Size;
+		glm::ivec2 m_Capacity;
 
 	public:
 		Viewport() = default;
