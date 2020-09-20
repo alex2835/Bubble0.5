@@ -15,63 +15,7 @@ namespace Bubble
         // Temp: test viewport
 		m_ViewportArray.Push(Viewport(800, 800));
 
-		// Temp: Draw stuff
-		float vertices[5 * 4] = {
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
-		};
-		m_VertexArray = CreateRef<VertexArray>();
-		m_VertexBuffer = CreateRef<VertexBuffer>(vertices, sizeof(vertices));
-		
-		BufferLayout layout = {
-			{ GLSLDataType::Float3, "a_Position" },
-			{ GLSLDataType::Float2, "a_TexCoords" }
-		};
-		m_VertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-		
-		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0 };
-		m_IndexBuffer = CreateRef<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
-		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-		m_Texture = CreateRef<Texture2D>("./resources/bubble.jpg");
-
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-			
-			out vec3 v_Position;
-			out vec2 v_TexCoord;
-			
-			void main()
-			{
-				v_Position = a_Position;
-				v_TexCoord = a_TexCoord;
-				gl_Position = vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			in vec3 v_Position;
-			in vec2 v_TexCoord;
-
-			uniform sampler2D u_Texture;
-
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-		)";
-
-		m_Shader = CreateScope<Shader>("Test shader", vertexSrc, fragmentSrc);
-		
 		// Temp: setup mesh
 		m_Lights.push_back(Light::CreateSpotLight());
 		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
@@ -82,7 +26,6 @@ namespace Bubble
 		m_GrassPlane = ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj");
 		m_Tree = ModelLoader::StaticModel("resources/Tree/Tree.obj");
 
-
 		// Temp: skybox
 		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
 		m_ShaderSkybox = Shader::Open("resources/shaders/skybox.glsl");
@@ -90,6 +33,11 @@ namespace Bubble
 		// Temp: Scene
 		m_Scene = CreateRef<Scene>();
 		m_Entity = m_Scene->CreateEntity("TestEntity");
+
+
+		// Temp: Try to simplify mesh
+
+
 	}
 
 
@@ -159,16 +107,7 @@ namespace Bubble
 		m_SceneCamera.OnUpdate(dt);
 
 		Renderer::SetViewport(m_ViewportArray[0].GetFramebuffer());
-		//Renderer::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
-		//Renderer::Clear();
 		Renderer::ClearDepth();
-		
-		// Temp: Test image
-		//m_Shader->Bind();
-		//m_Texture->Bind();
-		//m_GrassPlane->Meshes[0].Material.DiffuseMaps[0].Bind();
-		//m_Shader->SetUni1i("u_Texture", 0);
-		//Renderer::DrawIndex(m_VertexArray);
 
 		m_Lights[0].Position = m_SceneCamera.m_Camera.Position;
 		m_Lights[0].Direction = m_SceneCamera.m_Camera.Front;
@@ -189,13 +128,13 @@ namespace Bubble
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
 		m_ShaderPhong->SetUniMat4("u_Model", model);
 		Renderer::DrawModel(m_NanoSuit, m_ShaderPhong);
-
+		
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(10.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(5.0f));
 		m_ShaderPhong->SetUniMat4("u_Model", model);
 		Renderer::DrawModel(m_Tree, m_ShaderPhong);
-
+		
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.3f));
 		model = glm::translate(model, glm::vec3(0.0f, -7.0f, 0.0f));

@@ -58,7 +58,7 @@ namespace Bubble
         while (m_Window.get() && m_Window->IsOpen())
         {
 			Input::NewFrame();
-            m_DeltaTime.Update(SDL_GetTicks() / 1000.0f);
+            m_Timer.Update();
 
             // Retrieve and send events
             SDL_Event event;
@@ -75,7 +75,7 @@ namespace Bubble
             // Update layers
             for (auto& layer : m_LayerArray)
             {
-                layer->OnUpdate(m_DeltaTime);
+                layer->OnUpdate(m_Timer.GetDeltaTime());
             }
 
             // Update window

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base.h"
-#include "delta_time/delta_time.h"
+#include "time/time.h"
 
 #include "entt/entt.hpp"
 

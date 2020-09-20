@@ -1,6 +1,6 @@
 #pragma once
 
-#include "delta_time/delta_time.h"
+#include "time/time.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"

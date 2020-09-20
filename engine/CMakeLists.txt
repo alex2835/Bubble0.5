@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(engine VERSION 0.0.0)
+project(Engine VERSION 0.0.0)
 
 # Engine core API
 set(ENGINE_CORE
@@ -13,8 +13,10 @@ set(ENGINE_CORE
     src/core/log/spdlog.cpp
     src/core/log/log.cpp
     src/core/log/log.h
-    src/core/delta_time/delta_time.cpp
-    src/core/delta_time/delta_time.h
+    src/core/time/time.cpp
+    src/core/time/time.h
+    src/core/time/timer.h
+    src/core/time/timer.cpp
     src/core/input/input.h
     src/core/input/input.cpp
 )
@@ -48,7 +50,6 @@ set(RENDERING_STUFF
     src/renderer/light/light_array.h
     src/renderer/material/material.h
     src/renderer/material/material.cpp
-
     src/renderer/cubemap/cubemap.h
     src/renderer/cubemap/cubemap.cpp
     src/renderer/skybox/skybox.cpp

@@ -3,7 +3,7 @@
 #include "base.h"
 #include "window/window.h"
 #include "layers/layer_array.h"
-#include "delta_time/delta_time.h"
+#include "time/timer.h"
 #include "input/input.h"
 #include "renderer/renderer.h"
 
@@ -18,10 +18,10 @@ namespace Bubble
 		static Window* s_CurrentWindow;
 		static std::string* s_CurrentDir;
 	protected:
+		Timer m_Timer;
 		// Resources
 		Scope<Window> m_Window;
 		LayerArray m_LayerArray;
-		DeltaTime m_DeltaTime;
 		std::string m_CurrentDir;
 		
 	public:

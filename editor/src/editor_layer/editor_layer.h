@@ -14,21 +14,14 @@ namespace Bubble
 		ImGuiControll m_ImGuiControll;
 		ViewportArray m_ViewportArray;
 		Ref<Scene> m_Scene;
-
 		SceneCameraController m_SceneCamera;
 
 		// Temp:
-		Ref<VertexArray> m_VertexArray;
-		Ref<VertexBuffer> m_VertexBuffer;
-		Ref<IndexBuffer> m_IndexBuffer;
-		Ref<Texture2D> m_Texture;
-		Scope<Shader> m_Shader;
-
-		LightArray m_Lights;
+		LightArray  m_Lights;
 		Ref<Shader> m_ShaderPhong;
-		Ref<Model> m_NanoSuit;
-		Ref<Model> m_GrassPlane;
-		Ref<Model> m_Tree;
+		Ref<Model>  m_NanoSuit;
+		Ref<Model>  m_GrassPlane;
+		Ref<Model>  m_Tree;
 
 		Ref<Shader> m_ShaderSkybox;
 		Ref<Skybox> m_Skybox;

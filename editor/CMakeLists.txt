@@ -59,7 +59,7 @@ target_include_directories(
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/imgui  
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/imgui
 )
 
 

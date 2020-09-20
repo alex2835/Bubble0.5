@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SDL2/SDL_events.h"
-#include "delta_time/delta_time.h"
+#include "time/time.h"
 
 #include <string>
 

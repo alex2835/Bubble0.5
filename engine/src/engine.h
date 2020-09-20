@@ -8,6 +8,7 @@
 #include "core/layers/layer_array.h"
 #include "core/window/window.h"
 #include "core/input/input.h"
+#include "time/timer.h"
 
 // Renderer
 #include "renderer/renderer_base.h"

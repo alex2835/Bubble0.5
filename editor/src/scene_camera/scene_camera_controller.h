@@ -2,7 +2,7 @@
 
 #include "input/input.h"
 #include "camera/camera.h"
-#include "delta_time/delta_time.h"
+#include "time/time.h"
 
 #include "SDL2/SDL.h"
 

@@ -48,7 +48,6 @@ namespace Bubble
 
 	const glm::ivec2 Viewport::Size() const
 	{
-		// return m_Framebuffer.Size();
 		return m_Size;
 	}
 
@@ -56,16 +55,14 @@ namespace Bubble
 	void Viewport::Resize(const glm::ivec2& size)
 	{
 		// Down scale
-		if (m_Capacity.x > size.x * 1.5f || m_Capacity.y > size.y * 1.5f) {
-			LOG_WARN("Old vewport size {} {}", m_Capacity.x, m_Capacity.y);
-			LOG_ERROR("Vewport downsize {} {}", size.x, size.y);
+		if (m_Capacity.x > size.x * 1.5f || m_Capacity.y > size.y * 1.5f)
+		{
 			m_Capacity = size;
 			m_Framebuffer.Resize(size);
 		}
 		// Up scale
-		else if (m_Capacity.x * 1.5f < size.x || m_Capacity.y * 1.5f < size.y) {
-			LOG_WARN("Old vewport size {} {}", m_Capacity.x, m_Capacity.y);
-			LOG_INFO("Vewport upersize {} {}", size.x, size.y);
+		else if (m_Capacity.x * 1.5f < size.x || m_Capacity.y * 1.5f < size.y)
+		{
 			m_Capacity = size;
 			m_Framebuffer.Resize(size);
 		}
