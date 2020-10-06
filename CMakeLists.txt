@@ -40,6 +40,7 @@ add_definitions(-D"_NO_DEBUG_HEAP=1")
 add_subdirectory(editor)
 add_subdirectory(engine)
 
+add_subdirectory(dependencies/nativefiledialog)
 add_subdirectory(dependencies/assimp)
 add_subdirectory(dependencies/spdlog)
 add_subdirectory(dependencies/imgui)

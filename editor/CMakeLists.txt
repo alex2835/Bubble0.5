@@ -46,6 +46,9 @@ target_link_libraries(Bubble Engine)
 # imgui
 target_link_libraries(Bubble imgui)
 
+# open file dialog
+target_link_libraries(Bubble nativefiledialog)
+
 
 set_target_properties(
     Bubble PROPERTIES
@@ -60,6 +63,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/imgui
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/nativefiledialog/src/include
 )
 
 

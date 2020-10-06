@@ -95,6 +95,28 @@ namespace Bubble
 			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 
+		ImGui::Begin("Test file dilog");
+		bool open = ImGui::Button("Open", { 100, 50 });
+		if (open)
+		{
+			nfdchar_t* outPath = NULL;
+			nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
+
+			if (result == NFD_OKAY) {
+				puts("Success!");
+				puts(outPath);
+				free(outPath);
+			}
+			else if (result == NFD_CANCEL) {
+				puts("User pressed cancel.");
+			}
+			else {
+				printf("Error: %s\n", NFD_GetError());
+			}
+		}
+		ImGui::End();
+
+
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow();
         m_ImGuiControll.End();
