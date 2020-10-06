@@ -38,7 +38,7 @@ set(SOURCES
     ${SCENE_CAMERA}
  )
 
-add_executable(Bubble ${SOURCES})
+add_executable(Bubble ${SOURCES} "src/file_dialog/file_dialog.cpp" "src/file_dialog/file_dialog.h")
 
 # engine
 target_link_libraries(Bubble Engine)

@@ -21,23 +21,46 @@ namespace Bubble
 		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
 		m_Lights.push_back(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f)));
 
+
+		m_Scene = CreateRef<Scene>();
+
+		glm::mat4 model(1.0f);
+		model = glm::scale(model, glm::vec3(0.7f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
+
+		Entities.push_back(m_Scene->CreateEntity("nanosuit")
+			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/crysis/nanosuit.obj"))
+			.AddComponent<TransformComponent>(model));
+
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.3f));
+		model = glm::translate(model, glm::vec3(0.0f, -7.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+
+
+		Entities.push_back(m_Scene->CreateEntity("grass")
+			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj"))
+			.AddComponent<TransformComponent>(model));
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(10.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f));
+
+		Entities.push_back(m_Scene->CreateEntity("tree")
+			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/Tree/Tree.obj"))
+			.AddComponent<TransformComponent>(model));
+
 		m_ShaderPhong = Shader::Open("resources/shaders/phong.glsl");
-		m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
-		m_GrassPlane = ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj");
-		m_Tree = ModelLoader::StaticModel("resources/Tree/Tree.obj");
+
+		//m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
+		//m_GrassPlane = ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj");
+		//m_Tree = ModelLoader::StaticModel("resources/Tree/Tree.obj");
 
 		// Temp: skybox
 		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
 		m_ShaderSkybox = Shader::Open("resources/shaders/skybox.glsl");
 
-		// Temp: Scene
-		m_Scene = CreateRef<Scene>();
-		m_Entity = m_Scene->CreateEntity("TestEntity");
-
-
 		// Temp: Try to simplify mesh
-
-
 	}
 
 
@@ -99,20 +122,16 @@ namespace Bubble
 		bool open = ImGui::Button("Open", { 100, 50 });
 		if (open)
 		{
-			nfdchar_t* outPath = NULL;
-			nfdresult_t result = NFD_OpenDialog(NULL, NULL, &outPath);
+			try
+			{
+				auto path = OpenFileDialog();
+				LOG_INFO(path);
+			}
+			catch (const std::exception& e)
+			{
+				LOG_ERROR(e.what());
+			}
 
-			if (result == NFD_OKAY) {
-				puts("Success!");
-				puts(outPath);
-				free(outPath);
-			}
-			else if (result == NFD_CANCEL) {
-				puts("User pressed cancel.");
-			}
-			else {
-				printf("Error: %s\n", NFD_GetError());
-			}
 		}
 		ImGui::End();
 
@@ -145,24 +164,14 @@ namespace Bubble
 		m_ShaderPhong->SetUniMat4("u_View", view);
 		m_ShaderPhong->SetUniMat4("u_Projection", projection);
 
-		glm::mat4 model(1.0f);
-		model = glm::scale(model, glm::vec3(0.7f));
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
-		m_ShaderPhong->SetUniMat4("u_Model", model);
-		Renderer::DrawModel(m_NanoSuit, m_ShaderPhong);
-		
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(10.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f));
-		m_ShaderPhong->SetUniMat4("u_Model", model);
-		Renderer::DrawModel(m_Tree, m_ShaderPhong);
-		
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.3f));
-		model = glm::translate(model, glm::vec3(0.0f, -7.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
-		m_ShaderPhong->SetUniMat4("u_Model", model);
-		Renderer::DrawModel(m_GrassPlane, m_ShaderPhong);
+		auto scene_view = m_Scene->GetView<Ref<Model>, TransformComponent>();
+
+		for (auto entity : scene_view)
+		{
+			auto [model, transforms] = scene_view.get<Ref<Model>, TransformComponent>(entity);
+			m_ShaderPhong->SetUniMat4("u_Model", transforms);
+			Renderer::DrawModel(model, m_ShaderPhong);
+		}
 
 		// Render skybox
 		m_ShaderSkybox->SetUniMat4("u_Projection", projection);

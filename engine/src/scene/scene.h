@@ -12,6 +12,7 @@ namespace Bubble
 
 	class Scene
 	{
+	public:
 		entt::registry m_Registry;
 		friend class Entity;
 

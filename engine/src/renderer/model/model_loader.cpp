@@ -14,15 +14,15 @@ namespace Bubble
 				return stored_model.second;
 			}
 		}
+
 		auto model = CreateRef<Model>();
 		s_LoadedModels.push_back(std::make_pair(path, model));
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
+		
 		if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) || !scene->mRootNode)
-		{
 			throw std::runtime_error("ERROR::ASSIMP\n" + std::string(importer.GetErrorString()));
-		}
 
 		// Process ASSIMP's root node recursively
 		model->Meshes.reserve(scene->mNumMeshes);
@@ -47,7 +47,6 @@ namespace Bubble
 	
 	Mesh ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
-		// data to fill
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
 	
@@ -162,13 +161,13 @@ namespace Bubble
 					}
 				}
 			}
+
 			// Necessary maps
-			if (material.Diffuse.GetHeight() == 0) {
+			if (material.Diffuse.GetHeight() == 0)
 				material.Diffuse = Texture2D(Texture2D(glm::vec4(1.0f)));
-			}
-			if (material.Specular.GetHeight() == 0) {
+
+			if (material.Specular.GetHeight() == 0)
 				material.Specular = Texture2D(Texture2D(glm::vec4(1.0f)));
-			}
 			
 			float shininess;
 			if (AI_SUCCESS != aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &shininess))

@@ -1,12 +1,13 @@
 #pragma once
 
 #include "engine.h"
-#include "nfd.h"
 
 #include "viewport/viewport_array.h"
 #include "imgui_controll/imgui_controll.h"
 #include "sdl_window/sdl_window.h"
 #include "scene_camera/scene_camera_controller.h"
+
+#include "file_dialog/file_dialog.h"
 
 namespace Bubble
 {
@@ -24,10 +25,10 @@ namespace Bubble
 		Ref<Model>  m_GrassPlane;
 		Ref<Model>  m_Tree;
 
+		std::vector<Entity> Entities;
+
 		Ref<Shader> m_ShaderSkybox;
 		Ref<Skybox> m_Skybox;
-
-		Entity m_Entity;
 
 	public:
 		EditorLayer();
