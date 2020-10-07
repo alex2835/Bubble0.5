@@ -9,7 +9,7 @@
 namespace Bubble
 {
 	const static float MAX_SPEED = 10.0f;
-	const static float DELTA_SPEED = 1.0f;
+	const static float DELTA_SPEED = 5.0f;
 	const static float SENSITIVTY = 4.25f;
 
 

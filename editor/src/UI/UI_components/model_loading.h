@@ -6,6 +6,6 @@
 
 namespace Bubble
 {
-	void model_loader_UI(bool* is_open, std::vector<Ref<Model>>* models);
+	void ModelLoaderUI(bool* is_open, std::vector<Ref<Model>>* models);
 
 }

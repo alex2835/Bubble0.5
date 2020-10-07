@@ -34,6 +34,10 @@ set(UI
     src/UI/UI.cpp
     src/UI/UI_components/file_dialog.cpp
     src/UI/UI_components/model_loading.cpp
+    src/UI/UI_components/scene_camera_options.cpp
+    src/UI/UI_components/scene_camera_options.h
+    src/UI/UI_components/scene_explorer.h
+    src/UI/UI_components/scene_explorer.cpp
 )
 
 set(SOURCES
@@ -46,7 +50,7 @@ set(SOURCES
     ${UI}
  )
 
-add_executable(Bubble ${SOURCES} "src/UI/UI_components/camera_options.cpp" "src/UI/UI_components/camera_options.h")
+add_executable(Bubble ${SOURCES})
 
 # engine
 target_link_libraries(Bubble Engine)

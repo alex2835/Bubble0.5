@@ -5,5 +5,5 @@
 
 namespace Bubble
 {
-	void scene_camera_options(SceneCameraController* camera);
+	void SceneCameraOptions(SceneCameraController* camera);
 }

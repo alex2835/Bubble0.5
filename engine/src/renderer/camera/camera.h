@@ -37,7 +37,7 @@ namespace Bubble
         glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
         float Near = 0.1f;
-        float Far = 120.0f;
+        float Far = 500.0f;
 
         // Euler Angles
         float Yaw = -PI / 2.0f;

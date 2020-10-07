@@ -4,10 +4,11 @@
 
 namespace Bubble
 {
-	void UI::Draw(UIArgs args)
+	void UI::Draw()
 	{
-		model_loader_UI(&ModelLoader, args.Models);
-		
+		ModelLoaderUI(&IsOpenModelLoader, Args.Models);
+
+		ExplorerPanel.DrawEntitiesExplorer(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
 	}
 
 
@@ -18,7 +19,7 @@ namespace Bubble
 			// Scene camera
 			if (ImGui::BeginMenu("Camera"))
 			{
-				scene_camera_options(Args.Camera);
+				SceneCameraOptions(Args.Camera);
 				ImGui::EndMenu();
 			}
 
@@ -33,5 +34,7 @@ namespace Bubble
 			ImGui::EndMenu();
 		}
 	}
+
+
 
 }

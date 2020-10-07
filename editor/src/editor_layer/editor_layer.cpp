@@ -67,7 +67,7 @@ namespace Bubble
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// Set args for UI
-		UserInterface.Args = { &Models, &SceneCamera, &DrawTypeOption };
+		UserInterface.Args = { &Models, &SceneCamera, &DrawTypeOption, ActiveScene.get() };
 
 		// ImGui Scope
 		ImGuiControll.Begin();
@@ -76,7 +76,11 @@ namespace Bubble
 		ImGuiControll.BeginMenuBar();
 		DrawMenuBar();
 		ImGuiControll.EndMenuBar();
-		
+
+		// User Interface
+		UserInterface.Draw();
+
+
         // Temp: Veiwports control
 		ViewportArray.RemoveNotActiveViewports();
 		
