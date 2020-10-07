@@ -8,7 +8,7 @@
 
 namespace Bubble
 {
-	const static float MAX_SPEED = 20.0f;
+	const static float MAX_SPEED = 10.0f;
 	const static float DELTA_SPEED = 1.0f;
 	const static float SENSITIVTY = 4.25f;
 
@@ -34,7 +34,7 @@ namespace Bubble
 		void OnUpdate(DeltaTime dt);
 
 		glm::mat4 GetLookatMat();
-		glm::mat4 GetPprojectionMat(int WindowWidth, int WindowHeight, float near_plane = 0.1f, float far_plane = 120.0f);
+		glm::mat4 GetPprojectionMat(int WindowWidth, int WindowHeight);
 
 	private:
 		void ProcessKeyboard(CameraMovement direction, DeltaTime dt);

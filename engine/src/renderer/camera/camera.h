@@ -36,6 +36,9 @@ namespace Bubble
         glm::vec3 Right;
         glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+        float Near = 0.1f;
+        float Far = 120.0f;
+
         // Euler Angles
         float Yaw = -PI / 2.0f;
         float Pitch = 0;
@@ -49,7 +52,7 @@ namespace Bubble
         );
 
         glm::mat4 GetLookatMat();
-        glm::mat4 GetPprojectionMat(int window_width, int window_height, float near = 0.1f, float far = 120.0f);
+        glm::mat4 GetPprojectionMat(int window_width, int window_height);
         
         void UpdateCameraVectors();
     };

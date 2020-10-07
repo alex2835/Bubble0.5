@@ -19,18 +19,19 @@ namespace Bubble
 			// Boost
 			float Boost = Input::IsKeyPressed(SDLK_LSHIFT) ? BoostSpeed : 1.0f;
 
+			float max_speed = MaxSpeed * DeltaSpeed;
 
 			// Speed x
 			if (Input::IsKeyPressed(SDLK_w))
 			{
 				if (SpeedX < 0) SpeedX = 0;
-				SpeedX = SpeedX < MaxSpeed ? SpeedX + DeltaSpeed : MaxSpeed;
+				SpeedX = SpeedX < max_speed ? SpeedX + DeltaSpeed : max_speed;
 				SpeedX *= Boost;
 			}
 			else if (Input::IsKeyPressed(SDLK_s))
 			{
 				if (SpeedX > 0) SpeedX = 0;
-				SpeedX = SpeedX > -MaxSpeed ? SpeedX - DeltaSpeed : -MaxSpeed;
+				SpeedX = SpeedX > -max_speed ? SpeedX - DeltaSpeed : -max_speed;
 				SpeedX *= Boost;
 			}
 			else {
@@ -41,13 +42,13 @@ namespace Bubble
 			if (Input::IsKeyPressed(SDLK_d))
 			{
 				if (SpeedY < 0) SpeedY = 0;
-				SpeedY = SpeedY < MaxSpeed ? SpeedY + DeltaSpeed : MaxSpeed;
+				SpeedY = SpeedY < max_speed ? SpeedY + DeltaSpeed : max_speed;
 				SpeedY *= Boost;
 			}
 			else if (Input::IsKeyPressed(SDLK_a))
 			{
 				if (SpeedY > 0) SpeedY = 0;
-				SpeedY = SpeedY > -MaxSpeed ? SpeedY - DeltaSpeed : -MaxSpeed;
+				SpeedY = SpeedY > -max_speed ? SpeedY - DeltaSpeed : -max_speed;
 				SpeedY *= Boost;
 			}
 			else {
@@ -55,14 +56,14 @@ namespace Bubble
 			}
 
 			// Clamp
-			if (fabs(SpeedX) > MaxSpeed * Boost)
+			if (fabs(SpeedX) > max_speed * Boost)
 			{
-				SpeedX = sgn(SpeedX) * MaxSpeed;
+				SpeedX = sgn(SpeedX) * max_speed;
 			}
 			
-			if (fabs(SpeedY) > MaxSpeed * Boost)
+			if (fabs(SpeedY) > max_speed * Boost)
 			{
-				SpeedY = sgn(SpeedY) * MaxSpeed;
+				SpeedY = sgn(SpeedY) * max_speed;
 			}
 
 			// Move
@@ -91,9 +92,9 @@ namespace Bubble
 		return m_Camera.GetLookatMat();
 	}
 
-	glm::mat4 SceneCameraController::GetPprojectionMat(int window_width, int window_height, float near_plane, float far_plane)
+	glm::mat4 SceneCameraController::GetPprojectionMat(int window_width, int window_height)
 	{
-		return m_Camera.GetPprojectionMat(window_width, window_height, near_plane, far_plane);
+		return m_Camera.GetPprojectionMat(window_width, window_height);
 	}
 
 	void SceneCameraController::ProcessKeyboard(CameraMovement direction, DeltaTime dt)
@@ -122,8 +123,8 @@ namespace Bubble
 			SpeedY -= sgn(SpeedY) * DeltaSpeed;
 		}
 
-		if (fabs(SpeedX) > MaxSpeed) SpeedX = sgn(SpeedX) * MaxSpeed;
-		if (fabs(SpeedY) > MaxSpeed) SpeedY = sgn(SpeedY) * MaxSpeed;
+		//if (fabs(SpeedX) > max_speed) SpeedX = sgn(SpeedX) * max_speed;
+		//if (fabs(SpeedY) > max_speed) SpeedY = sgn(SpeedY) * max_speed;
 
 		m_Camera.Position -= m_Camera.Front * SpeedX * dt.GetSeconds();
 		m_Camera.Position += m_Camera.Right * SpeedY * dt.GetSeconds();

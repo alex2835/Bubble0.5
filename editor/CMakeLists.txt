@@ -46,7 +46,7 @@ set(SOURCES
     ${UI}
  )
 
-add_executable(Bubble ${SOURCES})
+add_executable(Bubble ${SOURCES} "src/UI/UI_components/camera_options.cpp" "src/UI/UI_components/camera_options.h")
 
 # engine
 target_link_libraries(Bubble Engine)

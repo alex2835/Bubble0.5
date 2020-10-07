@@ -66,16 +66,17 @@ namespace Bubble
 
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
+		// Set args for UI
+		UserInterface.Args = { &Models, &SceneCamera, &DrawTypeOption };
+
+		// ImGui Scope
 		ImGuiControll.Begin();
 
 		// MenuBar
 		ImGuiControll.BeginMenuBar();
 		DrawMenuBar();
 		ImGuiControll.EndMenuBar();
-
-		UIArgs args{ &Models };
-		UserInterface.Draw(args);
-
+		
         // Temp: Veiwports control
 		ViewportArray.RemoveNotActiveViewports();
 		
@@ -157,7 +158,7 @@ namespace Bubble
 		{
 			auto [model, transforms] = ActiveScene_view.get<Ref<Model>, TransformComponent>(entity);
 			m_ShaderPhong->SetUniMat4("u_Model", transforms);
-			Renderer::DrawModel(model, m_ShaderPhong);
+			Renderer::DrawModel(model, m_ShaderPhong, DrawTypeOption);
 		}
 
 		// Render skybox
@@ -189,6 +190,8 @@ namespace Bubble
 
 				ImGui::EndMenu();
 			}
+
+			UserInterface.DrawMenuOptions();
 
 			ImGui::EndMenuBar();
 		}

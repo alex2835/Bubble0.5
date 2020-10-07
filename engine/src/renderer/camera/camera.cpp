@@ -23,10 +23,10 @@ namespace Bubble
         return glm::lookAt(Position, Position + Front, Up);
     }
 
-    glm::mat4 Camera::GetPprojectionMat(int window_width, int window_height, float near, float far)
+    glm::mat4 Camera::GetPprojectionMat(int window_width, int window_height)
     {
         float aspect = (float)window_width / window_height;
-        return glm::perspective<float>(Fov, aspect, near, far);
+        return glm::perspective<float>(Fov, aspect, Near, Far);
     }
 
 	// Calculates the front vector from the Camera's (updated) Euler Angles

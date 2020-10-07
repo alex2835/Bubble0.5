@@ -16,13 +16,18 @@ namespace Bubble
 		UI UserInterface;
 		ImGuiControll ImGuiControll;
 		ViewportArray ViewportArray;
+		
 		std::vector<Ref<Model>> Models;
 		SceneCameraController SceneCamera;
+		
 		std::vector<Entity> Entities;
 		Ref<Scene> ActiveScene;
 
 		Ref<Shader> m_ShaderSkybox;
 		Ref<Skybox> m_Skybox;
+
+		// rendering options
+		DrawType DrawTypeOption = DrawType::TRIANGLES;
 
 		// Temp:
 		LightArray  m_Lights;
