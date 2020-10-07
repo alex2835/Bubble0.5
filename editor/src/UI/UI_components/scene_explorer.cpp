@@ -9,11 +9,19 @@ namespace Bubble
 		if (*is_open_explorer)
 		{
 			ImGui::Begin("Scene explorer", is_open_explorer);
-
+		
 			scene->m_Registry.each([&](auto entityID)
 				{
 					Entity entity(entityID, scene);
-					DrawEntityNode(entity);
+
+					auto& tag = entity.GetComponent<TagComponent>().Tag;
+					ImGui::Selectable(tag.c_str());
+
+					if (ImGui::IsItemClicked())
+					{
+						SelectedEntity = entity;
+					}
+					
 				});
 
 			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) {
@@ -35,28 +43,6 @@ namespace Bubble
 
 	}
 
-	void SceneExplorerPanel::DrawEntityNode(Entity entity)
-	{
-		auto& tag = entity.GetComponent<TagComponent>().Tag;
-
-		ImGuiTreeNodeFlags flags = ((SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
-		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
-
-		if (ImGui::IsItemClicked())
-		{
-			SelectedEntity = entity;
-		}
-
-		//if (opened)
-		//{
-		//	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
-		//	bool opened = ImGui::TreeNodeEx((void*)9817239, flags, tag.c_str());
-		//	if (opened)
-		//		ImGui::TreePop();
-		//	ImGui::TreePop();
-		//}
-
-	}
 
 	void SceneExplorerPanel::DrawComponents(Entity entity)
 	{
