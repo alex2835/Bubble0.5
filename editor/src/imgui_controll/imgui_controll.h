@@ -13,7 +13,6 @@ namespace Bubble
     class ImGuiControll
     {
 		SDL_WINDOW* m_Window;
-        void(*MenuBar)();
 
 		void ImGuiDocking();
 		void ImGuiMultiViewports();
@@ -28,8 +27,9 @@ namespace Bubble
         void Begin();
         void End();
 
-        void OnEvent(SDL_Event& event);
+		void BeginMenuBar();
+		void EndMenuBar();
 
-        void SetMenuBar(void(*menu_bar)()) { MenuBar = menu_bar; }
+        void OnEvent(SDL_Event& event);
     };
 }

@@ -30,12 +30,14 @@ set(SCENE_CAMERA
 )
 
 set(UI
-    src/UI/file_dialog.cpp
-    src/UI/file_dialog.h
+    src/UI/UI.h
+    src/UI/UI.cpp
+    src/UI/UI_components/file_dialog.cpp
+    src/UI/UI_components/model_loading.cpp
 )
 
 set(SOURCES
-    "src/editor_app.cpp"
+    src/editor_app.cpp
     ${EDITOR_GUI}
     ${EDITOR_LAYER}
     ${EDITOR_VIEWPORT}
@@ -44,7 +46,7 @@ set(SOURCES
     ${UI}
  )
 
-add_executable(Bubble ${SOURCES} )
+add_executable(Bubble ${SOURCES})
 
 # engine
 target_link_libraries(Bubble Engine)
@@ -72,13 +74,13 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/nativefiledialog/src/include
 )
 
-
+# resources
 add_custom_command(TARGET Bubble PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        ${PROJECT_SOURCE_DIR}/resources
                        $<TARGET_FILE_DIR:Bubble>/resources)
 
-# put dll with exe
+# put dll to exe
 if (WIN32)
     add_custom_command(TARGET Bubble POST_BUILD							# Adds a post-build event to MyTest
         COMMAND ${CMAKE_COMMAND} -E copy_if_different					# which executes "cmake - E copy_if_different..."

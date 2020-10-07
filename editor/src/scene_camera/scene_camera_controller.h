@@ -23,6 +23,7 @@ namespace Bubble
 		// Camera options
 		float MaxSpeed = MAX_SPEED;
 		float DeltaSpeed = DELTA_SPEED;
+		float BoostSpeed = 5.0f;
 		float SpeedX = 0;
 		float SpeedY = 0;
 		float MouseSensitivity = SENSITIVTY;

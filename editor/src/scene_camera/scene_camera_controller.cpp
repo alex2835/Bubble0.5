@@ -16,14 +16,22 @@ namespace Bubble
 			// Catch cursor
 			SDL_SetRelativeMouseMode(SDL_TRUE);
 
+			// Boost
+			float Boost = Input::IsKeyPressed(SDLK_LSHIFT) ? BoostSpeed : 1.0f;
+
+
 			// Speed x
 			if (Input::IsKeyPressed(SDLK_w))
 			{
+				if (SpeedX < 0) SpeedX = 0;
 				SpeedX = SpeedX < MaxSpeed ? SpeedX + DeltaSpeed : MaxSpeed;
+				SpeedX *= Boost;
 			}
 			else if (Input::IsKeyPressed(SDLK_s))
 			{
+				if (SpeedX > 0) SpeedX = 0;
 				SpeedX = SpeedX > -MaxSpeed ? SpeedX - DeltaSpeed : -MaxSpeed;
+				SpeedX *= Boost;
 			}
 			else {
 				SpeedX = fabs(SpeedX) < 0.01f ? SpeedX = 0 : SpeedX - sgn(SpeedX) * DeltaSpeed;
@@ -32,23 +40,27 @@ namespace Bubble
 			// Speed y
 			if (Input::IsKeyPressed(SDLK_d))
 			{
+				if (SpeedY < 0) SpeedY = 0;
 				SpeedY = SpeedY < MaxSpeed ? SpeedY + DeltaSpeed : MaxSpeed;
+				SpeedY *= Boost;
 			}
 			else if (Input::IsKeyPressed(SDLK_a))
 			{
+				if (SpeedY > 0) SpeedY = 0;
 				SpeedY = SpeedY > -MaxSpeed ? SpeedY - DeltaSpeed : -MaxSpeed;
+				SpeedY *= Boost;
 			}
 			else {
 				SpeedY = fabs(SpeedY) < 0.01f ? SpeedY = 0 : SpeedY - sgn(SpeedY) * DeltaSpeed;
 			}
 
 			// Clamp
-			if (fabs(SpeedX) > MaxSpeed)
+			if (fabs(SpeedX) > MaxSpeed * Boost)
 			{
 				SpeedX = sgn(SpeedX) * MaxSpeed;
 			}
 			
-			if (fabs(SpeedY) > MaxSpeed)
+			if (fabs(SpeedY) > MaxSpeed * Boost)
 			{
 				SpeedY = sgn(SpeedY) * MaxSpeed;
 			}
@@ -83,9 +95,6 @@ namespace Bubble
 	{
 		return m_Camera.GetPprojectionMat(window_width, window_height, near_plane, far_plane);
 	}
-
-
-
 
 	void SceneCameraController::ProcessKeyboard(CameraMovement direction, DeltaTime dt)
 	{

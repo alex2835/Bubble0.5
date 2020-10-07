@@ -7,16 +7,22 @@
 #include "sdl_window/sdl_window.h"
 #include "scene_camera/scene_camera_controller.h"
 
-#include "UI/file_dialog.h"
+#include "UI/UI.h"
 
 namespace Bubble
 {
 	class EditorLayer : public Layer
 	{
-		ImGuiControll m_ImGuiControll;
-		ViewportArray m_ViewportArray;
-		Ref<Scene> m_Scene;
-		SceneCameraController m_SceneCamera;
+		UI UserInterface;
+		ImGuiControll ImGuiControll;
+		ViewportArray ViewportArray;
+		std::vector<Ref<Model>> Models;
+		SceneCameraController SceneCamera;
+		std::vector<Entity> Entities;
+		Ref<Scene> ActiveScene;
+
+		Ref<Shader> m_ShaderSkybox;
+		Ref<Skybox> m_Skybox;
 
 		// Temp:
 		LightArray  m_Lights;
@@ -25,11 +31,7 @@ namespace Bubble
 		Ref<Model>  m_GrassPlane;
 		Ref<Model>  m_Tree;
 
-		std::vector<Entity> Entities;
-
-		Ref<Shader> m_ShaderSkybox;
-		Ref<Skybox> m_Skybox;
-
+		void DrawMenuBar();
 		
 	public:
 		EditorLayer();

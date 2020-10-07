@@ -18,19 +18,26 @@ namespace Bubble
 		switch (event.type)
 		{
 			case SDL_KEYUP:
-				if (event.key.keysym.sym < 128)
+				if (event.key.keysym.sym >= 1073741881) {
+					s_KeyMap[event.key.keysym.sym - 1073741881] = 0;
+				}
+				else if (event.key.keysym.sym < 128) {
 					s_KeyMap[event.key.keysym.sym] = 0;
+				}
 				break;
 
 			case SDL_KEYDOWN:
-				if (event.key.keysym.sym < 128)
+				if (event.key.keysym.sym >= 1073741881) {
+					s_KeyMap[event.key.keysym.sym - 1073741881] = 1 + event.key.repeat;
+				}
+				else if (event.key.keysym.sym < 128) {
 					s_KeyMap[event.key.keysym.sym] = 1 + event.key.repeat;
+				}
 				break;
 
 			case SDL_MOUSEWHEEL:
 				s_MouseWheelOffset = event.wheel.y;
 				break;
-
 
 			case SDL_MOUSEMOTION:
 				s_MousePosX = event.motion.x;
@@ -52,11 +59,17 @@ namespace Bubble
 
 	bool Input::IsKeyPressed(SDL_Keycode code)
 	{
+		if (code >= 1073741881) {
+			code -= 1073741881;
+		}
 		return s_KeyMap[code];
 	}
 
 	bool Input::IsKeyClick(SDL_Keycode code)
 	{
+		if (code >= 1073741881) {
+			code -= 1073741881;
+		}
 		return s_KeyMap[code] == 1;
 	}
 
