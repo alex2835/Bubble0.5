@@ -59,6 +59,7 @@ namespace Bubble
 			{
 				tag = std::string(buffer);
 			}
+			ImGui::Separator();
 		}
 
 		if (entity.HasComponent<TransformComponent>())
@@ -69,6 +70,7 @@ namespace Bubble
 				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
 				ImGui::TreePop();
 			}
+			ImGui::Separator();
 		}
 
 		// User properties
