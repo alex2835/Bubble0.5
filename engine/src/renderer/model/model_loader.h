@@ -16,7 +16,7 @@ namespace Bubble
 		static std::vector<std::pair<std::string, Ref<Model>>> s_LoadedModels;
 		 
 	public:
-		static Ref<Model> StaticModel(const std::string& path);
+		static Ref<Model> StaticModel(std::string path);
 		
 	private:
 		static void ProcessNode(Model& model, aiNode* node, const aiScene* scene);

@@ -4,9 +4,7 @@
 
 namespace Bubble
 {
-    static void imgui_docking();
-    static void imgui_multi_viewports();
-
+    
 	ImGuiControll::ImGuiControll()
 	{
         m_Window = (SDL_WINDOW*)Application::GetWindow();
@@ -60,7 +58,7 @@ namespace Bubble
         ImGui::NewFrame();
 
         // Process docking
-        imgui_docking();
+        ImGuiDocking();
     }
 
     void ImGuiControll::End()
@@ -70,7 +68,7 @@ namespace Bubble
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // Multi windows rendering
-        imgui_multi_viewports();
+        ImGuiMultiViewports();
     }
 
     void ImGuiControll::OnEvent(SDL_Event& event)
@@ -81,7 +79,7 @@ namespace Bubble
 
     // ========================= ImGui multi viewports rendering ==========================
 
-    static void imgui_multi_viewports()
+    void ImGuiControll::ImGuiMultiViewports()
     {
         ImGuiIO& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -98,7 +96,7 @@ namespace Bubble
     // ============================= ImGui docking =================================
     
     // Proccess docking stuff
-    static void imgui_docking()
+    void ImGuiControll::ImGuiDocking()
     {
         static bool* p_open = new bool(true);
         static bool opt_fullscreen_persistant = true;
@@ -130,8 +128,9 @@ namespace Bubble
         // all active windows docked into it will lose their parent and become undocked.
         // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
         // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+        
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        ImGui::Begin("DockSpace Demo", p_open, window_flags);
+        ImGui::Begin("DockSpace", p_open, window_flags);
         ImGui::PopStyleVar();
 
         if (opt_fullscreen)
@@ -145,30 +144,32 @@ namespace Bubble
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
+        // Draw MenuBar
+        MenuBar();
 
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("Docking"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+		//if (ImGui::BeginMenuBar())
+		//{
+		//	if (ImGui::BeginMenu("Docking"))
+		//	{
+		//		// Disabling fullscreen would allow the window to be moved to the front of other windows,
+		//		// which we can't undo at the moment without finer window depth/z control.
+		//		//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+        //
+		//		if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0))                                dockspace_flags ^= ImGuiDockNodeFlags_NoSplit;
+		//		if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0))                              dockspace_flags ^= ImGuiDockNodeFlags_NoResize;
+		//		if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))  dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
+		//		if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))        dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
+		//		if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0))                  dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar;
+		//		ImGui::Separator();
+		//		if (ImGui::MenuItem("Close DockSpace", NULL, false, p_open != NULL))
+		//			*p_open = false;
+		//		ImGui::EndMenu();
+		//	}
+        //
+		//	ImGui::EndMenuBar();
+		//}
 
-                if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0))                                dockspace_flags ^= ImGuiDockNodeFlags_NoSplit;
-                if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0))                              dockspace_flags ^= ImGuiDockNodeFlags_NoResize;
-                if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))  dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
-                if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))        dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
-                if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0))                  dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar;
-                ImGui::Separator();
-                if (ImGui::MenuItem("Close DockSpace", NULL, false, p_open != NULL))
-                    *p_open = false;
-                ImGui::EndMenu();
-            }
-
-            ImGui::EndMenuBar();
-        }
-
-        ImGui::End();
+		ImGui::End();
     }
 
 }

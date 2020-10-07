@@ -29,6 +29,11 @@ set(SCENE_CAMERA
     src/scene_camera/scene_camera_controller.h
 )
 
+set(UI
+    src/UI/file_dialog.cpp
+    src/UI/file_dialog.h
+)
+
 set(SOURCES
     "src/editor_app.cpp"
     ${EDITOR_GUI}
@@ -36,9 +41,10 @@ set(SOURCES
     ${EDITOR_VIEWPORT}
     ${EDITOR_SDL_WINDOW}
     ${SCENE_CAMERA}
+    ${UI}
  )
 
-add_executable(Bubble ${SOURCES} "src/file_dialog/file_dialog.cpp" "src/file_dialog/file_dialog.h")
+add_executable(Bubble ${SOURCES} )
 
 # engine
 target_link_libraries(Bubble Engine)

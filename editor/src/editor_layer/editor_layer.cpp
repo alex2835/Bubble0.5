@@ -4,23 +4,24 @@
 
 namespace Bubble
 {
-    EditorLayer::EditorLayer()
+	void DrawMenuBar();
+
+	EditorLayer::EditorLayer()
 		: m_SceneCamera(glm::vec3(0.0f, 5.0f, 0.0f))
 	{}
 
 	void EditorLayer::OnAttach()
 	{
+		m_ImGuiControll.SetMenuBar(DrawMenuBar);
         m_ImGuiControll.OnAttach();
 
         // Temp: test viewport
 		m_ViewportArray.Push(Viewport(800, 800));
 
-
 		// Temp: setup mesh
 		m_Lights.push_back(Light::CreateSpotLight());
 		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
 		m_Lights.push_back(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f)));
-
 
 		m_Scene = CreateRef<Scene>();
 
@@ -37,7 +38,6 @@ namespace Bubble
 		model = glm::translate(model, glm::vec3(0.0f, -7.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 
-
 		Entities.push_back(m_Scene->CreateEntity("grass")
 			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj"))
 			.AddComponent<TransformComponent>(model));
@@ -51,10 +51,6 @@ namespace Bubble
 			.AddComponent<TransformComponent>(model));
 
 		m_ShaderPhong = Shader::Open("resources/shaders/phong.glsl");
-
-		//m_NanoSuit = ModelLoader::StaticModel("resources/crysis/nanosuit.obj");
-		//m_GrassPlane = ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj");
-		//m_Tree = ModelLoader::StaticModel("resources/Tree/Tree.obj");
 
 		// Temp: skybox
 		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
@@ -73,6 +69,8 @@ namespace Bubble
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		m_ImGuiControll.Begin();
+
+		//DrawMenuBar();
 
         // Temp: Veiwports control
 		m_ViewportArray.RemoveNotActiveViewports();
@@ -125,7 +123,14 @@ namespace Bubble
 			try
 			{
 				auto path = OpenFileDialog();
-				LOG_INFO(path);
+				
+				glm::mat4 model(1.0f);
+				model = glm::scale(model, glm::vec3(0.7f));
+				model = glm::translate(model, glm::vec3(10.0f, 0.0f, 10.0f));
+
+				Entities.push_back(m_Scene->CreateEntity("loaded")
+					.AddComponent<Ref<Model>>(ModelLoader::StaticModel(path))
+					.AddComponent<TransformComponent>(model));
 			}
 			catch (const std::exception& e)
 			{
@@ -135,8 +140,7 @@ namespace Bubble
 		}
 		ImGui::End();
 
-
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+		// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow();
         m_ImGuiControll.End();
 
@@ -189,6 +193,25 @@ namespace Bubble
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 			Application::GetWindow()->Close();
 		}
+	}
+
+
+	void DrawMenuBar()
+	{
+		
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Open")) LOG_INFO("Open");
+				if (ImGui::MenuItem("Save")) LOG_INFO("Save");
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenuBar();
+		}
+
 	}
 
 }

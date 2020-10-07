@@ -5,12 +5,34 @@
 namespace Bubble
 {
 	std::vector<std::pair<std::string, Ref<Model>>>  ModelLoader::s_LoadedModels;
+
+
+	static std::string ReplaceAll(std::string str, const std::string& from, const std::string& to)
+	{
+		size_t start_pos = 0;
+		while ((start_pos = str.find(from, start_pos)) != std::string::npos)
+		{
+			str.replace(start_pos, from.length(), to);
+			start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+		}
+		return str;
+	}
+
+	static std::string NormalizePath(const std::string& path)
+	{
+		return ReplaceAll(path, "\\", "/");
+	}
 	
 
-	Ref<Model> ModelLoader::StaticModel(const std::string& path)
+	Ref<Model> ModelLoader::StaticModel(std::string path)
 	{
-		for (const auto& stored_model : s_LoadedModels) {
-			if (stored_model.first == path) {
+		path = NormalizePath(path);
+
+		for (const auto& stored_model : s_LoadedModels)
+		{
+			if (stored_model.first.find(path) != std::string::npos ||
+				path.find(stored_model.first) != std::string::npos)
+			{
 				return stored_model.second;
 			}
 		}
@@ -128,13 +150,15 @@ namespace Bubble
 	{
 		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT, aiTextureType_NORMALS };
 		
+		// retrieve the directory path of the filepath
+		const std::string& path = s_LoadedModels.back().first;
+		std::string directory = path.substr(0, path.find_last_of('/') + 1);
+
+
+
 		DefaultMaterial material;
 		for (int i = 0; i < 3; i++)
 		{
-			// retrieve the directory path of the filepath
-			const std::string& path = s_LoadedModels.back().first;
-			std::string directory = path.substr(0, path.find_last_of('/') + 1);
-			
 			for (int i = 0; i < 3; i++)
 			{
 				for (int j = 0; j < mat->GetTextureCount(types[i]); j++)
