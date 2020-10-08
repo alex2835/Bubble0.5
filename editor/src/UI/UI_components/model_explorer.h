@@ -8,8 +8,6 @@
 
 namespace Bubble
 {
-	//void ModelLoaderUI();
-
 	class ModelExplorer
 	{
 		Ref<Model>* SelectedModel;

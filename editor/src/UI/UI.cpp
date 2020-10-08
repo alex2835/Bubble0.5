@@ -10,7 +10,7 @@ namespace Bubble
 
 		ModelExplorerPanel.Draw(&IsOpenModelExplorer);
 
-		EntityExplorerPanel.DrawEntitiesExplorer(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
+		SceneExplorer.DrawEntitiesExplorer(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
 	}
 
 
@@ -32,9 +32,18 @@ namespace Bubble
 				ImGui::Combo("Type", (int*)Args.DrawTypeOption, types, 2);
 				ImGui::EndMenu();
 			}
-
 			ImGui::EndMenu();
 		}
+
+
+		if (ImGui::BeginMenu("View"))
+		{
+			ImGui::MenuItem("Scene explorer", "", &IsOpenSceneExplorer);
+			ImGui::MenuItem("Entity properties", "", &IsOpenEntityProperties);
+			ImGui::MenuItem("Model explorer", "", &IsOpenModelExplorer);
+			ImGui::EndMenu();
+		}
+
 	}
 
 

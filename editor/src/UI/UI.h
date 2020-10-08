@@ -38,7 +38,7 @@ namespace Bubble
 		// Scene
 		bool IsOpenSceneExplorer = true;
 		bool IsOpenEntityProperties = true;
-		SceneExplorerPanel EntityExplorerPanel;
+		SceneExplorerPanel SceneExplorer;
 		
 		void Draw();
 		void DrawMenuOptions();
