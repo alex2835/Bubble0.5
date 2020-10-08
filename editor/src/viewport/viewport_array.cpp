@@ -46,7 +46,7 @@ namespace Bubble
 
 	void ViewportArray::RemoveNotActiveViewports()
 	{
-		for (int i = 0; i < Size(); i++)
+		for (int i = 1; i < Size(); i++)
 		{
 			if (!m_IsOpen[i])
 			{

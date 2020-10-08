@@ -16,13 +16,10 @@ namespace Bubble
         // Temp: test viewport
 		ViewportArray.Push(Viewport(800, 800));
 
-		// Temp: setup mesh
-		m_Lights.push_back(Light::CreateSpotLight());
-		m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
-		m_Lights.push_back(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f)));
-
 		ActiveScene = CreateRef<Scene>();
 
+
+		// ============ Model entities =============
 		glm::mat4 model(1.0f);
 		model = glm::scale(model, glm::vec3(0.7f));
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
@@ -47,6 +44,23 @@ namespace Bubble
 		Entities.push_back(ActiveScene->CreateEntity("tree")
 			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/Tree/Tree.obj"))
 			.AddComponent<TransformComponent>(model));
+
+		// ============ Lights entities ==============
+		//m_Lights.push_back(Light::CreateSpotLight());
+		//m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
+		//m_Lights.push_back(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f)));
+
+		Entities.push_back(ActiveScene->CreateEntity("DirLight")
+			.AddComponent<Light>(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f))));
+
+		Entities.push_back(ActiveScene->CreateEntity("SpotLight")
+			.AddComponent<Light>(Light::CreateSpotLight()));
+
+		Entities.push_back(ActiveScene->CreateEntity("PointLight")
+			.AddComponent<Light>(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f))));
+
+
+
 
 		// Temp: skybox
 		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
@@ -105,26 +119,7 @@ namespace Bubble
 		}
 		ImGui::PopStyleVar();
 
-
-		// Temp
-		ImGui::Begin("Global light");
-			ImGui::SliderFloat3("Direction", (float*)&m_Lights[1].Direction, -1.0f, 1.0f);
-			ImGui::SliderFloat("Brightness", (float*)&m_Lights[1].Brightness, 0.0f, 1.0f);
-			ImGui::ColorEdit3("Color", (float*)&m_Lights[1].Color);
-		ImGui::End();
-		ImGui::Begin("Flashlight");
-			ImGui::SliderFloat("Distance", (float*)&m_Lights[0].Distance, 0.0f, 1.0f);
-			ImGui::SliderFloat("Cutoff", (float*)&m_Lights[0].CutOff, 0.0f, 20.0f);
-			ImGui::SliderFloat("OuterCutoff", (float*)&m_Lights[0].OuterCutOff, 0.0f, 20.0f);
-			ImGui::ColorEdit3("Color", (float*)&m_Lights[0].Color);
-			ImGui::SliderFloat("Brightness", &m_Lights[0].Brightness, 0.0f, 1.0f);
-		ImGui::End();
-		ImGui::Begin("PointLight");
-			ImGui::SliderFloat("Distance", (float*)&m_Lights[2].Distance, 0.0f, 1.0f);
-			ImGui::ColorEdit3("Color", (float*)&m_Lights[2].Color);
-			ImGui::SliderFloat("Brightness", &m_Lights[2].Brightness, 0.0f, 1.0f);
-		ImGui::End();
-
+		
 		ImGui::Begin("Info");
 			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
@@ -144,25 +139,38 @@ namespace Bubble
 		Renderer::SetViewport(ViewportArray[0].GetFramebuffer());
 		Renderer::ClearDepth();
 
-		m_Lights[0].Position = SceneCamera.m_Camera.Position;
-		m_Lights[0].Direction = SceneCamera.m_Camera.Front;
-		m_Lights[0].SetDistance();
-		m_Lights[2].SetDistance();
+		m_Lights.ApplyLights(m_ShaderPhong);
+
+		//m_Lights[0].Position = SceneCamera.m_Camera.Position;
+		//m_Lights[0].Direction = SceneCamera.m_Camera.Front;
+		//m_Lights[0].SetDistance();
+		//m_Lights[2].SetDistance();
+
+		// Temp : Apply lights to shader
+
+		int light_index = 0;
+		ActiveScene->m_Registry.view<Light>().each(
+			[&] (auto entity, Light& light)
+			{
+				light.SetDistance();
+				Light::ApplyLight(light, m_ShaderPhong, light_index++);
+			}
+		);
+		m_ShaderPhong->SetUni1i("nLights", light_index);
 
 		// Temp: Draw test mesh
 		glm::ivec2 window_size = ViewportArray[0].Size();
 		glm::mat4 projection = SceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = SceneCamera.GetLookatMat();
 		
-		m_Lights.ApplyLights(m_ShaderPhong);
 		m_ShaderPhong->SetUniMat4("u_View", view);
 		m_ShaderPhong->SetUniMat4("u_Projection", projection);
 
-		auto ActiveScene_view = ActiveScene->GetView<Ref<Model>, TransformComponent>();
+		auto scene_view = ActiveScene->GetView<Ref<Model>, TransformComponent>();
 
-		for (auto entity : ActiveScene_view)
+		for (auto entity : scene_view)
 		{
-			auto [mesh, model] = ActiveScene_view.get<Ref<Model>, TransformComponent>(entity);
+			auto [mesh, model] = scene_view.get<Ref<Model>, TransformComponent>(entity);
 			m_ShaderPhong->SetUniMat4("u_Model", model);
 			Renderer::DrawModel(mesh, m_ShaderPhong, UserInterface.DrawTypeOption);
 
@@ -181,7 +189,7 @@ namespace Bubble
 		m_ShaderSkybox->SetUniMat4("u_Projection", projection);
 		view = glm::rotate(view, glm::radians(Application::GetTime() * 0.5f), glm::vec3(0, 1, 0));
 		m_ShaderSkybox->SetUniMat4("u_View", glm::mat3(view));
-		m_ShaderSkybox->SetUni1f("u_Brightness", std::max(m_Lights[1].Brightness, 0.2f));
+		m_ShaderSkybox->SetUni1f("u_Brightness", 1.0f);
 		Renderer::DrawSkybox(m_Skybox, m_ShaderSkybox);
 
 	}

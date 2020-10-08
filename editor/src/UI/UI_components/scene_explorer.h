@@ -8,7 +8,7 @@
 #include "scene/scene.h"
 #include "scene/components/basic_components.h"
 #include "scene/entity/entity.h"
-
+#include "renderer/light/light.h"
 
 namespace Bubble
 {

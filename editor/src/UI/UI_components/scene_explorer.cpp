@@ -46,7 +46,7 @@ namespace Bubble
 
 	void SceneExplorer::DrawComponents(Entity entity)
 	{
-		// Basic default properties
+		// =============== Basic default properties =================
 
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -55,7 +55,8 @@ namespace Bubble
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strcpy_s(buffer, sizeof(buffer), tag.c_str());
-			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			ImGui::Text("Name");
+			if (ImGui::InputText("", buffer, sizeof(buffer)))
 			{
 				tag = std::string(buffer);
 			}
@@ -73,10 +74,44 @@ namespace Bubble
 			ImGui::Separator();
 		}
 
-		// User properties
-		for (auto DrawCustomProperties : CustomEntityProperties)
+		if (entity.HasComponent<Light>())
 		{
-			DrawCustomProperties(entity);
+			Light& light = entity.GetComponent<Light>();
+			switch(light.Type)
+			{
+				case LightType::DirLight:
+					ImGui::Text("Global light");
+					ImGui::SliderFloat3("Direction", (float*)&light.Direction, -1.0f, 1.0f);
+					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
+					ImGui::ColorEdit3("Color", (float*)&light.Color);
+					ImGui::Separator();
+				break;
+
+				case LightType::SpotLight:
+					ImGui::Text("Spotlight");
+					ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f);
+					ImGui::SliderFloat("Cutoff", (float*)&light.CutOff, 0.0f, 20.0f);
+					ImGui::SliderFloat("OuterCutoff", (float*)&light.OuterCutOff, 0.0f, 20.0f);
+					ImGui::ColorEdit3("Color", (float*)&light.Color);
+					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
+					ImGui::Separator();
+				break;
+
+				case LightType::PointLight:
+					ImGui::Text("PointLight");
+					ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f);
+					ImGui::ColorEdit3("Color", (float*)&light.Color);
+					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
+					ImGui::Separator();
+				break;
+			}
 		}
+
+
+		// ================ User properties ==================
+		//for (auto DrawCustomProperties : CustomEntityProperties)
+		//{
+		//	DrawCustomProperties(entity);
+		//}
 	}
 }
