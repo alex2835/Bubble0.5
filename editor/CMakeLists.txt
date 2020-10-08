@@ -33,7 +33,8 @@ set(UI
     src/UI/UI.h
     src/UI/UI.cpp
     src/UI/UI_components/file_dialog.cpp
-    src/UI/UI_components/model_loading.cpp
+    src/UI/UI_components/model_explorer.cpp
+    src/UI/UI_components/model_explorer.h
     src/UI/UI_components/scene_camera_options.cpp
     src/UI/UI_components/scene_camera_options.h
     src/UI/UI_components/scene_explorer.h

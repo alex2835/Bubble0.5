@@ -4,7 +4,7 @@
 
 namespace Bubble
 {
-	std::vector<std::pair<std::string, Ref<Model>>>  ModelLoader::s_LoadedModels;
+	std::vector<std::pair<std::string, Ref<Model>>>  ModelLoader::LoadedModels;
 
 
 	static std::string ReplaceAll(std::string str, const std::string& from, const std::string& to)
@@ -28,7 +28,7 @@ namespace Bubble
 	{
 		path = NormalizePath(path);
 
-		for (const auto& stored_model : s_LoadedModels)
+		for (const auto& stored_model : LoadedModels)
 		{
 			if (stored_model.first.find(path) != std::string::npos ||
 				path.find(stored_model.first) != std::string::npos)
@@ -38,7 +38,7 @@ namespace Bubble
 		}
 
 		auto model = CreateRef<Model>();
-		s_LoadedModels.push_back(std::make_pair(path, model));
+		LoadedModels.push_back(std::make_pair(path, model));
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
@@ -151,7 +151,7 @@ namespace Bubble
 		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT, aiTextureType_NORMALS };
 		
 		// retrieve the directory path of the filepath
-		const std::string& path = s_LoadedModels.back().first;
+		const std::string& path = LoadedModels.back().first;
 		std::string directory = path.substr(0, path.find_last_of('/') + 1);
 
 
@@ -181,7 +181,7 @@ namespace Bubble
 						//	material.Normal = Texture2D(directory + str.C_Str());
 						//	break;
 						default:
-							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", s_LoadedModels.back().first, str.C_Str());
+							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", LoadedModels.back().first, str.C_Str());
 					}
 				}
 			}

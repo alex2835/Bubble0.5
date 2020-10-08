@@ -23,8 +23,6 @@ namespace Bubble
 
 		void DrawEntitiesExplorer(bool* is_open_explorer, bool* is_open_properties, Scene* scene);
 
-		void DrawEntityNode(Entity entity);
-
 		void DrawComponents(Entity entity);
 	};
 }

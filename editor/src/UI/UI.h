@@ -3,7 +3,7 @@
 #include "imgui.h"
 #include <vector>
 
-#include "UI_components/model_loading.h"
+#include "UI_components/model_explorer.h"
 #include "UI_components/scene_camera_options.h"
 #include "UI_components/scene_explorer.h"
 
@@ -32,12 +32,13 @@ namespace Bubble
 		UIArgs Args;
 
 		// Models
-		bool IsOpenModelLoader = false;
+		bool IsOpenModelExplorer = true;
+		ModelExplorer ModelExplorerPanel;
 
 		// Scene
 		bool IsOpenSceneExplorer = true;
 		bool IsOpenEntityProperties = true;
-		SceneExplorerPanel ExplorerPanel;
+		SceneExplorerPanel EntityExplorerPanel;
 		
 		void Draw();
 		void DrawMenuOptions();

@@ -6,9 +6,11 @@ namespace Bubble
 {
 	void UI::Draw()
 	{
-		ModelLoaderUI(&IsOpenModelLoader, Args.Models);
+		//ModelLoaderUI(&IsOpenModelLoader, Args.Models);
 
-		ExplorerPanel.DrawEntitiesExplorer(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
+		ModelExplorerPanel.Draw(&IsOpenModelExplorer);
+
+		EntityExplorerPanel.DrawEntitiesExplorer(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
 	}
 
 

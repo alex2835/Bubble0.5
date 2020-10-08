@@ -13,9 +13,9 @@ namespace Bubble
 {
 	class ModelLoader
 	{
-		static std::vector<std::pair<std::string, Ref<Model>>> s_LoadedModels;
-		 
 	public:
+		static std::vector<std::pair<std::string, Ref<Model>>> LoadedModels;
+
 		static Ref<Model> StaticModel(std::string path);
 		
 	private:
