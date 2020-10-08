@@ -23,15 +23,14 @@ namespace Bubble
 		std::vector<Entity> Entities;
 		Ref<Scene> ActiveScene;
 
+		Ref<Shader> ShaderSelected;
+		Ref<Shader> m_ShaderPhong;
+
 		Ref<Shader> m_ShaderSkybox;
 		Ref<Skybox> m_Skybox;
-
-		// rendering options
-		DrawType DrawTypeOption = DrawType::TRIANGLES;
-
+		
 		// Temp:
 		LightArray  m_Lights;
-		Ref<Shader> m_ShaderPhong;
 		Ref<Model>  m_NanoSuit;
 		Ref<Model>  m_GrassPlane;
 		Ref<Model>  m_Tree;

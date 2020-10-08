@@ -4,7 +4,7 @@
 
 namespace Bubble
 {
-	void SceneExplorerPanel::DrawEntitiesExplorer(bool* is_open_explorer, bool* is_open_properties,  Scene* scene)
+	void SceneExplorer::Draw(bool* is_open_explorer, bool* is_open_properties,  Scene* scene)
 	{
 		if (*is_open_explorer)
 		{
@@ -44,7 +44,7 @@ namespace Bubble
 	}
 
 
-	void SceneExplorerPanel::DrawComponents(Entity entity)
+	void SceneExplorer::DrawComponents(Entity entity)
 	{
 		// Basic default properties
 

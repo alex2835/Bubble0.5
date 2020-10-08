@@ -24,8 +24,6 @@ namespace Bubble
 
 	void Renderer::Init()
 	{
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 	}
@@ -87,6 +85,19 @@ namespace Bubble
 		{
 			Renderer::DrawMesh(mesh, shader, draw_type);
 		}
+	}
+
+	void Renderer::DrawModelA(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		for (const auto& mesh : model->Meshes)
+		{
+			Renderer::DrawMesh(mesh, shader, draw_type);
+		}
+
+		glDisable(GL_BLEND);
 	}
 
 	void Renderer::DrawSkybox(const Ref<Skybox>& skybox, const Ref<Shader>& shader)

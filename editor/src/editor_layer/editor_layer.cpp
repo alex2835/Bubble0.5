@@ -48,11 +48,13 @@ namespace Bubble
 			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/Tree/Tree.obj"))
 			.AddComponent<TransformComponent>(model));
 
-		m_ShaderPhong = Shader::Open("resources/shaders/phong.glsl");
-
 		// Temp: skybox
 		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
 		m_ShaderSkybox = Shader::Open("resources/shaders/skybox.glsl");
+
+		m_ShaderPhong = Shader::Open("resources/shaders/phong.glsl");
+		ShaderSelected = Shader::Open("resources/shaders/solid_color.glsl");
+
 
 		// Temp: Try to simplify mesh
 	}
@@ -67,7 +69,7 @@ namespace Bubble
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// Set args for UI
-		UserInterface.Args = { &Models, &SceneCamera, &DrawTypeOption, ActiveScene.get() };
+		UserInterface.Args = { &Models, &SceneCamera, ActiveScene.get() };
 
 		// ImGui Scope
 		ImGuiControll.Begin();
@@ -160,9 +162,19 @@ namespace Bubble
 
 		for (auto entity : ActiveScene_view)
 		{
-			auto [model, transforms] = ActiveScene_view.get<Ref<Model>, TransformComponent>(entity);
-			m_ShaderPhong->SetUniMat4("u_Model", transforms);
-			Renderer::DrawModel(model, m_ShaderPhong, DrawTypeOption);
+			auto [mesh, model] = ActiveScene_view.get<Ref<Model>, TransformComponent>(entity);
+			m_ShaderPhong->SetUniMat4("u_Model", model);
+			Renderer::DrawModel(mesh, m_ShaderPhong, UserInterface.DrawTypeOption);
+
+			// Hightlighht selected model
+			if (UserInterface.SceneExplorerPanel.SelectedEntity == entity)
+			{
+				glDisable(GL_DEPTH_TEST);
+				ShaderSelected->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.2f));
+				ShaderSelected->SetUniMat4("u_Transforms", projection * view * (glm::mat4)model);
+				Renderer::DrawModelA(mesh, ShaderSelected, DrawType::TRIANGLES);
+				glEnable(GL_DEPTH_TEST);
+			}
 		}
 
 		// Render skybox

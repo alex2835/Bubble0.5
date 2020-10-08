@@ -15,8 +15,6 @@ namespace Bubble
 	{
 		std::vector<Ref<Model>>* Models;
 		SceneCameraController* Camera;
-		// Rendering
-		DrawType* DrawTypeOption;
 
 		// Scene
 		Scene* ActiveScene;
@@ -38,7 +36,10 @@ namespace Bubble
 		// Scene
 		bool IsOpenSceneExplorer = true;
 		bool IsOpenEntityProperties = true;
-		SceneExplorerPanel SceneExplorer;
+		SceneExplorer SceneExplorerPanel;
+
+		// rendering options
+		DrawType DrawTypeOption = DrawType::TRIANGLES;
 		
 		void Draw();
 		void DrawMenuOptions();

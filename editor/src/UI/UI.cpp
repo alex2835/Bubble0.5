@@ -6,11 +6,8 @@ namespace Bubble
 {
 	void UI::Draw()
 	{
-		//ModelLoaderUI(&IsOpenModelLoader, Args.Models);
-
 		ModelExplorerPanel.Draw(&IsOpenModelExplorer);
-
-		SceneExplorer.DrawEntitiesExplorer(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
+		SceneExplorerPanel.Draw(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
 	}
 
 
@@ -29,7 +26,7 @@ namespace Bubble
 			if (ImGui::BeginMenu("Rendering"))
 			{
 				const char* const types[] = { "Lines", "Triangles" };
-				ImGui::Combo("Type", (int*)Args.DrawTypeOption, types, 2);
+				ImGui::Combo("Type", (int*)&DrawTypeOption, types, 2);
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();
