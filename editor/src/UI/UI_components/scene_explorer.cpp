@@ -46,7 +46,7 @@ namespace Bubble
 
 	void SceneExplorer::DrawComponents(Entity entity)
 	{
-		// =============== Basic default properties =================
+		// =============== Basic properties =================
 
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -68,7 +68,31 @@ namespace Bubble
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
 				auto& transform = entity.GetComponent<TransformComponent>().Transform;
-				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+				auto& position = entity.GetComponent<PositionComponent>().Position;
+				auto& rotation = entity.GetComponent<RotationComponent>().Rotation;
+				auto& scale = entity.GetComponent<ScaleComponent>().Scale;
+
+				bool update = false;
+				float scale_entire = 0.0f;
+
+				if (ImGui::DragFloat3("Position", (float*)&position, 0.1f)) update = true;
+				if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.05f)) update = true;
+				if (ImGui::Button("Restore rotation", { 120, 20 })) { update = true; rotation = glm::vec3(); }
+				if (ImGui::DragFloat3("Scale", (float*)&scale, 0.05f)) update = true;
+				if (ImGui::DragFloat("ScaleAll", &scale_entire, 0.05f)) update = true;
+				if (ImGui::Button("Restore scale", { 120, 20 })) { update = true; scale = glm::vec3(1.0f); }
+
+				if (update)
+				{
+					scale += scale_entire;
+					transform = glm::mat4(1.0f);
+					transform = glm::translate(transform, position);
+					transform = glm::rotate(transform, rotation.x, glm::vec3(1, 0, 0));
+					transform = glm::rotate(transform, rotation.y, glm::vec3(0, 1, 0));
+					transform = glm::rotate(transform, rotation.z, glm::vec3(0, 0, 1));
+					transform = glm::scale(transform, scale);
+				}
+
 				ImGui::TreePop();
 			}
 			ImGui::Separator();
@@ -89,7 +113,9 @@ namespace Bubble
 
 				case LightType::SpotLight:
 					ImGui::Text("Spotlight");
-					ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f);
+					if (ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f)) {
+						light.SetDistance();
+					}
 					ImGui::SliderFloat("Cutoff", (float*)&light.CutOff, 0.0f, 20.0f);
 					ImGui::SliderFloat("OuterCutoff", (float*)&light.OuterCutOff, 0.0f, 20.0f);
 					ImGui::ColorEdit3("Color", (float*)&light.Color);
@@ -99,7 +125,9 @@ namespace Bubble
 
 				case LightType::PointLight:
 					ImGui::Text("PointLight");
-					ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f);
+					if (ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f)) {
+						light.SetDistance();
+					}
 					ImGui::ColorEdit3("Color", (float*)&light.Color);
 					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
 					ImGui::Separator();

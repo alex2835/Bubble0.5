@@ -26,7 +26,7 @@ namespace Bubble
 
 	void Scene::OnUpdate(DeltaTime dt)
 	{
-		// update native scripts
+		// Update native scripts
 		m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 			{
 				if (!nsc.Instance)

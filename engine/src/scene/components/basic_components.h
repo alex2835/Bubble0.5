@@ -6,6 +6,8 @@
 
 namespace Bubble
 {
+
+	// ================
 	struct TagComponent
 	{
 		std::string Tag;
@@ -14,6 +16,35 @@ namespace Bubble
 		TagComponent(const TagComponent&) = default;
 		TagComponent(const std::string& tag)
 			: Tag(tag) {}
+	};
+
+
+	// =================
+	struct PositionComponent
+	{
+		glm::vec3 Position;
+		//PositionComponent() = default;
+		//PositionComponent(const glm::vec3& position)
+		//	: Position(position)
+		//{}
+	};
+
+	struct RotationComponent
+	{
+		glm::vec3 Rotation;
+		//RotationComponent() = default;
+		//RotationComponent(const glm::vec3& rotation)
+		//	: Rotation(rotation)
+		//{}
+	};
+
+	struct ScaleComponent 
+	{ 
+		glm::vec3 Scale = glm::vec3( 1.0f );
+		//ScaleComponent() = default;
+		//ScaleComponent(const glm::vec3& scale)
+		//	: Scale(scale)
+		//{}
 	};
 
 	struct TransformComponent
@@ -29,7 +60,8 @@ namespace Bubble
 		operator const glm::mat4& () const { return Transform; }
 	};
 
-	
+
+	// =================
 	class ScriptableEntity;
 
 	class NativeScriptComponent

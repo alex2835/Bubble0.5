@@ -42,7 +42,7 @@ namespace Bubble
 		DrawType DrawTypeOption = DrawType::TRIANGLES;
 		
 		void Draw();
-		void DrawMenuOptions();
+		void DrawMenu();
 		
 	};
 

@@ -20,35 +20,46 @@ namespace Bubble
 
 
 		// ============ Model entities =============
-		glm::mat4 model(1.0f);
-		model = glm::scale(model, glm::vec3(0.7f));
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
-
 		Entities.push_back(ActiveScene->CreateEntity("nanosuit")
 			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/crysis/nanosuit.obj"))
-			.AddComponent<TransformComponent>(model));
-
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.3f));
-		model = glm::translate(model, glm::vec3(0.0f, -7.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+			.AddComponent<TransformComponent>()
+			.AddComponent<PositionComponent>(glm::vec3(0.0f, 0.0f, -10.0f))
+			.AddComponent<RotationComponent>()
+			.AddComponent<ScaleComponent>(glm::vec3(0.7f))
+		);
 
 		Entities.push_back(ActiveScene->CreateEntity("grass")
 			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj"))
-			.AddComponent<TransformComponent>(model));
-
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(10.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f));
+			.AddComponent<TransformComponent>()
+			.AddComponent<PositionComponent>(glm::vec3(0.0f, -7.0f, 0.0f))
+			.AddComponent<RotationComponent>(glm::vec3(glm::radians(-90.0f), 0, 0))
+			.AddComponent<ScaleComponent>(glm::vec3(0.3f))
+		);
 
 		Entities.push_back(ActiveScene->CreateEntity("tree")
 			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/Tree/Tree.obj"))
-			.AddComponent<TransformComponent>(model));
+			.AddComponent<TransformComponent>()
+			.AddComponent<PositionComponent>(glm::vec3(10.0f, 1.0f, 0.0f))
+			.AddComponent<RotationComponent>()
+			.AddComponent<ScaleComponent>(glm::vec3(5.0f))
+		);
 
-		// ============ Lights entities ==============
-		//m_Lights.push_back(Light::CreateSpotLight());
-		//m_Lights.push_back(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f)));
-		//m_Lights.push_back(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f)));
+		// Hard code
+		for (auto entity = Entities.end() - 3; entity < Entities.end(); entity++)
+		{
+			auto& transform = entity->GetComponent<TransformComponent>().Transform;
+			auto& position = entity->GetComponent<PositionComponent>().Position;
+			auto& rotation = entity->GetComponent<RotationComponent>().Rotation;
+			auto& scale = entity->GetComponent<ScaleComponent>().Scale;
+
+			transform = glm::mat4(1.0f);
+			transform = glm::translate(transform, position);
+			transform = glm::rotate(transform, rotation.x, glm::vec3(1, 0, 0));
+			transform = glm::rotate(transform, rotation.y, glm::vec3(0, 1, 0));
+			transform = glm::rotate(transform, rotation.z, glm::vec3(0, 0, 1));
+			transform = glm::scale(transform, scale);
+		}
+
 
 		Entities.push_back(ActiveScene->CreateEntity("DirLight")
 			.AddComponent<Light>(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f))));
@@ -58,8 +69,6 @@ namespace Bubble
 
 		Entities.push_back(ActiveScene->CreateEntity("PointLight")
 			.AddComponent<Light>(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f))));
-
-
 
 
 		// Temp: skybox
@@ -141,13 +150,7 @@ namespace Bubble
 
 		m_Lights.ApplyLights(m_ShaderPhong);
 
-		//m_Lights[0].Position = SceneCamera.m_Camera.Position;
-		//m_Lights[0].Direction = SceneCamera.m_Camera.Front;
-		//m_Lights[0].SetDistance();
-		//m_Lights[2].SetDistance();
-
 		// Temp : Apply lights to shader
-
 		int light_index = 0;
 		ActiveScene->m_Registry.view<Light>().each(
 			[&] (auto entity, Light& light)
@@ -157,6 +160,7 @@ namespace Bubble
 			}
 		);
 		m_ShaderPhong->SetUni1i("nLights", light_index);
+
 
 		// Temp: Draw test mesh
 		glm::ivec2 window_size = ViewportArray[0].Size();
@@ -178,7 +182,7 @@ namespace Bubble
 			if (UserInterface.SceneExplorerPanel.SelectedEntity == entity)
 			{
 				glDisable(GL_DEPTH_TEST);
-				ShaderSelected->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.2f));
+				ShaderSelected->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.1f));
 				ShaderSelected->SetUniMat4("u_Transforms", projection * view * (glm::mat4)model);
 				Renderer::DrawModelA(mesh, ShaderSelected, DrawType::TRIANGLES);
 				glEnable(GL_DEPTH_TEST);
@@ -207,6 +211,7 @@ namespace Bubble
 	{
 		if (ImGui::BeginMenuBar())
 		{
+			// ====== Editor Menu ======
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("Open")) LOG_INFO("Open");
@@ -215,7 +220,8 @@ namespace Bubble
 				ImGui::EndMenu();
 			}
 
-			UserInterface.DrawMenuOptions();
+			// ======== UI Menu =========
+			UserInterface.DrawMenu();
 
 			ImGui::EndMenuBar();
 		}

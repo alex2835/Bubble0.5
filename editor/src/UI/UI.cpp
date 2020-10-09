@@ -11,7 +11,7 @@ namespace Bubble
 	}
 
 
-	void UI::DrawMenuOptions()
+	void UI::DrawMenu()
 	{
 		if (ImGui::BeginMenu("Options"))
 		{
