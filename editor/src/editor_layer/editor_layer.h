@@ -8,6 +8,7 @@
 #include "scene_camera/scene_camera_controller.h"
 
 #include "UI/UI.h"
+#include "serialization/serialization.h"
 
 namespace Bubble
 {

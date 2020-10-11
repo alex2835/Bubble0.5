@@ -63,7 +63,7 @@ set(SCENE
     src/scene/scene.cpp
     src/scene/entity/Entity.h
     src/scene/entity/Entity.cpp
-    src/scene/components/basic_components.h
+    src/scene/components.h
     src/scene/entity/scriptable_entity.h
 )
 
@@ -116,7 +116,9 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glm/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/spdlog/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/entt/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/nlohmann_json/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/assimp/include
+
 )
 
 

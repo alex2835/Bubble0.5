@@ -6,7 +6,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "scene/scene.h"
-#include "scene/components/basic_components.h"
+#include "scene/components.h"
 #include "scene/entity/entity.h"
 #include "renderer/light/light.h"
 

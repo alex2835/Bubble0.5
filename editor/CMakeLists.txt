@@ -41,6 +41,12 @@ set(UI
     src/UI/UI_components/scene_explorer.cpp
 )
 
+set(SERIALIZATION
+    src/serialization/serialization.cpp
+    src/serialization/entity_serialization.h
+    src/serialization/entity_serialization.cpp
+)
+
 set(SOURCES
     src/editor_app.cpp
     ${EDITOR_GUI}
@@ -48,6 +54,7 @@ set(SOURCES
     ${EDITOR_VIEWPORT}
     ${EDITOR_SDL_WINDOW}
     ${SCENE_CAMERA}
+    ${SERIALIZATION}
     ${UI}
  )
 
@@ -71,8 +78,7 @@ set_target_properties(
 
 # include directories
 target_include_directories(
-    Bubble
-    PRIVATE
+    Bubble PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/imgui
@@ -92,3 +98,4 @@ if (WIN32)
             "${PROJECT_SOURCE_DIR}/../dependencies/SDL2/lib/SDL2.dll"   # <--this is in-file
             $<TARGET_FILE_DIR:Bubble>)									# <--this is out-file path
 endif()
+

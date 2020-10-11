@@ -25,6 +25,6 @@
 
 // Scene
 #include "scene/scene.h"
+#include "scene/components.h"
 #include "scene/entity/entity.h"
-#include "scene/components/basic_components.h"
-#include "scene/entity/scriptable_entity.h"
+//#include "scene/entity/scriptable_entity.h"

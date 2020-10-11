@@ -1,8 +1,8 @@
 
 #include "scene.h"
 #include "entity/entity.h"
-#include "entity/scriptable_entity.h"
-#include "components/basic_components.h"
+//#include "entity/scriptable_entity.h"
+#include "components.h"
 
 
 namespace Bubble
@@ -27,18 +27,18 @@ namespace Bubble
 	void Scene::OnUpdate(DeltaTime dt)
 	{
 		// Update native scripts
-		m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
-			{
-				if (!nsc.Instance)
-				{
-					nsc.Instance = nsc.InstantiateScript();
-					nsc.Instance->m_Entity = Entity{ entity, this };
-					nsc.Instance->OnCreate();
-				}
-
-				nsc.Instance->OnUpdate(dt);
-			}
-		);
+		//m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+		//	{
+		//		if (!nsc.Instance)
+		//		{
+		//			nsc.Instance = nsc.InstantiateScript();
+		//			nsc.Instance->m_Entity = Entity{ entity, this };
+		//			nsc.Instance->OnCreate();
+		//		}
+		//
+		//		nsc.Instance->OnUpdate(dt);
+		//	}
+		//);
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
