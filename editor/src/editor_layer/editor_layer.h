@@ -16,15 +16,12 @@ namespace Bubble
 	{
 		UI UserInterface;
 		ImGuiControll ImGuiControll;
-		ViewportArray ViewportArray;
-		
-		std::vector<Ref<Model>> Models;
 		SceneCameraController SceneCamera;
-		
+		Viewport MainViewport;
 		Scene ActiveScene;
 
 		Ref<Shader> ShaderSelected;
-		Ref<Shader> m_ShaderPhong;
+		Ref<Shader> PhongShader;
 
 		Ref<Shader> m_ShaderSkybox;
 		Ref<Skybox> m_Skybox;

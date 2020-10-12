@@ -1,0 +1,327 @@
+{
+ "Scene": {
+  "Components": [
+   {
+    "Component": {
+     "Tag": "nanosuit"
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Tag": "grass"
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Tag": "tree"
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
+     "Tag": "DirLight"
+    },
+    "Entity": 3
+   },
+   {
+    "Component": {
+     "Tag": "SpotLight"
+    },
+    "Entity": 4
+   },
+   {
+    "Component": {
+     "Tag": "PointLight"
+    },
+    "Entity": 5
+   },
+   {
+    "Component": {
+     "Position": [
+      -26.700000762939453,
+      0.0,
+      -10.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Position": [
+      0.0,
+      -7.0,
+      0.0
+     ]
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Position": [
+      10.399999618530273,
+      1.0,
+      0.0
+     ]
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
+     "Rotation": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Rotation": [
+      -1.5707963705062866,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Rotation": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
+     "Scale": [
+      0.699999988079071,
+      0.699999988079071,
+      0.699999988079071
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Scale": [
+      0.30000001192092896,
+      0.30000001192092896,
+      0.30000001192092896
+     ]
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Scale": [
+      5.0,
+      5.0,
+      5.0
+     ]
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
+     "Transform": [
+      0.699999988079071,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.699999988079071,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.699999988079071,
+      0.0,
+      -26.700000762939453,
+      0.0,
+      -10.0,
+      1.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Transform": [
+      0.29999998211860657,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.311341701892843e-08,
+      -0.30000001192092896,
+      0.0,
+      0.0,
+      0.30000001192092896,
+      -1.311341701892843e-08,
+      0.0,
+      0.0,
+      -7.0,
+      0.0,
+      1.0
+     ]
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Transform": [
+      5.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      5.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      5.0,
+      0.0,
+      10.399999618530273,
+      1.0,
+      0.0,
+      1.0
+     ]
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
+     "Light": {
+      "Brightness": 1.0,
+      "Color": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "Constant": 1.0,
+      "CutOff": 0.0,
+      "Direction": [
+       0.07053456455469131,
+       -0.705345630645752,
+       -0.705345630645752
+      ],
+      "Distance": 0.5,
+      "Linear": 0.057500001043081284,
+      "OuterCutOff": 0.0,
+      "Position": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "Quadratic": 0.012250000610947609,
+      "Type": 0
+     }
+    },
+    "Entity": 3
+   },
+   {
+    "Component": {
+     "Light": {
+      "Brightness": 1.0,
+      "Color": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "Constant": 1.0,
+      "CutOff": 12.5,
+      "Direction": [
+       1.0,
+       0.0,
+       0.0
+      ],
+      "Distance": 0.5,
+      "Linear": 0.057500001043081284,
+      "OuterCutOff": 17.5,
+      "Position": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "Quadratic": 0.012250000610947609,
+      "Type": 2
+     }
+    },
+    "Entity": 4
+   },
+   {
+    "Component": {
+     "Light": {
+      "Brightness": 1.0,
+      "Color": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "Constant": 1.0,
+      "CutOff": 0.0,
+      "Direction": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "Distance": 0.5,
+      "Linear": 0.057500001043081284,
+      "OuterCutOff": 0.0,
+      "Position": [
+       3.0,
+       5.0,
+       0.0
+      ],
+      "Quadratic": 0.012250000610947609,
+      "Type": 1
+     }
+    },
+    "Entity": 5
+   },
+   {
+    "Component": {
+     "Model": "resources/crysis/nanosuit.obj"
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Model": "resources/grass_plane/grass_plane.obj"
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Model": "resources/Tree/Tree.obj"
+    },
+    "Entity": 2
+   }
+  ],
+  "Entities": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "Size": [
+   6,
+   6,
+   3,
+   3,
+   3,
+   3,
+   3,
+   3
+  ]
+ }
+}

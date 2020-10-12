@@ -13,9 +13,8 @@ namespace Bubble
 {
 	struct UIArgs
 	{
-		std::vector<Ref<Model>>* Models;
 		SceneCameraController* Camera;
-
+		
 		// Scene
 		Scene* ActiveScene;
 	};

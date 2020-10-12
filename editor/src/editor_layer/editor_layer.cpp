@@ -13,17 +13,18 @@ namespace Bubble
         ImGuiControll.OnAttach();
 
         // Temp: test viewport
-		ViewportArray.Push(Viewport(800, 800));
+		//ViewportArray.Push(Viewport(800, 800));
+		MainViewport = Viewport(800, 800);
 
 		// ============ Model entities =============
 	
-		OpenProject("scene_test.json", &ActiveScene);
+		OpenProject("../../../../scene_test.json", &ActiveScene);
 
 		// Temp: skybox
 		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
 		m_ShaderSkybox = Shader::Open("resources/shaders/skybox.glsl");
 
-		m_ShaderPhong = Shader::Open("resources/shaders/phong.glsl");
+		PhongShader = Shader::Open("resources/shaders/phong.glsl");
 		ShaderSelected = Shader::Open("resources/shaders/solid_color.glsl");
 
 		// Temp: Try to simplify mesh
@@ -39,7 +40,7 @@ namespace Bubble
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// Set args for UI
-		UserInterface.Args = { &Models, &SceneCamera, &ActiveScene };
+		UserInterface.Args = { &SceneCamera, &ActiveScene };
 
 		// ImGui Scope
 		ImGuiControll.Begin();
@@ -52,26 +53,21 @@ namespace Bubble
 		// User Interface
 		UserInterface.Draw();
 
-        // Temp: Veiwports control
-		ViewportArray.RemoveNotActiveViewports();
+        // Temp: Veiwport resize
 		
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-		for (int i = 0; i < ViewportArray.Size(); i++)
-		{
-			ImGui::Begin(ViewportArray[i].GetName().c_str(), (bool*)&ViewportArray.IsOpen(i));
-
+		ImGui::Begin("Viewport");
 			ImVec2 imgui_viewport_size = ImGui::GetContentRegionAvail();
-			glm::vec2 viewport_size = ViewportArray[i].Size();
+			glm::vec2 viewport_size = MainViewport.Size();
 
-			if (viewport_size != *(glm::vec2*) & imgui_viewport_size) {
-				ViewportArray[i].Resize({ imgui_viewport_size.x, imgui_viewport_size.y });
+			if (viewport_size != *(glm::vec2*) & imgui_viewport_size)
+			{
+				MainViewport.Resize({ imgui_viewport_size.x, imgui_viewport_size.y });
 			}
 
-			uint32_t textureId = ViewportArray[i].GetFramebuffer().GetColorAttachmentRendererID();
-
-			ImGui::Image((void*)textureId, ImVec2{ (float)ViewportArray[i].Size().x, (float)ViewportArray[i].Size().y }, ImVec2(1, 1), ImVec2(0, 0));
-			ImGui::End();
-		}
+			uint32_t textureId = MainViewport.GetFramebuffer().GetColorAttachmentRendererID();
+			ImGui::Image((void*)textureId, ImVec2{ (float)MainViewport.Size().x, (float)MainViewport.Size().y }, ImVec2(1, 1), ImVec2(0, 0));
+		ImGui::End();
 		ImGui::PopStyleVar();
 
 		
@@ -85,16 +81,16 @@ namespace Bubble
         ImGuiControll.End();
 
 
-		// ActiveScene update
+		// Scene update scripts
 		ActiveScene.OnUpdate(dt);
 
 		// ActiveScene camera update
 		SceneCamera.OnUpdate(dt);
 
-		Renderer::SetViewport(ViewportArray[0].GetFramebuffer());
+		Renderer::SetViewport(MainViewport.GetFramebuffer());
 		Renderer::ClearDepth();
 
-		m_Lights.ApplyLights(m_ShaderPhong);
+		m_Lights.ApplyLights(PhongShader);
 
 		// Temp : Apply lights to shader
 		int light_index = 0;
@@ -102,27 +98,27 @@ namespace Bubble
 			[&] (auto entity, LightComponent& lc)
 			{
 				lc.light.SetDistance();
-				Light::ApplyLight(lc.light, m_ShaderPhong, light_index++);
+				Light::ApplyLight(lc.light, PhongShader, light_index++);
 			}
 		);
-		m_ShaderPhong->SetUni1i("nLights", light_index);
+		PhongShader->SetUni1i("nLights", light_index);
 
 
-		// Temp: Draw test mesh
-		glm::ivec2 window_size = ViewportArray[0].Size();
+		// Temp: Draw scene
+		glm::ivec2 window_size = MainViewport.Size();
 		glm::mat4 projection = SceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = SceneCamera.GetLookatMat();
 		
-		m_ShaderPhong->SetUniMat4("u_View", view);
-		m_ShaderPhong->SetUniMat4("u_Projection", projection);
+		PhongShader->SetUniMat4("u_View", view);
+		PhongShader->SetUniMat4("u_Projection", projection);
 
 		auto scene_view = ActiveScene.GetView<ModelComponent, TransformComponent>();
 
 		for (auto entity : scene_view)
 		{
 			auto [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
-			m_ShaderPhong->SetUniMat4("u_Model", model);
-			Renderer::DrawModel(mesh, m_ShaderPhong, UserInterface.DrawTypeOption);
+			PhongShader->SetUniMat4("u_Model", model);
+			Renderer::DrawModel(mesh, PhongShader, UserInterface.DrawTypeOption);
 
 			// Hightlight selected model
 			if (UserInterface.SceneExplorerPanel.SelectedEntity == entity)
@@ -175,7 +171,7 @@ namespace Bubble
 
 				if (ImGui::MenuItem("Save"))
 				{
-					SaveProject("scene_test.json", &ActiveScene);
+					SaveProject("../../../../scene_test.json", &ActiveScene);
 				}
 
 				ImGui::EndMenu();
