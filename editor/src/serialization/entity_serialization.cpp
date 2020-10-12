@@ -51,9 +51,6 @@ namespace Bubble
 		template <typename T>
 		void operator() (entt::entity& entity, T& component)
 		{
-			//if (ComponetIndex == 16)
-			//	LOG_ERROR("f");
-
 			nlohmann::json entity_component = Json["Components"][ComponetIndex++];
 			entity = entity_component["Entity"];
 			component.Deserialize(entity_component["Component"]);
@@ -69,19 +66,19 @@ namespace Bubble
 		OutputArchive output;
 		entt::snapshot{ scene }
 			.entities(output)
-			.component<TagComponent, PositionComponent, RotationComponent, TransformComponent, LightComponent>(output);
+			.component<TagComponent, PositionComponent, RotationComponent, ScaleComponent, TransformComponent, LightComponent, ModelComponent>(output);
 		return output.Json;
 	}
 
 	void DeserializeScene(entt::registry& scene, const nlohmann::json& json)
 	{
 		InputArchive input{ json };
-		LOG_INFO(json.dump(1));
 		scene.clear();
 
 		entt::snapshot_loader{ scene }
 			.entities(input)
-			.component<TagComponent, PositionComponent, RotationComponent, TransformComponent, LightComponent>(input);
+			.component<TagComponent, PositionComponent, RotationComponent, ScaleComponent, TransformComponent, LightComponent, ModelComponent>(input)
+			.orphans();
 	}
 
 }

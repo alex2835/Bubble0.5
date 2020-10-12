@@ -98,9 +98,9 @@ namespace Bubble
 			ImGui::Separator();
 		}
 
-		if (entity.HasComponent<Light>())
+		if (entity.HasComponent<LightComponent>())
 		{
-			Light& light = entity.GetComponent<Light>();
+			Light& light = entity.GetComponent<LightComponent>().light;
 			switch(light.Type)
 			{
 				case LightType::DirLight:

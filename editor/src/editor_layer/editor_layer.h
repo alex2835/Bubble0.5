@@ -21,8 +21,7 @@ namespace Bubble
 		std::vector<Ref<Model>> Models;
 		SceneCameraController SceneCamera;
 		
-		std::vector<Entity> Entities;
-		Ref<Scene> ActiveScene;
+		Scene ActiveScene;
 
 		Ref<Shader> ShaderSelected;
 		Ref<Shader> m_ShaderPhong;

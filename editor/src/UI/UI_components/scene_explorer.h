@@ -19,7 +19,7 @@ namespace Bubble
 	public:
 		Entity SelectedEntity;
 		// Possible to draw custom property that will be displayed in property panel
-		std::vector<FCustumEntityProperties> CustomEntityProperties;
+		//std::vector<FCustumEntityProperties> CustomEntityProperties;
 
 		void Draw(bool* is_open_explorer, bool* is_open_properties, Scene* scene);
 

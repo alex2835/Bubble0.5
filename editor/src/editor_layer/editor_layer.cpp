@@ -15,58 +15,9 @@ namespace Bubble
         // Temp: test viewport
 		ViewportArray.Push(Viewport(800, 800));
 
-		ActiveScene = CreateRef<Scene>();
-
 		// ============ Model entities =============
-		Entities.push_back(ActiveScene->CreateEntity("nanosuit")
-			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/crysis/nanosuit.obj"))
-			.AddComponent<TransformComponent>()
-			.AddComponent<PositionComponent>(glm::vec3(0.0f, 0.0f, -10.0f))
-			.AddComponent<RotationComponent>()
-			.AddComponent<ScaleComponent>(glm::vec3(0.7f))
-		);
-		
-		Entities.push_back(ActiveScene->CreateEntity("grass")
-			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/grass_plane/grass_plane.obj"))
-			.AddComponent<TransformComponent>()
-			.AddComponent<PositionComponent>(glm::vec3(0.0f, -7.0f, 0.0f))
-			.AddComponent<RotationComponent>(glm::vec3(glm::radians(-90.0f), 0, 0))
-			.AddComponent<ScaleComponent>(glm::vec3(0.3f))
-		);
-		
-		Entities.push_back(ActiveScene->CreateEntity("tree")
-			.AddComponent<Ref<Model>>(ModelLoader::StaticModel("resources/Tree/Tree.obj"))
-			.AddComponent<TransformComponent>()
-			.AddComponent<PositionComponent>(glm::vec3(10.0f, 1.0f, 0.0f))
-			.AddComponent<RotationComponent>()
-			.AddComponent<ScaleComponent>(glm::vec3(5.0f))
-		);
-
-		// Hard code
-		for (auto entity = Entities.end() - 3; entity < Entities.end(); entity++)
-		{
-			auto& transform = entity->GetComponent<TransformComponent>().Transform;
-			auto& position = entity->GetComponent<PositionComponent>().Position;
-			auto& rotation = entity->GetComponent<RotationComponent>().Rotation;
-			auto& scale = entity->GetComponent<ScaleComponent>().Scale;
-		
-			transform = glm::mat4(1.0f);
-			transform = glm::translate(transform, position);
-			transform = glm::rotate(transform, rotation.x, glm::vec3(1, 0, 0));
-			transform = glm::rotate(transform, rotation.y, glm::vec3(0, 1, 0));
-			transform = glm::rotate(transform, rotation.z, glm::vec3(0, 0, 1));
-			transform = glm::scale(transform, scale);
-		}
-
-
-		Entities.push_back(ActiveScene->CreateEntity("DirLight")
-			.AddComponent<LightComponent>(Light::CreateDirLight(glm::vec3(0.1f, -1.0f, -1.0f))));
-
-		Entities.push_back(ActiveScene->CreateEntity("SpotLight")
-			.AddComponent<LightComponent>(Light::CreateSpotLight()));
-
-		Entities.push_back(ActiveScene->CreateEntity("PointLight")
-			.AddComponent<LightComponent>(Light::CreatePointLight(glm::vec3(3.0f, 5.0f, 0.0f))));
+	
+		OpenProject("scene_test.json", &ActiveScene);
 
 		// Temp: skybox
 		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
@@ -74,43 +25,6 @@ namespace Bubble
 
 		m_ShaderPhong = Shader::Open("resources/shaders/phong.glsl");
 		ShaderSelected = Shader::Open("resources/shaders/solid_color.glsl");
-
-
-		// Temp: Serialization
-		std::stringstream storage;
-
-		entt::registry source;
-		entt::registry destination;
-
-		auto e0 = source.create();
-		source.emplace<PositionComponent>(e0, glm::vec3{ 16.f, 16.f, 1.0f } );
-
-		source.destroy(source.create());
-
-		auto e1 = source.create();
-		source.emplace<PositionComponent>(e1, glm::vec3{.8f, .0f, 1.0f} );
-		source.emplace<RotationComponent>(e1, glm::vec3{2.8f, 2.0f, 2.0f} );
-		//source.emplace<relationship>(e1, e0);
-
-		//{
-		//	// output finishes flushing its contents when it goes out of scope
-		//	//cereal::JSONOutputArchive output{ storage };
-		//	output_archive output;
-		//	entt::snapshot{ source }.entities(output).component<PositionComponent, RotationComponent>(output);
-		//	nlohmann::json j1 = output.j["Components"][0];
-		//	LOG_INFO(output.j.dump());
-		//	LOG_INFO(j1.dump());
-		//
-		//	input_archive input{output.j};
-		//
-		//	//cereal::JSONInputArchive input{ storage };
-		//	entt::snapshot_loader{ destination }.entities(input).component<PositionComponent, RotationComponent>(input);
- 		//}
-
-
-		SaveProject("test.json", source);
-		
-
 
 		// Temp: Try to simplify mesh
 	}
@@ -125,7 +39,7 @@ namespace Bubble
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// Set args for UI
-		UserInterface.Args = { &Models, &SceneCamera, ActiveScene.get() };
+		UserInterface.Args = { &Models, &SceneCamera, &ActiveScene };
 
 		// ImGui Scope
 		ImGuiControll.Begin();
@@ -172,7 +86,7 @@ namespace Bubble
 
 
 		// ActiveScene update
-		ActiveScene->OnUpdate(dt);
+		ActiveScene.OnUpdate(dt);
 
 		// ActiveScene camera update
 		SceneCamera.OnUpdate(dt);
@@ -184,7 +98,7 @@ namespace Bubble
 
 		// Temp : Apply lights to shader
 		int light_index = 0;
-		ActiveScene->m_Registry.view<LightComponent>().each(
+		ActiveScene.m_Registry.view<LightComponent>().each(
 			[&] (auto entity, LightComponent& lc)
 			{
 				lc.light.SetDistance();
@@ -202,11 +116,11 @@ namespace Bubble
 		m_ShaderPhong->SetUniMat4("u_View", view);
 		m_ShaderPhong->SetUniMat4("u_Projection", projection);
 
-		auto scene_view = ActiveScene->GetView<Ref<Model>, TransformComponent>();
+		auto scene_view = ActiveScene.GetView<ModelComponent, TransformComponent>();
 
 		for (auto entity : scene_view)
 		{
-			auto [mesh, model] = scene_view.get<Ref<Model>, TransformComponent>(entity);
+			auto [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
 			m_ShaderPhong->SetUniMat4("u_Model", model);
 			Renderer::DrawModel(mesh, m_ShaderPhong, UserInterface.DrawTypeOption);
 
@@ -251,7 +165,7 @@ namespace Bubble
 					try
 					{
 						std::string path = OpenFileDialog("json");
-						OpenProject(path, ActiveScene->m_Registry);
+						OpenProject(path, &ActiveScene);
 					}
 					catch (const std::exception& e)
 					{
@@ -261,7 +175,7 @@ namespace Bubble
 
 				if (ImGui::MenuItem("Save"))
 				{
-					SaveProject("scene_test.json", ActiveScene->m_Registry);
+					SaveProject("scene_test.json", &ActiveScene);
 				}
 
 				ImGui::EndMenu();

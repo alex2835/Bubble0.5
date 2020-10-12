@@ -4,8 +4,10 @@
 #include "glm/glm.hpp"
 
 #include "light/light.h"
+#include "model/model_loader.h"
 
 #include <string>
+#include <algorithm>
 
 
 namespace Bubble
@@ -69,6 +71,7 @@ namespace Bubble
 
 	};
 
+	// =================
 	struct RotationComponent
 	{
 		glm::vec3 Rotation;
@@ -92,6 +95,7 @@ namespace Bubble
 
 	};
 
+	// =================
 	struct ScaleComponent 
 	{ 
 		glm::vec3 Scale = glm::vec3( 1.0f );
@@ -114,7 +118,7 @@ namespace Bubble
 		}
 	};
 
-
+	// =================
 	struct TransformComponent
 	{
 		glm::mat4 Transform{ 1.0f };
@@ -154,15 +158,10 @@ namespace Bubble
 	};
 
 
-
+	// =================
 	struct LightComponent
 	{
 		Light light;
-
-		LightComponent() = default;
-		//LightComponent(Light light)
-		//	: light(light)
-		//{}
 
 		nlohmann::json Serialize() const
 		{
@@ -188,8 +187,6 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			LOG_INFO(j.dump(1));
-
 			light.Type= j["Light"]["Type"];
 			light.Brightness = j["Light"]["Brightness"];
 			light.Distance = j["Light"]["Distance"];
@@ -204,6 +201,42 @@ namespace Bubble
 
 			light.CutOff = j["Light"]["CutOff"];
 			light.OuterCutOff = j["Light"]["OuterCutOff"];
+		}
+
+	};
+
+	// =================
+	struct ModelComponent
+	{
+		Ref<Model> model;
+
+		ModelComponent() = default;
+		ModelComponent(const Ref<Model>& model)
+			: model(model)
+		{}
+		
+		operator Ref<Model>& () { return model; }
+		operator const Ref<Model>& () const { return model; }
+
+		nlohmann::json Serialize() const
+		{
+			nlohmann::json j;
+			auto iterator = *(std::find_if(
+				ModelLoader::LoadedModels.begin(), ModelLoader::LoadedModels.end(),
+				[&](const std::pair<std::string, Ref<Model>>& path_model) 
+				{
+					return path_model.second == model;
+				}
+			));
+
+			std::string path = iterator.first;
+			j["Model"] = path;
+			return j;
+		}
+
+		void Deserialize(const nlohmann::json& j)
+		{
+			model = ModelLoader::StaticModel(j["Model"]);
 		}
 
 	};
