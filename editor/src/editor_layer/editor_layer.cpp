@@ -53,10 +53,11 @@ namespace Bubble
 		// User Interface
 		UserInterface.Draw();
 
-        // Temp: Veiwport resize
-		
+		// Temp: Veiwport resize
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
+		{
 			ImVec2 imgui_viewport_size = ImGui::GetContentRegionAvail();
 			glm::vec2 viewport_size = MainViewport.Size();
 
@@ -64,15 +65,17 @@ namespace Bubble
 			{
 				MainViewport.Resize({ imgui_viewport_size.x, imgui_viewport_size.y });
 			}
-
 			uint32_t textureId = MainViewport.GetFramebuffer().GetColorAttachmentRendererID();
 			ImGui::Image((void*)textureId, ImVec2{ (float)MainViewport.Size().x, (float)MainViewport.Size().y }, ImVec2(1, 1), ImVec2(0, 0));
+		}
 		ImGui::End();
 		ImGui::PopStyleVar();
 
 		
 		ImGui::Begin("Info");
+		{
 			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		}
 		ImGui::End();
 
 		// DemoWindow
@@ -89,8 +92,6 @@ namespace Bubble
 
 		Renderer::SetViewport(MainViewport.GetFramebuffer());
 		Renderer::ClearDepth();
-
-		m_Lights.ApplyLights(PhongShader);
 
 		// Temp : Apply lights to shader
 		int light_index = 0;

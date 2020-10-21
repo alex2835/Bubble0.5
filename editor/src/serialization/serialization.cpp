@@ -11,10 +11,6 @@ namespace Bubble
 		// Save scene
 		json["Scene"] = SerializeScene(scene->m_Registry);
 
-		// Save models
-
-		// Save ...
-
 		std::ofstream fstream(path);
 		fstream << json.dump(1);
 		fstream.close();
@@ -33,9 +29,6 @@ namespace Bubble
 
 		// Open scene
 		DeserializeScene(scene->m_Registry, json["Scene"]);
-
-
-		// Open ...
 
 	}
 
