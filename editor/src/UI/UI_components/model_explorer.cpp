@@ -48,6 +48,7 @@ namespace Bubble
 			ImVec2 viewport_size = ImGui::GetContentRegionAvail();
 			ImVec2 pos = ImGui::GetCursorScreenPos();
 
+			//  ============ Model view =================
 			if (SelectedModel) {
 				DrawSelectedModel();
 			}
@@ -62,6 +63,7 @@ namespace Bubble
 				ActiveCamera.UpdateCameraVectors();
 			}
 
+			// ================= Model list ====================
 			ImGui::BeginChild("Models list", ImVec2(0, viewport_size.y * 0.3f), true);
 			{
 				for (auto name_model : ModelLoader::LoadedModels)

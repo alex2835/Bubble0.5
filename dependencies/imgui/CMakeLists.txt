@@ -27,10 +27,5 @@ target_include_directories(
     imgui
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../GLEW/include
-
-    if (APPLE)
-        ${CMAKE_CURRENT_SOURCE_DIR}/../SDL2/include_macos
-    elseif(WIN32)
-       ${CMAKE_CURRENT_SOURCE_DIR}/../SDL2/include_win32
-    endif()
+    ${CMAKE_CURRENT_SOURCE_DIR}/../SDL2/include
 )

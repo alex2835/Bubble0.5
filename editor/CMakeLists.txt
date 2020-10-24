@@ -1,72 +1,16 @@
 cmake_minimum_required(VERSION 3.12)
-project(Editor VERSION 0.0.0)
+project(Bubble VERSION 0.0.0)
+
+ 
+file(GLOB_RECURSE SRCS *.cpp)
+file(GLOB_RECURSE HDRS *.h)
 
 
-set(EDITOR_LAYER
-    src/editor_layer/editor_layer.cpp
-    src/editor_layer/editor_layer.h
-)
+add_executable(Bubble ${SRCS} ${HDRS})
 
-set(EDITOR_GUI
-    src/imgui_controll/imgui_controll.cpp
-    src/imgui_controll/imgui_controll.h
-)
-
-set(EDITOR_SDL_WINDOW
-    src/sdl_window/sdl_window.cpp
-    src/sdl_window/sdl_window.h
-)
-
-set(EDITOR_VIEWPORT
-    src/viewport/viewport.cpp
-    src/viewport/viewport.h
-    src/viewport/viewport_array.cpp
-    src/viewport/viewport_array.h
-)
-
-set(SCENE_CAMERA
-    src/scene_camera/scene_camera_controller.cpp
-    src/scene_camera/scene_camera_controller.h
-)
-
-set(UI
-    src/UI/UI.h
-    src/UI/UI.cpp
-    src/UI/UI_components/file_dialog.cpp
-    src/UI/UI_components/model_explorer.cpp
-    src/UI/UI_components/model_explorer.h
-    src/UI/UI_components/scene_camera_options.cpp
-    src/UI/UI_components/scene_camera_options.h
-    src/UI/UI_components/scene_explorer.h
-    src/UI/UI_components/scene_explorer.cpp
-)
-
-set(SERIALIZATION
-    src/serialization/serialization.cpp
-    src/serialization/entity_serialization.h
-    src/serialization/entity_serialization.cpp
-)
-
-set(SOURCES
-    src/editor_app.cpp
-    ${EDITOR_GUI}
-    ${EDITOR_LAYER}
-    ${EDITOR_VIEWPORT}
-    ${EDITOR_SDL_WINDOW}
-    ${SCENE_CAMERA}
-    ${SERIALIZATION}
-    ${UI}
- )
-
-add_executable(Bubble ${SOURCES})
-
-# engine
+# Libraries
 target_link_libraries(Bubble Engine)
-
-# imgui
 target_link_libraries(Bubble imgui)
-
-# open file dialog
 target_link_libraries(Bubble nativefiledialog)
 
 
@@ -76,7 +20,7 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
-# include directories
+# Include directories
 target_include_directories(
     Bubble PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -85,17 +29,14 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/nativefiledialog/src/include
 )
 
-# resources
+# Temp resources
 add_custom_command(TARGET Bubble PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        ${PROJECT_SOURCE_DIR}/resources
                        $<TARGET_FILE_DIR:Bubble>/resources)
 
-# put dll to exe
-if (WIN32)
-    add_custom_command(TARGET Bubble POST_BUILD							# Adds a post-build event to MyTest
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different					# which executes "cmake - E copy_if_different..."
-            "${PROJECT_SOURCE_DIR}/../dependencies/SDL2/lib/SDL2.dll"   # <--this is in-file
-            $<TARGET_FILE_DIR:Bubble>)									# <--this is out-file path
-endif()
-
+# Put dll files to exe
+add_custom_command(TARGET Bubble PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${PROJECT_SOURCE_DIR}/../dependencies/dll
+                       $<TARGET_FILE_DIR:Bubble>)
