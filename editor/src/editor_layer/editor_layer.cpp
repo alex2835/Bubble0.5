@@ -13,7 +13,6 @@ namespace Bubble
         ImGuiControll.OnAttach();
 
         // Temp: test viewport
-		//ViewportArray.Push(Viewport(800, 800));
 		MainViewport = Viewport(800, 800);
 
 		// ============ Model entities =============
@@ -51,7 +50,7 @@ namespace Bubble
 		ImGuiControll.EndMenuBar();
 
 		// User Interface
-		UserInterface.Draw();
+		UserInterface.Draw(dt);
 
 		// Temp: Veiwport resize
 
@@ -59,14 +58,14 @@ namespace Bubble
 		ImGui::Begin("Viewport");
 		{
 			ImVec2 imgui_viewport_size = ImGui::GetContentRegionAvail();
-			glm::vec2 viewport_size = MainViewport.Size();
+			glm::vec2 viewport_size = MainViewport.GetSize();
 
 			if (viewport_size != *(glm::vec2*) & imgui_viewport_size)
 			{
 				MainViewport.Resize({ imgui_viewport_size.x, imgui_viewport_size.y });
 			}
-			uint32_t textureId = MainViewport.GetFramebuffer().GetColorAttachmentRendererID();
-			ImGui::Image((void*)textureId, ImVec2{ (float)MainViewport.Size().x, (float)MainViewport.Size().y }, ImVec2(1, 1), ImVec2(0, 0));
+			uint32_t textureId = MainViewport.GetColorAttachmentRendererID();
+			ImGui::Image((void*)textureId, ImVec2{ (float)MainViewport.GetWidth(), (float)MainViewport.GetHeight() }, ImVec2(1, 1), ImVec2(0, 0));
 		}
 		ImGui::End();
 		ImGui::PopStyleVar();
@@ -90,7 +89,7 @@ namespace Bubble
 		// ActiveScene camera update
 		SceneCamera.OnUpdate(dt);
 
-		Renderer::SetViewport(MainViewport.GetFramebuffer());
+		Renderer::SetViewport(MainViewport);
 		Renderer::ClearDepth();
 
 		// Temp : Apply lights to shader
@@ -106,7 +105,7 @@ namespace Bubble
 
 
 		// Temp: Draw scene
-		glm::ivec2 window_size = MainViewport.Size();
+		glm::ivec2 window_size = MainViewport.GetSize();
 		glm::mat4 projection = SceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = SceneCamera.GetLookatMat();
 		

@@ -6,65 +6,67 @@ namespace Bubble
 {
 
 	ModelExplorer::ModelExplorer()
-		: ActiveViewport(Framebuffer(FramebufferSpecification{ {1000, 600} })),
-		  ActiveCamera(Camera(glm::vec3(0, 5, 20))),
-		  Scale(1.0f)
+		: Viewport(800, 600),
+		  Shader(Shader::Open("resources/Shaders/phong.glsl")),
+		  Light(Light::CreateDirLight())
 	{}
 
 	void ModelExplorer::DrawSelectedModel()
 	{
-		static Ref<Shader> shader = Shader::Open("resources/shaders/phong.glsl");
-		static Light light = Light::CreateDirLight();
-		Light::ApplyLight(light, shader, 0);
-		shader->SetUni1i("nLights", 1);
+		Light::ApplyLight(Light, Shader, 0);
+		Shader->SetUni1i("nLights", 1);
 		
 		// Transforms
-		glm::mat4 view = ActiveCamera.GetLookatMat();
-		glm::mat4 projection = ActiveCamera.GetPprojectionMat(ActiveViewport.GetWidth(), ActiveViewport.GetHeight());
+		glm::mat4 view = Camera.GetLookatMat();
+		glm::mat4 projection = Camera.GetPprojectionMat(Viewport.GetWidth(), Viewport.GetHeight());
 		
-		shader->SetUniMat4("u_View", view);
-		shader->SetUniMat4("u_Projection", projection);
+		Shader->SetUniMat4("u_View", view);
+		Shader->SetUniMat4("u_Projection", projection);
 		
 		glm::mat4 model(1.0f);
-		//modal = glm::scale()
-		
-		shader->SetUniMat4("u_Model", model);
+		Shader->SetUniMat4("u_Model", model);
 		 
-		Renderer::SetViewport(ActiveViewport);
-		Renderer::SetClearColor(glm::vec4(1.0f));
+		Renderer::SetViewport(Viewport);
+		Renderer::SetClearColor(glm::vec4(0.4f));
 		Renderer::Clear();
 		
-		Renderer::DrawModel(SelectedModel, shader);
+		Renderer::DrawModel(SelectedModel, Shader);
 		
-		ActiveViewport.Unbind();
+		Viewport.Unbind();
 	}
 
-	void ModelExplorer::Draw(bool* is_open)
+	void ModelExplorer::Draw(bool* is_open, DeltaTime dt)
 	{
 		if (!*is_open) return;
 
 		ImGui::Begin("Models explorer", is_open);
 		{
-			ImVec2 viewport_size = ImGui::GetContentRegionAvail();
+			ImVec2 window_size = ImGui::GetContentRegionAvail();
 			ImVec2 pos = ImGui::GetCursorScreenPos();
 
 			//  ============ Model view =================
 			if (SelectedModel) {
 				DrawSelectedModel();
 			}
-			uint32_t textureId = ActiveViewport.GetColorAttachmentRendererID();
-			ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + viewport_size.x, pos.y + viewport_size.y * 0.6f }, ImVec2(1, 1), ImVec2(0, 0));
+			Viewport.Resize({ window_size.x, window_size.y * 0.6f });
+			uint32_t textureId = Viewport.GetColorAttachmentRendererID();
+			ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + window_size.x, pos.y + window_size.y * 0.6f }, ImVec2(1, 1), ImVec2(0, 0));
 
-			ImGui::InvisibleButton("##dummy", ImVec2{ viewport_size.x + 1, viewport_size.y * 0.6f + 1});
+			ImGui::InvisibleButton("##dummy", ImVec2{ window_size.x + 1, window_size.y * 0.6f + 1});
 			if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
 			{
-				ActiveCamera.Yaw -= ImGui::GetIO().MouseDelta.x * 0.01f;
-				ActiveCamera.Pitch -= ImGui::GetIO().MouseDelta.y * 0.01f;
-				ActiveCamera.UpdateCameraVectors();
+				Camera.ProcessMouseMovementShift(Input::fGetMouseRelX(), -Input::fGetMouseRelY());
+				Camera.UpdateCameraAngles(dt);
+			}
+
+			if (ImGui::IsWindowFocused())
+			{
+				Camera.Radius = std::max(Camera.Radius - Input::GetMouseWheelOffset(), 1.0f);
+				Camera.UpdateCameraAngles(dt);
 			}
 
 			// ================= Model list ====================
-			ImGui::BeginChild("Models list", ImVec2(0, viewport_size.y * 0.3f), true);
+			ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.3f), true);
 			{
 				for (auto name_model : ModelLoader::LoadedModels)
 				{
@@ -83,7 +85,7 @@ namespace Bubble
 			}
 			ImGui::EndChild();
 
-			if (ImGui::Button("Load", {100, viewport_size.y * 0.05f}))
+			if (ImGui::Button("Load", {100, window_size.y * 0.05f}))
 			{
 				try
 				{

@@ -1,14 +1,12 @@
 #pragma once
 
+#include "engine.h"
+
 #include "imgui.h"
-
 #include "file_dialog.h"
+#include "Viewport/viewport.h"
 
-#include "light/light.h"
-#include "camera/camera.h"
-#include "renderer/renderer.h"
-#include "model/model_loader.h"
-#include "framebuffer/framebuffer.h"
+#include <algorithm>
 
 
 namespace Bubble
@@ -18,18 +16,17 @@ namespace Bubble
 		Ref<Model> SelectedModel = nullptr;
 
 		// Draw selected model
-		Camera ActiveCamera;
-		Framebuffer ActiveViewport;
-		glm::vec3 Translation;
-		glm::vec3 Scale;
-		glm::vec3 Rotation;
+		ThirdPersonCamera Camera;
+		Viewport Viewport;
+		Ref<Shader> Shader;
+		Light Light;
 
 	private:
 		void DrawSelectedModel();
 
 	public:
 		ModelExplorer();
-		void Draw(bool* is_open);
+		void Draw(bool* is_open, DeltaTime dt);
 	};
 
 }

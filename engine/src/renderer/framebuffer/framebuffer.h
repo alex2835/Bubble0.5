@@ -42,7 +42,7 @@ namespace Bubble
 
 		int GetWidth() const;
 		int GetHeight() const;
-		glm::ivec2 Size() const;
+		glm::ivec2 GetSize() const;
 		void Resize(glm::ivec2 size);
 
 		uint32_t GetColorAttachmentRendererID();

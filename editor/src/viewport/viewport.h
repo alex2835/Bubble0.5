@@ -7,12 +7,11 @@
 
 namespace Bubble
 {
-	class Viewport
+	struct Viewport : public Framebuffer
 	{
-		std::string m_Name;
-		Framebuffer m_Framebuffer;
-		glm::ivec2 m_Size;
-		glm::ivec2 m_Capacity;
+		std::string Name;
+		glm::ivec2 Size;
+		glm::ivec2 Capacity;
 
 	public:
 		Viewport() = default;
@@ -24,15 +23,11 @@ namespace Bubble
 		Viewport(Viewport&& other) noexcept;
 		Viewport& operator= (Viewport&& other) noexcept;
 
-		void Bind();
-		void Unbind();
-		
-		const glm::ivec2 Size() const;
 		void Resize(const glm::ivec2& size);
+		const glm::ivec2& GetSize() const;
+		float GetWidth();
+		float GetHeight();
 
-		const std::string& GetName() const;
-		void SetName(const std::string& name);
-
-		Framebuffer& GetFramebuffer();
+		operator Framebuffer& ();
 	};
 }

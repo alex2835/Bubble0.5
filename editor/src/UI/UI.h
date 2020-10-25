@@ -40,7 +40,7 @@ namespace Bubble
 		// rendering options
 		DrawType DrawTypeOption = DrawType::TRIANGLES;
 
-		void Draw();
+		void Draw(DeltaTime dt);
 		void DrawMenu();
 		
 	};

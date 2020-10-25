@@ -5,83 +5,69 @@
 namespace Bubble
 {
 	Viewport::Viewport(int width, int height, const std::string& name)
-		: m_Name(name),
-		  m_Size(width, height),
-		  m_Capacity(width, height)
-	{
-		Bubble::FramebufferSpecification spec;
-		spec.Samples = 1;
-		spec.Size = { width, height };
-		m_Framebuffer.Create(spec);
-	}
+		: Framebuffer({ { width, height } }),
+		  Name(name),
+		  Size(width, height),
+		  Capacity(width, height)
+	{}
 
 	Viewport::Viewport(Viewport&& other) noexcept
+		: Framebuffer(std::move(other))
 	{
-		m_Framebuffer = std::move(other.m_Framebuffer);
-		m_Name = std::move(other.m_Name);
-		m_Size = other.m_Size;
-		m_Capacity = other.m_Capacity;
-		other.m_Size = glm::ivec2(0);
-		other.m_Capacity = glm::ivec2(0);
+		Name = std::move(other.Name);
+		Size = other.Size;
+		Capacity = other.Capacity;
+		other.Size = glm::ivec2(0);
+		other.Capacity = glm::ivec2(0);
 	}
 
 	Viewport& Viewport::operator=(Viewport&& other) noexcept
 	{
-		m_Framebuffer = std::move(other.m_Framebuffer);
-		m_Name = std::move(other.m_Name);
-		m_Size = other.m_Size;
-		m_Capacity = other.m_Capacity;
-		other.m_Size = glm::ivec2(0);
-		other.m_Capacity = glm::ivec2(0);
+		Framebuffer& fb = *this;
+		fb = std::move(other);
+		Name = std::move(other.Name);
+		Size = other.Size;
+		Capacity = other.Capacity;
+		other.Size = glm::ivec2(0);
+		other.Capacity = glm::ivec2(0);
 		return *this;
 	}
-
-	void Viewport::Bind()
-	{
-		m_Framebuffer.Bind();
-	}
-
-	void Viewport::Unbind()
-	{
-		m_Framebuffer.Unbind();
-	}
-
-	const glm::ivec2 Viewport::Size() const
-	{
-		return m_Size;
-	}
-
 
 	void Viewport::Resize(const glm::ivec2& size)
 	{
 		// Down scale
-		if (m_Capacity.x > size.x * 1.5f || m_Capacity.y > size.y * 1.5f)
+		if (Capacity.x > size.x * 1.5f || Capacity.y > size.y * 1.5f)
 		{
-			m_Capacity = size;
-			m_Framebuffer.Resize(size);
+			Capacity = size;
+			Framebuffer::Resize(size);
 		}
 		// Up scale
-		else if (m_Capacity.x * 1.5f < size.x || m_Capacity.y * 1.5f < size.y)
+		else if (Capacity.x * 1.5f < size.x || Capacity.y * 1.5f < size.y)
 		{
-			m_Capacity = size;
-			m_Framebuffer.Resize(size);
+			Capacity = size;
+			Framebuffer::Resize(size);
 		}
-		m_Size = size;
+		Size = size;
 	}
 
-	const std::string& Viewport::GetName() const
+	Viewport::operator Framebuffer& ()
 	{
-		return m_Name;
+		return *(Framebuffer*)this;
 	}
 
-	void Viewport::SetName(const std::string& name)
+	const glm::ivec2& Viewport::GetSize() const
 	{
-		m_Name = name;
+		return Size;
 	}
 
-	Framebuffer& Viewport::GetFramebuffer()
+	float Viewport::GetWidth()
 	{
-		return m_Framebuffer;
+		return Size.x;
+	}
+
+	float Viewport::GetHeight()
+	{
+		return Size.y;
 	}
 
 }

@@ -11,7 +11,7 @@ namespace Bubble
 
 	void ViewportArray::Push(Viewport&& viewport)
 	{
-		std::string name = viewport.GetName();
+		std::string name = viewport.Name;
 		auto viewport_iterator = begin();
 
 		while (viewport_iterator != end())
@@ -19,7 +19,7 @@ namespace Bubble
 			viewport_iterator = std::find_if(begin(), end(),
 				[&name](const Viewport& viewport)
 				{
-					return name == viewport.GetName();
+					return name == viewport.Name;
 				}
 			);
 
@@ -30,9 +30,9 @@ namespace Bubble
 			}
 		}
 
-		if (name != viewport.GetName())
+		if (name != viewport.Name)
 		{
-			viewport.SetName(name);
+			viewport.Name = name;
 		}
 
 		m_Viewports.push_back(std::move(viewport));

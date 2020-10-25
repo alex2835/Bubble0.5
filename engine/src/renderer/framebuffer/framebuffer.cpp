@@ -121,7 +121,7 @@ namespace Bubble
 		glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	}
 
-	glm::ivec2 Framebuffer::Size() const
+	glm::ivec2 Framebuffer::GetSize() const
 	{
 		return m_Specification.Size;
 	}

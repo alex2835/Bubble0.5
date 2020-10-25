@@ -22,6 +22,10 @@
 #include "renderer/light/light_array.h"
 #include "renderer/cubemap/cubemap.h"
 #include "renderer/skybox/skybox.h"
+#include "camera/camera.h"
+#include "camera/free_camera.h"
+#include "camera/target_camera.h"
+#include "camera/third_person_camera.h"
 
 // Scene
 #include "scene/scene.h"

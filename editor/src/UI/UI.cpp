@@ -4,9 +4,9 @@
 
 namespace Bubble
 {
-	void UI::Draw()
+	void UI::Draw(DeltaTime dt)
 	{
-		ModelExplorerPanel.Draw(&IsOpenModelExplorer);
+		ModelExplorerPanel.Draw(&IsOpenModelExplorer, dt);
 		SceneExplorerPanel.Draw(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
 	}
 
