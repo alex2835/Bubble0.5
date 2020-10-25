@@ -13,7 +13,7 @@ namespace Bubble
 {
 	struct UIArgs
 	{
-		SceneCameraController* Camera;
+		SceneCamera* Camera;
 		
 		// Scene
 		Scene* ActiveScene;

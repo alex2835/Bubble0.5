@@ -55,7 +55,7 @@ namespace Bubble
 			uint32_t textureId = ActiveViewport.GetColorAttachmentRendererID();
 			ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + viewport_size.x, pos.y + viewport_size.y * 0.6f }, ImVec2(1, 1), ImVec2(0, 0));
 
-			ImGui::InvisibleButton("##dummy", ImVec2{ viewport_size.x, viewport_size.y * 0.6f });
+			ImGui::InvisibleButton("##dummy", ImVec2{ viewport_size.x + 1, viewport_size.y * 0.6f + 1});
 			if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
 			{
 				ActiveCamera.Yaw -= ImGui::GetIO().MouseDelta.x * 0.01f;

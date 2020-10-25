@@ -1,10 +1,11 @@
+#pragma once
 
 #include "camera.h"
 
 
 namespace Bubble
 {
-	class TargetCamera
+	struct TargetCamera : Camera
 	{
 
 	};

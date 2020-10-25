@@ -11,6 +11,8 @@ enum class CameraMovement {
     BACKWARD,
     LEFT,
     RIGHT,
+    UP,
+    DOWN,
     NO_DIRECTION
 };
 
@@ -18,15 +20,20 @@ namespace Bubble
 {
 	const float PI = 3.14159265359f;
 
+	// Default camera values
+	const static float YAW = -PI / 2;
+	const static float PITCH = 0;
+	const static float FOV = PI / 4;
+    const static float DELTA_FOV = 0.05f;
+
+	const static float MAX_SPEED = 10.0f;
+	const static float DELTA_SPEED = 5.0f;
+	const static float SENSITIVTY = 4.25f;
+
     template <typename T>
     inline int sgn(T num) { return (num > T(0)) - (num < T(0)); }
 
 
-    // Default camera values
-    const static float YAW = -PI / 2;
-    const static float PITCH = 0;
-    const static float FOV = PI / 4;
-    
     struct Camera
     {
         // Camera Attributes
@@ -39,11 +46,23 @@ namespace Bubble
         float Near = 0.1f;
         float Far = 500.0f;
 
-        // Euler Angles
-        float Yaw = -PI / 2.0f;
-        float Pitch = 0;
-		float Fov = FOV;
+        // Mouse
+		float MouseSensitivity = SENSITIVTY;
 
+        // Euler Angles
+        float Yaw = YAW;
+        float Pitch = PITCH;
+
+		float Fov = FOV;
+		float DeltaFov = DELTA_FOV;
+		
+		// Speed
+		float MaxSpeed = MAX_SPEED;
+		float DeltaSpeed = DELTA_SPEED;
+		float SpeedX = 0;
+		float SpeedY = 0;
+
+    public:
         Camera(const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.0f),
                float yaw = YAW,
                float pitch = PITCH,
