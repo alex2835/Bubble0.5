@@ -34,7 +34,7 @@ namespace Bubble
 
 
 		template<typename... Args>
-		auto GetComponent() const
+		auto& GetComponent() const
 		{
 			return m_Scene->Registry.get<Args...>(EntityHandle);
 		}
@@ -46,10 +46,10 @@ namespace Bubble
 		}
 
 
-		template<typename T>
+		template<typename... Args>
 		bool HasComponent() const
 		{
-			return m_Scene->Registry.has<T>(EntityHandle);
+			return m_Scene->Registry.has<Args...>(EntityHandle);
 		}
 
 

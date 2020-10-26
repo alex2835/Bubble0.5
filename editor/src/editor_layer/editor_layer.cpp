@@ -75,19 +75,18 @@ namespace Bubble
 
 		for (auto entity : scene_view)
 		{
-			auto [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
+			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
 			PhongShader->SetUniMat4("u_Model", model);
 			Renderer::DrawModel(mesh, PhongShader, UserInterface.DrawTypeOption);
 		}
-
 
 		// Highlight selected model
 		{
 			Entity selected_entity = UserInterface.SceneExplorerPanel.SelectedEntity;
 
-			if (selected_entity.Valid())
+			if (selected_entity.Valid() && selected_entity.HasComponent<ModelComponent, TransformComponent>())
 			{
-				auto [mesh, model] = selected_entity.GetComponent<ModelComponent, TransformComponent>();
+				auto& [mesh, model] = selected_entity.GetComponent<ModelComponent, TransformComponent>();
 
 				glDisable(GL_DEPTH_TEST);
 				SelectedItemShader->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.1f));
@@ -97,10 +96,9 @@ namespace Bubble
 			}
 		}
 
-
 		// Render skybox
-		SkyboxShader->SetUniMat4("u_Projection", projection);
 		view = glm::rotate(view, glm::radians(Application::GetTime() * 0.5f), glm::vec3(0, 1, 0));
+		SkyboxShader->SetUniMat4("u_Projection", projection);
 		SkyboxShader->SetUniMat4("u_View", glm::mat3(view));
 		SkyboxShader->SetUni1f("u_Brightness", 1.0f);
 		Renderer::DrawSkybox(ActiveSkybox, SkyboxShader);

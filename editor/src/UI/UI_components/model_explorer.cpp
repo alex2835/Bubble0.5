@@ -66,7 +66,7 @@ namespace Bubble
 			}
 
 			// ================= Model list ====================
-			ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.24f), true);
+			ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.22f), true);
 			{
 				for (auto name_model : ModelLoader::LoadedModels)
 				{
