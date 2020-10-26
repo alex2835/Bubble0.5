@@ -1,31 +1,28 @@
 #pragma once
 
 #include "imgui.h"
-#include <vector>
+#include "imgui_controll/imgui_controll.h"
+#include "serialization/serialization.h"
 
 #include "UI_components/model_explorer.h"
 #include "UI_components/scene_camera_options.h"
 #include "UI_components/scene_explorer.h"
-
+#include "UI_components/main_viewport.h"
 
 
 namespace Bubble
 {
 	struct UIArgs
 	{
+		ImGuiControll* ImGuiControll;
 		SceneCamera* Camera;
-		
-		// Scene
+		Viewport* MainViewport;
 		Scene* ActiveScene;
 	};
 
 	// ========== User Interface ===========
-
-	class UI
+	struct UI
 	{
-	public:
-		// Information from editor layer
-		// that will be displayed
 		UIArgs Args;
 
 		// Models
@@ -37,11 +34,11 @@ namespace Bubble
 		bool IsOpenEntityProperties = true;
 		SceneExplorer SceneExplorerPanel;
 
-		// rendering options
+		// Rendering options
 		DrawType DrawTypeOption = DrawType::TRIANGLES;
 
 		void Draw(DeltaTime dt);
-		void DrawMenu();
+		void DrawMenuBar();
 		
 	};
 

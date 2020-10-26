@@ -55,6 +55,11 @@ namespace Bubble
 		return *(Framebuffer*)this;
 	}
 
+	Viewport::operator const Framebuffer& () const
+	{
+		return *(Framebuffer*)this;
+	}
+
 	const glm::ivec2& Viewport::GetSize() const
 	{
 		return Size;

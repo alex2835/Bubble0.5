@@ -18,7 +18,7 @@ namespace Bubble
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
-		Entity entity = { m_Registry.create(), this };
+		Entity entity = { Registry.create(), this };
 		auto& tag = entity.EmplaceComponent<TagComponent>();
 		tag = name.empty() ? "Entity" : name;
 		return entity;
@@ -27,7 +27,7 @@ namespace Bubble
 	void Scene::OnUpdate(DeltaTime dt)
 	{
 		// Update native scripts
-		//m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+		//Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 		//	{
 		//		if (!nsc.Instance)
 		//		{

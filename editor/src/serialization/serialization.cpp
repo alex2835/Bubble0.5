@@ -9,7 +9,7 @@ namespace Bubble
 		nlohmann::json json;
 
 		// Save scene
-		json["Scene"] = SerializeScene(scene->m_Registry);
+		json["Scene"] = SerializeScene(scene->Registry);
 
 		std::ofstream fstream(path);
 		fstream << json.dump(1);
@@ -28,7 +28,7 @@ namespace Bubble
 		ifstream.close();
 
 		// Open scene
-		DeserializeScene(scene->m_Registry, json["Scene"]);
+		DeserializeScene(scene->Registry, json["Scene"]);
 
 	}
 

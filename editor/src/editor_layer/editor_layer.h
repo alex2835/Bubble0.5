@@ -20,18 +20,12 @@ namespace Bubble
 		Viewport MainViewport;
 		Scene ActiveScene;
 
-		Ref<Shader> ShaderSelected;
+		Ref<Shader> SelectedItemShader;
 		Ref<Shader> PhongShader;
 
-		Ref<Shader> m_ShaderSkybox;
-		Ref<Skybox> m_Skybox;
+		Ref<Shader> SkyboxShader;
+		Ref<Skybox> ActiveSkybox;
 		
-		// Temp:
-		LightArray  m_Lights;
-		Ref<Model>  m_NanoSuit;
-		Ref<Model>  m_GrassPlane;
-		Ref<Model>  m_Tree;
-
 		void DrawMenuBar();
 		
 	public:

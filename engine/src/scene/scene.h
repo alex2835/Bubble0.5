@@ -13,7 +13,7 @@ namespace Bubble
 	class Scene
 	{
 	public:
-		entt::registry m_Registry;
+		entt::registry Registry;
 		friend class Entity;
 
 	public:
@@ -28,7 +28,7 @@ namespace Bubble
 		template <typename ...Args>
 		auto GetView()
 		{
-			return m_Registry.view<Args...>();
+			return Registry.view<Args...>();
 		}
 
 	};

@@ -20,11 +20,11 @@ namespace Bubble
 		OpenProject("../../../../scene_test.json", &ActiveScene);
 
 		// Temp: skybox
-		m_Skybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
-		m_ShaderSkybox = Shader::Open("resources/shaders/skybox.glsl");
+		ActiveSkybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
+		SkyboxShader = Shader::Open("resources/shaders/skybox.glsl");
 
 		PhongShader = Shader::Open("resources/shaders/phong.glsl");
-		ShaderSelected = Shader::Open("resources/shaders/solid_color.glsl");
+		SelectedItemShader = Shader::Open("resources/shaders/solid_color.glsl");
 
 		// Temp: Try to simplify mesh
 	}
@@ -39,63 +39,22 @@ namespace Bubble
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// Set args for UI
-		UserInterface.Args = { &SceneCamera, &ActiveScene };
-
-		// ImGui Scope
-		ImGuiControll.Begin();
-
-		// MenuBar
-		ImGuiControll.BeginMenuBar();
-		DrawMenuBar();
-		ImGuiControll.EndMenuBar();
-
+		UserInterface.Args = { &ImGuiControll, &SceneCamera, &MainViewport, &ActiveScene };
 		// User Interface
 		UserInterface.Draw(dt);
 
-		// Temp: Veiwport resize
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-		ImGui::Begin("Viewport");
-		{
-			ImVec2 imgui_viewport_size = ImGui::GetContentRegionAvail();
-			glm::vec2 viewport_size = MainViewport.GetSize();
-
-			if (viewport_size != *(glm::vec2*) & imgui_viewport_size)
-			{
-				MainViewport.Resize({ imgui_viewport_size.x, imgui_viewport_size.y });
-			}
-			uint32_t textureId = MainViewport.GetColorAttachmentRendererID();
-			ImGui::Image((void*)textureId, ImVec2{ (float)MainViewport.GetWidth(), (float)MainViewport.GetHeight() }, ImVec2(1, 1), ImVec2(0, 0));
-		}
-		ImGui::End();
-		ImGui::PopStyleVar();
-
-		
-		ImGui::Begin("Info");
-		{
-			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		}
-		ImGui::End();
-
-		// DemoWindow
-		ImGui::ShowDemoWindow();
-
-        ImGuiControll.End();
-
-
-		// Scene update scripts
-		ActiveScene.OnUpdate(dt);
-
-		// ActiveScene camera update
+		// Scene camera update
 		SceneCamera.OnUpdate(dt);
+
 
 		Renderer::SetViewport(MainViewport);
 		Renderer::ClearDepth();
 
 		// Temp : Apply lights to shader
 		int light_index = 0;
-		ActiveScene.m_Registry.view<LightComponent>().each(
-			[&] (auto entity, LightComponent& lc)
+		ActiveScene.Registry.view<LightComponent>().each(
+			[&](auto entity, LightComponent& lc)
 			{
 				lc.light.SetDistance();
 				Light::ApplyLight(lc.light, PhongShader, light_index++);
@@ -108,7 +67,7 @@ namespace Bubble
 		glm::ivec2 window_size = MainViewport.GetSize();
 		glm::mat4 projection = SceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = SceneCamera.GetLookatMat();
-		
+
 		PhongShader->SetUniMat4("u_View", view);
 		PhongShader->SetUniMat4("u_Projection", projection);
 
@@ -119,24 +78,32 @@ namespace Bubble
 			auto [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
 			PhongShader->SetUniMat4("u_Model", model);
 			Renderer::DrawModel(mesh, PhongShader, UserInterface.DrawTypeOption);
+		}
 
-			// Hightlight selected model
-			if (UserInterface.SceneExplorerPanel.SelectedEntity == entity)
+
+		// Highlight selected model
+		{
+			Entity selected_entity = UserInterface.SceneExplorerPanel.SelectedEntity;
+
+			if (selected_entity.Valid())
 			{
+				auto [mesh, model] = selected_entity.GetComponent<ModelComponent, TransformComponent>();
+
 				glDisable(GL_DEPTH_TEST);
-				ShaderSelected->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.1f));
-				ShaderSelected->SetUniMat4("u_Transforms", projection * view * (glm::mat4)model);
-				Renderer::DrawModelA(mesh, ShaderSelected, DrawType::TRIANGLES);
+				SelectedItemShader->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.1f));
+				SelectedItemShader->SetUniMat4("u_Transforms", projection * view * (glm::mat4)model);
+				Renderer::DrawModelA(mesh, SelectedItemShader, DrawType::TRIANGLES);
 				glEnable(GL_DEPTH_TEST);
 			}
 		}
 
+
 		// Render skybox
-		m_ShaderSkybox->SetUniMat4("u_Projection", projection);
+		SkyboxShader->SetUniMat4("u_Projection", projection);
 		view = glm::rotate(view, glm::radians(Application::GetTime() * 0.5f), glm::vec3(0, 1, 0));
-		m_ShaderSkybox->SetUniMat4("u_View", glm::mat3(view));
-		m_ShaderSkybox->SetUni1f("u_Brightness", 1.0f);
-		Renderer::DrawSkybox(m_Skybox, m_ShaderSkybox);
+		SkyboxShader->SetUniMat4("u_View", glm::mat3(view));
+		SkyboxShader->SetUni1f("u_Brightness", 1.0f);
+		Renderer::DrawSkybox(ActiveSkybox, SkyboxShader);
 
 	}
 
@@ -146,41 +113,6 @@ namespace Bubble
 
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 			Application::GetWindow()->Close();
-		}
-	}
-
-	void EditorLayer::DrawMenuBar()
-	{
-		if (ImGui::BeginMenuBar())
-		{
-			// ====== Editor Menu ======
-			if (ImGui::BeginMenu("File"))
-			{
-				if (ImGui::MenuItem("Open"))
-				{
-					try
-					{
-						std::string path = OpenFileDialog("json");
-						OpenProject(path, &ActiveScene);
-					}
-					catch (const std::exception& e)
-					{
-						LOG_ERROR(e.what());
-					}
-				}
-
-				if (ImGui::MenuItem("Save"))
-				{
-					SaveProject("../../../../scene_test.json", &ActiveScene);
-				}
-
-				ImGui::EndMenu();
-			}
-
-			// ====== UI Menu =======
-			UserInterface.DrawMenu();
-
-			ImGui::EndMenuBar();
 		}
 	}
 

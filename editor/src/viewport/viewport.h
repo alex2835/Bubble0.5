@@ -29,5 +29,6 @@ namespace Bubble
 		float GetHeight();
 
 		operator Framebuffer& ();
+		operator const Framebuffer& () const;
 	};
 }

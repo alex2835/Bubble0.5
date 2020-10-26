@@ -10,7 +10,7 @@ namespace Bubble
 		{
 			ImGui::Begin("Scene explorer", is_open_explorer);
 		
-			scene->m_Registry.each([&](auto entityID)
+			scene->Registry.each([&](auto entityID)
 				{
 					Entity entity(entityID, scene);
 
