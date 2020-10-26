@@ -9,7 +9,7 @@ namespace Bubble
 	struct ThirdPersonCamera : public Camera
 	{
 		glm::vec3 Center;
-		float Radius = 5.0f;
+		float Radius = 20.0f;
 
 		float LastMouseX = 0.5f;
 		float LastMouseY = 0.5f;

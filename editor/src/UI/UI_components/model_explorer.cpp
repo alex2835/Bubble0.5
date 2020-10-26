@@ -50,9 +50,9 @@ namespace Bubble
 			}
 			Viewport.Resize({ window_size.x, window_size.y * 0.6f });
 			uint32_t textureId = Viewport.GetColorAttachmentRendererID();
-			ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + window_size.x, pos.y + window_size.y * 0.6f }, ImVec2(1, 1), ImVec2(0, 0));
+			ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + window_size.x, pos.y + window_size.y * 0.7f }, ImVec2(1, 1), ImVec2(0, 0));
 
-			ImGui::InvisibleButton("##dummy", ImVec2{ window_size.x + 1, window_size.y * 0.6f + 1});
+			ImGui::InvisibleButton("##dummy", ImVec2{ window_size.x + 1, window_size.y * 0.7f + 1});
 			if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
 			{
 				Camera.ProcessMouseMovementShift(Input::fGetMouseRelX(), -Input::fGetMouseRelY());
@@ -61,12 +61,12 @@ namespace Bubble
 
 			if (ImGui::IsWindowFocused())
 			{
-				Camera.Radius = std::max(Camera.Radius - Input::GetMouseWheelOffset(), 1.0f);
+				Camera.Radius = std::max(Camera.Radius - Input::GetMouseWheelOffset() * 7, 10.0f);
 				Camera.UpdateCameraAngles(dt);
 			}
 
 			// ================= Model list ====================
-			ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.3f), true);
+			ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.24f), true);
 			{
 				for (auto name_model : ModelLoader::LoadedModels)
 				{

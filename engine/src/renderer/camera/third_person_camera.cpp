@@ -9,6 +9,7 @@ namespace Bubble
 		: Center(glm::vec3(0, 5, 0))
 	{}
 
+
 	void ThirdPersonCamera::ProcessRotation(CameraMovement direction, DeltaTime dt)
 	{
 		float max_speed = MaxSpeed * DeltaSpeed;
@@ -70,10 +71,11 @@ namespace Bubble
 
 		if (Pitch > PI / 2.0f - 0.1f)
 			Pitch = PI / 2.0f - 0.1f;
-
+		
 		if (Pitch < -PI / 2.0f + 0.1f)
 			Pitch = -PI / 2.0f + 0.1f;
 	}
+
 
 	void ThirdPersonCamera::ProcessMouseMovementShift(float xoffset, float yoffset)
 	{
@@ -103,6 +105,7 @@ namespace Bubble
 			Fov = PI / 2.0f;
 	}
 
+
 	void ThirdPersonCamera::UpdateCameraAngles(DeltaTime dt)
 	{
 		// Inertia
@@ -118,18 +121,19 @@ namespace Bubble
 		Yaw += SpeedX * dt.GetSeconds();
 		Pitch += SpeedY * dt.GetSeconds();
 
+		// Rotating
 		glm::mat4 transform = glm::mat4(1.0f);
-		transform = glm::translate(transform, Center);
-		transform = glm::rotate(transform, Pitch, glm::vec3(1, 0, 0));
 		transform = glm::rotate(transform, Yaw, glm::vec3(0, 1, 0));
-		
-		Position = transform * glm::vec4(0, Center.y, Radius, 0);
-		//Position += Center;
+		transform = glm::rotate(transform, Pitch, glm::vec3(1, 0, 0));
+		transform = glm::translate(transform, Center);
+		Position = transform * glm::vec4(0, 0, Radius, 0);
 
+		// Basis
 		Front = glm::normalize(Center - Position);
 		Right = glm::normalize(glm::cross(Front, WorldUp));
 		Up = glm::normalize(glm::cross(Right, Front));
 	}
+
 
 	glm::mat4 ThirdPersonCamera::GetLookatMat()
 	{
