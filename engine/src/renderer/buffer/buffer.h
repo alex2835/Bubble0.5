@@ -18,17 +18,17 @@ namespace Bubble
 	{
 		switch (type)
 		{
-		case GLSLDataType::Float:    return 4;
-		case GLSLDataType::Float2:   return 4 * 2;
-		case GLSLDataType::Float3:   return 4 * 3;
-		case GLSLDataType::Float4:   return 4 * 4;
-		case GLSLDataType::Mat3:     return 4 * 3 * 3;
-		case GLSLDataType::Mat4:     return 4 * 4 * 4;
-		case GLSLDataType::Int:      return 4;
-		case GLSLDataType::Int2:     return 4 * 2;
-		case GLSLDataType::Int3:     return 4 * 3;
-		case GLSLDataType::Int4:     return 4 * 4;
-		case GLSLDataType::Bool:     return 1;
+			case GLSLDataType::Float:   return 4;
+			case GLSLDataType::Float2:  return 4 * 2;
+			case GLSLDataType::Float3:  return 4 * 3;
+			case GLSLDataType::Float4:  return 4 * 4;
+			case GLSLDataType::Mat3:    return 4 * 3 * 3;
+			case GLSLDataType::Mat4:    return 4 * 4 * 4;
+			case GLSLDataType::Int:     return 4;
+			case GLSLDataType::Int2:    return 4 * 2;
+			case GLSLDataType::Int3:    return 4 * 3;
+			case GLSLDataType::Int4:    return 4 * 4;
+			case GLSLDataType::Bool:    return 1;
 		}
 
 		BUBBLE_CORE_ASSERT(false, "Unknown GLSLDataType!");
@@ -42,18 +42,19 @@ namespace Bubble
 		std::string Name;
 		GLSLDataType Type;
 		uint32_t Size;
+		uint32_t Count;
 		size_t Offset;
 		bool Normalized;
 
 		BufferElement() = default;
 
-		BufferElement(GLSLDataType type, const std::string & name, bool normalized = false)
-			: 
-			Name(name),
-			Type(type),
-			Size(GLSLDataTypeSize(type)),
-			Offset(0),
-			Normalized(normalized)
+		BufferElement(GLSLDataType type, const std::string & name, size_t count = 1, bool normalized = false)
+			: Name(name),
+			  Type(type),
+			  Size(GLSLDataTypeSize(type)),
+			  Offset(0),
+			  Count(count),
+			  Normalized(normalized)
 		{}
 
 		uint32_t GetComponentCount() const
@@ -101,6 +102,7 @@ namespace Bubble
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
 		std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
 		std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
+
 	private:
 		void CalculateOffsetsAndStride()
 		{
@@ -108,9 +110,13 @@ namespace Bubble
 			for (auto& element : m_Elements)
 			{
 				element.Offset = offset;
-				offset += element.Size;
+				offset += element.Size * element.Count;
+				m_Stride += element.Size;
 			}
-			m_Stride = offset;
+			// If count more then one than
+			// attributes goes one after another (1111 2222 3333)
+			// So stride will be the size of each attribute value
+			m_Stride = m_Elements[0].Count == 1 ? m_Stride : 0;
 		}
 	};
 

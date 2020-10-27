@@ -61,7 +61,7 @@ namespace Bubble
 	void Renderer::DrawIndex(const Ref<VertexArray>& vertex_array, DrawType draw_type, uint32_t index_count)
 	{
 		vertex_array->Bind();
-		uint32_t count = index_count ? index_count : vertex_array->GetIndexBuffer()->GetCount();
+		uint32_t count = index_count ? index_count : vertex_array->GetIndexBuffer().GetCount();
 		glcall(glDrawElements(OpenGLDrawType(draw_type), count, GL_UNSIGNED_INT, nullptr));
 	}
 
@@ -75,7 +75,7 @@ namespace Bubble
 	{
 		mesh.VertexArray.Bind();
 		mesh.Material.Set(shader);
-		glDrawElements(OpenGLDrawType(draw_type), mesh.Indices->size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(OpenGLDrawType(draw_type), mesh.Indices.size(), GL_UNSIGNED_INT, 0);
 		Texture2D::UnbindAll();
 	}
 

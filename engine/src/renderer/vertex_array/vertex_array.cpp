@@ -31,11 +31,11 @@ namespace Bubble
 	VertexArray::VertexArray(VertexArray&& other)
 	{
 		m_RendererID = other.m_RendererID;
-		m_VertexBufferIndex = other.m_VertexBufferIndex;
+		VertexBufferIndex(other.m_VertexBufferIndex);
 		m_VertexBuffers = std::move(other.m_VertexBuffers);
 		m_IndexBuffer = std::move(other.m_IndexBuffer);
 		other.m_RendererID = 0;
-		other.m_VertexBufferIndex = 0;
+		other.VertexBufferIndex(0);
 	}
 
 	VertexArray& VertexArray::operator=(VertexArray&& other)
@@ -43,11 +43,11 @@ namespace Bubble
 		if (this != &other)
 		{
 			m_RendererID = other.m_RendererID;
-			m_VertexBufferIndex = other.m_VertexBufferIndex;
+			VertexBufferIndex(other.m_VertexBufferIndex);
 			m_VertexBuffers = std::move(other.m_VertexBuffers);
 			m_IndexBuffer = std::move(other.m_IndexBuffer);
 			other.m_RendererID = 0;
-			other.m_VertexBufferIndex = 0;
+			other.VertexBufferIndex(0);
 		}
 		return *this;
 	}
@@ -67,14 +67,14 @@ namespace Bubble
 		glcall(glBindVertexArray(0));
 	}
 
-	void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+	void VertexArray::AddVertexBuffer(VertexBuffer&& vertexBuffer)
 	{
-		BUBBLE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
+		BUBBLE_CORE_ASSERT(vertexBuffer.GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
 		Bind();
-		vertexBuffer->Bind();
+		vertexBuffer.Bind();
 
-		const auto& layout = vertexBuffer->GetLayout();
+		const auto& layout = vertexBuffer.GetLayout();
 		for (const auto& element : layout)
 		{
 			switch (element.Type)
@@ -91,12 +91,12 @@ namespace Bubble
 				{
 					glcall(glEnableVertexAttribArray(m_VertexBufferIndex));
 					glcall(glVertexAttribPointer(m_VertexBufferIndex,
-						element.GetComponentCount(),
-						GLSLDataTypeToOpenGLBaseType(element.Type),
-						element.Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(),
-						(const void*)element.Offset));
-					m_VertexBufferIndex++;
+												 element.GetComponentCount(),
+												 GLSLDataTypeToOpenGLBaseType(element.Type),
+												 element.Normalized ? GL_TRUE : GL_FALSE,
+												 layout.GetStride() ? layout.GetStride() : element.Size,
+												 (const void*)element.Offset));
+					VertexBufferIndex(m_VertexBufferIndex + 1);
 				}break;
 				case GLSLDataType::Mat3:
 				case GLSLDataType::Mat4:
@@ -106,13 +106,13 @@ namespace Bubble
 					{
 						glcall(glEnableVertexAttribArray(m_VertexBufferIndex));
 						glcall(glVertexAttribPointer(m_VertexBufferIndex,
-							count,
-							GLSLDataTypeToOpenGLBaseType(element.Type),
-							element.Normalized ? GL_TRUE : GL_FALSE,
-							layout.GetStride(),
-							(const void*)(sizeof(float) * count * i)));
+													 count,
+													 GLSLDataTypeToOpenGLBaseType(element.Type),
+													 element.Normalized ? GL_TRUE : GL_FALSE,
+													 layout.GetStride() ? layout.GetStride() : element.Size,
+													 (const void*)(sizeof(float) * count * i)));
 						glcall(glVertexAttribDivisor(m_VertexBufferIndex, 1));
-						m_VertexBufferIndex++;
+						VertexBufferIndex(m_VertexBufferIndex + 1);
 					}
 				}break;
 				default: {
@@ -120,24 +120,24 @@ namespace Bubble
 				}
 			}
 		}
-		m_VertexBuffers.push_back(vertexBuffer);
+		m_VertexBuffers.push_back(std::move(vertexBuffer));
 		Unbind();
 	}
 
-	void VertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
+	void VertexArray::SetIndexBuffer(IndexBuffer&& indexBuffer)
 	{
 		Bind();
-		indexBuffer->Bind();
-		m_IndexBuffer = indexBuffer;
+		indexBuffer.Bind();
+		m_IndexBuffer = std::move(indexBuffer);
 		Unbind();
 	}
 
-	const std::vector<Bubble::Ref<Bubble::VertexBuffer>>& VertexArray::GetVertexBuffers() const
+	const std::vector<Bubble::VertexBuffer>& VertexArray::GetVertexBuffers() const
 	{
 		return m_VertexBuffers;
 	}
 
-	const Bubble::Ref<Bubble::IndexBuffer>& VertexArray::GetIndexBuffer() const
+	const Bubble::IndexBuffer& VertexArray::GetIndexBuffer() const
 	{
 		return m_IndexBuffer;
 	}

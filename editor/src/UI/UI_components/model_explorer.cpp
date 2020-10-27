@@ -61,7 +61,7 @@ namespace Bubble
 
 			if (ImGui::IsWindowFocused())
 			{
-				Camera.Radius = std::max(Camera.Radius - Input::GetMouseWheelOffset() * 7, 10.0f);
+				Camera.Radius = std::max(Camera.Radius - Input::GetMouseWheelOffset() * 10, 10.0f);
 				Camera.UpdateCameraAngles(dt);
 			}
 

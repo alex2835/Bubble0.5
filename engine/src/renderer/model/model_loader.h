@@ -11,6 +11,13 @@
 
 namespace Bubble
 {
+	struct BoundingBox
+	{
+		glm::vec2 TopRight;
+		glm::vec2 BottopLeft;
+	};
+
+
 	class ModelLoader
 	{
 	public:

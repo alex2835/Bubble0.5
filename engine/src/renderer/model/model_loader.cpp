@@ -69,79 +69,47 @@ namespace Bubble
 	
 	Mesh ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
-		std::vector<Vertex> vertices;
+		VertexData vertices;
 		std::vector<uint32_t> indices;
 	
-		vertices.reserve(mesh->mNumVertices);
+		vertices.Positions.resize(mesh->mNumVertices);
+		vertices.Normals.resize(mesh->mNumVertices);
+		vertices.TexCoords.resize(mesh->mNumVertices);
 		indices.reserve(mesh->mNumFaces);
-	
-		// Walk through each of the mesh's vertices
-		for (int i = 0; i < mesh->mNumVertices; i++)
+
+		if (mesh->HasTangentsAndBitangents())
 		{
-			Vertex vertex;
-			glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-	
-			// positions
-			vector.x = mesh->mVertices[i].x;
-			vector.y = mesh->mVertices[i].y;
-			vector.z = mesh->mVertices[i].z;
-			vertex.Position = vector;
-	
-			// normals
-			vector.x = mesh->mNormals[i].x;
-			vector.y = mesh->mNormals[i].y;
-			vector.z = mesh->mNormals[i].z;
-			vertex.Normal = vector;
-	
-			// texture coordinates
-			if (mesh->mTextureCoords[0])
-			{
-				glm::vec2 vec;
-				// a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-				// use models where a vertex can have multiple texture coordinates so we always take the first set (0).
-				vec.x = mesh->mTextureCoords[0][i].x;
-				vec.y = mesh->mTextureCoords[0][i].y;
-				vertex.TexCoords = vec;
-			}
-			else {
-				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-			}
-	
-			if (mesh->mTangents)
-			{
-				// tangent
-				vector.x = mesh->mTangents[i].x;
-				vector.y = mesh->mTangents[i].y;
-				vector.z = mesh->mTangents[i].z;
-				vertex.Tangent = vector;
-				// bitangent
-				vector.x = mesh->mBitangents[i].x;
-				vector.y = mesh->mBitangents[i].y;
-				vector.z = mesh->mBitangents[i].z;
-				vertex.Bitangent = vector;
-			}
-	
-			vertices.push_back(vertex);
+			vertices.Tangents.resize(mesh->mNumVertices);
+			vertices.Bitangents.resize(mesh->mNumVertices);
 		}
-		
-		// now walk through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+
+		if (mesh->mTextureCoords[0])
+		{
+			for (int i = 0; i < mesh->mNumVertices; i++)
+			{
+				vertices.TexCoords[i].x = mesh->mTextureCoords[0][i].x;
+				vertices.TexCoords[i].y = mesh->mTextureCoords[0][i].y;
+			}
+		}
+
 		for (int i = 0; i < mesh->mNumFaces; i++)
 		{
 			aiFace face = mesh->mFaces[i];
-			// retrieve all indices of the face and store them in the indices vector
 			for (int j = 0; j < face.mNumIndices; j++) {
 				indices.push_back(face.mIndices[j]);
 			}
 		}
-		
+
+		memmove(vertices.Positions.data(),  mesh->mVertices,	sizeof(glm::vec3) * vertices.Positions.size());
+		memmove(vertices.Normals.data(),    mesh->mNormals,		sizeof(glm::vec3) * vertices.Normals.size());
+		memmove(vertices.Tangents.data(),   mesh->mTangents,	sizeof(glm::vec3) * vertices.Tangents.size());
+		memmove(vertices.Bitangents.data(), mesh->mBitangents,	sizeof(glm::vec3) * vertices.Bitangents.size());
+
 		// process materials
 		aiMaterial* assimp_material = scene->mMaterials[mesh->mMaterialIndex];
 		DefaultMaterial material = LoadMaterialTextures(assimp_material);
 
-		auto vertices_ref = CreateRef<std::vector<Vertex>>(std::move(vertices));
-		auto indices_ref = CreateRef<std::vector<uint32_t>>(std::move(indices));
-		
-		return Mesh(std::move(material), vertices_ref, indices_ref);
+		return Mesh(std::move(material), std::move(vertices), std::move(indices));
 	}
 	
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.

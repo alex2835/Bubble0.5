@@ -11,26 +11,37 @@
 
 namespace Bubble
 {
-	struct Vertex
+	//struct Vertex
+	//{
+	//	glm::vec3 Position;
+	//	glm::vec3 Normal;
+	//	glm::vec2 TexCoords;
+	//	glm::vec3 Tangent;
+	//	glm::vec3 Bitangent;
+	//};
+
+	struct VertexData
 	{
-		glm::vec3 Position;
-		glm::vec3 Normal;
-		glm::vec2 TexCoords;
-		glm::vec3 Tangent;
-		glm::vec3 Bitangent;
+		std::vector<glm::vec3> Positions;
+		std::vector<glm::vec3> Normals;
+		std::vector<glm::vec2> TexCoords;
+		std::vector<glm::vec3> Tangents;
+		std::vector<glm::vec3> Bitangents;
 	};
+
 
 	struct Mesh
 	{
 		VertexArray VertexArray;
 		DefaultMaterial Material;
-		Ref<std::vector<Vertex>> Vertices;
-		Ref<std::vector<uint32_t>> Indices;
+		//std::vector<VertexData> Vertices;
+		VertexData Vertices;
+		std::vector<uint32_t> Indices;
 		
 		Mesh() = default;
 		Mesh(DefaultMaterial&& Material,
-			 const Ref<std::vector<Vertex>>& vertices,
-			 const Ref<std::vector<uint32_t>>& indices);
+			 VertexData&& vertices,
+			 std::vector<uint32_t>&& indices);
 
 		Mesh(const Mesh&) = delete;
 		Mesh& operator= (const Mesh&) = delete;

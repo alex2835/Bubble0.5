@@ -145,14 +145,14 @@ namespace Bubble
 	void Skybox::InitVertexArray()
 	{
 		s_VertexArray = new VertexArray();
-		Ref<VertexBuffer> vb = CreateRef<VertexBuffer>(SkyboxVertices, sizeof(SkyboxVertices));
+		VertexBuffer vb = VertexBuffer(SkyboxVertices, sizeof(SkyboxVertices));
 		
 		BufferLayout layout{
 			{GLSLDataType::Float3, "Position" }
 		};
 
-		vb->SetLayout(layout);
-		s_VertexArray->AddVertexBuffer(vb);
+		vb.SetLayout(layout);
+		s_VertexArray->AddVertexBuffer(std::move(vb));
 	}
 
 }
