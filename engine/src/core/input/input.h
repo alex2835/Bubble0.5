@@ -11,14 +11,14 @@ namespace Bubble
 {
 	class Input
 	{
-		static short s_KeyMap[256];
-		static int s_MouseKeyMap[16];
-		static int s_MouseWheelOffset;
+		static short sKeyMap[256];
+		static int sMouseKeyMap[16];
+		static int sMouseWheelOffset;
 
-		static int s_MousePosX;
-		static int s_MousePosY;
-		static int s_MouseRelPosX;
-		static int s_MouseRelPosY;
+		static int sMousePosX;
+		static int sMousePosY;
+		static int sMouseRelPosX;
+		static int sMouseRelPosY;
 
 	public:
 		static void OnEvent(SDL_Event& event);

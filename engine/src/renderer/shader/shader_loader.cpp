@@ -3,7 +3,7 @@
 
 namespace Bubble
 {
-	std::vector<std::pair<std::string, Bubble::Ref<Bubble::Shader>>> ShaderLoader::LoadedShaders;
+	std::vector<std::pair<std::string, Ref<Shader>>> ShaderLoader::LoadedShaders;
 
 	Ref<Shader> ShaderLoader::Load(const std::string& path)
 	{

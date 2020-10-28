@@ -10,12 +10,10 @@ namespace Bubble
 
 		static Ref<Shader> Load(const std::string& path);
 		
-		// Load shaders from file
 		static Ref<Shader> Load(const std::string& name,
 								const std::string& vertex,
 								const std::string& fragment,
 								const std::string& geometry = std::string());
-
 
 
 	private:

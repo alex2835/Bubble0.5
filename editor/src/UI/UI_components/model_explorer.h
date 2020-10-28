@@ -15,7 +15,6 @@ namespace Bubble
 	{
 		Ref<Model> mSelectedModel = nullptr;
 
-		// Draw selected model
 		ThirdPersonCamera mCamera;
 		Viewport mViewport;
 		Ref<Shader> mShader;

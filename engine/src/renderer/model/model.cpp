@@ -5,7 +5,7 @@
 namespace Bubble
 {
 
-	void Model::CreateBoundBox()
+	void Model::CreateBoundingBox()
 	{
 		for (const auto& mesh : mMeshes)
 		{
@@ -17,9 +17,11 @@ namespace Bubble
 		}
 	}
 
-	AABB Model::RecalculateBoundingBox(glm::mat4 transform)
+	AABB Model::TransformBoundingBox(const glm::mat4& transform)
 	{
-		return AABB();
+		glm::vec3 min = transform * glm::vec4(mBoundingBox.getMin().xyz, 1);
+		glm::vec3 max = transform * glm::vec4(mBoundingBox.getMax().xyz, 1);
+		return AABB(min, max);
 	}
 
 }

@@ -17,6 +17,8 @@ set_target_properties(
 
 # Defines
 #add_definitions(-D"_NO_DEBUG_HEAP=1")
+add_definitions(-D"GLM_SWIZZLE")
+
 
 # Libraries
 target_link_libraries(Engine spdlog)

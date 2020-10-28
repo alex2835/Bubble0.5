@@ -16,9 +16,8 @@ namespace Bubble
 
 		auto [orig_data, orig_spec] = Texture2D::OpenRawImage(path);
 
-		if (orig_data == NULL) {
+		if (orig_data == NULL)
 			throw std::runtime_error("Skybox loading failed: " + path);
-		}
 
 		Texture2DSpecification spec = orig_spec;
 		int width = orig_spec.Width / 4;

@@ -4,14 +4,14 @@
 
 namespace Bubble
 {
-	short Input::s_KeyMap[256];
-	int Input::s_MouseKeyMap[16];
-	int Input::s_MouseWheelOffset;
+	short Input::sKeyMap[256];
+	int Input::sMouseKeyMap[16];
+	int Input::sMouseWheelOffset;
 
-	int Input::s_MousePosX;
-	int Input::s_MousePosY;
-	int Input::s_MouseRelPosX;
-	int Input::s_MouseRelPosY;
+	int Input::sMousePosX;
+	int Input::sMousePosY;
+	int Input::sMouseRelPosX;
+	int Input::sMouseRelPosY;
 
 	void Input::OnEvent(SDL_Event& event)
 	{
@@ -19,39 +19,39 @@ namespace Bubble
 		{
 			case SDL_KEYUP:
 				if (event.key.keysym.sym >= 1073741881) {
-					s_KeyMap[event.key.keysym.sym - 1073741881] = 0;
+					sKeyMap[event.key.keysym.sym - 1073741881] = 0;
 				}
 				else if (event.key.keysym.sym < 128) {
-					s_KeyMap[event.key.keysym.sym] = 0;
+					sKeyMap[event.key.keysym.sym] = 0;
 				}
 				break;
 
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym >= 1073741881) {
-					s_KeyMap[event.key.keysym.sym - 1073741881] = 1 + event.key.repeat;
+					sKeyMap[event.key.keysym.sym - 1073741881] = 1 + event.key.repeat;
 				}
 				else if (event.key.keysym.sym < 128) {
-					s_KeyMap[event.key.keysym.sym] = 1 + event.key.repeat;
+					sKeyMap[event.key.keysym.sym] = 1 + event.key.repeat;
 				}
 				break;
 
 			case SDL_MOUSEWHEEL:
-				s_MouseWheelOffset = event.wheel.y;
+				sMouseWheelOffset = event.wheel.y;
 				break;
 
 			case SDL_MOUSEMOTION:
-				s_MousePosX = event.motion.x;
-				s_MousePosY = event.motion.y;
-				s_MouseRelPosX = event.motion.xrel;
-				s_MouseRelPosY = event.motion.yrel;
+				sMousePosX = event.motion.x;
+				sMousePosY = event.motion.y;
+				sMouseRelPosX = event.motion.xrel;
+				sMouseRelPosY = event.motion.yrel;
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				s_MouseKeyMap[event.button.button] = event.button.clicks;
+				sMouseKeyMap[event.button.button] = event.button.clicks;
 				break;
 
 			case SDL_MOUSEBUTTONUP:
-				s_MouseKeyMap[event.button.button] = 0;
+				sMouseKeyMap[event.button.button] = 0;
 				break;
 			}
 		
@@ -62,7 +62,7 @@ namespace Bubble
 		if (code >= 1073741881) {
 			code -= 1073741881;
 		}
-		return s_KeyMap[code];
+		return sKeyMap[code];
 	}
 
 	bool Input::IsKeyClick(SDL_Keycode code)
@@ -70,90 +70,90 @@ namespace Bubble
 		if (code >= 1073741881) {
 			code -= 1073741881;
 		}
-		return s_KeyMap[code] == 1;
+		return sKeyMap[code] == 1;
 	}
 
 	bool Input::IsMouseButtonPressed(int button)
 	{
-		return s_MouseKeyMap[button];
+		return sMouseKeyMap[button];
 	}
 
 	glm::ivec2 Input::GetMousePosition()
 	{
-		return glm::ivec2(s_MousePosX, s_MousePosY);
+		return glm::ivec2(sMousePosX, sMousePosY);
 	}
 
 	glm::vec2 Input::fGetMousePosition()
 	{
 		glm::vec2 window_size = Application::GetWindow()->GetSize();
-		return glm::vec2((float)s_MousePosX / window_size.x, (float)s_MousePosY / window_size.y);
+		return glm::vec2((float)sMousePosX / window_size.x, (float)sMousePosY / window_size.y);
 	}
 
 	float Input::fGetMouseX()
 	{
 		int width = Application::GetWindow()->GetWidth();
-		return (float)s_MousePosX / width;
+		return (float)sMousePosX / width;
 	}
 
 	float Input::fGetMouseY()
 	{
 		int height = Application::GetWindow()->GetHeight();
-		return (float)s_MousePosY / height;
+		return (float)sMousePosY / height;
 	}
 
 	glm::vec2 Input::fGetMouseRelPosition()
 	{
 		glm::vec2 window_size = Application::GetWindow()->GetSize();
-		return glm::vec2((float)s_MouseRelPosX / window_size.x, (float)s_MouseRelPosY / window_size.y);
+		return glm::vec2((float)sMouseRelPosX / window_size.x, (float)sMouseRelPosY / window_size.y);
 	}
 
 	float Input::fGetMouseRelX()
 	{
 		int width = Application::GetWindow()->GetWidth();
-		return (float)s_MouseRelPosX / width;
+		return (float)sMouseRelPosX / width;
 	}
 
 	float Input::fGetMouseRelY()
 	{
 		int height = Application::GetWindow()->GetHeight();
-		return (float)s_MouseRelPosY / height;
+		return (float)sMouseRelPosY / height;
 	}
 
 	int Input::GetMouseX()
 	{
-		return s_MousePosX;
+		return sMousePosX;
 	}
 
 	int Input::GetMouseY()
 	{
-		return s_MousePosY;
+		return sMousePosY;
 	}
 
 	glm::ivec2 Input::GetMouseRelPosition()
 	{
-		return glm::ivec2(s_MouseRelPosX, s_MouseRelPosY);
+		return glm::ivec2(sMouseRelPosX, sMouseRelPosY);
 	}
 
 	int Input::GetMouseRelX()
 	{
-		return s_MouseRelPosX;
+		return sMouseRelPosX;
 	}
 
 	int Input::GetMouseRelY()
 	{
-		return s_MouseRelPosY;
+		return sMouseRelPosY;
 	}
 
 	int Input::GetMouseWheelOffset()
 	{
-		return s_MouseWheelOffset;
+		return sMouseWheelOffset;
 	}
 
 	void Input::NewFrame()
 	{
-		s_MouseRelPosX = 0.0f;
-		s_MouseRelPosY = 0.0f;
-		s_MouseWheelOffset = 0.0f;
+		sMouseRelPosX = 0.0f;
+		sMouseRelPosY = 0.0f;
+		sMouseWheelOffset = 0.0f;
 	}
 
 }

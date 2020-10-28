@@ -22,8 +22,8 @@ namespace Bubble
 		Model(Model&&) = default;
 		Model& operator= (Model&&) = default;
 
-		void CreateBoundBox();
-		AABB RecalculateBoundingBox(glm::mat4 transform);
+		void CreateBoundingBox();
+		AABB TransformBoundingBox(const glm::mat4& transform);
 	};
 
 }

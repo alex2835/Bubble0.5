@@ -50,7 +50,7 @@ namespace Bubble
 		model->mMeshes.reserve(scene->mNumMeshes);
 		ProcessNode(*model, scene->mRootNode, scene);
 
-		model->CreateBoundBox();
+		model->CreateBoundingBox();
 
 		return model;
 	}
