@@ -14,7 +14,7 @@ namespace Bubble
 				{
 					Entity entity(entityID, scene);
 
-					auto& tag = entity.GetComponent<TagComponent>().Tag;
+					auto& tag = entity.GetComponent<TagComponent>().mTag;
 					ImGui::Selectable(tag.c_str());
 
 					if (ImGui::IsItemClicked())
@@ -50,7 +50,7 @@ namespace Bubble
 
 		if (entity.HasComponent<TagComponent>())
 		{
-			auto& tag = entity.GetComponent<TagComponent>().Tag;
+			auto& tag = entity.GetComponent<TagComponent>().mTag;
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
@@ -67,10 +67,10 @@ namespace Bubble
 		{
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
-				auto& transform = entity.GetComponent<TransformComponent>().Transform;
-				auto& position = entity.GetComponent<PositionComponent>().Position;
-				auto& rotation = entity.GetComponent<RotationComponent>().Rotation;
-				auto& scale = entity.GetComponent<ScaleComponent>().Scale;
+				auto& transform = entity.GetComponent<TransformComponent>().mTransform;
+				auto& position = entity.GetComponent<PositionComponent>().mPosition;
+				auto& rotation = entity.GetComponent<RotationComponent>().mRotation;
+				auto& scale = entity.GetComponent<ScaleComponent>().mScale;
 
 				bool update = false;
 				float scale_entire = 0.0f;
@@ -100,7 +100,7 @@ namespace Bubble
 
 		if (entity.HasComponent<LightComponent>())
 		{
-			Light& light = entity.GetComponent<LightComponent>().light;
+			Light& light = entity.GetComponent<LightComponent>().mLight;
 			switch(light.Type)
 			{
 				case LightType::DirLight:

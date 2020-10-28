@@ -73,15 +73,15 @@ namespace Bubble
 
 	void Renderer::DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type)
 	{
-		mesh.VertexArray.Bind();
-		mesh.Material.Set(shader);
-		glDrawElements(OpenGLDrawType(draw_type), mesh.Indices.size(), GL_UNSIGNED_INT, 0);
+		mesh.mVertexArray.Bind();
+		mesh.mMaterial.Set(shader);
+		glDrawElements(OpenGLDrawType(draw_type), mesh.mIndices.size(), GL_UNSIGNED_INT, 0);
 		Texture2D::UnbindAll();
 	}
 
 	void Renderer::DrawModel(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type)
 	{
-		for (const auto& mesh : model->Meshes)
+		for (const auto& mesh : model->mMeshes)
 		{
 			Renderer::DrawMesh(mesh, shader, draw_type);
 		}
@@ -92,7 +92,7 @@ namespace Bubble
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		for (const auto& mesh : model->Meshes)
+		for (const auto& mesh : model->mMeshes)
 		{
 			Renderer::DrawMesh(mesh, shader, draw_type);
 		}

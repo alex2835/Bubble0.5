@@ -6,17 +6,17 @@ namespace Bubble
 {
 	void UI::Draw(DeltaTime dt)
 	{
-		Args.ImGuiControll->Begin();
+		mArgs.mImGuiControll->Begin();
 
 		// MenuBar
-		Args.ImGuiControll->BeginMenuBar();
+		mArgs.mImGuiControll->BeginMenuBar();
 		DrawMenuBar();
-		Args.ImGuiControll->EndMenuBar();
+		mArgs.mImGuiControll->EndMenuBar();
 
 		// Main UI
-		DrawMainviewport(*Args.MainViewport);
-		ModelExplorerPanel.Draw(&IsOpenModelExplorer, dt);
-		SceneExplorerPanel.Draw(&IsOpenSceneExplorer, &IsOpenEntityProperties, Args.ActiveScene);
+		DrawMainviewport(*mArgs.mViewport);
+		mModelExplorer.Draw(&mIsOpenModelExplorer, dt);
+		mSceneExplorer.Draw(&mIsOpenSceneExplorer, &mIsOpenEntityProperties, mArgs.mScene);
 
 		// Temp
 		ImGui::Begin("Info");
@@ -28,7 +28,7 @@ namespace Bubble
 		// DemoWindow
 		ImGui::ShowDemoWindow();
 
-		Args.ImGuiControll->End();
+		mArgs.mImGuiControll->End();
 	}
 
 
@@ -44,7 +44,7 @@ namespace Bubble
 					try
 					{
 						std::string path = OpenFileDialog("json");
-						OpenProject(path, Args.ActiveScene);
+						OpenProject(path, mArgs.mScene);
 					}
 					catch (const std::exception& e)
 					{
@@ -54,7 +54,7 @@ namespace Bubble
 
 				if (ImGui::MenuItem("Save"))
 				{
-					SaveProject("../../../../scene_test.json", Args.ActiveScene);
+					SaveProject("../../../../scene_test.json", mArgs.mScene);
 				}
 
 				ImGui::EndMenu();
@@ -66,7 +66,7 @@ namespace Bubble
 				// Scene camera
 				if (ImGui::BeginMenu("Camera"))
 				{
-					SceneCameraOptions(Args.Camera);
+					SceneCameraOptions(mArgs.mCamera);
 					ImGui::EndMenu();
 				}
 
@@ -74,7 +74,7 @@ namespace Bubble
 				if (ImGui::BeginMenu("Rendering"))
 				{
 					const char* const types[] = { "Lines", "Triangles" };
-					ImGui::Combo("Type", (int*)&DrawTypeOption, types, 2);
+					ImGui::Combo("Type", (int*)&mDrawTypeOption, types, 2);
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
@@ -83,9 +83,9 @@ namespace Bubble
 			// ======================== View ============================
 			if (ImGui::BeginMenu("View"))
 			{
-				ImGui::MenuItem("Scene explorer", "", &IsOpenSceneExplorer);
-				ImGui::MenuItem("Entity properties", "", &IsOpenEntityProperties);
-				ImGui::MenuItem("Model explorer", "", &IsOpenModelExplorer);
+				ImGui::MenuItem("Scene explorer", "", &mIsOpenSceneExplorer);
+				ImGui::MenuItem("Entity properties", "", &mIsOpenEntityProperties);
+				ImGui::MenuItem("Model explorer", "", &mIsOpenModelExplorer);
 				ImGui::EndMenu();
 			}
 

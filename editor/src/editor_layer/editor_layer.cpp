@@ -39,7 +39,8 @@ namespace Bubble
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// Set args for UI
-		mUI.Args = { &mImGuiControll, &mSceneCamera, &mViewport, &mScene };
+		mUI.mArgs = { &mImGuiControll, &mSceneCamera, &mViewport, &mScene };
+
 		// User Interface
 		mUI.Draw(dt);
 
@@ -56,8 +57,8 @@ namespace Bubble
 		mScene.Registry.view<LightComponent>().each(
 			[&](auto entity, LightComponent& lc)
 			{
-				lc.light.SetDistance();
-				Light::ApplyLight(lc.light, mPhongShader, light_index++);
+				lc.mLight.SetDistance();
+				Light::ApplyLight(lc.mLight, mPhongShader, light_index++);
 			}
 		);
 		mPhongShader->SetUni1i("nLights", light_index);
@@ -77,12 +78,12 @@ namespace Bubble
 		{
 			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
 			mPhongShader->SetUniMat4("u_Model", model);
-			Renderer::DrawModel(mesh, mPhongShader, mUI.DrawTypeOption);
+			Renderer::DrawModel(mesh, mPhongShader, mUI.mDrawTypeOption);
 		}
 
 		// Highlight selected model
 		{
-			Entity selected_entity = mUI.SceneExplorerPanel.SelectedEntity;
+			Entity selected_entity = mUI.mSceneExplorer.SelectedEntity;
 
 			if (selected_entity.Valid() && selected_entity.HasComponent<ModelComponent, TransformComponent>())
 			{

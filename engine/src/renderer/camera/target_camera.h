@@ -5,7 +5,7 @@
 
 namespace Bubble
 {
-	struct TargetCamera : Camera
+	struct TargetCamera : public Camera
 	{
 
 	};

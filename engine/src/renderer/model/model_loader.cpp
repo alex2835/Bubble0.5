@@ -47,8 +47,10 @@ namespace Bubble
 			throw std::runtime_error("ERROR::ASSIMP\n" + std::string(importer.GetErrorString()));
 
 		// Process ASSIMP's root node recursively
-		model->Meshes.reserve(scene->mNumMeshes);
+		model->mMeshes.reserve(scene->mNumMeshes);
 		ProcessNode(*model, scene->mRootNode, scene);
+
+		model->CreateBoundBox();
 
 		return model;
 	}
@@ -59,7 +61,7 @@ namespace Bubble
 		for (int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			model.Meshes.emplace_back(ProcessMesh(mesh, scene));
+			model.mMeshes.emplace_back(ProcessMesh(mesh, scene));
 		}
 	
 		for (int i = 0; i < node->mNumChildren; i++) {
@@ -83,6 +85,7 @@ namespace Bubble
 			vertices.Bitangents.resize(mesh->mNumVertices);
 		}
 
+		// Texture coords
 		if (mesh->mTextureCoords[0])
 		{
 			for (int i = 0; i < mesh->mNumVertices; i++)
@@ -92,6 +95,7 @@ namespace Bubble
 			}
 		}
 
+		// Faces
 		for (int i = 0; i < mesh->mNumFaces; i++)
 		{
 			aiFace face = mesh->mFaces[i];
@@ -105,7 +109,7 @@ namespace Bubble
 		memmove(vertices.Tangents.data(),   mesh->mTangents,	sizeof(glm::vec3) * vertices.Tangents.size());
 		memmove(vertices.Bitangents.data(), mesh->mBitangents,	sizeof(glm::vec3) * vertices.Bitangents.size());
 
-		// process materials
+		// Process materials
 		aiMaterial* assimp_material = scene->mMaterials[mesh->mMaterialIndex];
 		DefaultMaterial material = LoadMaterialTextures(assimp_material);
 

@@ -14,28 +14,28 @@ namespace Bubble
 {
 	struct UIArgs
 	{
-		ImGuiControll* ImGuiControll;
-		SceneCamera* Camera;
-		Viewport* MainViewport;
-		Scene* ActiveScene;
+		ImGuiControll* mImGuiControll;
+		SceneCamera* mCamera;
+		Viewport* mViewport;
+		Scene* mScene;
 	};
 
 	// ========== User Interface ===========
 	struct UI
 	{
-		UIArgs Args;
+		UIArgs mArgs;
 
 		// Models
-		bool IsOpenModelExplorer = true;
-		ModelExplorer ModelExplorerPanel;
+		bool mIsOpenModelExplorer = true;
+		ModelExplorer mModelExplorer;
 
 		// Scene
-		bool IsOpenSceneExplorer = true;
-		bool IsOpenEntityProperties = true;
-		SceneExplorer SceneExplorerPanel;
+		bool mIsOpenSceneExplorer = true;
+		bool mIsOpenEntityProperties = true;
+		SceneExplorer mSceneExplorer;
 
 		// Rendering options
-		DrawType DrawTypeOption = DrawType::TRIANGLES;
+		DrawType mDrawTypeOption = DrawType::TRIANGLES;
 
 		void Draw(DeltaTime dt);
 		void DrawMenuBar();

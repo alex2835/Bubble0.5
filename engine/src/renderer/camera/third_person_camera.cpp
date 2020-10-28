@@ -5,16 +5,16 @@
 namespace Bubble
 {
 
-	ThirdPersonCamera::ThirdPersonCamera()
-		: Center(glm::vec3(0, 5, 0))
+	ThirdPersonCamera::ThirdPersonCamera(float yaw, float pitch)
+		: Center(glm::vec3(0, 0, 0)),
+		  Camera(glm::vec3(), yaw, pitch)
 	{}
-
 
 	void ThirdPersonCamera::ProcessRotation(CameraMovement direction, DeltaTime dt)
 	{
 		float max_speed = MaxSpeed * DeltaSpeed;
 
-		// Speed x
+		// Horizontal speed
 		if (direction == CameraMovement::LEFT)
 		{
 			if (SpeedX < 0)
@@ -30,7 +30,7 @@ namespace Bubble
 			IsRotatingX = true;
 		}
 
-		// Speed y
+		// Vertical speed
 		if (direction == CameraMovement::UP)
 		{
 			if (SpeedY < 0)
@@ -45,9 +45,6 @@ namespace Bubble
 			SpeedY = SpeedY > -max_speed ? SpeedY - DeltaSpeed : -max_speed;
 			IsRotatingY = true;
 		}
-
-		// Speed z
-		// ...
 
 		// Clamp
 		if (fabs(SpeedX) > max_speed)
@@ -121,11 +118,12 @@ namespace Bubble
 		Yaw += SpeedX * dt.GetSeconds();
 		Pitch += SpeedY * dt.GetSeconds();
 
-		// Rotating
+		// Transformation matrix
 		glm::mat4 transform = glm::mat4(1.0f);
 		transform = glm::rotate(transform, Yaw, glm::vec3(0, 1, 0));
 		transform = glm::rotate(transform, Pitch, glm::vec3(1, 0, 0));
 		transform = glm::translate(transform, Center);
+
 		Position = transform * glm::vec4(0, 0, Radius, 0);
 
 		// Basis

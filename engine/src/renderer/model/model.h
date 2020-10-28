@@ -1,6 +1,8 @@
 #pragma once
 
 #include "mesh.h"
+#include "glm-aabb/AABB.hpp"
+
 #include <vector>
 
 
@@ -9,8 +11,9 @@ namespace Bubble
 	class Model
 	{
 	public:
-		std::vector<Mesh> Meshes;
-	
+		std::vector<Mesh> mMeshes;
+		AABB mBoundingBox;
+
 		Model() = default;
 		
 		Model(const Model&) = delete;
@@ -18,6 +21,9 @@ namespace Bubble
 
 		Model(Model&&) = default;
 		Model& operator= (Model&&) = default;
+
+		void CreateBoundBox();
+		AABB RecalculateBoundingBox(glm::mat4 transform);
 	};
 
 }

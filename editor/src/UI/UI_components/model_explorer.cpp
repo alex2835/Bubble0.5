@@ -6,33 +6,33 @@ namespace Bubble
 {
 
 	ModelExplorer::ModelExplorer()
-		: Viewport(800, 600),
-		  Shader(Shader::Open("resources/Shaders/phong.glsl")),
-		  Light(Light::CreateDirLight())
+		: mViewport(800, 600),
+		  mShader(Shader::Open("resources/Shaders/phong.glsl")),
+		  mLight(Light::CreateDirLight()),
+		  mCamera(0)
 	{}
 
 	void ModelExplorer::DrawSelectedModel()
 	{
-		Light::ApplyLight(Light, Shader, 0);
-		Shader->SetUni1i("nLights", 1);
+		Light::ApplyLight(mLight, mShader, 0);
+		mShader->SetUni1i("nLights", 1);
 		
 		// Transforms
-		glm::mat4 view = Camera.GetLookatMat();
-		glm::mat4 projection = Camera.GetPprojectionMat(Viewport.GetWidth(), Viewport.GetHeight());
-		
-		Shader->SetUniMat4("u_View", view);
-		Shader->SetUniMat4("u_Projection", projection);
-		
 		glm::mat4 model(1.0f);
-		Shader->SetUniMat4("u_Model", model);
+		glm::mat4 view = mCamera.GetLookatMat();
+		glm::mat4 projection = mCamera.GetPprojectionMat(mViewport.GetWidth(), mViewport.GetHeight());
+		
+		mShader->SetUniMat4("u_Model", model);
+		mShader->SetUniMat4("u_View", view);
+		mShader->SetUniMat4("u_Projection", projection);
 		 
-		Renderer::SetViewport(Viewport);
+		Renderer::SetViewport(mViewport);
 		Renderer::SetClearColor(glm::vec4(0.4f));
 		Renderer::Clear();
 		
-		Renderer::DrawModel(SelectedModel, Shader);
+		Renderer::DrawModel(mSelectedModel, mShader);
 		
-		Viewport.Unbind();
+		mViewport.Unbind();
 	}
 
 	void ModelExplorer::Draw(bool* is_open, DeltaTime dt)
@@ -44,29 +44,39 @@ namespace Bubble
 			ImVec2 window_size = ImGui::GetContentRegionAvail();
 			ImVec2 pos = ImGui::GetCursorScreenPos();
 
-			//  ============ Model view =================
-			if (SelectedModel) {
+			//  ================= Model view =================
+			if (mSelectedModel) {
 				DrawSelectedModel();
 			}
-			Viewport.Resize({ window_size.x, window_size.y * 0.6f });
-			uint32_t textureId = Viewport.GetColorAttachmentRendererID();
+			
+			// Draw viewport
+			mViewport.Resize({ window_size.x, window_size.y * 0.6f });
+			uint32_t textureId = mViewport.GetColorAttachmentRendererID();
 			ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + window_size.x, pos.y + window_size.y * 0.7f }, ImVec2(1, 1), ImVec2(0, 0));
 
+			// Invisible drag able area
 			ImGui::InvisibleButton("##dummy", ImVec2{ window_size.x + 1, window_size.y * 0.7f + 1});
 			if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
 			{
-				Camera.ProcessMouseMovementShift(Input::fGetMouseRelX(), -Input::fGetMouseRelY());
-				Camera.UpdateCameraAngles(dt);
+				// Moving by dragging
+				mCamera.ProcessMouseMovementShift(Input::fGetMouseRelX(), -Input::fGetMouseRelY());
+				mCamera.UpdateCameraAngles(dt);
 			}
 
+			// Change radius by mouse wheel moving
 			if (ImGui::IsWindowFocused())
 			{
-				Camera.Radius = std::max(Camera.Radius - Input::GetMouseWheelOffset() * 10, 10.0f);
-				Camera.UpdateCameraAngles(dt);
+				if (mSelectedModel)
+				{
+					float longest_edge = mSelectedModel->mBoundingBox.getLongestEdge();
+					mCamera.Radius -= Input::GetMouseWheelOffset() * longest_edge / 5;
+					mCamera.Radius = glm::clamp(mCamera.Radius, longest_edge, mCamera.Far);
+					mCamera.UpdateCameraAngles(dt);
+				}
 			}
 
-			// ================= Model list ====================
-			ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.22f), true);
+			// ==================== Model list ====================
+			ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.2f), true);
 			{
 				for (auto name_model : ModelLoader::LoadedModels)
 				{
@@ -75,12 +85,19 @@ namespace Bubble
 
 					ImGui::Selectable(name.c_str());
 
+					// Switch
 					if (ImGui::IsItemClicked())
-						SelectedModel = name_model.second;
+					{
+						mSelectedModel = name_model.second;
+						// Start camera params for this model
+						mCamera.Center = mSelectedModel->mBoundingBox.getCenter();
+						mCamera.Radius = mSelectedModel->mBoundingBox.getLongestEdge() * 1.5f;
+						mCamera.UpdateCameraAngles(dt);
+					}
 				}
-
+				
 				if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) {
-					SelectedModel = nullptr;
+					mSelectedModel = nullptr;
 				}
 			}
 			ImGui::EndChild();

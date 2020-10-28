@@ -3,7 +3,7 @@
 #include "nlohmann/json.hpp"
 #include "glm/glm.hpp"
 
-#include "light/light.h"
+#include "Light/Light.h"
 #include "model/model_loader.h"
 
 #include <string>
@@ -17,119 +17,122 @@ namespace Bubble
 		return { value.r, value.g, value.b };
 	}
 
-	inline glm::vec3 fromjson(const nlohmann::json& value)
+	inline glm::vec3 from_json(const nlohmann::json& value)
 	{
 		return glm::vec3(value[0], value[1], value[2]);
 	}
 
 
-	// ================
+	// ================= TagComponent =================
 	struct TagComponent
 	{
-		std::string Tag;
+		std::string mTag;
 
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
 		TagComponent(const std::string& tag)
-			: Tag(tag) {}
+			: mTag(tag) {}
 
 		nlohmann::json Serialize() const
 		{
 			nlohmann::json j;
-			j["Tag"] = Tag;
+			j["Tag"] = mTag;
 			return j;
 		}
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			Tag = j["Tag"];
+			mTag = j["Tag"];
 		}
 	};
 
 
-	// =================
+	// ================= PositionComponent =================
 	struct PositionComponent
 	{
-		glm::vec3 Position;
+		glm::vec3 mPosition;
 
 		PositionComponent() = default;
-		PositionComponent(const glm::vec3& position)
-			: Position(position)
+		PositionComponent(const glm::vec3& mPosition)
+			: mPosition(mPosition)
 		{}
 
 		nlohmann::json Serialize() const
 		{
 			nlohmann::json j;
-			j["Position"] = to_json(Position);
+			j["Position"] = to_json(mPosition);
 			return j;
 		}
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			Position = fromjson(j["Position"]);
+			mPosition = from_json(j["Position"]);
 		}
 
 	};
 
-	// =================
+
+	// ================= RotationComponent =================
 	struct RotationComponent
 	{
-		glm::vec3 Rotation;
+		glm::vec3 mRotation;
 
 		RotationComponent() = default;
 		RotationComponent(const glm::vec3& rotation)
-			: Rotation(rotation)
+			: mRotation(rotation)
 		{}
 
 		nlohmann::json Serialize() const
 		{
 			nlohmann::json j;
-			j["Rotation"] = to_json(Rotation);
+			j["Rotation"] = to_json(mRotation);
 			return j;
 		}
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			Rotation = fromjson(j["Rotation"]);
+			mRotation = from_json(j["Rotation"]);
 		}
 
 	};
 
-	// =================
+
+	// ================= ScaleComponent =================
 	struct ScaleComponent 
 	{ 
-		glm::vec3 Scale = glm::vec3( 1.0f );
+		glm::vec3 mScale = glm::vec3( 1.0f );
 		
 		ScaleComponent() = default;
 		ScaleComponent(const glm::vec3 & scale)
-			: Scale(scale)
+			: mScale(scale)
 		{}
 
 		nlohmann::json Serialize() const
 		{
 			nlohmann::json j;
-			j["Scale"] = to_json(Scale);
+			j["Scale"] = to_json(mScale);
 			return j;
 		}
 		
 		void Deserialize(const nlohmann::json& j)
 		{
-			Scale = fromjson(j["Scale"]);
+			mScale = from_json(j["Scale"]);
 		}
 	};
 
-	// =================
+
+	// ================= TransformComponent =================
 	struct TransformComponent
 	{
-		glm::mat4 Transform{ 1.0f };
+		glm::mat4 mTransform{ 1.0f };
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(glm::mat4 transform)
-			: Transform(transform) {}
+			: mTransform(transform) {}
 
-		operator glm::mat4& () { return Transform; }
-		operator const glm::mat4& () const { return Transform; }
+		operator glm::mat4& () { return mTransform; }
+		operator const glm::mat4& () const { return mTransform; }
 
 		nlohmann::json Serialize() const
 		{
@@ -137,7 +140,7 @@ namespace Bubble
 			std::vector<float> temp;
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
-					temp.push_back(Transform[i][j]);
+					temp.push_back(mTransform[i][j]);
 				}
 			}
 			j["Transform"] = temp;
@@ -149,7 +152,7 @@ namespace Bubble
 			std::vector<float> temp = j["Transform"];
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
-					Transform[i][j] = temp[i * 4 + j];
+					mTransform[i][j] = temp[i * 4 + j];
 				}
 			}
 
@@ -158,28 +161,28 @@ namespace Bubble
 	};
 
 
-	// =================
+	// ================= LightComponent =================
 	struct LightComponent
 	{
-		Light light;
+		Light mLight;
 
 		nlohmann::json Serialize() const
 		{
 			nlohmann::json j;
-			j["Light"]["Type"] = light.Type;
-			j["Light"]["Brightness"] = light.Brightness;
-			j["Light"]["Distance"] = light.Distance;
-			j["Light"]["Color"] = to_json(light.Color);
+			j["Light"]["Type"] = mLight.Type;
+			j["Light"]["Brightness"] = mLight.Brightness;
+			j["Light"]["Distance"] = mLight.Distance;
+			j["Light"]["Color"] = to_json(mLight.Color);
 
-			j["Light"]["Direction"] = to_json(light.Direction);
-			j["Light"]["Position"] = to_json(light.Position);
+			j["Light"]["Direction"] = to_json(mLight.Direction);
+			j["Light"]["Position"] = to_json(mLight.Position);
 
-			j["Light"]["Constant"] = light.Constant;
-			j["Light"]["Linear"] = light.Linear;
-			j["Light"]["Quadratic"] = light.Quadratic;
+			j["Light"]["Constant"] = mLight.Constant;
+			j["Light"]["Linear"] = mLight.Linear;
+			j["Light"]["Quadratic"] = mLight.Quadratic;
 
-			j["Light"]["CutOff"] = light.CutOff;
-			j["Light"]["OuterCutOff"] = light.OuterCutOff;
+			j["Light"]["CutOff"] = mLight.CutOff;
+			j["Light"]["OuterCutOff"] = mLight.OuterCutOff;
 
 			return j;
 		}
@@ -187,36 +190,36 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			light.Type= j["Light"]["Type"];
-			light.Brightness = j["Light"]["Brightness"];
-			light.Distance = j["Light"]["Distance"];
-			light.Color = fromjson(j["Light"]["Color"]);
+			mLight.Type= j["Light"]["Type"];
+			mLight.Brightness = j["Light"]["Brightness"];
+			mLight.Distance = j["Light"]["Distance"];
+			mLight.Color = from_json(j["Light"]["Color"]);
 
-			light.Direction = fromjson(j["Light"]["Direction"]);
-			light.Position = fromjson(j["Light"]["Position"]);
+			mLight.Direction = from_json(j["Light"]["Direction"]);
+			mLight.Position = from_json(j["Light"]["Position"]);
 
-			light.Constant = j["Light"]["Constant"];
-			light.Linear= j["Light"]["Linear"];
-			light.Quadratic = j["Light"]["Quadratic"];
+			mLight.Constant = j["Light"]["Constant"];
+			mLight.Linear= j["Light"]["Linear"];
+			mLight.Quadratic = j["Light"]["Quadratic"];
 
-			light.CutOff = j["Light"]["CutOff"];
-			light.OuterCutOff = j["Light"]["OuterCutOff"];
+			mLight.CutOff = j["Light"]["CutOff"];
+			mLight.OuterCutOff = j["Light"]["OuterCutOff"];
 		}
 
 	};
 
-	// =================
+	// ================= ModelComponent =================
 	struct ModelComponent
 	{
-		Ref<Model> model;
+		Ref<Model> mModel;
 
 		ModelComponent() = default;
 		ModelComponent(const Ref<Model>& model)
-			: model(model)
+			: mModel(model)
 		{}
 		
-		operator Ref<Model>& () { return model; }
-		operator const Ref<Model>& () const { return model; }
+		operator Ref<Model>& () { return mModel; }
+		operator const Ref<Model>& () const { return mModel; }
 
 		nlohmann::json Serialize() const
 		{
@@ -225,7 +228,7 @@ namespace Bubble
 				ModelLoader::LoadedModels.begin(), ModelLoader::LoadedModels.end(),
 				[&](const std::pair<std::string, Ref<Model>>& path_model) 
 				{
-					return path_model.second == model;
+					return path_model.second == mModel;
 				}
 			));
 
@@ -236,7 +239,7 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			model = ModelLoader::StaticModel(j["Model"]);
+			mModel = ModelLoader::StaticModel(j["Model"]);
 		}
 
 	};

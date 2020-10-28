@@ -13,13 +13,13 @@ namespace Bubble
 {
 	class ModelExplorer
 	{
-		Ref<Model> SelectedModel = nullptr;
+		Ref<Model> mSelectedModel = nullptr;
 
 		// Draw selected model
-		ThirdPersonCamera Camera;
-		Viewport Viewport;
-		Ref<Shader> Shader;
-		Light Light;
+		ThirdPersonCamera mCamera;
+		Viewport mViewport;
+		Ref<Shader> mShader;
+		Light mLight;
 
 	private:
 		void DrawSelectedModel();

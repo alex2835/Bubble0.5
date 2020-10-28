@@ -11,15 +11,6 @@
 
 namespace Bubble
 {
-	//struct Vertex
-	//{
-	//	glm::vec3 Position;
-	//	glm::vec3 Normal;
-	//	glm::vec2 TexCoords;
-	//	glm::vec3 Tangent;
-	//	glm::vec3 Bitangent;
-	//};
-
 	struct VertexData
 	{
 		std::vector<glm::vec3> Positions;
@@ -32,11 +23,10 @@ namespace Bubble
 
 	struct Mesh
 	{
-		VertexArray VertexArray;
-		DefaultMaterial Material;
-		//std::vector<VertexData> Vertices;
-		VertexData Vertices;
-		std::vector<uint32_t> Indices;
+		VertexArray mVertexArray;
+		DefaultMaterial mMaterial;
+		VertexData mVertices;
+		std::vector<uint32_t> mIndices;
 		
 		Mesh() = default;
 		Mesh(DefaultMaterial&& Material,

@@ -16,8 +16,8 @@ namespace Bubble
 
 		bool IsRotatingX = false;
 		bool IsRotatingY = false;
-
-		ThirdPersonCamera();
+		
+		ThirdPersonCamera(float yaw = YAW, float pitch = PITCH);
 
 		/*
 			Directions: UP, DOWN, LEFT, RIGHT
