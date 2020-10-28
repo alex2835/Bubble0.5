@@ -20,11 +20,11 @@ namespace Bubble
 		OpenProject("../../../../scene_test.json", &mScene);
 
 		// Temp: skybox
-		mActiveSkybox = CreateRef<Skybox>("resources/skybox/skybox1.jpg");
-		mSkyboxShader = Shader::Open("resources/shaders/skybox.glsl");
+		mActiveSkybox = SkyboxLoader::Load("resources/skybox/skybox1.jpg");//CreateRef<Skybox>("resources/skybox/skybox1.jpg");
+		mSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
 
-		mPhongShader = Shader::Open("resources/shaders/phong.glsl");
-		mSelectedItemShader = Shader::Open("resources/shaders/solid_color.glsl");
+		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
+		mSelectedItemShader = ShaderLoader::Load("resources/shaders/solid_color.glsl");
 
 		// Temp: Try to simplify mesh
  	}

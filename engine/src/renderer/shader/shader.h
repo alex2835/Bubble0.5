@@ -17,24 +17,22 @@
 
 namespace Bubble
 {
-    class Shader
-    {
+	struct Shader
+	{
 		std::string mName;
         uint32_t mShaderID;
 		mutable std::unordered_map<std::string, int> mUniformCache;
 
-    private:
-        void ParseShaders(const std::string& path, std::string& vertex, std::string& fragment, std::string& geometry);
-        void CompileShaders(const std::string& vertex_source, const std::string& fragment_source, const std::string& geometry_source);
-        int GetUni(const std::string& name) const;
-
     public:
-        Shader(const std::string& path);
+        Shader() = default;
 
-        Shader(const std::string& name,
-               const std::string& vertex,
-               const std::string& fragment,
-               const std::string& geometry = std::string());
+        Shader(const Shader&) = delete;
+        Shader& operator= (const Shader&) = delete;
+
+		Shader(Shader&&);
+		Shader& operator= (Shader&&);
+
+		int GetUni(const std::string& name) const;
 
         void Bind() const;
         void Unbind() const;
@@ -52,8 +50,5 @@ namespace Bubble
         void SetUniMat3(const std::string& name, const glm::mat3& val) const;
         void SetUniMat4(const std::string& name, const glm::mat4& val) const;
 
-        static Ref<Shader> Open(const std::string& path);
-    private:
-        static std::vector<std::pair<std::string, Ref<Shader>>> s_OpenedShaders;
     };
 }

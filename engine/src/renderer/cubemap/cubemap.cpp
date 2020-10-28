@@ -50,7 +50,7 @@ namespace Bubble
 			}
 			else
 			{
-				// release resource
+				// Release resource
 				glDeleteTextures(1, &mRendererID);
 				throw std::runtime_error("Cubemap loading failed: " + path);
 			}

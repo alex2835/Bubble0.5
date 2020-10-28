@@ -7,7 +7,7 @@ namespace Bubble
 
 	ModelExplorer::ModelExplorer()
 		: mViewport(800, 600),
-		  mShader(Shader::Open("resources/Shaders/phong.glsl")),
+		  mShader(ShaderLoader::Load("resources/Shaders/phong.glsl")),
 		  mLight(Light::CreateDirLight()),
 		  mCamera(0)
 	{}

@@ -146,15 +146,14 @@ namespace Bubble
 
 	int Input::GetMouseWheelOffset()
 	{
-		int temp = s_MouseWheelOffset;
-		s_MouseWheelOffset = 0;
-		return temp;
+		return s_MouseWheelOffset;
 	}
 
 	void Input::NewFrame()
 	{
-		Input::s_MouseRelPosX = 0.0f;
-		Input::s_MouseRelPosY = 0.0f;
+		s_MouseRelPosX = 0.0f;
+		s_MouseRelPosY = 0.0f;
+		s_MouseWheelOffset = 0.0f;
 	}
 
 }
