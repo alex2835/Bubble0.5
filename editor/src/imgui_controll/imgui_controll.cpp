@@ -7,7 +7,7 @@ namespace Bubble
     
 	ImGuiControll::ImGuiControll()
 	{
-        m_Window = (SDL_WINDOW*)Application::GetWindow();
+        mWindow = (SDL_WINDOW*)Application::GetWindow();
 	}
 
 	void ImGuiControll::OnAttach()
@@ -36,8 +36,8 @@ namespace Bubble
         }
 
         // Setup Platform/Renderer bindings
-        ImGui_ImplSDL2_InitForOpenGL(m_Window->GetWindow(), m_Window->GetGLContext());
-        ImGui_ImplOpenGL3_Init(m_Window->GetGLSLVersion());
+        ImGui_ImplSDL2_InitForOpenGL(mWindow->GetWindow(), mWindow->GetGLContext());
+        ImGui_ImplOpenGL3_Init(mWindow->GetGLSLVersion());
     }
 
     void ImGuiControll::OnDetach()
@@ -53,7 +53,7 @@ namespace Bubble
 		Framebuffer::BindDefault();
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame(m_Window->GetWindow());
+        ImGui_ImplSDL2_NewFrame(mWindow->GetWindow());
         ImGui::NewFrame();
     }
 

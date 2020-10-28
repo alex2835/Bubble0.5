@@ -9,29 +9,29 @@ namespace Bubble
 
 
 	Application::Application(Window* window)
-        : m_Window(window)
+        : mWindow(window)
     {
         Application::s_CurrentWindow = window;
     }
 
 	void Application::PushLayer(Layer* layer)
 	{
-		m_LayerArray.Push(layer);
+		mLayerArray.Push(layer);
 	}
 
 	void Application::InsertLayer(int id, Layer* layer)
 	{
-        m_LayerArray.Insert(id, layer);
+        mLayerArray.Insert(id, layer);
 	}
 
     void Application::RemoveLayer(int id)
     {
-        m_LayerArray.Remove(id);
+        mLayerArray.Remove(id);
     }
 
 	void Application::SwapLayers(int id_1, int id_2)
 	{
-        m_LayerArray.Swap(id_1, id_2);
+        mLayerArray.Swap(id_1, id_2);
 	}
 
 	Window* Application::GetWindow()
@@ -42,8 +42,8 @@ namespace Bubble
 	void Application::SetCurrentDir(const std::string& path)
 	{
         int path_size = std::min(path.find("/Bubble"), path.size());
-        m_CurrentDir = path.substr(0, path_size);
-        s_CurrentDir = &m_CurrentDir;
+        mCurrentDir = path.substr(0, path_size);
+        s_CurrentDir = &mCurrentDir;
 	}
 
 	const std::string& Application::GetCurrentDir()
@@ -55,31 +55,31 @@ namespace Bubble
 	{
         Renderer::Init();
 
-        while (m_Window.get() && m_Window->IsOpen())
+        while (mWindow.get() && mWindow->IsOpen())
         {
 			Input::NewFrame();
-            m_Timer.Update();
+            mTimer.Update();
 
             // Retrieve and send events
             SDL_Event event;
-            while (m_Window->PollEvent(event))
+            while (mWindow->PollEvent(event))
             {
-                for (auto& layer : m_LayerArray)
+                for (auto& layer : mLayerArray)
                 {
                     layer->OnEvent(event);
                 }
-                m_Window->OnEvent(event);
+                mWindow->OnEvent(event);
                 Input::OnEvent(event);
             }
 
             // Update layers
-            for (auto& layer : m_LayerArray)
+            for (auto& layer : mLayerArray)
             {
-                layer->OnUpdate(m_Timer.GetDeltaTime());
+                layer->OnUpdate(mTimer.GetDeltaTime());
             }
 
             // Update window
-            m_Window->OnUpdate();
+            mWindow->OnUpdate();
         }
 	}
 

@@ -17,7 +17,7 @@ namespace Bubble
 		return { value.r, value.g, value.b };
 	}
 
-	inline glm::vec3 from_json(const nlohmann::json& value)
+	inline glm::vec3 fromjson(const nlohmann::json& value)
 	{
 		return glm::vec3(value[0], value[1], value[2]);
 	}
@@ -66,7 +66,7 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			Position = from_json(j["Position"]);
+			Position = fromjson(j["Position"]);
 		}
 
 	};
@@ -90,7 +90,7 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			Rotation = from_json(j["Rotation"]);
+			Rotation = fromjson(j["Rotation"]);
 		}
 
 	};
@@ -114,7 +114,7 @@ namespace Bubble
 		
 		void Deserialize(const nlohmann::json& j)
 		{
-			Scale = from_json(j["Scale"]);
+			Scale = fromjson(j["Scale"]);
 		}
 	};
 
@@ -190,10 +190,10 @@ namespace Bubble
 			light.Type= j["Light"]["Type"];
 			light.Brightness = j["Light"]["Brightness"];
 			light.Distance = j["Light"]["Distance"];
-			light.Color = from_json(j["Light"]["Color"]);
+			light.Color = fromjson(j["Light"]["Color"]);
 
-			light.Direction = from_json(j["Light"]["Direction"]);
-			light.Position = from_json(j["Light"]["Position"]);
+			light.Direction = fromjson(j["Light"]["Direction"]);
+			light.Position = fromjson(j["Light"]["Position"]);
 
 			light.Constant = j["Light"]["Constant"];
 			light.Linear= j["Light"]["Linear"];

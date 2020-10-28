@@ -6,8 +6,8 @@ namespace Bubble
 {
 	Cubemap::Cubemap(int width, int height, const Texture2DSpecification& spec)
 	{
-		glGenTextures(1, &m_RendererID);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
+		glGenTextures(1, &mRendererID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, mRendererID);
 
 		for (unsigned int i = 0; i < 6; ++i)
 		{
@@ -24,15 +24,15 @@ namespace Bubble
 
 	Cubemap::Cubemap(Cubemap&& other)
 	{
-		m_RendererID = other.m_RendererID;
-		other.m_RendererID = 0;
+		mRendererID = other.mRendererID;
+		other.mRendererID = 0;
 	}
 
 	Cubemap::Cubemap(const std::string& dir, const std::string& ext, const Texture2DSpecification& spec)
 	{
 		const char* names[] = { "/right", "/left", "/top", "/bottom", "/front", "/back" };
-		glGenTextures(1, &m_RendererID);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
+		glGenTextures(1, &mRendererID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, mRendererID);
 
 		int width, height, chanels;
 		unsigned char* data;
@@ -51,7 +51,7 @@ namespace Bubble
 			else
 			{
 				// release resource
-				glDeleteTextures(1, &m_RendererID);
+				glDeleteTextures(1, &mRendererID);
 				throw std::runtime_error("Cubemap loading failed: " + path);
 			}
 		}
@@ -65,8 +65,8 @@ namespace Bubble
 
 	Cubemap::Cubemap(uint8_t* const data[6], const Texture2DSpecification& spec)
 	{
-		glGenTextures(1, &m_RendererID);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
+		glGenTextures(1, &mRendererID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, mRendererID);
 
 		for (GLuint i = 0; i < 6; i++)
 		{
@@ -83,19 +83,19 @@ namespace Bubble
 
 	void Cubemap::Bind()
 	{
-		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, mRendererID);
 	}
 
 	Cubemap& Cubemap::operator=(Cubemap&& other)
 	{
-		m_RendererID = other.m_RendererID;
-		other.m_RendererID = 0;
+		mRendererID = other.mRendererID;
+		other.mRendererID = 0;
 		return *this;
 	}
 
 	Cubemap::~Cubemap()
 	{
-		glDeleteTextures(1, &m_RendererID);
+		glDeleteTextures(1, &mRendererID);
 	}
 
 }

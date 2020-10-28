@@ -4,7 +4,7 @@ namespace Bubble
 {
 	class Time
 	{
-		float m_Time = 0.0f;
+		float mTime = 0.0f;
 
 	public:
 		Time() = default;

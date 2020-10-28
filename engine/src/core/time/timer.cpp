@@ -9,14 +9,14 @@ namespace Bubble
 	void Timer::Update()
 	{
 		high_resolution_clock::time_point now = Now();
-		duration<float> time_dif = duration_cast<duration<float>>(now - m_LastTime);
-		m_Deltatime = time_dif.count();
-		m_LastTime = now;
+		duration<float> time_dif = duration_cast<duration<float>>(now - mLastTime);
+		mDeltatime = time_dif.count();
+		mLastTime = now;
 	}
 
 	DeltaTime Timer::GetDeltaTime()
 	{
-		return m_Deltatime;
+		return mDeltatime;
 	}
 
 	std::chrono::high_resolution_clock::time_point Timer::Now()

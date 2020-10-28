@@ -4,17 +4,17 @@
 namespace Bubble
 {
 	Time::Time(float time)
-		: m_Time(time)
+		: mTime(time)
 	{}
 
 	float Time::GetSeconds()
 	{
-		return m_Time;
+		return mTime;
 	}
 
 	float Time::GetMilliseconds()
 	{
-		return m_Time * 1000.0f;
+		return mTime * 1000.0f;
 	}
 
 }

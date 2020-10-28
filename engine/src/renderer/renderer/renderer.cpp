@@ -100,6 +100,12 @@ namespace Bubble
 		glDisable(GL_BLEND);
 	}
 
+	void Renderer::DrawAABB(const AABB& aabb)
+	{
+		//static glBert
+		//glDrawBuffer();
+	}
+
 	void Renderer::DrawSkybox(const Ref<Skybox>& skybox, const Ref<Shader>& shader)
 	{
 		shader->Bind();

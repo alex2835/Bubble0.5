@@ -11,20 +11,20 @@ namespace Bubble
 {
 	class LightArray
 	{
-		std::vector<Light> m_Lights;
+		std::vector<Light> mLights;
 
 	public:
 		// It must be a child of shader class
 		template <typename ShaderType>
 		void ApplyLights(const Ref<ShaderType>& shader);
 
-		Light& operator[] (int index) { return m_Lights[index]; }
-		void push_back(const Light& lihgt) { m_Lights.push_back(lihgt); }
-		void erise(int index) { m_Lights.erase(begin() + index); }
-		int size() { return m_Lights.size(); }
+		Light& operator[] (int index) { return mLights[index]; }
+		void push_back(const Light& lihgt) { mLights.push_back(lihgt); }
+		void erise(int index) { mLights.erase(begin() + index); }
+		int size() { return mLights.size(); }
 
-		std::vector<Light>::iterator begin() { return m_Lights.begin(); };
-		std::vector<Light>::iterator end() { return m_Lights.end(); };
+		std::vector<Light>::iterator begin() { return mLights.begin(); };
+		std::vector<Light>::iterator end() { return mLights.end(); };
 	};
 
 
@@ -34,9 +34,9 @@ namespace Bubble
 		shader->Bind();
 		char light_id[64];
 		char buffer[64];
-		for (int i = 0; i < m_Lights.size(); i++)
+		for (int i = 0; i < mLights.size(); i++)
 		{
-			const Light& light = m_Lights[i];
+			const Light& light = mLights[i];
 			sprintf(light_id, "lights[%d]", i);
 			
 			sprintf(buffer, "%s.type", light_id);
@@ -64,7 +64,7 @@ namespace Bubble
 			sprintf(buffer, "%s.brightness", light_id);
 			shader->SetUni1f(buffer, light.Brightness);
 		}
-		shader->SetUni1i("nLights", m_Lights.size());
+		shader->SetUni1i("nLights", mLights.size());
 	}
 
 

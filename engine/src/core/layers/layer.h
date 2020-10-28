@@ -11,7 +11,7 @@ namespace Bubble
 	class Layer
 	{
 	public:
-		std::string m_Name;
+		std::string mName;
 
 		Layer(const std::string& name = "Layer");
 		virtual ~Layer() = default;

@@ -72,7 +72,7 @@ namespace Bubble
                 // free resources
     			glDeleteShader(vertex_shader);
     
-                LOG_CORE_ERROR("VERTEX SHADER ERROR: {0} \n {1}", m_Name, log);
+                LOG_CORE_ERROR("VERTEX SHADER ERROR: {0} \n {1}", mName, log);
     			throw std::runtime_error("Shader compilation failed");
             }
         }
@@ -99,7 +99,7 @@ namespace Bubble
 				glDeleteShader(vertex_shader);
 				glDeleteShader(fragment_shader);
 
-                LOG_CORE_ERROR("FRAGMENT SHADER ERROR: : {0} \n {1}", m_Name, log);
+                LOG_CORE_ERROR("FRAGMENT SHADER ERROR: : {0} \n {1}", mName, log);
 				throw std::runtime_error("Shader compilation failed");
             }
         }
@@ -128,26 +128,26 @@ namespace Bubble
 					glDeleteShader(vertex_shader);
 					glDeleteShader(fragment_shader);
 
-                    LOG_CORE_ERROR("GEOMETRY SHADER ERROR: {0} \n {1}", m_Name, log);
+                    LOG_CORE_ERROR("GEOMETRY SHADER ERROR: {0} \n {1}", mName, log);
 					throw std::runtime_error("Shader compilation failed");
                 }
             }
         }
 		// Shader program
-		m_ShaderID = glCreateProgram();
+		mShaderID = glCreateProgram();
 
 		// Link shaders
-        glcall(glAttachShader(m_ShaderID, vertex_shader));
-        glcall(glAttachShader(m_ShaderID, fragment_shader));
+        glcall(glAttachShader(mShaderID, vertex_shader));
+        glcall(glAttachShader(mShaderID, fragment_shader));
         if (geometry_source.size())
         {
-            glcall(glAttachShader(m_ShaderID, geometry_shader));
+            glcall(glAttachShader(mShaderID, geometry_shader));
         }
-        glcall(glLinkProgram(m_ShaderID));
+        glcall(glLinkProgram(mShaderID));
         
         {
             GLint success;
-            glGetProgramiv(m_ShaderID, GL_COMPILE_STATUS, &success);
+            glGetProgramiv(mShaderID, GL_COMPILE_STATUS, &success);
             if (!success)
             {
                 GLint max_length = 0;
@@ -155,15 +155,15 @@ namespace Bubble
 
                 glGetShaderiv(geometry_shader, GL_INFO_LOG_LENGTH, &max_length);
                 log.resize(max_length);
-                glGetProgramInfoLog(m_ShaderID, max_length, NULL, (GLchar*)log.data());
+                glGetProgramInfoLog(mShaderID, max_length, NULL, (GLchar*)log.data());
 
                 // free resources
 				glDeleteShader(geometry_shader);
 				glDeleteShader(vertex_shader);
 				glDeleteShader(fragment_shader);
-                glDeleteProgram(m_ShaderID);
+                glDeleteProgram(mShaderID);
 
-                LOG_CORE_ERROR("LINLING SHADER ERROR: {0} \n {1}", m_Name, log);
+                LOG_CORE_ERROR("LINLING SHADER ERROR: {0} \n {1}", mName, log);
                 throw std::runtime_error("Shader compilation failed");
             }
         }
@@ -174,21 +174,21 @@ namespace Bubble
         glDeleteShader(fragment_shader);
     }
 
-    int Shader::GetUni(const std::string& uniform_name) const
+    int Shader::GetUni(const std::string& uniformname) const
     {
-        glcall(glUseProgram(m_ShaderID));
-        if (m_UniformCache.find(uniform_name) != m_UniformCache.end())
+        glcall(glUseProgram(mShaderID));
+        if (mUniformCache.find(uniformname) != mUniformCache.end())
         {
-            return m_UniformCache[uniform_name];
+            return mUniformCache[uniformname];
         }
 
-        int unifrom_id = glGetUniformLocation(m_ShaderID, uniform_name.c_str());
-        if (unifrom_id == -1)
+        int unifromid = glGetUniformLocation(mShaderID, uniformname.c_str());
+        if (unifromid == -1)
         {
-            LOG_CORE_WARN("Shader: {0} doesn't have uniform: {1}", m_Name, uniform_name);
+            LOG_CORE_WARN("Shader: {0} doesn't have uniform: {1}", mName, uniformname);
         }
-        m_UniformCache[uniform_name] = unifrom_id;
-        return unifrom_id;
+        mUniformCache[uniformname] = unifromid;
+        return unifromid;
     }
 
     // =================== Contructors ====================
@@ -196,7 +196,7 @@ namespace Bubble
     Shader::Shader(const std::string& path)
     {
 		std::string vertexSource, fragmentSource, geometry;
-        m_Name = path.substr(path.find_last_of('/') + 1);
+        mName = path.substr(path.find_last_of('/') + 1);
         
         ParseShaders(path, vertexSource, fragmentSource, geometry);
         CompileShaders(vertexSource, fragmentSource, geometry);
@@ -206,14 +206,14 @@ namespace Bubble
                    const std::string& vertex,
                    const std::string& fragment,
                    const std::string& geometry /*= std::string()*/)
-        : m_Name(name)
+        : mName(name)
 	{
         CompileShaders(vertex, fragment, geometry);
 	}
 
 	void Shader::Bind() const
 	{
-        glcall(glUseProgram(m_ShaderID));
+        glcall(glUseProgram(mShaderID));
 	}
 
 	void Shader::Unbind() const
@@ -223,41 +223,41 @@ namespace Bubble
 
 
 	// lone int 
-    void Shader::SetUni1i(const std::string& m_Name, const int& val) const
+    void Shader::SetUni1i(const std::string& mName, const int& val) const
     {
-        glcall(glUniform1i(GetUni(m_Name), val));
+        glcall(glUniform1i(GetUni(mName), val));
     }
 
     // float vec
-    void Shader::SetUni1f(const std::string& m_Name, const float& val) const
+    void Shader::SetUni1f(const std::string& mName, const float& val) const
     {
-        glcall(glUniform1f(GetUni(m_Name), val));
+        glcall(glUniform1f(GetUni(mName), val));
     }
 
-    void Shader::SetUni2f(const std::string& m_Name, const glm::vec2& val) const
+    void Shader::SetUni2f(const std::string& mName, const glm::vec2& val) const
     {
-        glcall(glUniform2f(GetUni(m_Name), val.x, val.y));
+        glcall(glUniform2f(GetUni(mName), val.x, val.y));
     }
 
-    void Shader::SetUni3f(const std::string& m_Name, const glm::vec3& val) const
+    void Shader::SetUni3f(const std::string& mName, const glm::vec3& val) const
     {
-        glcall(glUniform3f(GetUni(m_Name), val.x, val.y, val.z));
+        glcall(glUniform3f(GetUni(mName), val.x, val.y, val.z));
     }
 
-    void Shader::SetUni4f(const std::string& m_Name, const glm::vec4& val) const
+    void Shader::SetUni4f(const std::string& mName, const glm::vec4& val) const
     {
-        glcall(glUniform4f(GetUni(m_Name), val.x, val.y, val.z, val.w));
+        glcall(glUniform4f(GetUni(mName), val.x, val.y, val.z, val.w));
     }
 
     // float matrices
-    void Shader::SetUniMat3(const std::string& m_Name, const glm::mat3& val) const
+    void Shader::SetUniMat3(const std::string& mName, const glm::mat3& val) const
     {
-        glcall(glUniformMatrix3fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val)));
+        glcall(glUniformMatrix3fv(GetUni(mName), 1, GL_FALSE, glm::value_ptr(val)));
     }
 
-    void Shader::SetUniMat4(const std::string& m_Name, const glm::mat4& val) const
+    void Shader::SetUniMat4(const std::string& mName, const glm::mat4& val) const
     {
-        glcall(glUniformMatrix4fv(GetUni(m_Name), 1, GL_FALSE, glm::value_ptr(val)));
+        glcall(glUniformMatrix4fv(GetUni(mName), 1, GL_FALSE, glm::value_ptr(val)));
     }
 
 	

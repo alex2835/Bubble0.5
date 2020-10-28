@@ -25,16 +25,16 @@ namespace Bubble
 
 	VertexArray::VertexArray()
 	{
-		glcall(glGenVertexArrays(1, &m_RendererID));
+		glcall(glGenVertexArrays(1, &mRendererID));
 	}
 
 	VertexArray::VertexArray(VertexArray&& other)
 	{
-		m_RendererID = other.m_RendererID;
-		VertexBufferIndex(other.m_VertexBufferIndex);
-		m_VertexBuffers = std::move(other.m_VertexBuffers);
-		m_IndexBuffer = std::move(other.m_IndexBuffer);
-		other.m_RendererID = 0;
+		mRendererID = other.mRendererID;
+		VertexBufferIndex(other.mVertexBufferIndex);
+		mVertexBuffers = std::move(other.mVertexBuffers);
+		mIndexBuffer = std::move(other.mIndexBuffer);
+		other.mRendererID = 0;
 		other.VertexBufferIndex(0);
 	}
 
@@ -42,11 +42,11 @@ namespace Bubble
 	{
 		if (this != &other)
 		{
-			m_RendererID = other.m_RendererID;
-			VertexBufferIndex(other.m_VertexBufferIndex);
-			m_VertexBuffers = std::move(other.m_VertexBuffers);
-			m_IndexBuffer = std::move(other.m_IndexBuffer);
-			other.m_RendererID = 0;
+			mRendererID = other.mRendererID;
+			VertexBufferIndex(other.mVertexBufferIndex);
+			mVertexBuffers = std::move(other.mVertexBuffers);
+			mIndexBuffer = std::move(other.mIndexBuffer);
+			other.mRendererID = 0;
 			other.VertexBufferIndex(0);
 		}
 		return *this;
@@ -54,12 +54,12 @@ namespace Bubble
 
 	VertexArray::~VertexArray()
 	{
-		glDeleteVertexArrays(1, &m_RendererID);
+		glDeleteVertexArrays(1, &mRendererID);
 	}
 
 	void VertexArray::Bind() const
 	{
-		glcall(glBindVertexArray(m_RendererID));
+		glcall(glBindVertexArray(mRendererID));
 	}
 
 	void VertexArray::Unbind() const
@@ -89,14 +89,14 @@ namespace Bubble
 				case GLSLDataType::Int4:
 				case GLSLDataType::Bool:
 				{
-					glcall(glEnableVertexAttribArray(m_VertexBufferIndex));
-					glcall(glVertexAttribPointer(m_VertexBufferIndex,
+					glcall(glEnableVertexAttribArray(mVertexBufferIndex));
+					glcall(glVertexAttribPointer(mVertexBufferIndex,
 												 element.GetComponentCount(),
 												 GLSLDataTypeToOpenGLBaseType(element.Type),
 												 element.Normalized ? GL_TRUE : GL_FALSE,
 												 layout.GetStride() ? layout.GetStride() : element.Size,
 												 (const void*)element.Offset));
-					VertexBufferIndex(m_VertexBufferIndex + 1);
+					VertexBufferIndex(mVertexBufferIndex + 1);
 				}break;
 				case GLSLDataType::Mat3:
 				case GLSLDataType::Mat4:
@@ -104,15 +104,15 @@ namespace Bubble
 					uint32_t count = element.GetComponentCount();
 					for (uint32_t i = 0; i < count; i++)
 					{
-						glcall(glEnableVertexAttribArray(m_VertexBufferIndex));
-						glcall(glVertexAttribPointer(m_VertexBufferIndex,
+						glcall(glEnableVertexAttribArray(mVertexBufferIndex));
+						glcall(glVertexAttribPointer(mVertexBufferIndex,
 													 count,
 													 GLSLDataTypeToOpenGLBaseType(element.Type),
 													 element.Normalized ? GL_TRUE : GL_FALSE,
 													 layout.GetStride() ? layout.GetStride() : element.Size,
 													 (const void*)(sizeof(float) * count * i)));
-						glcall(glVertexAttribDivisor(m_VertexBufferIndex, 1));
-						VertexBufferIndex(m_VertexBufferIndex + 1);
+						glcall(glVertexAttribDivisor(mVertexBufferIndex, 1));
+						VertexBufferIndex(mVertexBufferIndex + 1);
 					}
 				}break;
 				default: {
@@ -120,7 +120,7 @@ namespace Bubble
 				}
 			}
 		}
-		m_VertexBuffers.push_back(std::move(vertexBuffer));
+		mVertexBuffers.push_back(std::move(vertexBuffer));
 		Unbind();
 	}
 
@@ -128,18 +128,18 @@ namespace Bubble
 	{
 		Bind();
 		indexBuffer.Bind();
-		m_IndexBuffer = std::move(indexBuffer);
+		mIndexBuffer = std::move(indexBuffer);
 		Unbind();
 	}
 
 	const std::vector<Bubble::VertexBuffer>& VertexArray::GetVertexBuffers() const
 	{
-		return m_VertexBuffers;
+		return mVertexBuffers;
 	}
 
 	const Bubble::IndexBuffer& VertexArray::GetIndexBuffer() const
 	{
-		return m_IndexBuffer;
+		return mIndexBuffer;
 	}
 
 }

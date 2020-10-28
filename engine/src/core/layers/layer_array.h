@@ -11,7 +11,7 @@ namespace Bubble
 {
 	class LayerArray
 	{
-		std::vector<Scope<Layer>> m_Layers;
+		std::vector<Scope<Layer>> mLayers;
 
 	public:
 		void Push(Layer* layer);
@@ -19,8 +19,8 @@ namespace Bubble
 		void Insert(int id, Layer* layer);
 		void Swap(int id_1, int id_2);
 
-		std::vector<Scope<Layer>>::iterator begin() { return m_Layers.begin(); }
-		std::vector<Scope<Layer>>::iterator end() { return m_Layers.end(); }
+		std::vector<Scope<Layer>>::iterator begin() { return mLayers.begin(); }
+		std::vector<Scope<Layer>>::iterator end() { return mLayers.end(); }
 
 		Layer* operator [] (int id);
 		

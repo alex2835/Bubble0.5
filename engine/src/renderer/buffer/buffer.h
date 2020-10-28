@@ -65,8 +65,8 @@ namespace Bubble
 				case GLSLDataType::Float2:  return 2;
 				case GLSLDataType::Float3:  return 3;
 				case GLSLDataType::Float4:  return 4;
-				case GLSLDataType::Mat3:    return 3; // 3* float3
-				case GLSLDataType::Mat4:    return 4; // 4* float4
+				case GLSLDataType::Mat3:    return 3;
+				case GLSLDataType::Mat4:    return 4;
 				case GLSLDataType::Int:     return 1;
 				case GLSLDataType::Int2:    return 2;
 				case GLSLDataType::Int3:    return 3;
@@ -83,40 +83,40 @@ namespace Bubble
 	class BufferLayout
 	{
 	private:
-		std::vector<BufferElement> m_Elements;
-		uint32_t m_Stride = 0;
+		std::vector<BufferElement> mElements;
+		uint32_t mStride = 0;
 
 	public:
 		BufferLayout() {}
 
 		BufferLayout(const std::initializer_list<BufferElement>& elements)
-			: m_Elements(elements)
+			: mElements(elements)
 		{
 			CalculateOffsetsAndStride();
 		}
 
-		uint32_t GetStride() const { return m_Stride; }
-		const std::vector<BufferElement>& GetElements() const { return m_Elements; }
+		uint32_t GetStride() const { return mStride; }
+		const std::vector<BufferElement>& GetElements() const { return mElements; }
 
-		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
-		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
-		std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
-		std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
+		std::vector<BufferElement>::iterator begin() { return mElements.begin(); }
+		std::vector<BufferElement>::iterator end() { return mElements.end(); }
+		std::vector<BufferElement>::const_iterator begin() const { return mElements.begin(); }
+		std::vector<BufferElement>::const_iterator end() const { return mElements.end(); }
 
 	private:
 		void CalculateOffsetsAndStride()
 		{
 			size_t offset = 0;
-			for (auto& element : m_Elements)
+			for (auto& element : mElements)
 			{
 				element.Offset = offset;
 				offset += element.Size * element.Count;
-				m_Stride += element.Size;
+				mStride += element.Size;
 			}
 			// If count more then one than
 			// attributes goes one after another (1111 2222 3333)
 			// So stride will be the size of each attribute value
-			m_Stride = m_Elements[0].Count == 1 ? m_Stride : 0;
+			mStride = mElements[0].Count == 1 ? mStride : 0;
 		}
 	};
 
@@ -124,9 +124,9 @@ namespace Bubble
 	class VertexBuffer
 	{
 	private:
-		uint32_t m_RendererID = 0;
-		uint32_t m_Size = 0;
-		BufferLayout m_Layout;
+		uint32_t mRendererID = 0;
+		uint32_t mSize = 0;
+		BufferLayout mLayout;
 
 	public:
 		VertexBuffer() = default;
@@ -149,15 +149,15 @@ namespace Bubble
 		const BufferLayout& GetLayout() const;
 		void SetLayout(const BufferLayout& layout);
 
-		uint32_t GetSize() { return m_Size; }
+		uint32_t GetSize() { return mSize; }
 	};
 
 	
 	class IndexBuffer
 	{
 	private:
-		uint32_t m_RendererID = 0;
-		uint32_t m_Count = 0;
+		uint32_t mRendererID = 0;
+		uint32_t mCount = 0;
 
 	public:
 		IndexBuffer() = default;

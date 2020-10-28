@@ -5,8 +5,8 @@ namespace Bubble
 {
 	void ViewportArray::Erase(int idx)
 	{
-		m_Viewports.erase(m_Viewports.begin() + idx);
-		m_IsOpen.erase(m_IsOpen.begin() + idx);
+		mViewports.erase(mViewports.begin() + idx);
+		mIsOpen.erase(mIsOpen.begin() + idx);
 	}
 
 	void ViewportArray::Push(Viewport&& viewport)
@@ -35,20 +35,20 @@ namespace Bubble
 			viewport.Name = name;
 		}
 
-		m_Viewports.push_back(std::move(viewport));
-		m_IsOpen.push_back(true);
+		mViewports.push_back(std::move(viewport));
+		mIsOpen.push_back(true);
 	}
 
 	int ViewportArray::Size()
 	{
-		return m_Viewports.size();
+		return mViewports.size();
 	}
 
 	void ViewportArray::RemoveNotActiveViewports()
 	{
 		for (int i = 1; i < Size(); i++)
 		{
-			if (!m_IsOpen[i])
+			if (!mIsOpen[i])
 			{
 				Erase(i);
 			}
@@ -57,14 +57,14 @@ namespace Bubble
 
 	Viewport& ViewportArray::operator[] (int idx)
 	{
-		return m_Viewports[idx];
+		return mViewports[idx];
 	}
 	
 	char& ViewportArray::IsOpen(int idx)
 	{
-		return m_IsOpen[idx];
+		return mIsOpen[idx];
 	}
 
-	std::vector<Viewport>::iterator ViewportArray::begin() { return m_Viewports.begin(); }
-	std::vector<Viewport>::iterator ViewportArray::end() { return m_Viewports.end(); }
+	std::vector<Viewport>::iterator ViewportArray::begin() { return mViewports.begin(); }
+	std::vector<Viewport>::iterator ViewportArray::end() { return mViewports.end(); }
 }

@@ -18,11 +18,11 @@ namespace Bubble
 		static Window* s_CurrentWindow;
 		static std::string* s_CurrentDir;
 	protected:
-		Timer m_Timer;
+		Timer mTimer;
 		// Resources
-		Scope<Window> m_Window;
-		LayerArray m_LayerArray;
-		std::string m_CurrentDir;
+		Scope<Window> mWindow;
+		LayerArray mLayerArray;
+		std::string mCurrentDir;
 		
 	public:
 		Application(Window* window = nullptr);

@@ -11,7 +11,7 @@ namespace Bubble
 {
 	struct Cubemap
 	{
-		uint32_t m_RendererID = 0;
+		uint32_t mRendererID = 0;
 		
 		Cubemap() = default;
 		Cubemap(int width, int height, const Texture2DSpecification& spec);

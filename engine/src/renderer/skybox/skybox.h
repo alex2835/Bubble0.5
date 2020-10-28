@@ -10,7 +10,7 @@ namespace Bubble
 	{
 		static VertexArray* s_VertexArray;
 	public:
-		Cubemap m_Skybox;
+		Cubemap mSkybox;
 
 		Skybox() = default;
 		Skybox(const std::string& dir, const std::string& ext);

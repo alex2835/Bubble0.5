@@ -7,7 +7,7 @@
 //{
 //	struct ScriptableEntity
 //	{
-//		Entity m_Entity;
+//		Entity mEntity;
 //		friend class Scene;
 //
 //		virtual ~ScriptableEntity() {}
@@ -15,7 +15,7 @@
 //		template<typename T>
 //		T& GetComponent()
 //		{
-//			return m_Entity.GetComponent<T>();
+//			return mEntity.GetComponent<T>();
 //		}
 //	
 //	protected:

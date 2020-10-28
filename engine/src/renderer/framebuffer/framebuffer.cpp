@@ -6,7 +6,7 @@
 namespace Bubble
 {
 	Framebuffer::Framebuffer(const FramebufferSpecification& spec)
-		: m_Specification(spec)
+		: mSpecification(spec)
 	{
 		Invalidate();
 	}
@@ -14,15 +14,15 @@ namespace Bubble
 	Framebuffer::Framebuffer(Framebuffer&& other) noexcept
 	{
 		// Rebind
-		m_RendererID = other.m_RendererID;
-		m_ColorAttachment = other.m_ColorAttachment;
-		m_DepthAttachment = other.m_DepthAttachment;
-		m_Specification = other.m_Specification;
+		mRendererID = other.mRendererID;
+		mColorAttachment = other.mColorAttachment;
+		mDepthAttachment = other.mDepthAttachment;
+		mSpecification = other.mSpecification;
 
 		// Make invalid
-		other.m_RendererID = 0;
-		other.m_ColorAttachment = 0;
-		other.m_DepthAttachment = 0;
+		other.mRendererID = 0;
+		other.mColorAttachment = 0;
+		other.mDepthAttachment = 0;
 	}
 
 	Framebuffer& Framebuffer::operator= (Framebuffer&& other) noexcept
@@ -30,20 +30,20 @@ namespace Bubble
 		if (this != &other)
 		{
 			// Clear
-			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(1, &m_ColorAttachment);
-			glDeleteTextures(1, &m_DepthAttachment);
+			glDeleteFramebuffers(1, &mRendererID);
+			glDeleteTextures(1, &mColorAttachment);
+			glDeleteTextures(1, &mDepthAttachment);
 
 			// Rebind
-			m_RendererID = other.m_RendererID;
-			m_ColorAttachment = other.m_ColorAttachment;
-			m_DepthAttachment = other.m_DepthAttachment;
-			m_Specification = other.m_Specification;
+			mRendererID = other.mRendererID;
+			mColorAttachment = other.mColorAttachment;
+			mDepthAttachment = other.mDepthAttachment;
+			mSpecification = other.mSpecification;
 
 			// Make invalid
-			other.m_RendererID = 0;
-			other.m_ColorAttachment = 0;
-			other.m_DepthAttachment = 0;
+			other.mRendererID = 0;
+			other.mColorAttachment = 0;
+			other.mDepthAttachment = 0;
 		}
 		return *this;
 	}
@@ -51,38 +51,38 @@ namespace Bubble
 
 	void Framebuffer::Create(const FramebufferSpecification& spec)
 	{
-		m_Specification = spec;
+		mSpecification = spec;
 		Invalidate();
 	}
 
 	Framebuffer::~Framebuffer()
 	{
-		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(1, &m_ColorAttachment);
-		glDeleteTextures(1, &m_DepthAttachment);
+		glDeleteFramebuffers(1, &mRendererID);
+		glDeleteTextures(1, &mColorAttachment);
+		glDeleteTextures(1, &mDepthAttachment);
 	}
 
 	void Framebuffer::Invalidate()
 	{
-		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(1, &m_ColorAttachment);
-		glDeleteTextures(1, &m_DepthAttachment);
+		glDeleteFramebuffers(1, &mRendererID);
+		glDeleteTextures(1, &mColorAttachment);
+		glDeleteTextures(1, &mDepthAttachment);
 
-		glcall(glGenFramebuffers(1, &m_RendererID));
-		glcall(glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID));
+		glcall(glGenFramebuffers(1, &mRendererID));
+		glcall(glBindFramebuffer(GL_FRAMEBUFFER, mRendererID));
 
 		// Color
-		glcall(glGenTextures(1, &m_ColorAttachment));
-		glcall(glBindTexture(GL_TEXTURE_2D, m_ColorAttachment));
+		glcall(glGenTextures(1, &mColorAttachment));
+		glcall(glBindTexture(GL_TEXTURE_2D, mColorAttachment));
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
 			GetWidth(), GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachment, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mColorAttachment, 0);
 
 		// Depth
-		glcall(glGenTextures(1, &m_DepthAttachment));
-		glcall(glBindTexture(GL_TEXTURE_2D, m_DepthAttachment));
+		glcall(glGenTextures(1, &mDepthAttachment));
+		glcall(glBindTexture(GL_TEXTURE_2D, mDepthAttachment));
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
 			GetWidth(), GetWidth(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -92,7 +92,7 @@ namespace Bubble
 		
 		float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mDepthAttachment, 0);
 
 		// Something going wrong
 		BUBBLE_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
@@ -102,17 +102,17 @@ namespace Bubble
 
 	int Framebuffer::GetWidth() const
 	{
-		return m_Specification.Size.x;
+		return mSpecification.Size.x;
 	}
 
 	int Framebuffer::GetHeight() const
 	{
-		return m_Specification.Size.y;
+		return mSpecification.Size.y;
 	}
 
 	void Framebuffer::Bind() const
 	{
-		glcall(glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID));
+		glcall(glBindFramebuffer(GL_FRAMEBUFFER, mRendererID));
 		glViewport(0, 0, GetWidth(), GetHeight());
 	}
 
@@ -123,7 +123,7 @@ namespace Bubble
 
 	glm::ivec2 Framebuffer::GetSize() const
 	{
-		return m_Specification.Size;
+		return mSpecification.Size;
 	}
 
 	void Framebuffer::Resize(glm::ivec2 size)
@@ -134,13 +134,13 @@ namespace Bubble
 		else if (size.x < size.y) {
 			size.x = size.y;
 		}
-		m_Specification.Size = size;
+		mSpecification.Size = size;
 		Invalidate();
 	}
 
 	const FramebufferSpecification& Framebuffer::GetSpecification() const
 	{
-		return m_Specification;
+		return mSpecification;
 	}
 
 	void Framebuffer::BindDefault()
@@ -152,7 +152,7 @@ namespace Bubble
 
 	uint32_t Framebuffer::GetColorAttachmentRendererID()
 	{
-		return m_ColorAttachment;
+		return mColorAttachment;
 	}
 
 }

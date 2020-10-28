@@ -18,10 +18,10 @@ namespace Bubble
 
 	class Framebuffer
 	{
-		uint32_t m_RendererID = 0;
-		uint32_t m_ColorAttachment = 0;
-		uint32_t m_DepthAttachment = 0;
-		FramebufferSpecification m_Specification;
+		uint32_t mRendererID = 0;
+		uint32_t mColorAttachment = 0;
+		uint32_t mDepthAttachment = 0;
+		FramebufferSpecification mSpecification;
 
 	public:
 		Framebuffer() = default;

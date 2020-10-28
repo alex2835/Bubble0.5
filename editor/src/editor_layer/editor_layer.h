@@ -10,24 +10,24 @@
 #include "UI/UI.h"
 #include "serialization/serialization.h"
 
+#include "glm-aabb/AABB.hpp"
+
 namespace Bubble
 {
 	class EditorLayer : public Layer
 	{
-		UI UserInterface;
-		ImGuiControll ImGuiControll;
-		SceneCamera SceneCamera;
-		Viewport MainViewport;
-		Scene ActiveScene;
+		UI mUI;
+		ImGuiControll mImGuiControll;
+		SceneCamera mSceneCamera;
+		Viewport mViewport;
+		Scene mScene;
 
-		Ref<Shader> SelectedItemShader;
-		Ref<Shader> PhongShader;
+		Ref<Shader> mSelectedItemShader;
+		Ref<Shader> mPhongShader;
 
-		Ref<Shader> SkyboxShader;
-		Ref<Skybox> ActiveSkybox;
-		
-		void DrawMenuBar();
-		
+		Ref<Shader> mSkyboxShader;
+		Ref<Skybox> mActiveSkybox;
+
 	public:
 		EditorLayer();
 		void OnAttach() override;

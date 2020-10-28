@@ -8,8 +8,8 @@ namespace Bubble
 {
 	Texture2D::Texture2D(const glm::vec4& color)
 	{
-		glcall(glGenTextures(1, &m_RendererID));
-		glcall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
+		glcall(glGenTextures(1, &mRendererID));
+		glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
 		glcall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &color));
 
 		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
@@ -21,14 +21,14 @@ namespace Bubble
 
 
 	Texture2D::Texture2D(const Texture2DSpecification& spec)
-		: m_Width(spec.Width),
-		  m_Height(spec.Height)
+		: mWidth(spec.Width),
+		  mHeight(spec.Height)
 	{
-		m_InternalFormat = spec.InternalFormat;
-		m_DataFormat = spec.DataFormat;
+		mInternalFormat = spec.InternalFormat;
+		mDataFormat = spec.DataFormat;
 
-		glcall(glGenTextures(1, &m_RendererID));
-		glcall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
+		glcall(glGenTextures(1, &mRendererID));
+		glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
 		glcall(glTexImage2D(GL_TEXTURE_2D, 0, spec.InternalFormat, spec.Width, spec.Height, 0, spec.DataFormat, GL_UNSIGNED_BYTE, nullptr));
 		
 		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, spec.MinFiler));
@@ -55,8 +55,8 @@ namespace Bubble
 			throw std::runtime_error("Failed to load image!\nPath: " + path);
 		}
 
-		m_Width = width;
-		m_Height = height;
+		mWidth = width;
+		mHeight = height;
 
 		GLenum internal_format = 0, data_format = 0;
 		if (channels == 1)
@@ -75,13 +75,13 @@ namespace Bubble
 			data_format = GL_RGBA;
 		}
 		
-		m_InternalFormat = internal_format;
-		m_DataFormat = data_format;
+		mInternalFormat = internal_format;
+		mDataFormat = data_format;
 
 		BUBBLE_CORE_ASSERT(internal_format & data_format, "Format not supported!");
 
-		glcall(glGenTextures(1, &m_RendererID));
-		glcall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
+		glcall(glGenTextures(1, &mRendererID));
+		glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
 		glcall(glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0, data_format, GL_UNSIGNED_BYTE, data));
 		
 		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, spec.MinFiler));
@@ -104,60 +104,60 @@ namespace Bubble
 	}
 
 	Texture2D::Texture2D(Texture2D&& other) noexcept
-		: m_Width(other.m_Width),
-		  m_Height(other.m_Height),
-		  m_DataFormat(other.m_DataFormat),
-		  m_RendererID(other.m_RendererID),
-		  m_InternalFormat(other.m_InternalFormat)
+		: mWidth(other.mWidth),
+		  mHeight(other.mHeight),
+		  mDataFormat(other.mDataFormat),
+		  mRendererID(other.mRendererID),
+		  mInternalFormat(other.mInternalFormat)
 	{
-		other.m_Width = 0;
-		other.m_Height = 0;
-		other.m_RendererID = 0;
+		other.mWidth = 0;
+		other.mHeight = 0;
+		other.mRendererID = 0;
 	}
 
 	Texture2D& Texture2D::operator=(Texture2D&& other) noexcept
 	{
 		if (this != &other)
 		{
-			glDeleteTextures(1, &m_RendererID);
-			m_Width = other.m_Width;
-			m_Height = other.m_Height;
-			m_DataFormat = other.m_DataFormat;
-			m_RendererID = other.m_RendererID;
-			m_InternalFormat = other.m_InternalFormat;
-			other.m_Width = 0;
-			other.m_Height = 0;
-			other.m_RendererID = 0;
+			glDeleteTextures(1, &mRendererID);
+			mWidth = other.mWidth;
+			mHeight = other.mHeight;
+			mDataFormat = other.mDataFormat;
+			mRendererID = other.mRendererID;
+			mInternalFormat = other.mInternalFormat;
+			other.mWidth = 0;
+			other.mHeight = 0;
+			other.mRendererID = 0;
 		}
 		return *this;
 	}
 
 	Texture2D::~Texture2D()
 	{
-		glDeleteTextures(1, &m_RendererID);
+		glDeleteTextures(1, &mRendererID);
 	}
 
 	void Texture2D::SetData(void* data, uint32_t size)
 	{
 		uint32_t bpp = 0;
-		if (m_DataFormat == GL_RGBA) {
+		if (mDataFormat == GL_RGBA) {
 			bpp = 4;
 		}
-		else if (m_DataFormat == GL_RGB) {
+		else if (mDataFormat == GL_RGB) {
 			bpp = 3;
 		}
-		else if (m_DataFormat == GL_RED) {
+		else if (mDataFormat == GL_RED) {
 			bpp = 1;
 		}
 
-		BUBBLE_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
-		glTexSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+		BUBBLE_CORE_ASSERT(size == mWidth * mHeight * bpp, "Data must be entire texture!");
+		glTexSubImage2D(mRendererID, 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
 	}
 
 	void Texture2D::Bind(uint32_t slot) const
 	{
 		glActiveTexture(GL_TEXTURE0 + slot);
-		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		glBindTexture(GL_TEXTURE_2D, mRendererID);
 	}
 
 	std::tuple<uint8_t*, Texture2DSpecification>

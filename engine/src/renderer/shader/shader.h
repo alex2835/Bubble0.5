@@ -19,9 +19,9 @@ namespace Bubble
 {
     class Shader
     {
-		std::string m_Name;
-        uint32_t m_ShaderID;
-		mutable std::unordered_map<std::string, int> m_UniformCache;
+		std::string mName;
+        uint32_t mShaderID;
+		mutable std::unordered_map<std::string, int> mUniformCache;
 
     private:
         void ParseShaders(const std::string& path, std::string& vertex, std::string& fragment, std::string& geometry);

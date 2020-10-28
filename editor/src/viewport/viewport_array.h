@@ -9,8 +9,8 @@ namespace Bubble
 {
 	class ViewportArray
 	{
-		std::vector<Viewport> m_Viewports;
-		std::vector<char> m_IsOpen;
+		std::vector<Viewport> mViewports;
+		std::vector<char> mIsOpen;
 
 	public:
 		void Erase(int idx);

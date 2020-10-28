@@ -36,7 +36,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/entt/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/nlohmann_json/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/assimp/include
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glm-aabb/include
 )
 
 # Libraries directories

@@ -24,10 +24,10 @@ namespace Bubble
         SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
         SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
-        m_Window = SDL_CreateWindow("Bubble", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
-        m_GLContext = SDL_GL_CreateContext(m_Window);
+        mWindow = SDL_CreateWindow("Bubble", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+        mGLContext = SDL_GL_CreateContext(mWindow);
 
-        SDL_GL_MakeCurrent(m_Window, m_GLContext);
+        SDL_GL_MakeCurrent(mWindow, mGLContext);
         SDL_GL_SetSwapInterval(1); // Enable vsync
 
         if (int error = glewInit(); error != GLEW_OK)
@@ -39,44 +39,44 @@ namespace Bubble
 
 	SDL_WINDOW::~SDL_WINDOW()
 	{
-		SDL_GL_DeleteContext(m_GLContext);
-		SDL_DestroyWindow(m_Window);
+		SDL_GL_DeleteContext(mGLContext);
+		SDL_DestroyWindow(mWindow);
 	}
 
 	bool SDL_WINDOW::IsOpen()
 	{
-        return m_IsOpen;
+        return mIsOpen;
 	}
 
 	int SDL_WINDOW::GetWidth()
     {
         int width = 0, height = 0;
-        SDL_GetWindowSize(m_Window, &width, &height);
+        SDL_GetWindowSize(mWindow, &width, &height);
         return width;
     }
 
     int SDL_WINDOW::GetHeight()
     {
 		int width = 0, height = 0;
-        SDL_GetWindowSize(m_Window, &width, &height);
+        SDL_GetWindowSize(mWindow, &width, &height);
         return height;
     }
 
 	glm::ivec2 SDL_WINDOW::GetSize()
 	{
 		int width = 0, height = 0;
-		SDL_GetWindowSize(m_Window, &width, &height);
+		SDL_GetWindowSize(mWindow, &width, &height);
         return glm::ivec2(width, height);
 	}
 
 	SDL_Window* SDL_WINDOW::GetWindow()
     {
-        return m_Window;
+        return mWindow;
     }
 
     SDL_GLContext SDL_WINDOW::GetGLContext()
     {
-        return m_GLContext;
+        return mGLContext;
     }
 
     const char* SDL_WINDOW::GetGLSLVersion()
@@ -93,24 +93,24 @@ namespace Bubble
     {
         if (event.type == SDL_QUIT)
         {
-            m_IsOpen = false;
+            mIsOpen = false;
         }
         if (event.type == SDL_WINDOWEVENT &&
             event.window.event == SDL_WINDOWEVENT_CLOSE &&
-            event.window.windowID == SDL_GetWindowID(m_Window))
+            event.window.windowID == SDL_GetWindowID(mWindow))
         {
-            m_IsOpen = false;
+            mIsOpen = false;
         }
     }
 
     void SDL_WINDOW::OnUpdate()
     {
-        SDL_GL_SwapWindow(m_Window);
+        SDL_GL_SwapWindow(mWindow);
     }
 
     void SDL_WINDOW::Close()
     {
-        m_IsOpen = false;
+        mIsOpen = false;
     }
 
 	void SDL_WINDOW::SetVSync(bool mode)

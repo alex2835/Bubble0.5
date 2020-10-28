@@ -12,10 +12,10 @@ namespace Bubble
 {
     class SDL_WINDOW: public Window
     {
-        SDL_Window* m_Window;
-        SDL_GLContext m_GLContext;
+        SDL_Window* mWindow;
+        SDL_GLContext mGLContext;
         const char* glsl_version = "#version 330";
-        bool m_IsOpen = true;
+        bool mIsOpen = true;
 
     public:
         SDL_WINDOW();

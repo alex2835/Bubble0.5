@@ -8,6 +8,7 @@
 #include "skybox/skybox.h"
 
 #include "glm/glm.hpp"
+#include "glm-AABB/AABB.hpp"
 
 
 namespace Bubble
@@ -29,6 +30,7 @@ namespace Bubble
 		static void DrawMesh(const Ref<Mesh>& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
 		static void DrawModel(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
 		static void DrawModelA(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
+		static void DrawAABB(const AABB& aabb);
 
 		static void DrawSkybox(const Ref<Skybox>& model, const Ref<Shader>& shader);
 	};

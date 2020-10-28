@@ -6,10 +6,10 @@ namespace Bubble
 {
 	class VertexArray
 	{
-		uint32_t m_RendererID;
-		uint32_t m_VertexBufferIndex = 0;
-		std::vector<VertexBuffer> m_VertexBuffers;
-		IndexBuffer m_IndexBuffer;
+		uint32_t mRendererID;
+		uint32_t mVertexBufferIndex = 0;
+		std::vector<VertexBuffer> mVertexBuffers;
+		IndexBuffer mIndexBuffer;
 
 	public:
 		VertexArray();
@@ -28,10 +28,10 @@ namespace Bubble
 		void AddVertexBuffer(VertexBuffer&& vertexBuffer);
 		void SetIndexBuffer(IndexBuffer&& indexBuffer);
 
-		const uint32_t GetID() const { return m_RendererID; }
+		const uint32_t GetID() const { return mRendererID; }
 		const std::vector<VertexBuffer>& GetVertexBuffers() const;
 		const IndexBuffer& GetIndexBuffer() const;
-		void VertexBufferIndex(uint32_t val) { m_VertexBufferIndex = val; }
+		void VertexBufferIndex(uint32_t val) { mVertexBufferIndex = val; }
 	};
 
 }

@@ -24,10 +24,10 @@ namespace Bubble
 
 	class Texture2D
 	{
-		uint32_t m_Width = 0;
-		uint32_t m_Height = 0;
-		uint32_t m_RendererID = 0;
-		uint32_t m_InternalFormat = 0, m_DataFormat = 0;
+		uint32_t mWidth = 0;
+		uint32_t mHeight = 0;
+		uint32_t mRendererID = 0;
+		uint32_t mInternalFormat = 0, mDataFormat = 0;
 
 	public:
 		Texture2D() = default;
@@ -44,16 +44,16 @@ namespace Bubble
 
 		~Texture2D();
 
-		uint32_t GetWidth() const { return m_Width; }
-		uint32_t GetHeight() const { return m_Height; }
-		uint32_t GetRendererID() const  { return m_RendererID; }
+		uint32_t GetWidth() const { return mWidth; }
+		uint32_t GetHeight() const { return mHeight; }
+		uint32_t GetRendererID() const  { return mRendererID; }
 
 		void SetData(void* data, uint32_t size);
 
 		void Bind(uint32_t slot = 0) const;
 		static void UnbindAll() { glActiveTexture(GL_TEXTURE0); }
 
-		bool operator==(const Texture2D& other) const {return m_RendererID == other.m_RendererID;}
+		bool operator==(const Texture2D& other) const {return mRendererID == other.mRendererID;}
 
 		// Don't forget to remove char*
 		static std::tuple<uint8_t*, Texture2DSpecification> OpenRawImage(const std::string& path);

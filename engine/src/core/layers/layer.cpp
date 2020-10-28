@@ -5,6 +5,6 @@
 namespace Bubble
 {
 	Layer::Layer(const std::string& name) 
-		: m_Name(name)
+		: mName(name)
 	{}
 }

@@ -32,7 +32,7 @@ namespace Bubble
 		//		if (!nsc.Instance)
 		//		{
 		//			nsc.Instance = nsc.InstantiateScript();
-		//			nsc.Instance->m_Entity = Entity{ entity, this };
+		//			nsc.Instance->mEntity = Entity{ entity, this };
 		//			nsc.Instance->OnCreate();
 		//		}
 		//

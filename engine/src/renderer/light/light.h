@@ -83,7 +83,7 @@ namespace Bubble
 			sprintf(buffer, "%s.brightness", light_id);
 			shader->SetUni1f(buffer, light.Brightness);
 			
-			//shader->SetUni1i("nLights", m_Lights.size());
+			//shader->SetUni1i("nLights", mLights.size());
 		}
 	};
 }

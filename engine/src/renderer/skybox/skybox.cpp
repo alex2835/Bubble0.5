@@ -52,7 +52,7 @@ namespace Bubble
 	};
 
 	Skybox::Skybox(const std::string& dir, const std::string& ext)
-		: m_Skybox(dir, ext)
+		: mSkybox(dir, ext)
 	{
 		if (s_VertexArray == nullptr) {
 			InitVertexArray();
@@ -115,7 +115,7 @@ namespace Bubble
 		std::swap(data[3], data[5]);
 		std::swap(data[2], data[3]);
 
-		m_Skybox = Cubemap(data, spec);
+		mSkybox = Cubemap(data, spec);
 
 		free(orig_data);
 		for (int i = 0; i < 6; i++) {
@@ -127,7 +127,7 @@ namespace Bubble
 	{
 		s_VertexArray->Bind();
 		glActiveTexture(GL_TEXTURE0 + slot);
-		m_Skybox.Bind();
+		mSkybox.Bind();
 	}
 
 	Skybox Skybox::LoadFromDir(const std::string& dir, const std::string& ext)
