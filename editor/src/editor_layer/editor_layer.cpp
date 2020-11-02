@@ -12,7 +12,6 @@ namespace Bubble
 	{
         mImGuiControll.OnAttach();
 
-        // Temp: test viewport
 		mViewport = Viewport(800, 800);
 
 		// ============ Model entities =============
@@ -24,7 +23,6 @@ namespace Bubble
 		mSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
 
 		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
-		mSelectedItemShader = ShaderLoader::Load("resources/shaders/solid_color.glsl");
 
 		// Temp: Try to simplify mesh
  	}
@@ -72,32 +70,26 @@ namespace Bubble
 		mPhongShader->SetUniMat4("u_View", view);
 		mPhongShader->SetUniMat4("u_Projection", projection);
 
+		// Draw scene
 		auto scene_view = mScene.GetView<ModelComponent, TransformComponent>();
-
 		for (auto entity : scene_view)
 		{
 			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
 			mPhongShader->SetUniMat4("u_Model", model);
-			Renderer::DrawModel(mesh, mPhongShader, mUI.mDrawTypeOption);
+			Renderer::DrawModel(mesh, mPhongShader);
 		}
 
-		// Highlight selected model
+		// Highlight selected entity
+		draw_selected_model(mUI.mSceneExplorer.SelectedEntity, projection * view);
+		
+		// Draw boundingBox
+		for (auto entity : scene_view)
 		{
-			Entity selected_entity = mUI.mSceneExplorer.SelectedEntity;
-
-			if (selected_entity.Valid() && selected_entity.HasComponent<ModelComponent, TransformComponent>())
-			{
-				auto& [mesh, model] = selected_entity.GetComponent<ModelComponent, TransformComponent>();
-
-				glDisable(GL_DEPTH_TEST);
-				mSelectedItemShader->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.1f));
-				mSelectedItemShader->SetUniMat4("u_Transforms", projection * view * (glm::mat4)model);
-				Renderer::DrawModelA(mesh, mSelectedItemShader, DrawType::TRIANGLES);
-				glEnable(GL_DEPTH_TEST);
-			}
+			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
+			draw_boundingbox(((Ref<Model>)mesh)->TransformBoundingBox(model), projection * view);
 		}
 
-		// Render skybox
+		// Draw skybox
 		view = glm::rotate(view, glm::radians(Application::GetTime() * 0.5f), glm::vec3(0, 1, 0));
 		mSkyboxShader->SetUniMat4("u_Projection", projection);
 		mSkyboxShader->SetUniMat4("u_View", glm::mat3(view));

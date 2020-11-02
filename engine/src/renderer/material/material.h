@@ -6,9 +6,6 @@
 
 namespace Bubble
 {
-	//enum class TextureType { DIFFUSE, SPECULAR, NORMAL, HEIGHT };
-	//static const char* const TextureNameLookup[] = { "material.diffuse", "material.specular", "material.normal", "material.height" };
-
 	struct BasicMaterial
 	{
 		glm::vec3 Ambient;

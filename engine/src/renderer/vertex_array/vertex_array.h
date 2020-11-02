@@ -29,8 +29,8 @@ namespace Bubble
 		void SetIndexBuffer(IndexBuffer&& indexBuffer);
 
 		const uint32_t GetID() const { return mRendererID; }
-		const std::vector<VertexBuffer>& GetVertexBuffers() const;
-		const IndexBuffer& GetIndexBuffer() const;
+		std::vector<VertexBuffer>& GetVertexBuffers();
+		IndexBuffer& GetIndexBuffer();
 		void VertexBufferIndex(uint32_t val) { mVertexBufferIndex = val; }
 	};
 

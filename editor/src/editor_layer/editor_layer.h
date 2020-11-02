@@ -8,9 +8,10 @@
 #include "scene_camera/scene_camera.h"
 
 #include "UI/UI.h"
-#include "serialization/serialization.h"
 
-#include "glm-aabb/AABB.hpp"
+#include "draw_tools/draw_selected_entity.h"
+#include "draw_tools/draw_boundingbox.h"
+
 
 namespace Bubble
 {
@@ -22,11 +23,11 @@ namespace Bubble
 		Viewport mViewport;
 		Scene mScene;
 
-		Ref<Shader> mSelectedItemShader;
 		Ref<Shader> mPhongShader;
 
 		Ref<Shader> mSkyboxShader;
 		Ref<Skybox> mActiveSkybox;
+
 
 	public:
 		EditorLayer();

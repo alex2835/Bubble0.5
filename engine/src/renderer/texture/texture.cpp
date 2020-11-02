@@ -51,14 +51,15 @@ namespace Bubble
 		stbi_uc* data = nullptr;
 		
 		data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		if (data == nullptr) {
+		
+		if (data == nullptr)
 			throw std::runtime_error("Failed to load image!\nPath: " + path);
-		}
 
 		mWidth = width;
 		mHeight = height;
 
-		GLenum internal_format = 0, data_format = 0;
+		GLenum internal_format = 0;
+		GLenum data_format = 0;
 		if (channels == 1)
 		{
 			internal_format = GL_R8;

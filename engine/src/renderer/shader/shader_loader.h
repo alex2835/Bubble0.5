@@ -15,10 +15,15 @@ namespace Bubble
 								const std::string& fragment,
 								const std::string& geometry = std::string());
 
-
 	private:
-		static void ParseShaders(const std::string& path, std::string& vertex, std::string& fragment, std::string& geometry);
-		static Shader&& CompileShaders(const std::string& vertex_source, const std::string& fragment_source, const std::string& geometry_source);
-
+		static void ParseShaders(const std::string& path,
+								 std::string& vertex,
+								 std::string& fragment,
+								 std::string& geometry);
+		
+		static void CompileShaders(Shader& shader,
+								   const std::string& vertex_source,
+								   const std::string& fragment_source,
+								   const std::string& geometry_source);
 	};
 }

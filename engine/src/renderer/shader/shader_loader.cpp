@@ -5,20 +5,21 @@ namespace Bubble
 {
 	std::vector<std::pair<std::string, Ref<Shader>>> ShaderLoader::LoadedShaders;
 
+
 	Ref<Shader> ShaderLoader::Load(const std::string& path)
 	{
 		for (auto path_shader : LoadedShaders)
 		{
-			if (path_shader.first == path) {
+			if (path.find(path_shader.first) != std::string::npos) {
 				return path_shader.second;
 			}
 		}
 		Ref<Shader> shader = CreateRef<Shader>();
 		std::string vertexSource, fragmentSource, geometry;
-		ParseShaders(path, vertexSource, fragmentSource, geometry);
 		
-		*shader = CompileShaders(vertexSource, fragmentSource, geometry);
 		shader->mName = path.substr(path.find_last_of('/') + 1);
+		ParseShaders(path, vertexSource, fragmentSource, geometry);
+		CompileShaders(*shader, vertexSource, fragmentSource, geometry);
 
 		LoadedShaders.push_back({ path, shader });
 		return shader;
@@ -31,13 +32,16 @@ namespace Bubble
 								   const std::string& geometry)
 	{
 		Ref<Shader> shader = CreateRef<Shader>();
-		*shader = CompileShaders(vertex, fragment, geometry);
-		LoadedShaders.push_back({ "", shader });
+		CompileShaders(*shader, vertex, fragment, geometry);
+		LoadedShaders.push_back({ name, shader });
 		return shader;
 	}
 
 
-	void ShaderLoader::ParseShaders(const std::string& path, std::string& vertex, std::string& fragment, std::string& geometry)
+	void ShaderLoader::ParseShaders(const std::string& path,
+									std::string& vertex,
+									std::string& fragment,
+									std::string& geometry)
 	{
 		enum ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2 };
 		ShaderType type = NONE;
@@ -78,10 +82,12 @@ namespace Bubble
 		geometry = shaders[GEOMETRY].str();
 	}
 
-	Shader&& ShaderLoader::CompileShaders(const std::string& vertex_source, const std::string& fragment_source, const std::string& geometry_source)
-	{
-		Shader shader;
 
+	void ShaderLoader::CompileShaders(Shader& shader,
+		const std::string& vertex_source,
+		const std::string& fragment_source,
+		const std::string& geometry_source)
+	{
 		// Vertex shaders
 		GLint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 		const char* cvertex_source = vertex_source.c_str();
@@ -103,7 +109,7 @@ namespace Bubble
 				// free resources
 				glDeleteShader(vertex_shader);
 
-				LOG_CORE_ERROR("VERTEX SHADER ERROR: {0} \n {1}", shader.mName, log);
+				LOG_CORE_ERROR("VERTEX SHADER ERROR: {} \n {}", shader.mName, log);
 				throw std::runtime_error("Shader compilation failed");
 			}
 		}
@@ -130,7 +136,7 @@ namespace Bubble
 				glDeleteShader(vertex_shader);
 				glDeleteShader(fragment_shader);
 
-				LOG_CORE_ERROR("FRAGMENT SHADER ERROR: : {0} \n {1}", shader.mName, log);
+				LOG_CORE_ERROR("FRAGMENT SHADER ERROR: : {} \n {}", shader.mName, log);
 				throw std::runtime_error("Shader compilation failed");
 			}
 		}
@@ -159,7 +165,7 @@ namespace Bubble
 					glDeleteShader(vertex_shader);
 					glDeleteShader(fragment_shader);
 
-					LOG_CORE_ERROR("GEOMETRY SHADER ERROR: {0} \n {1}", shader.mName, log);
+					LOG_CORE_ERROR("GEOMETRY SHADER ERROR: {} \n {}", shader.mName, log);
 					throw std::runtime_error("Shader compilation failed");
 				}
 			}
@@ -194,7 +200,7 @@ namespace Bubble
 				glDeleteShader(fragment_shader);
 				glDeleteProgram(shader.mShaderID);
 
-				LOG_CORE_ERROR("LINLING SHADER ERROR: {0} \n {1}", shader.mName, log);
+				LOG_CORE_ERROR("LINLING SHADER ERROR: {} \n {}", shader.mName, log);
 				throw std::runtime_error("Shader compilation failed");
 			}
 		}
@@ -203,8 +209,6 @@ namespace Bubble
 		glDeleteShader(geometry_shader);
 		glDeleteShader(vertex_shader);
 		glDeleteShader(fragment_shader);
-
-		return std::move(shader);
 	}
 
 }

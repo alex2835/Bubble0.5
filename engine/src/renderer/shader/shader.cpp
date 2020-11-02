@@ -13,6 +13,7 @@ namespace Bubble
         other.mShaderID = 0;
 	}
 
+
 	Shader& Shader::operator=(Shader&& other)
 	{
 		mShaderID = other.mShaderID;
@@ -22,10 +23,12 @@ namespace Bubble
         return *this;
 	}
 
+
 	void Shader::Bind() const
 	{
         glcall(glUseProgram(mShaderID));
 	}
+
 
 	void Shader::Unbind() const
 	{

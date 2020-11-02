@@ -20,6 +20,10 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
+# Defines
+add_definitions(-D"GLM_SWIZZLE")
+
+
 # Include directories
 target_include_directories(
     Bubble PUBLIC

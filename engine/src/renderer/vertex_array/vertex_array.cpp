@@ -26,6 +26,7 @@ namespace Bubble
 	VertexArray::VertexArray()
 	{
 		glcall(glGenVertexArrays(1, &mRendererID));
+		glcall(glBindVertexArray(mRendererID));
 	}
 
 	VertexArray::VertexArray(VertexArray&& other)
@@ -132,12 +133,12 @@ namespace Bubble
 		Unbind();
 	}
 
-	const std::vector<Bubble::VertexBuffer>& VertexArray::GetVertexBuffers() const
+	std::vector<Bubble::VertexBuffer>& VertexArray::GetVertexBuffers()
 	{
 		return mVertexBuffers;
 	}
 
-	const Bubble::IndexBuffer& VertexArray::GetIndexBuffer() const
+	Bubble::IndexBuffer& VertexArray::GetIndexBuffer()
 	{
 		return mIndexBuffer;
 	}

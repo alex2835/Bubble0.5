@@ -137,31 +137,31 @@ inline void AABB::extend(float val)
 
 inline void AABB::extend(const glm::vec3& p)
 {
-  if (!isNull())
-  {
-    mMin = glm::min(p, mMin);
-    mMax = glm::max(p, mMax);
-  }
-  else
-  {
-    mMin = p;
-    mMax = p;
-  }
+	if (!isNull())
+	{
+		mMin = glm::min(p, mMin);
+		mMax = glm::max(p, mMax);
+	}
+	else
+	{
+		mMin = p;
+		mMax = p;
+	}
 }
 
 inline void AABB::extend(const glm::vec3& p, float radius)
 {
-  glm::vec3 r(radius);
-  if (!isNull())
-  {
-    mMin = glm::min(p - r, mMin);
-    mMax = glm::max(p + r, mMax);
-  }
-  else
-  {
-    mMin = p - r;
-    mMax = p + r;
-  }
+	glm::vec3 r(radius);
+	if (!isNull())
+	{
+		mMin = glm::min(p - r, mMin);
+		mMax = glm::max(p + r, mMax);
+	}
+	else
+	{
+		mMin = p - r;
+		mMax = p + r;
+	}
 }
 
 inline void AABB::extend(const AABB& aabb)

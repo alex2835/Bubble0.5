@@ -8,7 +8,7 @@ namespace Bubble
     {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
         {
-            LOG_ERROR("Error: ", SDL_GetError());
+            LOG_ERROR("Error: {}", SDL_GetError());
 			throw std::runtime_error("Window can't be created");
 		}
         
@@ -32,7 +32,7 @@ namespace Bubble
 
         if (int error = glewInit(); error != GLEW_OK)
         {
-            LOG_ERROR("Error: Glew init ", glewGetErrorString(error));
+            LOG_ERROR("Error: Glew init \n{}", glewGetErrorString(error));
             throw std::runtime_error("Window can't be created");
         }
     }

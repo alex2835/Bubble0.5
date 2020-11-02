@@ -121,14 +121,12 @@ namespace Bubble
 	};
 
 
-	class VertexBuffer
+	struct VertexBuffer
 	{
-	private:
 		uint32_t mRendererID = 0;
 		uint32_t mSize = 0;
 		BufferLayout mLayout;
 
-	public:
 		VertexBuffer() = default;
 		VertexBuffer(uint32_t size);
 		VertexBuffer(void* vertices, uint32_t size);
@@ -153,13 +151,11 @@ namespace Bubble
 	};
 
 	
-	class IndexBuffer
+	struct IndexBuffer
 	{
-	private:
 		uint32_t mRendererID = 0;
 		uint32_t mCount = 0;
 
-	public:
 		IndexBuffer() = default;
 		IndexBuffer(uint32_t* indices, uint32_t count);
 

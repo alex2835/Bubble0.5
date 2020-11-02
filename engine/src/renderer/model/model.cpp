@@ -19,9 +19,24 @@ namespace Bubble
 
 	AABB Model::TransformBoundingBox(const glm::mat4& transform)
 	{
-		glm::vec3 min = transform * glm::vec4(mBoundingBox.getMin().xyz, 1);
-		glm::vec3 max = transform * glm::vec4(mBoundingBox.getMax().xyz, 1);
-		return AABB(min, max);
+		glm::vec3 min = mBoundingBox.getMin();
+		glm::vec3 max = mBoundingBox.getMax();
+
+		glm::vec3 pos[] = { min, max,
+			glm::vec3(max.x, min.y, min.z),
+			glm::vec3(min.x, max.y, min.z),
+			glm::vec3(min.x, min.y, max.z),
+			glm::vec3(max.x, max.y, min.z),
+			glm::vec3(min.x, max.y, max.z),
+			glm::vec3(max.x, min.y, max.z)
+		};
+
+		AABB new_bb;
+		for (int i = 0; i < 8; i++)
+		{
+			new_bb.extend(transform * glm::vec4(pos[i].xyz, 1));
+		}
+		return new_bb;
 	}
 
 }

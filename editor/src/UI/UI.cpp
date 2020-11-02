@@ -71,12 +71,13 @@ namespace Bubble
 				}
 
 				// Rendering type
-				if (ImGui::BeginMenu("Rendering"))
-				{
-					const char* const types[] = { "Lines", "Triangles" };
-					ImGui::Combo("Type", (int*)&mDrawTypeOption, types, 2);
-					ImGui::EndMenu();
-				}
+				//if (ImGui::BeginMenu("Rendering"))
+				//{
+				//	const char* const types[] = { "Lines", "Triangles" };
+				//	ImGui::Combo("Type", (int*)&mDrawTypeOption, types, 2);
+				//	ImGui::EndMenu();
+				//}
+
 				ImGui::EndMenu();
 			}
 
