@@ -5,8 +5,8 @@ project(Bubble VERSION 0.0.0)
 file(GLOB_RECURSE SRCS *.cpp)
 file(GLOB_RECURSE HDRS *.h)
 
-
 add_executable(Bubble ${SRCS} ${HDRS})
+
 
 # Libraries
 target_link_libraries(Bubble Engine)

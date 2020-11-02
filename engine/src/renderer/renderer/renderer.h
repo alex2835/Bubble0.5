@@ -32,6 +32,7 @@ namespace Bubble
 		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
 		static void ClearDepth();
+		static void ClearColor();
 
 		static void DrawIndex(const Ref<VertexArray>& vertexArray, DrawType draw_type = DrawType::TRIANGLES, uint32_t count = 0);
 		static void DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);

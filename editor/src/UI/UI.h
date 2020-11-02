@@ -35,7 +35,8 @@ namespace Bubble
 		SceneExplorer mSceneExplorer;
 
 		// Rendering options
-		//DrawType mDrawTypeOption = DrawType::TRIANGLES;
+		bool mWireframeOption = false;
+		bool mBoundingBoxOption = false;
 
 		void Draw(DeltaTime dt);
 		void DrawMenuBar();

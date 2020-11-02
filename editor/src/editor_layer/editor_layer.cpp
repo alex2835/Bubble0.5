@@ -24,6 +24,7 @@ namespace Bubble
 
 		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
 
+
 		// Temp: Try to simplify mesh
  	}
 
@@ -62,7 +63,16 @@ namespace Bubble
 		mPhongShader->SetUni1i("nLights", light_index);
 
 
-		// Temp: Draw scene
+		// ====================== Rendering ======================
+
+		mClearScreanOption |= mUI.mWireframeOption;
+
+		if (mClearScreanOption)
+		{
+			Renderer::SetClearColor(glm::vec4(1.0f));
+			Renderer::ClearColor();
+		}
+
 		glm::ivec2 window_size = mViewport.GetSize();
 		glm::mat4 projection = mSceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = mSceneCamera.GetLookatMat();
@@ -79,17 +89,26 @@ namespace Bubble
 			Renderer::DrawModel(mesh, mPhongShader);
 		}
 
+
+		// ======================= Draw editor sruff =======================
+
 		// Highlight selected entity
 		draw_selected_model(mUI.mSceneExplorer.SelectedEntity, projection * view);
 		
+
 		// Draw boundingBox
-		for (auto entity : scene_view)
+		if (mUI.mBoundingBoxOption)
 		{
-			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
-			draw_boundingbox(((Ref<Model>)mesh)->TransformBoundingBox(model), projection * view);
+			for (auto entity : scene_view)
+			{
+				auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
+				draw_boundingbox(((Ref<Model>)mesh)->TransformBoundingBox(model), projection * view);
+			}
 		}
 
-		// Draw skybox
+
+		// ========================= Draw skybox ========================= 
+
 		view = glm::rotate(view, glm::radians(Application::GetTime() * 0.5f), glm::vec3(0, 1, 0));
 		mSkyboxShader->SetUniMat4("u_Projection", projection);
 		mSkyboxShader->SetUniMat4("u_View", glm::mat3(view));

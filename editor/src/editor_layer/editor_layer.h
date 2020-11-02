@@ -23,6 +23,10 @@ namespace Bubble
 		Viewport mViewport;
 		Scene mScene;
 
+		// Options
+		bool mClearScreanOption = false;
+
+		// Temp:
 		Ref<Shader> mPhongShader;
 
 		Ref<Shader> mSkyboxShader;

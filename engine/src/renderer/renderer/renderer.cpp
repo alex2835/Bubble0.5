@@ -37,13 +37,11 @@ namespace Bubble
 	{
 		if (on)
 		{
-			glPolygonMode(GL_FRONT, GL_LINE);
-			glPolygonMode(GL_BACK, GL_LINE);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		}
 		else
 		{
-			glPolygonMode(GL_FRONT, GL_FILL);
-			glPolygonMode(GL_BACK, GL_FILL);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 	}
 
@@ -101,6 +99,11 @@ namespace Bubble
 	void Renderer::ClearDepth()
 	{
 		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+
+	void Renderer::ClearColor()
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 

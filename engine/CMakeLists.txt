@@ -6,8 +6,8 @@ project(Engine VERSION 0.0.0)
 file(GLOB_RECURSE SRCS *.cpp)
 file(GLOB_RECURSE HDRS *.h)
 
-
 add_library(Engine STATIC ${SRCS} ${HDRS})
+
 
 set_target_properties(
     Engine PROPERTIES
@@ -16,7 +16,6 @@ set_target_properties(
 )
 
 # Defines
-#add_definitions(-D"_NO_DEBUG_HEAP=1")
 add_definitions(-D"GLM_SWIZZLE")
 
 
