@@ -19,7 +19,7 @@ namespace Bubble
 		OpenProject("../../../../scene_test.json", &mScene);
 
 		// Temp: skybox
-		mActiveSkybox = SkyboxLoader::Load("resources/skybox/skybox1.jpg");//CreateRef<Skybox>("resources/skybox/skybox1.jpg");
+		mActiveSkybox = SkyboxLoader::Load("resources/skybox/skybox1.jpg");
 		mSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
 
 		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
@@ -80,13 +80,20 @@ namespace Bubble
 		mPhongShader->SetUniMat4("u_View", view);
 		mPhongShader->SetUniMat4("u_Projection", projection);
 
+		SetFrustumPlanes(projection * view);
+
+
 		// Draw scene
 		auto scene_view = mScene.GetView<ModelComponent, TransformComponent>();
 		for (auto entity : scene_view)
 		{
 			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
-			mPhongShader->SetUniMat4("u_Model", model);
-			Renderer::DrawModel(mesh, mPhongShader);
+
+			if (IsInFrustum(mesh.mModel->mBoundingBox.transform(model)))
+			{
+				mPhongShader->SetUniMat4("u_Model", model);
+				Renderer::DrawModel(mesh, mPhongShader);
+			}
 		}
 
 
@@ -102,7 +109,7 @@ namespace Bubble
 			for (auto entity : scene_view)
 			{
 				auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
-				draw_boundingbox(((Ref<Model>)mesh)->TransformBoundingBox(model), projection * view);
+				draw_boundingbox(((Ref<Model>)mesh)->mBoundingBox.transform(model), projection * view);
 			}
 		}
 
@@ -121,7 +128,8 @@ namespace Bubble
 	{
         mImGuiControll.OnEvent(event);
 
-		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+		{
 			Application::GetWindow()->Close();
 		}
 	}

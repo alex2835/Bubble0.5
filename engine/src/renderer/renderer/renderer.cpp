@@ -45,12 +45,12 @@ namespace Bubble
 		}
 	}
 
-	void Renderer::AlphaBlending(bool on)
+	void Renderer::AlphaBlending(bool on, uint32_t sfactor, uint32_t dfactor)
 	{
 		if (on)
 		{
 			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBlendFunc(sfactor, dfactor);
 		}
 		else
 		{

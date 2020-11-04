@@ -57,6 +57,9 @@ public:
   ///                    be the center of the AABB.
   void scale(const glm::vec3& scale, const glm::vec3& origin);
 
+  // Return new AABB that include transformed box
+  AABB transform(const glm::mat4& transform);
+
   /// Retrieves the center of the AABB.
   glm::vec3 getCenter() const;
 
@@ -73,10 +76,10 @@ public:
   float getShortestEdge() const;
 
   /// Retrieves the AABB's minimum point.
-  glm::vec3 getMin() const {return mMin;}
+  const glm::vec3& getMin() const {return mMin;}
 
   /// Retrieves the AABB's maximum point.
-  glm::vec3 getMax() const {return mMax;}
+  const glm::vec3& getMax() const {return mMax;}
 
   /// Returns true if AABBs share a face overlap.
   /// \xxx Untested -- This function is not represented in our unit tests.
@@ -239,6 +242,24 @@ inline void AABB::scale(const glm::vec3& s, const glm::vec3& o)
     mMin += o;
     mMax += o;
   }
+}
+
+inline AABB AABB::transform(const glm::mat4& transform)
+{
+	glm::vec3 pos[] = { mMin, mMax,
+		glm::vec3(mMax.x, mMin.y, mMin.z),
+		glm::vec3(mMin.x, mMax.y, mMin.z),
+		glm::vec3(mMin.x, mMin.y, mMax.z),
+		glm::vec3(mMax.x, mMax.y, mMin.z),
+		glm::vec3(mMin.x, mMax.y, mMax.z),
+		glm::vec3(mMax.x, mMin.y, mMax.z)
+	};
+	AABB new_aabb;
+	for (int i = 0; i < 8; i++)
+	{
+		new_aabb.extend(transform * glm::vec4(pos[i].xyz, 1));
+	}
+	return new_aabb;
 }
 
 inline bool AABB::overlaps(const AABB& bb) const

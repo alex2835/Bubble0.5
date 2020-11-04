@@ -6,11 +6,14 @@
 #include "shader/shader.h"
 #include "model/model.h"
 #include "skybox/skybox.h"
-#include "scene.h"
 #include "buffer/buffer.h"
+#include "scene.h"
 
 #include "glm/glm.hpp"
 #include "glm-AABB/AABB.hpp"
+
+// Rendering optimizations
+#include "optimizations/frustum_culling .h"
 
 
 namespace Bubble
@@ -24,7 +27,7 @@ namespace Bubble
 
 		// Options
 		static void Wareframe(bool);
-		static void AlphaBlending(bool);
+		static void AlphaBlending(bool, uint32_t sfactor = GL_SRC_ALPHA, uint32_t dfactor = GL_ONE_MINUS_SRC_ALPHA);
 		static void BackfaceCulling(bool);
 		static void DepthTest(bool);
 

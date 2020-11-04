@@ -40,6 +40,7 @@ namespace Bubble
 		sBoundingBoxShader->SetUniMat4("u_Projection", glm::mat4(1));
 		sBoundingBoxShader->SetUniMat4("u_View", glm::mat4(1));
 		sBoundingBoxShader->SetUniMat4("u_Model", proj_view);
+		sBoundingBoxShader->SetUni4f("u_Color", glm::vec4(1.0f));
 
 		{
 			glm::vec3 min = bb.getMin();
@@ -54,8 +55,6 @@ namespace Bubble
 				glm::vec3(max.x, min.y, max.z)
 			};
 			sVertexArray->GetVertexBuffers()[0].SetData(pos, sizeof(pos));
-
-			sBoundingBoxShader->SetUni4f("u_Color", glm::vec4(1.0f));
 
 			Renderer::BackfaceCulling(false);
 			Renderer::DrawIndex(sVertexArray, DrawType::LINES);
