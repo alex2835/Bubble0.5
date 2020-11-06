@@ -4,6 +4,11 @@
 
 namespace Bubble
 {
+	Scope<UniformBuffer> Renderer::UBOLights;
+	Scope<UniformBuffer> Renderer::UBOPrjectionview;
+	Camera* Renderer::ActiveCamera;
+
+
 	static uint32_t OpenGLDrawType(DrawType draw_type)
 	{
 		uint32_t opengl_draw_type = 0;
@@ -24,9 +29,9 @@ namespace Bubble
 		return opengl_draw_type;
 	}
 
-
 	void Renderer::Init()
 	{
+		InitUBOS();
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 	}
@@ -69,6 +74,28 @@ namespace Bubble
 	}
 
 
+	// ======================== UBO ======================== 
+
+	void Renderer::InitUBOS()
+	{
+		// Init Projection View UBO
+		BufferLayout UBOProjectionViewLayout{
+			{ GLSLDataType::Mat4, "Projection" },
+			{ GLSLDataType::Mat4, "View" }
+		};
+		UBOPrjectionview = CreateScope<UniformBuffer>(0, UBOProjectionViewLayout);
+
+		// Init Lights UBO
+		// ...
+	}
+
+	void Renderer::SetUBOPojectionView(const glm::mat4& projection, const glm::mat4& view)
+	{
+		glm::mat4 projection_view[2] = { projection, view };
+		UBOPrjectionview->SetData(projection_view, sizeof(projection_view));
+	}
+
+	// ======================== Clearing ========================
 
 	void Renderer::SetViewport(const Framebuffer& framebuffer, uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
@@ -129,8 +156,10 @@ namespace Bubble
 		Texture2D::UnbindAll();
 	}
 
-	void Renderer::DrawModel(const Ref<Model>& model, const Ref<Shader>& shader, DrawType draw_type)
+	void Renderer::DrawModel(const Ref<Model>& model, const Ref<Shader>& in_shader, DrawType draw_type)
 	{
+		const Ref<Shader>& shader = in_shader ? in_shader : model->mShader;
+
 		for (const auto& mesh : model->mMeshes)
 		{
 			Renderer::DrawMesh(mesh, shader, draw_type);
@@ -141,12 +170,10 @@ namespace Bubble
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		for (const auto& mesh : model->mMeshes)
 		{
 			Renderer::DrawMesh(mesh, shader, draw_type);
 		}
-
 		glDisable(GL_BLEND);
 	}
 
@@ -161,9 +188,21 @@ namespace Bubble
 	}
 
 
-	void Renderer::DrawScene(const Scene& scene)
+	void Renderer::DrawScene(Scene& scene)
 	{
+		auto scene_view = scene.GetView<ModelComponent, TransformComponent>();
 
+		for (auto entity : scene_view)
+		{
+			auto& [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
+
+			if (IsInFrustum(model->mBoundingBox.transform(transforms)))
+			{
+				model->mShader->SetUniMat4("u_Model", transforms);
+				Renderer::DrawModel(model);
+			}
+		}
 	}
+
 
 }

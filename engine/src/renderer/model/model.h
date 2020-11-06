@@ -8,13 +8,13 @@
 
 namespace Bubble
 {
-	class Model
+	struct Model
 	{
-	public:
 		std::vector<Mesh> mMeshes;
+		Ref<Shader> mShader;
 		AABB mBoundingBox;
 
-		Model() = default;
+		Model();
 		
 		Model(const Model&) = delete;
 		Model& operator= (const Model&) = delete;

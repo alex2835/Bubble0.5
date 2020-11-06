@@ -209,17 +209,17 @@ namespace Bubble
 	};
 
 	// ================= ModelComponent =================
-	struct ModelComponent
+	struct ModelComponent : Ref<Model>
 	{
-		Ref<Model> mModel;
+		//Ref<Model> mModel;
 
 		ModelComponent() = default;
 		ModelComponent(const Ref<Model>& model)
-			: mModel(model)
+			: Ref<Model>(model)
 		{}
 		
-		operator Ref<Model>& () { return mModel; }
-		operator const Ref<Model>& () const { return mModel; }
+		operator Ref<Model>& () { return *this; }
+		operator const Ref<Model>& () const { return *this; }
 
 		nlohmann::json Serialize() const
 		{
@@ -228,7 +228,7 @@ namespace Bubble
 				ModelLoader::LoadedModels.begin(), ModelLoader::LoadedModels.end(),
 				[&](const std::pair<std::string, Ref<Model>>& path_model) 
 				{
-					return path_model.second == mModel;
+					return path_model.second == *this;
 				}
 			));
 
@@ -239,7 +239,7 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			mModel = ModelLoader::StaticModel(j["Model"]);
+			*this = ModelLoader::StaticModel(j["Model"]);
 		}
 
 	};

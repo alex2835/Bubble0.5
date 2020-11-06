@@ -28,7 +28,8 @@ namespace Bubble
 		  Specular(std::move(specular_map)),
 		  Normal(std::move(normal_map)),
 		  Shininess(shininess)
-	{}
+	{
+	}
 
 	void DefaultMaterial::Set(const Ref<Shader>& shader) const
 	{

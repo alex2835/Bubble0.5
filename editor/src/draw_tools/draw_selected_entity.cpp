@@ -6,7 +6,7 @@ namespace Bubble
 {
 	static Ref<Shader> sSelectedModelShader;
 
-	void draw_selected_model(Entity selected_entity, const glm::mat4& prj_view)
+	void draw_selected_model(Entity selected_entity)
 	{
 		if (sSelectedModelShader == nullptr)
 		{
@@ -19,8 +19,6 @@ namespace Bubble
 			glDisable(GL_DEPTH_TEST);
 			sSelectedModelShader->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.1f));
 			sSelectedModelShader->SetUniMat4("u_Model", model);
-			sSelectedModelShader->SetUniMat4("u_View", prj_view);
-			sSelectedModelShader->SetUniMat4("u_Projection", glm::mat4(1));
 			Renderer::DrawModelA(mesh, sSelectedModelShader);
 			glEnable(GL_DEPTH_TEST);
 		}

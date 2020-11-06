@@ -2,7 +2,7 @@
 
 #include "glm/glm.hpp"
 #include "texture/texture.h"
-#include "shader/shader.h"
+#include "shader/shader_loader.h"
 
 namespace Bubble
 {
@@ -68,6 +68,6 @@ namespace Bubble
 	};
 
 
-	// PBR material and so on
+	// PBR material
 
 }

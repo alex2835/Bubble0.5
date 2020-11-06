@@ -4,5 +4,7 @@
 
 namespace Bubble
 {
-	void draw_boundingbox(const AABB& bb, const glm::mat4& proj_view);
+	void draw_boundingbox(const AABB& bb);
+
+	void draw_scene_boundingbox(Scene& scene);
 }

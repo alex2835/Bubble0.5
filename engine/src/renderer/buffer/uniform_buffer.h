@@ -76,7 +76,9 @@ namespace Bubble
 		UniformArrayElemnt operator[] (int index);
 
 		const BufferLayout& GetLayout() const { return mLayout; };
+		// Return size in bytes
 		uint32_t GetBufferSize() { return mBufferSize; }
+		// Return size of elements
 		uint32_t GetSize() { return mSize; };
 
 	private:

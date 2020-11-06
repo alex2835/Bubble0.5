@@ -21,15 +21,10 @@ namespace Bubble
 		// Temp: skybox
 		mActiveSkybox = SkyboxLoader::Load("resources/skybox/skybox1.jpg");
 		mSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
-
+		
 		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
 
-		BufferLayout UBOProjectionViewLayout{
-			{ GLSLDataType::Mat4, "Projection" },
-			{ GLSLDataType::Mat4, "View" }
-		};
-		mUBOPrjectionview = UniformBuffer(0, UBOProjectionViewLayout);
-
+		
 		// Temp: Try to simplify mesh
  	}
 
@@ -82,48 +77,35 @@ namespace Bubble
 		glm::mat4 projection = mSceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = mSceneCamera.GetLookatMat();
 
-		// Fill ubo
-		glm::mat4 PrjView[2] = { projection, view };
-		mUBOPrjectionview.SetData(&PrjView, sizeof(PrjView));
-
-
+		Renderer::SetUBOPojectionView(projection, view);
 		SetFrustumPlanes(projection * view);
 
 		// Draw scene
-		auto scene_view = mScene.GetView<ModelComponent, TransformComponent>();
-		for (auto entity : scene_view)
-		{
-			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
-
-			if (IsInFrustum(mesh.mModel->mBoundingBox.transform(model)))
-			{
-				mPhongShader->SetUniMat4("u_Model", model);
-				Renderer::DrawModel(mesh, mPhongShader);
-			}
-		}
-
+		Renderer::DrawScene(mScene);
 
 		// ======================= Draw editor sruff =======================
 
 		// Highlight selected entity
-		draw_selected_model(mUI.mSceneExplorer.SelectedEntity, projection * view);
+		Entity selected_entity = mUI.mSceneExplorer.SelectedEntity;
+		if (selected_entity)
+		{
+			draw_selected_model(selected_entity);
+		}
 		
-
 		// Draw boundingBox
 		if (mUI.mBoundingBoxOption)
 		{
-			for (auto entity : scene_view)
-			{
-				auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
-				draw_boundingbox(((Ref<Model>)mesh)->mBoundingBox.transform(model), projection * view);
-			}
+			draw_scene_boundingbox(mScene);
 		}
 
 
 		// ========================= Draw skybox ========================= 
 
-		view = glm::rotate(view, glm::radians(Timer::GetTime().GetSeconds() * 0.5f), glm::vec3(0, 1, 0));
-		mUBOPrjectionview[0].SetMat4("View", glm::mat4(glm::mat3(view)));
+		float rotation_const = glm::radians(Timer::GetTime().GetSeconds() * 0.5f);
+		view = glm::rotate(view, rotation_const, glm::vec3(0, 1, 0));
+
+		Renderer::GetUBOPojectionView()[0].SetMat4("View", glm::mat4(glm::mat3(view)));
+
 		mSkyboxShader->SetUni1f("u_Brightness", 1.0f);
 		Renderer::DrawSkybox(mActiveSkybox, mSkyboxShader);
 

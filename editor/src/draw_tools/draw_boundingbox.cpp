@@ -31,17 +31,14 @@ namespace Bubble
 	}
 
 
-	void draw_boundingbox(const AABB& bb, const glm::mat4& proj_view)
+	void draw_boundingbox(const AABB& bb)
 	{
 		if (sBoundingBoxShader == nullptr)
 		{
 			init_bounding_box_drawing();
 		}
-		sBoundingBoxShader->SetUniMat4("u_Projection", glm::mat4(1));
-		sBoundingBoxShader->SetUniMat4("u_View", glm::mat4(1));
-		sBoundingBoxShader->SetUniMat4("u_Model", proj_view);
 		sBoundingBoxShader->SetUni4f("u_Color", glm::vec4(1.0f));
-
+		sBoundingBoxShader->SetUniMat4("u_Model", glm::mat4(1.0f));
 		{
 			glm::vec3 min = bb.getMin();
 			glm::vec3 max = bb.getMax();
@@ -59,6 +56,18 @@ namespace Bubble
 			Renderer::BackfaceCulling(false);
 			Renderer::DrawIndex(sVertexArray, DrawType::LINES);
 			Renderer::BackfaceCulling(true);
+		}
+	}
+
+	void draw_scene_boundingbox(Scene& scene)
+	{
+		auto scene_view = scene.GetView<ModelComponent, TransformComponent>();
+
+		// Draw boundingBoxes
+		for (auto entity : scene_view)
+		{
+			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
+			draw_boundingbox(((Ref<Model>)mesh)->mBoundingBox.transform(model));
 		}
 	}
 
