@@ -32,11 +32,14 @@ namespace Bubble
 
 	VertexBuffer& VertexBuffer::operator=(VertexBuffer&& other) noexcept
 	{
-		mRendererID = other.mRendererID;
-		mLayout = std::move(other.mLayout);
-		mSize = other.mSize;
-		other.mRendererID = 0;
-		other.mSize = 0;
+		if (this != &other)
+		{
+			mRendererID = other.mRendererID;
+			mLayout = std::move(other.mLayout);
+			mSize = other.mSize;
+			other.mRendererID = 0;
+			other.mSize = 0;
+		}
 		return *this;
 	}
 

@@ -14,6 +14,7 @@
 #include "renderer/renderer_base.h"
 #include "renderer/framebuffer/framebuffer.h"
 #include "renderer/buffer/buffer.h"
+#include "renderer/buffer/uniform_buffer.h"
 #include "renderer/vertex_array/vertex_array.h"
 #include "renderer/shader/shader.h"
 #include "renderer/shader/shader_loader.h"

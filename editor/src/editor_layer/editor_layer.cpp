@@ -24,6 +24,11 @@ namespace Bubble
 
 		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
 
+		BufferLayout UBOProjectionViewLayout{
+			{ GLSLDataType::Mat4, "Projection" },
+			{ GLSLDataType::Mat4, "View" }
+		};
+		mUBOPrjectionview = UniformBuffer(0, UBOProjectionViewLayout);
 
 		// Temp: Try to simplify mesh
  	}
@@ -77,11 +82,12 @@ namespace Bubble
 		glm::mat4 projection = mSceneCamera.GetPprojectionMat(window_size.x, window_size.y);
 		glm::mat4 view = mSceneCamera.GetLookatMat();
 
-		mPhongShader->SetUniMat4("u_View", view);
-		mPhongShader->SetUniMat4("u_Projection", projection);
+		// Fill ubo
+		glm::mat4 PrjView[2] = { projection, view };
+		mUBOPrjectionview.SetData(&PrjView, sizeof(PrjView));
+
 
 		SetFrustumPlanes(projection * view);
-
 
 		// Draw scene
 		auto scene_view = mScene.GetView<ModelComponent, TransformComponent>();
@@ -116,9 +122,8 @@ namespace Bubble
 
 		// ========================= Draw skybox ========================= 
 
-		view = glm::rotate(view, glm::radians(Application::GetTime() * 0.5f), glm::vec3(0, 1, 0));
-		mSkyboxShader->SetUniMat4("u_Projection", projection);
-		mSkyboxShader->SetUniMat4("u_View", glm::mat3(view));
+		view = glm::rotate(view, glm::radians(Timer::GetTime().GetSeconds() * 0.5f), glm::vec3(0, 1, 0));
+		mUBOPrjectionview[0].SetMat4("View", glm::mat4(glm::mat3(view)));
 		mSkyboxShader->SetUni1f("u_Brightness", 1.0f);
 		Renderer::DrawSkybox(mActiveSkybox, mSkyboxShader);
 

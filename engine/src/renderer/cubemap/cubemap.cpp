@@ -28,6 +28,17 @@ namespace Bubble
 		other.mRendererID = 0;
 	}
 
+	Cubemap& Cubemap::operator=(Cubemap&& other)
+	{
+		if (this != &other)
+		{
+			mRendererID = other.mRendererID;
+			other.mRendererID = 0;
+		}
+		return *this;
+	}
+
+
 	Cubemap::Cubemap(const std::string& dir, const std::string& ext, const Texture2DSpecification& spec)
 	{
 		const char* names[] = { "/right", "/left", "/top", "/bottom", "/front", "/back" };
@@ -81,21 +92,14 @@ namespace Bubble
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	}
 
-	void Cubemap::Bind()
-	{
-		glBindTexture(GL_TEXTURE_CUBE_MAP, mRendererID);
-	}
-
-	Cubemap& Cubemap::operator=(Cubemap&& other)
-	{
-		mRendererID = other.mRendererID;
-		other.mRendererID = 0;
-		return *this;
-	}
-
 	Cubemap::~Cubemap()
 	{
 		glDeleteTextures(1, &mRendererID);
+	}
+
+	void Cubemap::Bind()
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, mRendererID);
 	}
 
 }

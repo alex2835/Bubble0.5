@@ -1,6 +1,6 @@
 // Vertex shader
 #shader vertex
-#version 330 core
+#version 420 core
 layout(location = 0) in vec3  a_Pos;
 layout(location = 1) in vec3  a_Normal;
 layout(location = 2) in vec2  a_TexCoords;
@@ -11,9 +11,14 @@ out vec3 v_FragPos;
 out vec3 v_Normal;
 out vec2 v_TexCoords;
 
+
+layout (std140, binding = 0) uniform Matrices
+{
+    mat4 u_Projection;
+    mat4 u_View;
+};
 uniform mat4 u_Model;
-uniform mat4 u_View;
-uniform mat4 u_Projection;
+
 
 void main()
 {
@@ -25,7 +30,7 @@ void main()
 
 // Fragment shader
 #shader fragment
-#version 330 core
+#version 420 core
 out vec4 FragColor;
 
 struct Material {

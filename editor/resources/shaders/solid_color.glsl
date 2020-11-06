@@ -2,9 +2,13 @@
 #version 330 core
 layout (location = 0) in vec3 a_Position;
 
+layout (std140, binding = 0) uniform Matrices
+{
+    mat4 u_Projection;
+    mat4 u_View;
+};
 uniform mat4 u_Model;
-uniform mat4 u_View;
-uniform mat4 u_Projection;
+
 
 void main()
 {

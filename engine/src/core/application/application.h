@@ -41,6 +41,5 @@ namespace Bubble
 		static const std::string& GetCurrentDir();
 
 		static Window* GetWindow();
-		static float GetTime() { return SDL_GetTicks() / 1000.0f; }
 	};
 }

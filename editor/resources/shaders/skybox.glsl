@@ -4,8 +4,13 @@ layout (location = 0) in vec3 a_Position;
 
 out vec3 v_TexCoords;
 
-uniform mat4 u_Projection;
-uniform mat4 u_View;
+
+layout (std140, binding = 0) uniform Matrices
+{
+    mat4 u_Projection;
+    mat4 u_View;
+};
+
 
 void main()
 {

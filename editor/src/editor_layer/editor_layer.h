@@ -32,6 +32,10 @@ namespace Bubble
 		Ref<Shader> mSkyboxShader;
 		Ref<Skybox> mActiveSkybox;
 
+		//unsigned int uboMatrices;
+
+		UniformBuffer mUBOPrjectionview;
+
 
 	public:
 		EditorLayer();

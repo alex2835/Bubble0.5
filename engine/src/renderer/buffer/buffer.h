@@ -14,23 +14,22 @@ namespace Bubble
 		None, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
 	};
 
-	static uint32_t GLSLDataTypeSize(GLSLDataType type)
+	inline uint32_t GLSLDataTypeSize(GLSLDataType type)
 	{
 		switch (type)
 		{
-			case GLSLDataType::Float:   return 4;
-			case GLSLDataType::Float2:  return 4 * 2;
-			case GLSLDataType::Float3:  return 4 * 3;
-			case GLSLDataType::Float4:  return 4 * 4;
-			case GLSLDataType::Mat3:    return 4 * 3 * 3;
-			case GLSLDataType::Mat4:    return 4 * 4 * 4;
-			case GLSLDataType::Int:     return 4;
-			case GLSLDataType::Int2:    return 4 * 2;
-			case GLSLDataType::Int3:    return 4 * 3;
-			case GLSLDataType::Int4:    return 4 * 4;
-			case GLSLDataType::Bool:    return 1;
+			case GLSLDataType::Float:  return 4;
+			case GLSLDataType::Float2: return 4 * 2;
+			case GLSLDataType::Float3: return 4 * 3;
+			case GLSLDataType::Float4: return 4 * 4;
+			case GLSLDataType::Mat3:   return 4 * 3 * 3;
+			case GLSLDataType::Mat4:   return 4 * 4 * 4;
+			case GLSLDataType::Int:    return 4;
+			case GLSLDataType::Int2:   return 4 * 2;
+			case GLSLDataType::Int3:   return 4 * 3;
+			case GLSLDataType::Int4:   return 4 * 4;
+			case GLSLDataType::Bool:   return 1;
 		}
-
 		BUBBLE_CORE_ASSERT(false, "Unknown GLSLDataType!");
 		return 0;
 	}
@@ -38,7 +37,6 @@ namespace Bubble
 
 	struct BufferElement
 	{
-	public:
 		std::string Name;
 		GLSLDataType Type;
 		uint32_t Size;
@@ -61,17 +59,17 @@ namespace Bubble
 		{
 			switch (Type)
 			{
-				case GLSLDataType::Float:   return 1;
-				case GLSLDataType::Float2:  return 2;
-				case GLSLDataType::Float3:  return 3;
-				case GLSLDataType::Float4:  return 4;
-				case GLSLDataType::Mat3:    return 3;
-				case GLSLDataType::Mat4:    return 4;
-				case GLSLDataType::Int:     return 1;
-				case GLSLDataType::Int2:    return 2;
-				case GLSLDataType::Int3:    return 3;
-				case GLSLDataType::Int4:    return 4;
-				case GLSLDataType::Bool:    return 1;
+				case GLSLDataType::Float:  return 1;
+				case GLSLDataType::Float2: return 2;
+				case GLSLDataType::Float3: return 3;
+				case GLSLDataType::Float4: return 4;
+				case GLSLDataType::Mat3:   return 3;
+				case GLSLDataType::Mat4:   return 4;
+				case GLSLDataType::Int:    return 1;
+				case GLSLDataType::Int2:   return 2;
+				case GLSLDataType::Int3:   return 3;
+				case GLSLDataType::Int4:   return 4;
+				case GLSLDataType::Bool:   return 1;
 			}
 
 			BUBBLE_CORE_ASSERT(false, "Unknown GLSLDataType!");
@@ -80,13 +78,11 @@ namespace Bubble
 	};
 
 
-	class BufferLayout
+	struct BufferLayout
 	{
-	private:
 		std::vector<BufferElement> mElements;
 		uint32_t mStride = 0;
 
-	public:
 		BufferLayout() {}
 
 		BufferLayout(const std::initializer_list<BufferElement>& elements)
@@ -113,9 +109,9 @@ namespace Bubble
 				offset += element.Size * element.Count;
 				mStride += element.Size;
 			}
-			// If count more then one than
+			// If count more then one, it means that
 			// attributes goes one after another (1111 2222 3333)
-			// So stride will be the size of each attribute value
+			// So stride will be the size of each single attribute
 			mStride = mElements[0].Count == 1 ? mStride : 0;
 		}
 	};

@@ -41,6 +41,7 @@ namespace Bubble
 		{
 			glcall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, (float*)&spec.BorderColor));
 		}
+
 	}
 
 
@@ -96,11 +97,12 @@ namespace Bubble
 			glcall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, (float*)&spec.BorderColor));
 		}
 
-		if (spec.MinMap)
-		{
-			glGenerateMipmap(GL_TEXTURE_2D);
-		}
+		// Anisotropy filtering
+		GLfloat value;
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &value);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, value);
 
+		//glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
 	}
 

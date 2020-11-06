@@ -80,7 +80,6 @@ namespace Bubble
 			else {
 				axis_vert.x = max.x;
 			}
-
 			// y-axis
 			if (FrustumPlanes[planeID].y < 0.0f) {    // Which AABB vertex is furthest down (plane normals direction) the y axis
 				axis_vert.y = min.y;
@@ -88,7 +87,6 @@ namespace Bubble
 			else {
 				axis_vert.y = max.y;
 			}
-
 			// z-axis
 			if (FrustumPlanes[planeID].z < 0.0f) {   // Which AABB vertex is furthest down (plane normals direction) the z axis
 				axis_vert.z = min.z;
@@ -96,7 +94,6 @@ namespace Bubble
 			else {
 				axis_vert.z = max.z;
 			}
-
 
 			glm::vec3 plane_normal = FrustumPlanes[planeID].xyz;
 			float plane_Constant = FrustumPlanes[planeID].w;
