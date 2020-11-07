@@ -20,16 +20,14 @@ namespace Bubble
 		glm::mat4 model(1.0f);
 		glm::mat4 view = mCamera.GetLookatMat();
 		glm::mat4 projection = mCamera.GetPprojectionMat(mViewport.GetWidth(), mViewport.GetHeight());
-		
-		mShader->SetUniMat4("u_Model", model);
-		mShader->SetUniMat4("u_View", view);
-		mShader->SetUniMat4("u_Projection", projection);
-		 
+
 		Renderer::SetViewport(mViewport);
+		Renderer::SetCamera(mCamera);
+		 
 		Renderer::SetClearColor(glm::vec4(0.4f));
 		Renderer::Clear();
 		
-		Renderer::DrawModel(mSelectedModel, mShader);
+		Renderer::DrawModel(mSelectedModel, model, mShader);
 		
 		mViewport.Unbind();
 	}

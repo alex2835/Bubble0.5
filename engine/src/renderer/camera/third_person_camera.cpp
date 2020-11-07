@@ -133,8 +133,8 @@ namespace Bubble
 	}
 
 
-	glm::mat4 ThirdPersonCamera::GetLookatMat()
-	{
-		return glm::lookAt(Position, Position + Front, Up);
-	}
+	//glm::mat4 ThirdPersonCamera::GetLookatMat()
+	//{
+	//	return glm::lookAt(Position, Position + Front, Up);
+	//}
 }

@@ -35,8 +35,14 @@ namespace Bubble
 		if (*is_open_properties)
 		{
 			ImGui::Begin("Properties", is_open_properties);
+			
 			if (SelectedEntity) {
 				DrawComponents(SelectedEntity);
+			}
+			
+			if (Input::IsKeyClick(SDLK_ESCAPE) && ImGui::IsWindowHovered())
+			{
+				SelectedEntity = {};
 			}
 			ImGui::End();
 		}
@@ -55,13 +61,13 @@ namespace Bubble
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strcpy_s(buffer, sizeof(buffer), tag.c_str());
-			ImGui::Text("Name");
-			if (ImGui::InputText("", buffer, sizeof(buffer)))
+			if (ImGui::InputText("Name", buffer, sizeof(buffer)))
 			{
 				tag = std::string(buffer);
 			}
 			ImGui::Separator();
 		}
+
 
 		if (entity.HasComponent<TransformComponent>())
 		{
@@ -84,7 +90,7 @@ namespace Bubble
 
 				if (update)
 				{
-					scale += scale_entire;
+					scale = glm::max(scale + scale_entire, 0.01f);
 					transform = glm::mat4(1.0f);
 					transform = glm::translate(transform, position);
 					transform = glm::rotate(transform, rotation.x, glm::vec3(1, 0, 0));
@@ -97,6 +103,7 @@ namespace Bubble
 			}
 			ImGui::Separator();
 		}
+
 
 		if (entity.HasComponent<LightComponent>())
 		{

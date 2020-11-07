@@ -1,5 +1,4 @@
 
-
 #include "draw_boundingbox.h"
 
 
@@ -39,35 +38,37 @@ namespace Bubble
 		}
 		sBoundingBoxShader->SetUni4f("u_Color", glm::vec4(1.0f));
 		sBoundingBoxShader->SetUniMat4("u_Model", glm::mat4(1.0f));
-		{
-			glm::vec3 min = bb.getMin();
-			glm::vec3 max = bb.getMax();
 
-			glm::vec3 pos[] = { min, max,
-				glm::vec3(max.x, min.y, min.z),
-				glm::vec3(min.x, max.y, min.z),
-				glm::vec3(min.x, min.y, max.z),
-				glm::vec3(max.x, max.y, min.z),
-				glm::vec3(min.x, max.y, max.z),
-				glm::vec3(max.x, min.y, max.z)
-			};
-			sVertexArray->GetVertexBuffers()[0].SetData(pos, sizeof(pos));
+		glm::vec3 min = bb.getMin();
+		glm::vec3 max = bb.getMax();
 
-			Renderer::BackfaceCulling(false);
-			Renderer::DrawIndex(sVertexArray, DrawType::LINES);
-			Renderer::BackfaceCulling(true);
-		}
+		glm::vec3 pos[] = { min, max,
+			glm::vec3(max.x, min.y, min.z),
+			glm::vec3(min.x, max.y, min.z),
+			glm::vec3(min.x, min.y, max.z),
+			glm::vec3(max.x, max.y, min.z),
+			glm::vec3(min.x, max.y, max.z),
+			glm::vec3(max.x, min.y, max.z)
+		};
+		sVertexArray->GetVertexBuffers()[0].SetData(pos, sizeof(pos));
+
+		Renderer::BackfaceCulling(false);
+		Renderer::DrawIndices(sVertexArray, DrawType::LINES);
+		Renderer::BackfaceCulling(true);
 	}
+
 
 	void draw_scene_boundingbox(Scene& scene)
 	{
 		auto scene_view = scene.GetView<ModelComponent, TransformComponent>();
 
-		// Draw boundingBoxes
 		for (auto entity : scene_view)
 		{
-			auto& [mesh, model] = scene_view.get<ModelComponent, TransformComponent>(entity);
-			draw_boundingbox(((Ref<Model>)mesh)->mBoundingBox.transform(model));
+			auto& [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
+			if (IsInFrustum(model->mBoundingBox.transform(transforms)))
+			{
+				draw_boundingbox(model->mBoundingBox.transform(transforms));
+			}
 		}
 	}
 

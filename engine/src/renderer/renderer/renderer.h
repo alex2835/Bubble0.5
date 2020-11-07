@@ -28,36 +28,51 @@ namespace Bubble
 		// Uniform buffer
 		static Scope<UniformBuffer> UBOPrjectionview;
 		static Scope<UniformBuffer> UBOLights;
-		static Camera* ActiveCamera;
+		
+		// Active components
+		static const Camera* ActiveCamera;
+		static const Framebuffer* ActiveViewport;
+		static glm::ivec2 RenderPos;
+		static glm::ivec2 RenderSize;
+
 
 		static void Init();
 
-		// Options
+		// ============ Options ============
 		static void Wareframe(bool);
 		static void AlphaBlending(bool, uint32_t sfactor = GL_SRC_ALPHA, uint32_t dfactor = GL_ONE_MINUS_SRC_ALPHA);
 		static void BackfaceCulling(bool);
 		static void DepthTest(bool);
 
-		// Uniform buffers
-		static void InitUBOS();
-		static void SetUBOPojectionView(const glm::mat4& projection, const glm::mat4& view);
+		
+		// ============ Set active components ============
+		static void SetViewport(const Framebuffer& framebuffer, uint32_t x = 0, uint32_t y = 0, uint32_t width = 0, uint32_t height = 0);
+		// Set viewport first
+		static void SetCamera(const Camera& camera);
 
+		// ============ Getters ============
 		static UniformBuffer& GetUBOPojectionView() { return *UBOPrjectionview; }
 
-		// Rendering
-		static void SetViewport(const Framebuffer& framebuffer, uint32_t x = 0, uint32_t y = 0, uint32_t width = 0, uint32_t height = 0);
+		// ============ Clearing ============
 		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
 		static void ClearDepth();
 		static void ClearColor();
 
-		static void DrawIndex(const Ref<VertexArray>& vertexArray, DrawType draw_type = DrawType::TRIANGLES, uint32_t count = 0);
+		// ============ Rendering ============
+		static void DrawIndices(const Ref<VertexArray>& vertexArray, DrawType draw_type = DrawType::TRIANGLES, uint32_t count = 0);
+		
 		static void DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
 		static void DrawMesh(const Ref<Mesh>& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
-		static void DrawModel(const Ref<Model>& model, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
-		static void DrawModelA(const Ref<Model>& model, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
+		
+		static void DrawModel(const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
+		static void DrawModelA(const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
+		
 		static void DrawSkybox(const Ref<Skybox>& model, const Ref<Shader>& shader);
 
 		static void DrawScene(Scene& scene);
+
+	private:
+		static void InitUBOS();
 	};
 }

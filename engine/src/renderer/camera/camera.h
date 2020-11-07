@@ -70,8 +70,8 @@ namespace Bubble
                const glm::vec3& up = glm::vec3(0.0f, 1.0f, 0.0f)
         );
 
-        glm::mat4 GetLookatMat(); 
-        glm::mat4 GetPprojectionMat(int window_width, int window_height);
+        glm::mat4 GetLookatMat() const; 
+        glm::mat4 GetPprojectionMat(int window_width, int window_height) const;
         
         void UpdateCameraVectors();
     };

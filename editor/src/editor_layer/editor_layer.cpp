@@ -37,19 +37,18 @@ namespace Bubble
 
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
-		// Set args for UI
+		// ====================== Draw gui ======================
 		mUI.mArgs = { &mImGuiControll, &mSceneCamera, &mViewport, &mScene };
-
-		// User Interface
 		mUI.Draw(dt);
 
 
-		// Scene camera update
+		// ====================== Update ======================
 		mSceneCamera.OnUpdate(dt);
 
 
+		// ====================== Set uniform data ======================
 		Renderer::SetViewport(mViewport);
-		Renderer::ClearDepth();
+		Renderer::SetCamera(mSceneCamera);
 
 		// Temp : Apply lights to shader
 		int light_index = 0;
@@ -64,7 +63,6 @@ namespace Bubble
 
 
 		// ====================== Rendering ======================
-
 		mClearScreanOption |= mUI.mWireframeOption;
 
 		if (mClearScreanOption)
@@ -72,27 +70,23 @@ namespace Bubble
 			Renderer::SetClearColor(glm::vec4(1.0f));
 			Renderer::ClearColor();
 		}
+		Renderer::ClearDepth();
 
-		glm::ivec2 window_size = mViewport.GetSize();
-		glm::mat4 projection = mSceneCamera.GetPprojectionMat(window_size.x, window_size.y);
-		glm::mat4 view = mSceneCamera.GetLookatMat();
 
-		Renderer::SetUBOPojectionView(projection, view);
-		SetFrustumPlanes(projection * view);
-
-		// Draw scene
+		// ====================== Draw scene ====================== 
 		Renderer::DrawScene(mScene);
 
-		// ======================= Draw editor sruff =======================
+
+		// ====================== Draw editor sruff ======================
+		Entity selected_entity = mUI.mSceneExplorer.SelectedEntity;
 
 		// Highlight selected entity
-		Entity selected_entity = mUI.mSceneExplorer.SelectedEntity;
 		if (selected_entity)
 		{
 			draw_selected_model(selected_entity);
 		}
 		
-		// Draw boundingBox
+		// Draw bounding boxes
 		if (mUI.mBoundingBoxOption)
 		{
 			draw_scene_boundingbox(mScene);
@@ -100,15 +94,17 @@ namespace Bubble
 
 
 		// ========================= Draw skybox ========================= 
+		glm::mat4 view = Renderer::ActiveCamera->GetLookatMat();
 
-		float rotation_const = glm::radians(Timer::GetTime().GetSeconds() * 0.5f);
-		view = glm::rotate(view, rotation_const, glm::vec3(0, 1, 0));
+		float rotation = glm::radians(Timer::GetTime().GetSeconds() * 0.5f);
+		view = glm::rotate(view, rotation, glm::vec3(0, 1, 0));
+		view = glm::mat4(glm::mat3(view));
 
-		Renderer::GetUBOPojectionView()[0].SetMat4("View", glm::mat4(glm::mat3(view)));
+		Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
+
 
 		mSkyboxShader->SetUni1f("u_Brightness", 1.0f);
 		Renderer::DrawSkybox(mActiveSkybox, mSkyboxShader);
-
 
 
 		// Quit closure

@@ -27,7 +27,6 @@ namespace Bubble
 		void ProcessMouseMovementShift(float xoffset, float yoffset);
 		void ProcessMouseScroll(float yoffset);
 		void UpdateCameraAngles(DeltaTime dt);
-		glm::mat4 GetLookatMat();
 	};
 
 }

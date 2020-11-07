@@ -18,12 +18,12 @@ namespace Bubble
         UpdateCameraVectors();
     }
 
-    glm::mat4 Camera::GetLookatMat()
+    glm::mat4 Camera::GetLookatMat() const
     {
         return glm::lookAt(Position, Position + Front, Up);
     }
 
-    glm::mat4 Camera::GetPprojectionMat(int window_width, int window_height)
+    glm::mat4 Camera::GetPprojectionMat(int window_width, int window_height) const
     {
         float aspect = (float)window_width / window_height;
         return glm::perspective<float>(Fov, aspect, Near, Far);

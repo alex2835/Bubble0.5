@@ -18,8 +18,7 @@ namespace Bubble
 			auto& [mesh, model] = selected_entity.GetComponent<ModelComponent, TransformComponent>();
 			glDisable(GL_DEPTH_TEST);
 			sSelectedModelShader->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.1f));
-			sSelectedModelShader->SetUniMat4("u_Model", model);
-			Renderer::DrawModelA(mesh, sSelectedModelShader);
+			Renderer::DrawModelA(mesh, model, sSelectedModelShader);
 			glEnable(GL_DEPTH_TEST);
 		}
 	}
