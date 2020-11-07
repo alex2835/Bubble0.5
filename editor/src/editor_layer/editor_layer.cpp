@@ -109,16 +109,18 @@ namespace Bubble
 		mSkyboxShader->SetUni1f("u_Brightness", 1.0f);
 		Renderer::DrawSkybox(mActiveSkybox, mSkyboxShader);
 
+
+
+		// Quit closure
+		if (Input::IsKeyClick(SDLK_LALT) && Input::IsKeyClick(SDLK_F4))
+		{
+			Application::GetWindow()->Close();
+		}
 	}
 
 	void EditorLayer::OnEvent(SDL_Event& event)
 	{
         mImGuiControll.OnEvent(event);
-
-		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-		{
-			Application::GetWindow()->Close();
-		}
 	}
 
 }

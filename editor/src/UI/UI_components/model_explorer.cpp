@@ -4,7 +4,6 @@
 
 namespace Bubble
 {
-
 	ModelExplorer::ModelExplorer()
 		: mViewport(800, 600),
 		  mShader(ShaderLoader::Load("resources/shaders/phong.glsl")),
@@ -117,7 +116,6 @@ namespace Bubble
 
 		}
 		ImGui::End();
-
 	}
 
 }

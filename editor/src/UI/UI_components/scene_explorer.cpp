@@ -15,16 +15,17 @@ namespace Bubble
 					Entity entity(entityID, scene);
 
 					auto& tag = entity.GetComponent<TagComponent>().mTag;
-					ImGui::Selectable(tag.c_str());
+					ImGui::Selectable(tag.c_str(), entity == SelectedEntity);
 
 					if (ImGui::IsItemClicked())
 					{
 						SelectedEntity = entity;
 					}
-					
 				});
 
-			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) {
+			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered() ||
+				Input::IsKeyClick(SDLK_ESCAPE) && ImGui::IsWindowHovered())
+			{
 				SelectedEntity = {};
 			}
 
@@ -37,7 +38,6 @@ namespace Bubble
 			if (SelectedEntity) {
 				DrawComponents(SelectedEntity);
 			}
-		
 			ImGui::End();
 		}
 
@@ -134,12 +134,6 @@ namespace Bubble
 				break;
 			}
 		}
-
-
-		// ================ User properties ==================
-		//for (auto DrawCustomProperties : CustomEntityProperties)
-		//{
-		//	DrawCustomProperties(entity);
-		//}
 	}
+
 }

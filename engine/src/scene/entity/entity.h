@@ -63,6 +63,7 @@ namespace Bubble
 		operator bool() const { return EntityHandle != entt::null; }
 
 		bool operator== (const entt::entity& other) { return EntityHandle == other; }
+		bool operator== (const Entity& other) { return EntityHandle == other.EntityHandle; }
 	};
 
 }
