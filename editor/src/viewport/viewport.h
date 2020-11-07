@@ -3,15 +3,21 @@
 #include "framebuffer/framebuffer.h"
 
 #include <string>
-
+#include <algorithm>
 
 namespace Bubble
 {
-	struct Viewport : public Framebuffer
+	struct Viewport;
+	extern std::vector<Viewport*> EditorViewports;
+
+	/*
+		Editor framebuffer abstraction
+	*/
+
+	struct Viewport : Framebuffer
 	{
 		std::string Name;
-		glm::ivec2 Size;
-		glm::ivec2 Capacity;
+		glm::ivec2 NewSize;
 
 	public:
 		Viewport() = default;
@@ -23,12 +29,7 @@ namespace Bubble
 		Viewport(Viewport&& other) noexcept;
 		Viewport& operator= (Viewport&& other) noexcept;
 
-		void Resize(const glm::ivec2& size);
-		const glm::ivec2& GetSize() const;
-		float GetWidth();
-		float GetHeight();
-
-		operator Framebuffer& ();
-		operator const Framebuffer& () const;
+		~Viewport();
 	};
+
 }

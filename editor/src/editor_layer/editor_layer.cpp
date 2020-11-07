@@ -5,17 +5,15 @@
 namespace Bubble
 {
 	EditorLayer::EditorLayer()
-		: mSceneCamera(glm::vec3(0.0f, 5.0f, 0.0f))
+		: mSceneCamera(glm::vec3(0.0f, 5.0f, 0.0f)),
+		  mViewport(800, 800)
 	{}
 
 	void EditorLayer::OnAttach()
 	{
         mImGuiControll.OnAttach();
-
-		mViewport = Viewport(800, 800);
-
-		// ============ Model entities =============
 	
+		// Temp: load scene
 		OpenProject("../../../../scene_test.json", &mScene);
 
 		// Temp: skybox
@@ -23,7 +21,6 @@ namespace Bubble
 		mSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
 		
 		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
-
 		
 		// Temp: Try to simplify mesh
  	}
@@ -44,6 +41,16 @@ namespace Bubble
 
 		// ====================== Update ======================
 		mSceneCamera.OnUpdate(dt);
+
+		// Resize editor viewports
+		for (Viewport* viewport : EditorViewports)
+		{
+			if (viewport->NewSize != viewport->GetSize())
+			{
+				viewport->Resize(viewport->NewSize);
+			}
+		}
+
 
 
 		// ====================== Set uniform data ======================
@@ -101,7 +108,6 @@ namespace Bubble
 		view = glm::mat4(glm::mat3(view));
 
 		Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
-
 
 		mSkyboxShader->SetUni1f("u_Brightness", 1.0f);
 		Renderer::DrawSkybox(mActiveSkybox, mSkyboxShader);

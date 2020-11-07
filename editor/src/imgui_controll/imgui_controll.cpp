@@ -59,6 +59,7 @@ namespace Bubble
 
     void ImGuiControll::End()
     {
+        ImGui::EndFrame();
         // Rendering
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

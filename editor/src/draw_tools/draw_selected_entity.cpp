@@ -15,11 +15,12 @@ namespace Bubble
 
 		if (selected_entity.Valid() && selected_entity.HasComponent<ModelComponent, TransformComponent>())
 		{
-			auto& [mesh, model] = selected_entity.GetComponent<ModelComponent, TransformComponent>();
-			glDisable(GL_DEPTH_TEST);
 			sSelectedModelShader->SetUni4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 0.1f));
+
+			auto& [mesh, model] = selected_entity.GetComponent<ModelComponent, TransformComponent>();
+			Renderer::DepthTest(false);
 			Renderer::DrawModelA(mesh, model, sSelectedModelShader);
-			glEnable(GL_DEPTH_TEST);
+			Renderer::DepthTest(true);
 		}
 	}
 

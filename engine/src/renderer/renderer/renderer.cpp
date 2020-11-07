@@ -96,15 +96,15 @@ namespace Bubble
 
 	void Renderer::SetViewport(const Framebuffer& framebuffer, uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
+
 		if (width * height) {
 			RenderPos = { x, y };
 			RenderSize = { width, height };
 		}
 		else {
 			RenderPos = { 0, 0 };
-			RenderSize = { framebuffer.GetWidth(), framebuffer.GetHeight() };
+			RenderSize = { framebuffer.GetWidth(), framebuffer.GetHeight()};
 		}
-
 		framebuffer.Bind();
 		ActiveViewport = &framebuffer;
 		glViewport(RenderPos.x, RenderPos.y, RenderSize.x, RenderSize.y);

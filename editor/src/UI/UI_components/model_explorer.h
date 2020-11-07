@@ -19,13 +19,13 @@ namespace Bubble
 		Viewport mViewport;
 		Ref<Shader> mShader;
 		Light mLight;
-
-	private:
-		void DrawSelectedModel();
-
+	
 	public:
 		ModelExplorer();
 		void Draw(bool* is_open, DeltaTime dt);
+
+	private:
+		void RenderSelectedModel();
 	};
 
 }

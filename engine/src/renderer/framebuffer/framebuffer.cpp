@@ -11,6 +11,12 @@ namespace Bubble
 		Invalidate();
 	}
 
+	Framebuffer::Framebuffer(int width, int height)
+		: mSpecification({ {width, height} })
+	{
+		Invalidate();
+	}
+
 	Framebuffer::Framebuffer(Framebuffer&& other) noexcept
 	{
 		// Rebind
@@ -121,7 +127,7 @@ namespace Bubble
 		glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	}
 
-	glm::ivec2 Framebuffer::GetSize() const
+	const glm::ivec2& Framebuffer::GetSize() const
 	{
 		return mSpecification.Size;
 	}
