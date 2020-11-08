@@ -10,6 +10,7 @@
 #include "buffer/uniform_buffer.h"
 #include "camera/camera.h"
 #include "components.h"
+#include "light/light.h"
 #include "scene.h"
 
 #include "glm/glm.hpp"
@@ -49,6 +50,8 @@ namespace Bubble
 		static void SetViewport(const Framebuffer& framebuffer, uint32_t x = 0, uint32_t y = 0, uint32_t width = 0, uint32_t height = 0);
 		// Set viewport first
 		static void SetCamera(const Camera& camera);
+		static void SetLights(const std::vector<Light>& lights);
+		static void SetLights(const Light* lights, int size);
 
 		// ============ Getters ============
 		static UniformBuffer& GetUBOPojectionView() { return *UBOPrjectionview; }

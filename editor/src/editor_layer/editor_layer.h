@@ -25,11 +25,7 @@ namespace Bubble
 		// Options
 		bool mClearScreanOption = false;
 
-		UniformBuffer UBOLights;
-
 		// Temp:
-		Ref<Shader> mPhongShader;
-
 		Ref<Shader> mSkyboxShader;
 		Ref<Skybox> mActiveSkybox;
 

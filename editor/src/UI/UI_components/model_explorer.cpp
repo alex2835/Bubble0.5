@@ -15,12 +15,10 @@ namespace Bubble
 
 	void ModelExplorer::RenderSelectedModel()
 	{
-		Light::ApplyLight(mLight, mShader, 0);
-		mShader->SetUni1i("nLights", 1);
-		
 		Renderer::SetViewport(mViewport);
 		Renderer::SetCamera(mCamera);
-		 
+		Renderer::SetLights(&mLight, 1);
+
 		Renderer::SetClearColor(glm::vec4(0.4f));
 		Renderer::Clear();
 		

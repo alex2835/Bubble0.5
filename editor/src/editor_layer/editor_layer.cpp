@@ -20,27 +20,6 @@ namespace Bubble
 		mActiveSkybox = SkyboxLoader::Load("resources/skybox/skybox1.jpg");
 		mSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
 		
-		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
-		
-		BufferLayout layout{
-			{ GLSLDataType::Int, "Type"},
-			{ GLSLDataType::Float, "Brightness"},
-
-			{ GLSLDataType::Float, "Constant"},
-			{ GLSLDataType::Float, "Linear"},
-			{ GLSLDataType::Float, "Quadratic"},
-
-			{ GLSLDataType::Float, "CutOff"},
-			{ GLSLDataType::Float, "OuterCutOff"},
-
-			{ GLSLDataType::Float3, "Color"},
-			{ GLSLDataType::Float3, "Direction"},
-			{ GLSLDataType::Float3, "Position"},
-		};
-
-		UBOLights = UniformBuffer(1, layout, 5, 16);
-
-		// Temp: Try to simplify mesh
  	}
 
 
@@ -70,8 +49,6 @@ namespace Bubble
 
 
 		// ====================== Set uniform data ======================
-		Renderer::SetViewport(mViewport);
-		Renderer::SetCamera(mSceneCamera);
 
 		// Temp
 		static std::vector<Light> lights;
@@ -85,11 +62,10 @@ namespace Bubble
 			}
 		);
 
-		int numLights = lights.size();
-		UBOLights.SetData(lights.data(), sizeof(Light) * lights.size(), 16);
-		UBOLights.SetData(&numLights, 4);
 
-
+		Renderer::SetViewport(mViewport);
+		Renderer::SetCamera(mSceneCamera);
+		Renderer::SetLights(lights);
 		// ====================== Rendering ======================
 		mClearScreanOption |= mUI.mWireframeOption;
 

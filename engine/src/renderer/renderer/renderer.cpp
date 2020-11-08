@@ -94,6 +94,22 @@ namespace Bubble
 	}
 
 
+	void Renderer::SetLights(const std::vector<Light>& lights)
+	{
+		int offset = 16;
+		int nLights = lights.size();
+
+		UBOLights->SetData(lights.data(), sizeof(Light) * nLights, offset);
+		UBOLights->SetData(&nLights, 4);
+	}
+
+	void Renderer::SetLights(const Light* lights, int size)
+	{
+		int offset = 16;
+		UBOLights->SetData(lights, sizeof(Light) * size, offset);
+		UBOLights->SetData(&size, 4);
+	}
+
 	void Renderer::SetViewport(const Framebuffer& framebuffer, uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
 
@@ -230,7 +246,21 @@ namespace Bubble
 		UBOPrjectionview = CreateScope<UniformBuffer>(0, UBOProjectionViewLayout);
 
 		// Init Lights UBO
-		// ...
+		BufferLayout layout{
+			{ GLSLDataType::Int, "Type"},
+			{ GLSLDataType::Float, "Brightness"},
+			{ GLSLDataType::Float, "Constant"},
+			{ GLSLDataType::Float, "Linear"},
+			{ GLSLDataType::Float, "Quadratic"},
+			{ GLSLDataType::Float, "CutOff"},
+			{ GLSLDataType::Float, "OuterCutOff"},
+			{ GLSLDataType::Float3, "Color"},
+			{ GLSLDataType::Float3, "Direction"},
+			{ GLSLDataType::Float3, "Position"},
+		};
+		int nLights = 30;
+		int reserved_data = 16; //for nLights
+		UBOLights = CreateScope<UniformBuffer>(1, layout, nLights, reserved_data);
 	}
 
 

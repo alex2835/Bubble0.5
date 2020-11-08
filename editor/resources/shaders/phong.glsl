@@ -66,7 +66,7 @@ struct Light
     float pad3;
 };
 
-#define MAX_LIGHTS 5
+#define MAX_LIGHTS 30
 layout (std140, binding = 1) uniform Lights {
   int nLights;
   Light lights[MAX_LIGHTS];
@@ -89,13 +89,16 @@ vec4 CalcSpotLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir);
 
 void main()
 {
+    vec4 diffuse = texture(material.diffuse0, v_TexCoords);
+    if (diffuse.a < 0.001f){
+        discard;
+    }
+    vec4 specular = texture(material.specular0, v_TexCoords);
+    
     vec3 norm = normalize(v_Normal);
     vec3 view_dir = normalize(u_ViewPos - v_FragPos);
-    
-    vec4 texel_diffuse = texture(material.diffuse0, v_TexCoords);
-    if (texel_diffuse.a < 0.001f) discard;
-    
-    vec3 result = vec3(0.0f);
+
+    vec4 result = vec4(0.0f);
     vec4 diff_spec = vec4(0.0f);
 
     for (int i = 0; i < nLights; i++)
@@ -115,14 +118,16 @@ void main()
                 break;
         }
     }
-    result += diff_spec.xyz * vec3(texel_diffuse);
-    vec4 spec = texture(material.specular0, v_TexCoords);
-    result += vec3(diff_spec.w * (spec.x + spec.y + spec.z) / 3);
-    
     // Hard code ambient
-    clamp(result, vec3(0.1f), vec3(1.0f));
+    float ambient = 0.05f;
+    vec4  diffuse_coef = max(vec4(ambient), vec4(diff_spec.xyz, 1.0f));
+    float specular_coef = diff_spec.w;
 
-    FragColor = vec4(result, 1.0);
+    result += diffuse_coef * diffuse;
+    result += vec4(vec3(specular_coef * specular.x ), 0);
+    
+    result = min(result, vec4(1.0f));
+    FragColor = result;
 }
 
 

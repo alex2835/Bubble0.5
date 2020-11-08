@@ -62,41 +62,5 @@ namespace Bubble
 									 float cutoff = 12.5f,		// cutoff and outer_cutoff in degrees
 									 float outer_cutoff = 17.5f,
 									 const glm::vec3& color = glm::vec3(1.0f));
-
-		static inline void ApplyLight(const Light& light, const Ref<Shader>& shader, int i)
-		{
-			shader->Bind();
-			char light_id[64];
-			char buffer[64];
-			
-			sprintf(light_id, "lights[%d]", i);
-
-			sprintf(buffer, "%s.type", light_id);
-			shader->SetUni1i(buffer, (int)light.Type);
-			sprintf(buffer, "%s.direction", light_id);
-			shader->SetUni3f(buffer, light.Direction);
-			sprintf(buffer, "%s.position", light_id);
-			shader->SetUni3f(buffer, light.Position);
-
-			sprintf(buffer, "%s.constant", light_id);
-			shader->SetUni1f(buffer, light.Constant);
-			sprintf(buffer, "%s.linear", light_id);
-			shader->SetUni1f(buffer, light.Linear);
-			sprintf(buffer, "%s.quadratic", light_id);
-			shader->SetUni1f(buffer, light.Quadratic);
-
-			sprintf(buffer, "%s.cutOff", light_id);
-			shader->SetUni1f(buffer, cosf(glm::radians(light.CutOff)));
-			sprintf(buffer, "%s.outerCutOff", light_id);
-			shader->SetUni1f(buffer, cosf(glm::radians(light.OuterCutOff)));
-
-			sprintf(buffer, "%s.color", light_id);
-			shader->SetUni3f(buffer, light.Color);
-
-			sprintf(buffer, "%s.brightness", light_id);
-			shader->SetUni1f(buffer, light.Brightness);
-			
-			//shader->SetUni1i("nLights", mLights.size());
-		}
 	};
 }
