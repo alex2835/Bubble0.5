@@ -45,36 +45,39 @@ const int DirLight = 0;
 const int PointLight = 1;
 const int SpotLight = 2;
 
+// Light
 struct Light
 {
     int type;
     float brightness;
-	vec3 color;
 
-    // dir
-    vec3 direction;
-    vec3 position;
-
-    // point
     float constant;
     float linear;
     float quadratic;
 
-    // spot
     float cutOff;
     float outerCutOff;
+
+    vec3 color;
+    float pad1;
+    vec3 direction;
+    float pad2;
+    vec3 position;
+    float pad3;
 };
+
+#define MAX_LIGHTS 5
+layout (std140, binding = 1) uniform Lights {
+  int nLights;
+  Light lights[MAX_LIGHTS];
+};
+
 
 in vec3 v_FragPos;
 in vec3 v_Normal;
 in vec2 v_TexCoords;
 
 uniform vec3 u_ViewPos;
-
-// Light
-#define MAX_LIGHTS 5
-uniform Light lights[MAX_LIGHTS];
-uniform int nLights;
 
 // Material
 uniform Material material;
@@ -89,8 +92,8 @@ void main()
     vec3 norm = normalize(v_Normal);
     vec3 view_dir = normalize(u_ViewPos - v_FragPos);
     
-    vec4 texel_diff = texture(material.diffuse0, v_TexCoords);
-    if (texel_diff.a < 0.001f) discard;
+    vec4 texel_diffuse = texture(material.diffuse0, v_TexCoords);
+    if (texel_diffuse.a < 0.001f) discard;
     
     vec3 result = vec3(0.0f);
     vec4 diff_spec = vec4(0.0f);
@@ -112,7 +115,7 @@ void main()
                 break;
         }
     }
-    result += diff_spec.xyz * vec3(texel_diff);
+    result += diff_spec.xyz * vec3(texel_diffuse);
     vec4 spec = texture(material.specular0, v_TexCoords);
     result += vec3(diff_spec.w * (spec.x + spec.y + spec.z) / 3);
     

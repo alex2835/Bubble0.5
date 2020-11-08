@@ -59,7 +59,8 @@ namespace Bubble
 		uint32_t mIndex;
 
 		UniformBuffer() = default;
-		UniformBuffer(int index, const BufferLayout& layout, uint32_t size = 1);
+		// additional size necessary if buffer contain more then one array (for example nLights)
+		UniformBuffer(int index, const BufferLayout& layout, uint32_t size = 1, uint32_t additional_size = 0);
 
 		UniformBuffer(const UniformBuffer&) = delete;
 		UniformBuffer& operator=(const UniformBuffer&) = delete;

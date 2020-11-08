@@ -22,6 +22,24 @@ namespace Bubble
 		
 		mPhongShader = ShaderLoader::Load("resources/shaders/phong.glsl");
 		
+		BufferLayout layout{
+			{ GLSLDataType::Int, "Type"},
+			{ GLSLDataType::Float, "Brightness"},
+
+			{ GLSLDataType::Float, "Constant"},
+			{ GLSLDataType::Float, "Linear"},
+			{ GLSLDataType::Float, "Quadratic"},
+
+			{ GLSLDataType::Float, "CutOff"},
+			{ GLSLDataType::Float, "OuterCutOff"},
+
+			{ GLSLDataType::Float3, "Color"},
+			{ GLSLDataType::Float3, "Direction"},
+			{ GLSLDataType::Float3, "Position"},
+		};
+
+		UBOLights = UniformBuffer(1, layout, 5, 16);
+
 		// Temp: Try to simplify mesh
  	}
 
@@ -42,7 +60,6 @@ namespace Bubble
 		// ====================== Update ======================
 		mSceneCamera.OnUpdate(dt);
 
-		// Resize editor viewports
 		for (Viewport* viewport : EditorViewports)
 		{
 			if (viewport->NewSize != viewport->GetSize())
@@ -52,21 +69,25 @@ namespace Bubble
 		}
 
 
-
 		// ====================== Set uniform data ======================
 		Renderer::SetViewport(mViewport);
 		Renderer::SetCamera(mSceneCamera);
 
-		// Temp : Apply lights to shader
-		int light_index = 0;
+		// Temp
+		static std::vector<Light> lights;
+		lights.clear();
+
 		mScene.Registry.view<LightComponent>().each(
-			[&](auto entity, LightComponent& lc)
+			[&](auto& entity, LightComponent& lc)
 			{
-				lc.mLight.SetDistance();
-				Light::ApplyLight(lc.mLight, mPhongShader, light_index++);
+				lc.mLight.Update();
+				lights.push_back(lc.mLight);
 			}
 		);
-		mPhongShader->SetUni1i("nLights", light_index);
+
+		int numLights = lights.size();
+		UBOLights.SetData(lights.data(), sizeof(Light) * lights.size(), 16);
+		UBOLights.SetData(&numLights, 4);
 
 
 		// ====================== Rendering ======================
@@ -98,7 +119,6 @@ namespace Bubble
 		{
 			draw_scene_boundingbox(mScene);
 		}
-
 
 		// ========================= Draw skybox ========================= 
 		glm::mat4 view = Renderer::ActiveCamera->GetLookatMat();

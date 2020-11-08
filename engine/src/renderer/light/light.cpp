@@ -38,16 +38,18 @@ namespace Bubble
 	void Light::SetDistance(float distance)
 	{
 		auto [linear, quadratic] = GetAttenuationConstans(distance);
-		Distance = distance;
+		__Distance = distance;
 		Linear = linear;
 		Quadratic = quadratic;
 	}
 
-	void Light::SetDistance()
+	void Light::Update()
 	{
-		auto [linear, quadratic] = GetAttenuationConstans(Distance);
+		auto [linear, quadratic] = GetAttenuationConstans(__Distance);
 		Linear = linear;
 		Quadratic = quadratic;
+		CutOff = cosf(glm::radians(__CutOff));
+		OuterCutOff = cosf(glm::radians(__OuterCutOff));
 	}
 
 	Light Light::CreateDirLight(const glm::vec3& direction, const glm::vec3& color)
@@ -64,8 +66,9 @@ namespace Bubble
 		Light light;
 		light.Position = position;
 		light.Type = LightType::PointLight;
-		light.SetDistance(distance);
+		light.__Distance = distance;
 		light.Color = color;
+		light.Update();
 		return light;
 	}
 
@@ -80,10 +83,11 @@ namespace Bubble
 		light.Type = LightType::SpotLight;
 		light.Position = position;
 		light.Direction = glm::normalize(direction);
-		light.SetDistance(distance);
-		light.CutOff = cutoff;
-		light.OuterCutOff = outer_cutoff;
+		light.__Distance = distance;
+		light.__CutOff = cutoff;
+		light.__OuterCutOff = outer_cutoff;
 		light.Color = color;
+		light.Update();
 		return light;
 	}
 

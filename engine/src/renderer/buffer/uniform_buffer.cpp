@@ -6,7 +6,7 @@ namespace Bubble
 {
 	// ============================= UniformBuffer ============================= 
 
-	UniformBuffer::UniformBuffer(int index, const BufferLayout& layout, uint32_t size)
+	UniformBuffer::UniformBuffer(int index, const BufferLayout& layout, uint32_t size, uint32_t additional_size)
 		: mLayout(std::move(layout)),
 		  mIndex(index),
 		  mSize(size)
@@ -77,7 +77,7 @@ namespace Bubble
 			uint32_t std140_pad = Std140DataTypePadding(elemnt.Type);
 			elemnt.Size = Std140DataTypeSize(elemnt.Type);
 			
-			pad = elemnt.Offset % std140_pad;
+			pad = offset % std140_pad;
 			pad = pad > 0 ? std140_pad - pad : 0;
 
 			elemnt.Offset = offset + pad;

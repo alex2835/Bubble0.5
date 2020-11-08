@@ -120,11 +120,11 @@ namespace Bubble
 
 				case LightType::SpotLight:
 					ImGui::Text("Spotlight");
-					if (ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f)) {
-						light.SetDistance();
-					}
-					ImGui::SliderFloat("Cutoff", (float*)&light.CutOff, 0.0f, 20.0f);
-					ImGui::SliderFloat("OuterCutoff", (float*)&light.OuterCutOff, 0.0f, 20.0f);
+					ImGui::DragFloat3("Position", (float*)&light.Position, 0.1f);
+					ImGui::DragFloat3("Direction", (float*)&light.Direction, 0.1f);
+					ImGui::SliderFloat("Distance", (float*)&light.__Distance, 0.0f, 1.0f);
+					ImGui::SliderFloat("Cutoff", (float*)&light.__CutOff, 0.0f, 90.0f);
+					ImGui::SliderFloat("OuterCutoff", (float*)&light.__OuterCutOff, 0.0f, 90.0f);
 					ImGui::ColorEdit3("Color", (float*)&light.Color);
 					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
 					ImGui::Separator();
@@ -132,9 +132,8 @@ namespace Bubble
 
 				case LightType::PointLight:
 					ImGui::Text("PointLight");
-					if (ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f)) {
-						light.SetDistance();
-					}
+					ImGui::DragFloat3("Position", (float*)&light.Position, 0.1f);
+					ImGui::SliderFloat("Distance", (float*)&light.__Distance, 0.0f, 1.0f);
 					ImGui::ColorEdit3("Color", (float*)&light.Color);
 					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
 					ImGui::Separator();

@@ -12,6 +12,7 @@ namespace Bubble
 		mLight = Light::CreateDirLight();
 	}
 
+
 	void ModelExplorer::RenderSelectedModel()
 	{
 		Light::ApplyLight(mLight, mShader, 0);
@@ -26,6 +27,7 @@ namespace Bubble
 		Renderer::DrawModel(mSelectedModel, glm::mat4(1.0f), mShader);
 		mViewport.BindDefault();
 	}
+
 
 	void ModelExplorer::Draw(bool* is_open, DeltaTime dt)
 	{
