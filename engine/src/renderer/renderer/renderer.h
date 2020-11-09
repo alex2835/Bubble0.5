@@ -29,12 +29,16 @@ namespace Bubble
 		// Uniform buffer
 		static Scope<UniformBuffer> UBOPrjectionview;
 		static Scope<UniformBuffer> UBOLights;
+		static Scope<UniformBuffer> UBOViewPos; // Temp name
 		
 		// Active components
 		static const Camera* ActiveCamera;
 		static const Framebuffer* ActiveViewport;
 		static glm::ivec2 RenderPos;
 		static glm::ivec2 RenderSize;
+
+		// Optimizations
+		static std::vector<GLSL_Light> ActiveLights;
 
 
 		static void Init();
@@ -50,8 +54,8 @@ namespace Bubble
 		static void SetViewport(const Framebuffer& framebuffer, uint32_t x = 0, uint32_t y = 0, uint32_t width = 0, uint32_t height = 0);
 		// Set viewport first
 		static void SetCamera(const Camera& camera);
-		static void SetLights(const std::vector<Light>& lights);
-		static void SetLights(const Light* lights, int size);
+		static void SetLights(const std::vector<GLSL_Light>& lights);
+		static void SetLights(const GLSL_Light* lights, int size);
 
 		// ============ Getters ============
 		static UniformBuffer& GetUBOPojectionView() { return *UBOPrjectionview; }

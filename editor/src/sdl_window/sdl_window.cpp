@@ -4,11 +4,11 @@
 
 namespace Bubble
 {
-    SDL_WINDOW::SDL_WINDOW()
+    SDLWindow::SDLWindow()
     {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
         {
-            LOG_ERROR("Error: {}", SDL_GetError());
+            LOG_CORE_ERROR("Error: {}", SDL_GetError());
 			throw std::runtime_error("Error: SDL init");
 		}
         
@@ -32,64 +32,64 @@ namespace Bubble
 
         if (int error = glewInit(); error != GLEW_OK)
         {
-            LOG_ERROR("Error: Glew init \n{}", glewGetErrorString(error));
+            LOG_CORE_ERROR("Error: Glew init \n{}", glewGetErrorString(error));
             throw std::runtime_error("Window can't be created");
         }
     }
 
-	SDL_WINDOW::~SDL_WINDOW()
+	SDLWindow::~SDLWindow()
 	{
 		SDL_GL_DeleteContext(mGLContext);
 		SDL_DestroyWindow(mWindow);
 	}
 
-	bool SDL_WINDOW::IsOpen()
+	bool SDLWindow::IsOpen()
 	{
         return mIsOpen;
 	}
 
-	int SDL_WINDOW::GetWidth()
+	int SDLWindow::GetWidth()
     {
         int width = 0, height = 0;
         SDL_GetWindowSize(mWindow, &width, &height);
         return width;
     }
 
-    int SDL_WINDOW::GetHeight()
+    int SDLWindow::GetHeight()
     {
 		int width = 0, height = 0;
         SDL_GetWindowSize(mWindow, &width, &height);
         return height;
     }
 
-	glm::ivec2 SDL_WINDOW::GetSize()
+	glm::ivec2 SDLWindow::GetSize()
 	{
 		int width = 0, height = 0;
 		SDL_GetWindowSize(mWindow, &width, &height);
         return glm::ivec2(width, height);
 	}
 
-	SDL_Window* SDL_WINDOW::GetWindow()
+	SDL_Window* SDLWindow::GetWindow()
     {
         return mWindow;
     }
 
-    SDL_GLContext SDL_WINDOW::GetGLContext()
+    SDL_GLContext SDLWindow::GetGLContext()
     {
         return mGLContext;
     }
 
-    const char* SDL_WINDOW::GetGLSLVersion()
+    const char* SDLWindow::GetGLSLVersion()
     {
         return glsl_version;
     }
 
-    bool SDL_WINDOW::PollEvent(SDL_Event& event)
+    bool SDLWindow::PollEvent(SDL_Event& event)
     {
         return SDL_PollEvent(&event);
     }
 
-    void SDL_WINDOW::OnEvent(SDL_Event& event)
+    void SDLWindow::OnEvent(SDL_Event& event)
     {
         if (event.type == SDL_QUIT)
         {
@@ -103,17 +103,17 @@ namespace Bubble
         }
     }
 
-    void SDL_WINDOW::OnUpdate()
+    void SDLWindow::OnUpdate()
     {
         SDL_GL_SwapWindow(mWindow);
     }
 
-    void SDL_WINDOW::Close()
+    void SDLWindow::Close()
     {
         mIsOpen = false;
     }
 
-	void SDL_WINDOW::SetVSync(bool mode)
+	void SDLWindow::SetVSync(bool mode)
 	{
         SDL_GL_SetSwapInterval(mode);
 	}

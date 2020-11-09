@@ -4,7 +4,7 @@
 
 namespace Bubble
 {
-	high_resolution_clock::time_point Timer::s_ProgramStart = Now();
+	high_resolution_clock::time_point Timer::ProgramStartTime = Now();
 
 	void Timer::Update()
 	{
@@ -27,7 +27,7 @@ namespace Bubble
 	Time Timer::GetTime()
 	{
 		high_resolution_clock::time_point now = Now();
-		duration<float> time_dif = duration_cast<duration<float>>(now - s_ProgramStart);
+		duration<float> time_dif = duration_cast<duration<float>>(now - ProgramStartTime);
 		return time_dif.count();
 	}
 

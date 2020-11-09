@@ -59,11 +59,11 @@ struct Light
     float outerCutOff;
 
     vec3 color;
-    float pad1;
+    float __pad0;
     vec3 direction;
-    float pad2;
+    float __pad1;
     vec3 position;
-    float pad3;
+    float __pad2;
 };
 
 #define MAX_LIGHTS 30
@@ -73,11 +73,17 @@ layout (std140, binding = 1) uniform Lights {
 };
 
 
+layout (std140, binding = 2) uniform  Stuff {
+    vec3 view_pos;
+    float __pad0;
+};
+
+
 in vec3 v_FragPos;
 in vec3 v_Normal;
 in vec2 v_TexCoords;
 
-uniform vec3 u_ViewPos;
+//uniform vec3 u_ViewPos;
 
 // Material
 uniform Material material;
@@ -96,7 +102,7 @@ void main()
     vec4 specular = texture(material.specular0, v_TexCoords);
     
     vec3 norm = normalize(v_Normal);
-    vec3 view_dir = normalize(u_ViewPos - v_FragPos);
+    vec3 view_dir = normalize(view_pos - v_FragPos);
 
     vec4 result = vec4(0.0f);
     vec4 diff_spec = vec4(0.0f);

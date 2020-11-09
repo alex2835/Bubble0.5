@@ -5,12 +5,9 @@
 #include "renderer/renderer_base.h"
 #include "core/window/window.h"
 
-#include "cassert"
-
-
 namespace Bubble
 {
-    class SDL_WINDOW: public Window
+    class SDLWindow: public Window
     {
         SDL_Window* mWindow;
         SDL_GLContext mGLContext;
@@ -18,8 +15,8 @@ namespace Bubble
         bool mIsOpen = true;
 
     public:
-        SDL_WINDOW();
-        ~SDL_WINDOW();
+        SDLWindow();
+        ~SDLWindow();
 
         bool IsOpen() override;
         

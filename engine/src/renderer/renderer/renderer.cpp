@@ -6,11 +6,16 @@ namespace Bubble
 {
 	Scope<UniformBuffer> Renderer::UBOLights;
 	Scope<UniformBuffer> Renderer::UBOPrjectionview;
+	Scope<UniformBuffer> Renderer::UBOViewPos;
 
 	const Camera* Renderer::ActiveCamera;
 	const Framebuffer* Renderer::ActiveViewport;
 	glm::ivec2 Renderer::RenderPos;
 	glm::ivec2 Renderer::RenderSize;
+
+	// Optimizations
+	std::vector<GLSL_Light> Renderer::ActiveLights;
+
 
 	static uint32_t OpenGLDrawType(DrawType draw_type)
 	{
@@ -91,10 +96,13 @@ namespace Bubble
 
 		// Set frustum
 		SetFrustumPlanes(projection * view);
+
+		// View position
+		(*UBOViewPos)[0].SetFloat3("ViewPos", camera.Position);
 	}
 
 
-	void Renderer::SetLights(const std::vector<Light>& lights)
+	void Renderer::SetLights(const std::vector<GLSL_Light>& lights)
 	{
 		int offset = 16;
 		int nLights = lights.size();
@@ -103,7 +111,7 @@ namespace Bubble
 		UBOLights->SetData(&nLights, 4);
 	}
 
-	void Renderer::SetLights(const Light* lights, int size)
+	void Renderer::SetLights(const GLSL_Light* lights, int size)
 	{
 		int offset = 16;
 		UBOLights->SetData(lights, sizeof(Light) * size, offset);
@@ -112,7 +120,6 @@ namespace Bubble
 
 	void Renderer::SetViewport(const Framebuffer& framebuffer, uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
-
 		if (width * height) {
 			RenderPos = { x, y };
 			RenderSize = { width, height };
@@ -222,6 +229,16 @@ namespace Bubble
 	void Renderer::DrawScene(Scene& scene)
 	{
 		auto scene_view = scene.GetView<ModelComponent, TransformComponent>();
+		
+		ActiveLights.clear();
+		scene.Registry.view<LightComponent>().each(
+			[&](auto& entity, LightComponent& lc)
+			{
+				lc.mLight.Update();
+				ActiveLights.push_back(lc.mLight);
+			}
+		);
+		SetLights(ActiveLights);
 
 		for (auto entity : scene_view)
 		{
@@ -247,13 +264,13 @@ namespace Bubble
 
 		// Init Lights UBO
 		BufferLayout layout{
-			{ GLSLDataType::Int, "Type"},
-			{ GLSLDataType::Float, "Brightness"},
-			{ GLSLDataType::Float, "Constant"},
-			{ GLSLDataType::Float, "Linear"},
-			{ GLSLDataType::Float, "Quadratic"},
-			{ GLSLDataType::Float, "CutOff"},
-			{ GLSLDataType::Float, "OuterCutOff"},
+			{ GLSLDataType::Int,    "Type"},
+			{ GLSLDataType::Float,  "Brightness"},
+			{ GLSLDataType::Float,  "Constant"},
+			{ GLSLDataType::Float,  "Linear"},
+			{ GLSLDataType::Float,  "Quadratic"},
+			{ GLSLDataType::Float,  "CutOff"},
+			{ GLSLDataType::Float,  "OuterCutOff"},
 			{ GLSLDataType::Float3, "Color"},
 			{ GLSLDataType::Float3, "Direction"},
 			{ GLSLDataType::Float3, "Position"},
@@ -261,7 +278,12 @@ namespace Bubble
 		int nLights = 30;
 		int reserved_data = 16; //for nLights
 		UBOLights = CreateScope<UniformBuffer>(1, layout, nLights, reserved_data);
-	}
 
+		// Init view pos UBO
+		BufferLayout UBOViewPosLayout{
+			{ GLSLDataType::Float3, "ViewPos" },
+		};
+		UBOViewPos = CreateScope<UniformBuffer>(2, UBOViewPosLayout);
+	}
 
 }

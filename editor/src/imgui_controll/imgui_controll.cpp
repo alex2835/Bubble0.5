@@ -4,10 +4,9 @@
 
 namespace Bubble
 {
-    
 	ImGuiControll::ImGuiControll()
 	{
-        mWindow = (SDL_WINDOW*)Application::GetWindow();
+        mWindow = (SDLWindow*)Application::GetWindow();
 	}
 
 	void ImGuiControll::OnAttach()

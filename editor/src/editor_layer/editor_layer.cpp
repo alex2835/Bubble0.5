@@ -19,7 +19,6 @@ namespace Bubble
 		// Temp: skybox
 		mActiveSkybox = SkyboxLoader::Load("resources/skybox/skybox1.jpg");
 		mSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
-		
  	}
 
 
@@ -49,23 +48,10 @@ namespace Bubble
 
 
 		// ====================== Set uniform data ======================
-
-		// Temp
-		static std::vector<Light> lights;
-		lights.clear();
-
-		mScene.Registry.view<LightComponent>().each(
-			[&](auto& entity, LightComponent& lc)
-			{
-				lc.mLight.Update();
-				lights.push_back(lc.mLight);
-			}
-		);
-
-
 		Renderer::SetViewport(mViewport);
 		Renderer::SetCamera(mSceneCamera);
-		Renderer::SetLights(lights);
+
+
 		// ====================== Rendering ======================
 		mClearScreanOption |= mUI.mWireframeOption;
 

@@ -18,21 +18,21 @@ namespace Bubble
 				{0.014f	 ,0.0007f    } , // 325	
 				{0.007f	 ,0.0002f    } , // 600	
 				{0.0014f ,0.000007f  }, // 3250
-				//{0.0007f, 0.00000035f},
-				//{0.0003f, 0.00000007f}
+				{0.0007f, 0.00000035f},
+				{0.0003f, 0.00000007f}
 	};
 
 
 	// Take distance between 0 and 1.0f (where 0 = 7m and 1.0f = 3250m)
 	static std::pair<float, float> GetAttenuationConstans(float distance)
 	{
-		float index = distance * 11.0f; // 11 is array size
+		float index = distance * 14.0f; // 11 is array size
 		float hight_coef = index - floor(index);
 		float lower_coef = 1.0f - (index - floor(index));
 
 		int nIndex = index;
-		auto first = AttenuationLookup[std::min(nIndex, 11)];
-		auto second = AttenuationLookup[std::min((nIndex + 1), 11)];
+		auto first = AttenuationLookup[std::min(nIndex, 14)];
+		auto second = AttenuationLookup[std::min((nIndex + 1), 14)];
 
 		// linear interpolation
 		return { first.first * lower_coef + second.first * hight_coef,
@@ -42,18 +42,18 @@ namespace Bubble
 	void Light::SetDistance(float distance)
 	{
 		auto [linear, quadratic] = GetAttenuationConstans(distance);
-		__Distance = distance;
+		Distance = distance;
 		Linear = linear;
 		Quadratic = quadratic;
 	}
 
 	void Light::Update()
 	{
-		auto [linear, quadratic] = GetAttenuationConstans(__Distance);
+		auto [linear, quadratic] = GetAttenuationConstans(Distance);
 		Linear = linear;
 		Quadratic = quadratic;
-		CutOff = cosf(glm::radians(__CutOff));
-		OuterCutOff = cosf(glm::radians(__OuterCutOff));
+		__CutOff = cosf(glm::radians(CutOff));
+		__OuterCutOff = cosf(glm::radians(OuterCutOff));
 	}
 
 	Light Light::CreateDirLight(const glm::vec3& direction, const glm::vec3& color)
@@ -70,7 +70,7 @@ namespace Bubble
 		Light light;
 		light.Position = position;
 		light.Type = LightType::PointLight;
-		light.__Distance = distance;
+		light.Distance = distance;
 		light.Color = color;
 		light.Update();
 		return light;
@@ -87,9 +87,9 @@ namespace Bubble
 		light.Type = LightType::SpotLight;
 		light.Position = position;
 		light.Direction = glm::normalize(direction);
-		light.__Distance = distance;
-		light.__CutOff = cutoff;
-		light.__OuterCutOff = outer_cutoff;
+		light.Distance = distance;
+		light.CutOff = cutoff;
+		light.OuterCutOff = outer_cutoff;
 		light.Color = color;
 		light.Update();
 		return light;

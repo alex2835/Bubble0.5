@@ -171,7 +171,7 @@ namespace Bubble
 			nlohmann::json j;
 			j["Light"]["Type"] = mLight.Type;
 			j["Light"]["Brightness"] = mLight.Brightness;
-			j["Light"]["Distance"] = mLight.__Distance;
+			j["Light"]["Distance"] = mLight.Distance;
 			j["Light"]["Color"] = to_json(mLight.Color);
 
 			j["Light"]["Direction"] = to_json(mLight.Direction);
@@ -181,8 +181,8 @@ namespace Bubble
 			j["Light"]["Linear"] = mLight.Linear;
 			j["Light"]["Quadratic"] = mLight.Quadratic;
 
-			j["Light"]["CutOff"] = mLight.__CutOff;
-			j["Light"]["OuterCutOff"] = mLight.__OuterCutOff;
+			j["Light"]["CutOff"] = mLight.CutOff;
+			j["Light"]["OuterCutOff"] = mLight.OuterCutOff;
 
 			return j;
 		}
@@ -192,7 +192,7 @@ namespace Bubble
 		{
 			mLight.Type= j["Light"]["Type"];
 			mLight.Brightness = j["Light"]["Brightness"];
-			mLight.__Distance = j["Light"]["Distance"];
+			mLight.Distance = j["Light"]["Distance"];
 			mLight.Color = from_json(j["Light"]["Color"]);
 
 			mLight.Direction = from_json(j["Light"]["Direction"]);
@@ -202,8 +202,8 @@ namespace Bubble
 			mLight.Linear= j["Light"]["Linear"];
 			mLight.Quadratic = j["Light"]["Quadratic"];
 
-			mLight.__CutOff = j["Light"]["CutOff"];
-			mLight.__OuterCutOff = j["Light"]["OuterCutOff"];
+			mLight.CutOff = j["Light"]["CutOff"];
+			mLight.OuterCutOff = j["Light"]["OuterCutOff"];
 		}
 
 	};

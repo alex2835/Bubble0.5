@@ -11,7 +11,7 @@ namespace Bubble
 
 	class Timer
 	{
-		static high_resolution_clock::time_point s_ProgramStart;
+		static high_resolution_clock::time_point ProgramStartTime;
 		high_resolution_clock::time_point mLastTime = Now();
 		DeltaTime mDeltatime;
 

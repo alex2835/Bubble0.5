@@ -12,7 +12,7 @@ namespace Bubble
 {
     class ImGuiControll
     {
-		SDL_WINDOW* mWindow;
+		SDLWindow* mWindow;
 
 		void ImGuiDocking();
 		void ImGuiMultiViewports();

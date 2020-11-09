@@ -12,7 +12,7 @@ namespace Bubble
     class EditorApp : public Application
     {
     public:
-        EditorApp() : Application(new SDL_WINDOW())
+        EditorApp() : Application(new SDLWindow())
         {
             PushLayer(new EditorLayer());
         }

@@ -20,7 +20,8 @@ namespace Bubble
 		to shader by one load
 	*/
 
-	struct Light
+
+	struct GLSL_Light
 	{
 		LightType Type;
 		float Brightness = 1.0f;
@@ -31,21 +32,27 @@ namespace Bubble
 		float Quadratic = 0.0f;
 
 		// Spot
-		float CutOff = 0.0f;
-		float OuterCutOff = 0.0f;
-
-		float __Distance = 0.5f;
+		float __CutOff = 0.0f;
+		float __OuterCutOff = 0.0f;
+		float __pad0;
 
 		glm::vec3 Color = glm::vec3(1.0f);
-		float __CutOff = 0;
+		float __pad1;
 
 		// Directional
 		glm::vec3 Direction = glm::vec3();
-		float __OuterCutOff = 0;
+		float __pad2;
 
 		glm::vec3 Position = glm::vec3();
-		float __pad1 = 0;
+		float __pad3;
+	};
 
+
+	struct Light : GLSL_Light
+	{
+		float CutOff = 0.0f;
+		float OuterCutOff = 0.0f;
+		float Distance = 0.0f;
 		
 		void SetDistance(float distance);
 		void Update();
