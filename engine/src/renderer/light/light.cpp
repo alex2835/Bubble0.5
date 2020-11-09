@@ -18,23 +18,21 @@ namespace Bubble
 				{0.014f	 ,0.0007f    } , // 325	
 				{0.007f	 ,0.0002f    } , // 600	
 				{0.0014f ,0.000007f  }, // 3250
-				{0.0007f, 0.00000035f},
-				{0.0003f, 0.00000007f}
 	};
 
 
 	// Take distance between 0 and 1.0f (where 0 = 7m and 1.0f = 3250m)
 	static std::pair<float, float> GetAttenuationConstans(float distance)
 	{
-		float index = distance * 14.0f; // 11 is array size
+		float index = distance * 11.0f; // 11 is an array size
 		float hight_coef = index - floor(index);
 		float lower_coef = 1.0f - (index - floor(index));
 
-		int nIndex = index;
-		auto first = AttenuationLookup[std::min(nIndex, 14)];
-		auto second = AttenuationLookup[std::min((nIndex + 1), 14)];
-
 		// linear interpolation
+		int nIndex = index;
+		auto first = AttenuationLookup[std::min(nIndex, 11)];
+		auto second = AttenuationLookup[std::min((nIndex + 1), 11)];
+
 		return { first.first * lower_coef + second.first * hight_coef,
 				first.second * lower_coef + second.second * hight_coef };
 	}
@@ -54,6 +52,15 @@ namespace Bubble
 		Quadratic = quadratic;
 		__CutOff = cosf(glm::radians(CutOff));
 		__OuterCutOff = cosf(glm::radians(OuterCutOff));
+
+		// Brightens compensation
+		if (Type == LightType::PointLight || Type == LightType::SpotLight)
+		{
+			__Brightness = Brightness * (7.0f - Distance * 5.0f);
+		}
+		else {
+			__Brightness = Brightness;
+		}
 	}
 
 	Light Light::CreateDirLight(const glm::vec3& direction, const glm::vec3& color)

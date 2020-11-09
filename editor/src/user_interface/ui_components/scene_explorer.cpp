@@ -107,14 +107,14 @@ namespace Bubble
 
 		if (entity.HasComponent<LightComponent>())
 		{
-			Light& light = entity.GetComponent<LightComponent>().mLight;
+			Light& light = entity.GetComponent<LightComponent>();
 			switch(light.Type)
 			{
 				case LightType::DirLight:
 					ImGui::Text("Global light");
 					ImGui::SliderFloat3("Direction", (float*)&light.Direction, -1.0f, 1.0f);
-					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
 					ImGui::ColorEdit3("Color", (float*)&light.Color);
+					ImGui::DragFloat("Brightness", (float*)&light.Brightness, 0.02f);
 					ImGui::Separator();
 				break;
 
@@ -126,16 +126,16 @@ namespace Bubble
 					ImGui::SliderFloat("Cutoff", (float*)&light.CutOff, 0.0f, 90.0f);
 					ImGui::SliderFloat("OuterCutoff", (float*)&light.OuterCutOff, 0.0f, 90.0f);
 					ImGui::ColorEdit3("Color", (float*)&light.Color);
-					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
+					ImGui::DragFloat("Brightness", (float*)&light.Brightness, 0.02f);
 					ImGui::Separator();
 				break;
 
 				case LightType::PointLight:
 					ImGui::Text("PointLight");
-					ImGui::DragFloat3("Position", (float*)&light.Position, 0.1f);
+					ImGui::DragFloat3("Position", (float*)&light.Position, 0.01f);
 					ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f);
 					ImGui::ColorEdit3("Color", (float*)&light.Color);
-					ImGui::SliderFloat("Brightness", (float*)&light.Brightness, 0.0f, 1.0f);
+					ImGui::DragFloat("Brightness", (float*)&light.Brightness, 0.02f);
 					ImGui::Separator();
 				break;
 			}

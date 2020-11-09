@@ -16,8 +16,8 @@ set_target_properties(
 )
 
 # Defines
+add_definitions(-D"GLEW_STATIC")
 add_definitions(-D"GLM_SWIZZLE")
-
 
 # Libraries
 target_link_libraries(Engine spdlog)

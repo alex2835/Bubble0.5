@@ -17,8 +17,8 @@ namespace Bubble
 		OpenProject("../../../../scene_test.json", &mScene);
 
 		// Temp: skybox
-		mActiveSkybox = SkyboxLoader::Load("resources/skybox/skybox1.jpg");
-		mSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
+		mSkyboxFirst = SkyboxLoader::Load("resources/skybox/skybox1.jpg");
+		mSkyboxSecond = SkyboxLoader::Load("resources/skybox/skybox6.jpg");
  	}
 
 
@@ -47,9 +47,16 @@ namespace Bubble
 		}
 
 
-		// ====================== Set uniform data ======================
+		// ====================== Set scene data ======================
 		Renderer::SetViewport(mViewport);
 		Renderer::SetCamera(mSceneCamera);
+		
+		// Temp: Set skybox data
+		Renderer::SkyboxFirst = mSkyboxFirst;
+		Renderer::SkyboxSecond = mSkyboxSecond;
+		Renderer::SkyboxBrightness = 1.0f;
+		Renderer::SkyboxBlendFactor = 1.0f;
+		Renderer::SkyboxRotation = Timer::GetTime().GetSeconds() * 0.001f;
 
 
 		// ====================== Rendering ======================
@@ -82,20 +89,10 @@ namespace Bubble
 			draw_scene_boundingbox(mScene);
 		}
 
-		// ========================= Draw skybox ========================= 
-		glm::mat4 view = Renderer::ActiveCamera->GetLookatMat();
 
-		float rotation = glm::radians(Timer::GetTime().GetSeconds() * 0.5f);
-		view = glm::rotate(view, rotation, glm::vec3(0, 1, 0));
-		view = glm::mat4(glm::mat3(view));
+		// Temp: Hot keys
 
-		Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
-
-		mSkyboxShader->SetUni1f("u_Brightness", 1.0f);
-		Renderer::DrawSkybox(mActiveSkybox, mSkyboxShader);
-
-
-		// Quit closure
+		// Quit combination
 		if (Input::IsKeyClick(SDLK_LALT) && Input::IsKeyClick(SDLK_F4))
 		{
 			Application::GetWindow()->Close();

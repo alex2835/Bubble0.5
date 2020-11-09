@@ -5,6 +5,7 @@
 #include "renderer/renderer_base.h"
 #include "core/window/window.h"
 
+
 namespace Bubble
 {
     class SDLWindow: public Window

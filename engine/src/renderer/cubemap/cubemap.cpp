@@ -97,8 +97,9 @@ namespace Bubble
 		glDeleteTextures(1, &mRendererID);
 	}
 
-	void Cubemap::Bind()
+	void Cubemap::Bind(int slot)
 	{
+		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, mRendererID);
 	}
 

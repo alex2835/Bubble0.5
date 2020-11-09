@@ -26,10 +26,15 @@ out vec4 FragColor;
 
 in vec3 v_TexCoords;
 
-uniform samplerCube u_Skybox;
+uniform samplerCube u_Skybox0;
+uniform samplerCube u_Skybox1;
 uniform float u_Brightness;
+uniform float u_BlendFactor;
 
 void main()
 {    
-    FragColor = u_Brightness * texture(u_Skybox, v_TexCoords);
+    vec4 texel0 = texture(u_Skybox0, v_TexCoords);
+    vec4 texel1 = texture(u_Skybox1, v_TexCoords);
+    vec4 result_color = mix(texel0, texel1, u_BlendFactor);
+    FragColor = u_Brightness * result_color;
 }

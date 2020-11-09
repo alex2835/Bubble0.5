@@ -40,7 +40,6 @@ namespace Bubble
 
 		void Draw(DeltaTime dt);
 		void DrawMenuBar();
-		
 	};
 
 }

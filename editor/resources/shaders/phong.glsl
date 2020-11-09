@@ -33,6 +33,7 @@ void main()
 #version 420 core
 out vec4 FragColor;
 
+// Material
 struct Material {
     sampler2D diffuse0;
     sampler2D specular0;
@@ -66,6 +67,9 @@ struct Light
     float __pad2;
 };
 
+// Uniforms
+uniform Material material;
+
 #define MAX_LIGHTS 30
 layout (std140, binding = 1) uniform Lights {
   int nLights;
@@ -78,15 +82,11 @@ layout (std140, binding = 2) uniform  Stuff {
     float __pad0;
 };
 
-
+// Vertex shader output
 in vec3 v_FragPos;
 in vec3 v_Normal;
 in vec2 v_TexCoords;
 
-//uniform vec3 u_ViewPos;
-
-// Material
-uniform Material material;
 
 // Function prototypes
 vec4 CalcDirLight(Light light, vec3 normal, vec3 view_dir);
@@ -96,7 +96,7 @@ vec4 CalcSpotLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir);
 void main()
 {
     vec4 diffuse = texture(material.diffuse0, v_TexCoords);
-    if (diffuse.a < 0.001f){
+    if (diffuse.a < 0.0001f){
         discard;
     }
     vec4 specular = texture(material.specular0, v_TexCoords);
@@ -130,11 +130,12 @@ void main()
     float specular_coef = diff_spec.w;
 
     result += diffuse_coef * diffuse;
-    result += vec4(vec3(specular_coef * specular.x ), 0);
+    result += vec4(vec3(specular_coef * specular.x), 0);
     
     result = min(result, vec4(1.0f));
     FragColor = result;
 }
+
 
 
 // calculates the color when using a directional light.
@@ -152,6 +153,7 @@ vec4 CalcDirLight(Light light, vec3 normal, vec3 view_dir)
     vec3 diffuse = light.color * diff;
     return light.brightness * vec4(diffuse, spec);
 }
+
 
 // calculates the color when using a point light.
 vec4 CalcPointLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir)
@@ -173,6 +175,7 @@ vec4 CalcPointLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir)
     spec *= attenuation;
     return light.brightness * vec4(diffuse, spec);
 }
+
 
 // calculates the color when using a spot light.
 vec4 CalcSpotLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir)

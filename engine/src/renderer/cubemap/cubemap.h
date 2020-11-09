@@ -27,7 +27,7 @@ namespace Bubble
 		Cubemap(Cubemap&&);
 		Cubemap& operator=(Cubemap&&);
 
-		void Bind();
+		void Bind(int slot = 0);
 	};
 
 }

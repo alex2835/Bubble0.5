@@ -8,7 +8,7 @@ namespace Bubble
 
 	Ref<Skybox> SkyboxLoader::Load(const std::string& path)
 	{
-		if (Skybox::sVertexArray == nullptr) {
+		if (Skybox::SkyboxVertexArray == nullptr) {
 			Skybox::InitVertexArray();
 		}
 
@@ -77,7 +77,7 @@ namespace Bubble
 
 	Ref<Skybox> SkyboxLoader::LoadSeparateFiles(const std::string& dir, const std::string& ext)
 	{
-		if (Skybox::sVertexArray == nullptr) {
+		if (Skybox::SkyboxVertexArray == nullptr) {
 			Skybox::InitVertexArray();
 		}
 		Ref<Skybox> skybox = CreateRef<Skybox>();

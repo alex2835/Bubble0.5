@@ -24,7 +24,7 @@ namespace Bubble
 	struct GLSL_Light
 	{
 		LightType Type;
-		float Brightness = 1.0f;
+		float __Brightness = 1.0f;
 
 		// Point
 		float Constant = 1.0f;
@@ -53,7 +53,8 @@ namespace Bubble
 		float CutOff = 0.0f;
 		float OuterCutOff = 0.0f;
 		float Distance = 0.0f;
-		
+		float Brightness = 1.0f;
+
 		void SetDistance(float distance);
 		void Update();
 

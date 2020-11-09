@@ -3,12 +3,15 @@
 #include "cubemap/cubemap.h"
 #include "vertex_array/vertex_array.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtx/transform.hpp"
+
 
 namespace Bubble
 {
 	struct Skybox
 	{
-		static VertexArray* sVertexArray;
+		static VertexArray* SkyboxVertexArray;
 		static void InitVertexArray();
 
 		Cubemap mSkybox;
@@ -22,5 +25,8 @@ namespace Bubble
 		Skybox& operator=(Skybox&&) = default;
 
 		void Bind(int slot = 0);
+		
+		// Generate matrix for correct skybox rendering
+		static glm::mat4 GetViewMatrix(glm::mat4 view, float rotation);
 	};
 }

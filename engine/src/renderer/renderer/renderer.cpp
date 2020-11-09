@@ -8,10 +8,18 @@ namespace Bubble
 	Scope<UniformBuffer> Renderer::UBOPrjectionview;
 	Scope<UniformBuffer> Renderer::UBOViewPos;
 
+	// Scene components
 	const Camera* Renderer::ActiveCamera;
 	const Framebuffer* Renderer::ActiveViewport;
 	glm::ivec2 Renderer::RenderPos;
 	glm::ivec2 Renderer::RenderSize;
+
+	Ref<Skybox> Renderer::SkyboxFirst;
+	Ref<Skybox> Renderer::SkyboxSecond;
+	Ref<Shader> Renderer::SkyboxShader;
+	float Renderer::SkyboxBrightness;
+	float Renderer::SkyboxBlendFactor;
+	float Renderer::SkyboxRotation;
 
 	// Optimizations
 	std::vector<GLSL_Light> Renderer::ActiveLights;
@@ -43,6 +51,7 @@ namespace Bubble
 		InitUBOS();
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
+		SkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
 	}
 
 	// =================== Options ===================
@@ -94,10 +103,10 @@ namespace Bubble
 		glm::mat4 projection_view[2] = { projection, view };
 		UBOPrjectionview->SetData(projection_view, sizeof(projection_view));
 
-		// Set frustum
+		// Set camera frustum
 		SetFrustumPlanes(projection * view);
 
-		// View position
+		// Set camera position
 		(*UBOViewPos)[0].SetFloat3("ViewPos", camera.Position);
 	}
 
@@ -107,14 +116,14 @@ namespace Bubble
 		int offset = 16;
 		int nLights = lights.size();
 
-		UBOLights->SetData(lights.data(), sizeof(Light) * nLights, offset);
 		UBOLights->SetData(&nLights, 4);
+		UBOLights->SetData(lights.data(), sizeof(GLSL_Light) * nLights, offset);
 	}
 
 	void Renderer::SetLights(const GLSL_Light* lights, int size)
 	{
 		int offset = 16;
-		UBOLights->SetData(lights, sizeof(Light) * size, offset);
+		UBOLights->SetData(lights, sizeof(GLSL_Light) * size, offset);
 		UBOLights->SetData(&size, 4);
 	}
 
@@ -216,10 +225,14 @@ namespace Bubble
 	}
 
 
-	void Renderer::DrawSkybox(const Ref<Skybox>& skybox, const Ref<Shader>& shader)
+	void Renderer::DrawSkybox(const Ref<Skybox>* skybox, int size, const Ref<Shader>& shader)
 	{
 		shader->Bind();
-		skybox->Bind();
+		for (int i = 0; i < size; i++)
+		{
+			shader->SetUni1i("u_Skybox" + std::to_string(i), i);
+			skybox[i]->Bind(i);
+		}
 		glDepthFunc(GL_LEQUAL);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glDepthFunc(GL_LESS);
@@ -230,16 +243,18 @@ namespace Bubble
 	{
 		auto scene_view = scene.GetView<ModelComponent, TransformComponent>();
 		
+		// Temp: Extract all lights
 		ActiveLights.clear();
 		scene.Registry.view<LightComponent>().each(
-			[&](auto& entity, LightComponent& lc)
+			[&](auto& entity, LightComponent& light)
 			{
-				lc.mLight.Update();
-				ActiveLights.push_back(lc.mLight);
+				light.Update();
+				ActiveLights.push_back(light);
 			}
 		);
 		SetLights(ActiveLights);
 
+		// Draw scene
 		for (auto entity : scene_view)
 		{
 			auto& [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
@@ -248,6 +263,17 @@ namespace Bubble
 				Renderer::DrawModel(model, transforms);
 			}
 		}
+
+		// Draw skybox
+		glm::mat4 view = ActiveCamera->GetLookatMat();
+		view = Skybox::GetViewMatrix(view, SkyboxRotation);
+		Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
+
+		SkyboxShader->SetUni1f("u_Brightness", SkyboxBrightness);
+		SkyboxShader->SetUni1f("u_BlendFactor", SkyboxBlendFactor);
+
+		Ref<Skybox> skyboxes[] = { SkyboxFirst, SkyboxSecond };
+		Renderer::DrawSkybox(skyboxes, 2, SkyboxShader);
 	}
 
 
@@ -276,14 +302,15 @@ namespace Bubble
 			{ GLSLDataType::Float3, "Position"},
 		};
 		int nLights = 30;
-		int reserved_data = 16; //for nLights
+		int reserved_data = 16; // for nLights
 		UBOLights = CreateScope<UniformBuffer>(1, layout, nLights, reserved_data);
 
-		// Init view pos UBO
+		// Init view position UBO
 		BufferLayout UBOViewPosLayout{
 			{ GLSLDataType::Float3, "ViewPos" },
 		};
 		UBOViewPos = CreateScope<UniformBuffer>(2, UBOViewPosLayout);
 	}
+
 
 }

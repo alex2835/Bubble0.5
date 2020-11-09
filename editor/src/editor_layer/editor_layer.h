@@ -6,7 +6,7 @@
 #include "sdl_window/sdl_window.h"
 #include "scene_camera/scene_camera.h"
 
-#include "UI/UI.h"
+#include "user_interface/user_interface.h"
 
 #include "draw_tools/draw_selected_entity.h"
 #include "draw_tools/draw_boundingbox.h"
@@ -26,9 +26,8 @@ namespace Bubble
 		bool mClearScreanOption = false;
 
 		// Temp:
-		Ref<Shader> mSkyboxShader;
-		Ref<Skybox> mActiveSkybox;
-
+		Ref<Skybox> mSkyboxFirst;
+		Ref<Skybox> mSkyboxSecond;
 
 	public:
 		EditorLayer();

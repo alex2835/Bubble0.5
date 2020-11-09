@@ -23,7 +23,7 @@ namespace Bubble
 	}
 
 
-	// ================= TagComponent =================
+	// ================= Tag Component =================
 	struct TagComponent
 	{
 		std::string mTag;
@@ -47,7 +47,7 @@ namespace Bubble
 	};
 
 
-	// ================= PositionComponent =================
+	// ================= Position Component =================
 	struct PositionComponent
 	{
 		glm::vec3 mPosition;
@@ -72,7 +72,7 @@ namespace Bubble
 	};
 
 
-	// ================= RotationComponent =================
+	// ================= Rotation Component =================
 	struct RotationComponent
 	{
 		glm::vec3 mRotation;
@@ -121,7 +121,7 @@ namespace Bubble
 	};
 
 
-	// ================= TransformComponent =================
+	// ================= Transform Component =================
 	struct TransformComponent
 	{
 		glm::mat4 mTransform{ 1.0f };
@@ -161,58 +161,52 @@ namespace Bubble
 	};
 
 
-	// ================= LightComponent =================
-	struct LightComponent
+	// ================= Light Component =================
+	struct LightComponent : Light
 	{
-		Light mLight;
-
 		nlohmann::json Serialize() const
 		{
 			nlohmann::json j;
-			j["Light"]["Type"] = mLight.Type;
-			j["Light"]["Brightness"] = mLight.Brightness;
-			j["Light"]["Distance"] = mLight.Distance;
-			j["Light"]["Color"] = to_json(mLight.Color);
+			j["Light"]["Type"] = Type;
+			j["Light"]["Brightness"] = Brightness;
+			j["Light"]["Distance"] = Distance;
 
-			j["Light"]["Direction"] = to_json(mLight.Direction);
-			j["Light"]["Position"] = to_json(mLight.Position);
+			j["Light"]["Constant"] = Constant;
+			j["Light"]["Linear"] = Linear;
+			j["Light"]["Quadratic"] = Quadratic;
 
-			j["Light"]["Constant"] = mLight.Constant;
-			j["Light"]["Linear"] = mLight.Linear;
-			j["Light"]["Quadratic"] = mLight.Quadratic;
+			j["Light"]["CutOff"] = CutOff;
+			j["Light"]["OuterCutOff"] = OuterCutOff;
 
-			j["Light"]["CutOff"] = mLight.CutOff;
-			j["Light"]["OuterCutOff"] = mLight.OuterCutOff;
-
+			j["Light"]["Position"] = to_json(Position);
+			j["Light"]["Color"] = to_json(Color);
+			j["Light"]["Direction"] = to_json(Direction);
 			return j;
 		}
 
-
 		void Deserialize(const nlohmann::json& j)
 		{
-			mLight.Type= j["Light"]["Type"];
-			mLight.Brightness = j["Light"]["Brightness"];
-			mLight.Distance = j["Light"]["Distance"];
-			mLight.Color = from_json(j["Light"]["Color"]);
+			Type= j["Light"]["Type"];
+			Brightness = j["Light"]["Brightness"];
+			Distance = j["Light"]["Distance"];
+			
+			Constant = j["Light"]["Constant"];
+			Linear = j["Light"]["Linear"];
+			Quadratic = j["Light"]["Quadratic"];
 
-			mLight.Direction = from_json(j["Light"]["Direction"]);
-			mLight.Position = from_json(j["Light"]["Position"]);
+			CutOff = j["Light"]["CutOff"];
+			OuterCutOff = j["Light"]["OuterCutOff"];
 
-			mLight.Constant = j["Light"]["Constant"];
-			mLight.Linear= j["Light"]["Linear"];
-			mLight.Quadratic = j["Light"]["Quadratic"];
-
-			mLight.CutOff = j["Light"]["CutOff"];
-			mLight.OuterCutOff = j["Light"]["OuterCutOff"];
+			Position = from_json(j["Light"]["Position"]);
+			Direction = from_json(j["Light"]["Direction"]);
+			Color = from_json(j["Light"]["Color"]);
 		}
 
 	};
 
-	// ================= ModelComponent =================
+	// ================= Model Component =================
 	struct ModelComponent : Ref<Model>
 	{
-		//Ref<Model> mModel;
-
 		ModelComponent() = default;
 		ModelComponent(const Ref<Model>& model)
 			: Ref<Model>(model)
@@ -232,7 +226,7 @@ namespace Bubble
 				}
 			));
 
-			std::string path = iterator.first;
+			const std::string& path = iterator.first;
 			j["Model"] = path;
 			return j;
 		}

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "time/timer.h"
+
 #include "renderer_base.h"
 #include "vertex_array/vertex_array.h"
 #include "framebuffer/framebuffer.h"
@@ -29,15 +31,22 @@ namespace Bubble
 		// Uniform buffer
 		static Scope<UniformBuffer> UBOPrjectionview;
 		static Scope<UniformBuffer> UBOLights;
-		static Scope<UniformBuffer> UBOViewPos; // Temp name
+		static Scope<UniformBuffer> UBOViewPos;
 		
-		// Active components
+		// Scene components
 		static const Camera* ActiveCamera;
 		static const Framebuffer* ActiveViewport;
 		static glm::ivec2 RenderPos;
 		static glm::ivec2 RenderSize;
 
-		// Optimizations
+		static Ref<Skybox> SkyboxFirst;
+		static Ref<Skybox> SkyboxSecond;
+		static Ref<Shader> SkyboxShader;
+		static float SkyboxBlendFactor;
+		static float SkyboxBrightness;
+		static float SkyboxRotation;
+
+		// Optimization
 		static std::vector<GLSL_Light> ActiveLights;
 
 
@@ -75,7 +84,7 @@ namespace Bubble
 		static void DrawModel(const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
 		static void DrawModelA(const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
 		
-		static void DrawSkybox(const Ref<Skybox>& model, const Ref<Shader>& shader);
+		static void DrawSkybox(const Ref<Skybox>* skybox, int size, const Ref<Shader>& shader);
 
 		static void DrawScene(Scene& scene);
 

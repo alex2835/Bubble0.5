@@ -4,7 +4,7 @@
 
 namespace Bubble
 {
-	VertexArray* Skybox::sVertexArray = nullptr;
+	VertexArray* Skybox::SkyboxVertexArray = nullptr;
 
 	// Identity box
 	float SkyboxVertices[] = {
@@ -51,17 +51,25 @@ namespace Bubble
 		 1.0f, -1.0f,  1.0f
 	};
 
+
 	void Skybox::Bind(int slot)
 	{
-		sVertexArray->Bind();
-		glActiveTexture(GL_TEXTURE0 + slot);
-		mSkybox.Bind();
+		SkyboxVertexArray->Bind();
+		mSkybox.Bind(slot);
+	}
+
+
+	glm::mat4 Skybox::GetViewMatrix(glm::mat4 view, float rotation)
+	{
+		view = glm::rotate(view, rotation, glm::vec3(0, 1, 0));
+		view = glm::mat4(glm::mat3(view));
+		return view;
 	}
 
 
 	void Skybox::InitVertexArray()
 	{
-		sVertexArray = new VertexArray();
+		SkyboxVertexArray = new VertexArray();
 		VertexBuffer vb = VertexBuffer(SkyboxVertices, sizeof(SkyboxVertices));
 		
 		BufferLayout layout{
@@ -69,7 +77,7 @@ namespace Bubble
 		};
 
 		vb.SetLayout(layout);
-		sVertexArray->AddVertexBuffer(std::move(vb));
+		SkyboxVertexArray->AddVertexBuffer(std::move(vb));
 	}
 
 }
