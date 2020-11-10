@@ -13,7 +13,7 @@ namespace Bubble
 		float BoostSpeed = 5.0f;
 
 		SceneCamera(const glm::vec3& position = glm::vec3(0.0f));
-		void OnUpdate(DeltaTime dt);
+		void Update(DeltaTime dt);
 	};
 
 }

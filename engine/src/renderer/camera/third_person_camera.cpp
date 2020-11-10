@@ -103,7 +103,7 @@ namespace Bubble
 	}
 
 
-	void ThirdPersonCamera::UpdateCameraAngles(DeltaTime dt)
+	void ThirdPersonCamera::Update(DeltaTime dt)
 	{
 		// Inertia
 		if (!IsRotatingX)
@@ -132,9 +132,4 @@ namespace Bubble
 		Up = glm::normalize(glm::cross(Right, Front));
 	}
 
-
-	//glm::mat4 ThirdPersonCamera::GetLookatMat()
-	//{
-	//	return glm::lookAt(Position, Position + Front, Up);
-	//}
 }

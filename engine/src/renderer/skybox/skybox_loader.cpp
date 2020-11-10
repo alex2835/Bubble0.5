@@ -6,8 +6,11 @@ namespace Bubble
 {
 	std::vector<std::pair<std::string, Bubble::Ref<Bubble::Skybox>>> SkyboxLoader::LoadedSkyboxes;
 
-	Ref<Skybox> SkyboxLoader::Load(const std::string& path)
+
+	Ref<Skybox> SkyboxLoader::Load(std::string path)
 	{
+		path = NormalizePath(path);
+
 		if (Skybox::SkyboxVertexArray == nullptr) {
 			Skybox::InitVertexArray();
 		}

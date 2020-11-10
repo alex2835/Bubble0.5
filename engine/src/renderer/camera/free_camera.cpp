@@ -106,7 +106,7 @@ namespace Bubble
 			Fov = PI / 2.0f;
 	}
 
-	void FreeCamera::UpdateCameraPosition(DeltaTime dt)
+	void FreeCamera::Update(DeltaTime dt)
 	{
 		// Inertia
 		if (!IsMovingX)

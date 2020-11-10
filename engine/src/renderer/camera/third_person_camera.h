@@ -26,7 +26,7 @@ namespace Bubble
 		void ProcessMouseMovement(float xMousePos, float yMousePos);
 		void ProcessMouseMovementShift(float xoffset, float yoffset);
 		void ProcessMouseScroll(float yoffset);
-		void UpdateCameraAngles(DeltaTime dt);
+		void Update(DeltaTime dt);
 	};
 
 }

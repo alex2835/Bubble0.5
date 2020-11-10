@@ -9,7 +9,7 @@ namespace Bubble
 	{}
 
 
-	void SceneCamera::OnUpdate(DeltaTime dt)
+	void SceneCamera::Update(DeltaTime dt)
 	{
 		if (Input::IsMouseButtonPressed(SDL_BUTTON_RIGHT))
 		{
@@ -55,14 +55,14 @@ namespace Bubble
 				SpeedY *= boost;
 				MaxSpeed *= boost;
 
-				UpdateCameraPosition(dt);
+				FreeCamera::Update(dt);
 
 				SpeedX = old_speedx;
 				SpeedY = old_speedy;
 				MaxSpeed = old_maxspeed;
 			}
 			else {
-				UpdateCameraPosition(dt);
+				FreeCamera::Update(dt);
 			}
 
 		}
@@ -71,7 +71,7 @@ namespace Bubble
 			SDL_SetRelativeMouseMode(SDL_FALSE);
 
 			// Inertia
-			UpdateCameraPosition(dt);
+			FreeCamera::Update(dt);
 		}
 	}
 

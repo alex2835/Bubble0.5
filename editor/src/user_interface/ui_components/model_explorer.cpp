@@ -44,7 +44,7 @@ namespace Bubble
 				if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
 				{
 					mCamera.ProcessMouseMovementShift(Input::fGetMouseRelX(), -Input::fGetMouseRelY());
-					mCamera.UpdateCameraAngles(dt);
+					mCamera.Update(dt);
 				}
 
 				// Change radius by mouse wheel scrolling
@@ -55,7 +55,7 @@ namespace Bubble
 						float longest_edge = mSelectedModel->mBoundingBox.getLongestEdge();
 						mCamera.Radius -= Input::GetMouseWheelOffset() * longest_edge / 5;
 						mCamera.Radius = glm::clamp(mCamera.Radius, longest_edge, mCamera.Far);
-						mCamera.UpdateCameraAngles(dt);
+						mCamera.Update(dt);
 					}
 				}
 
@@ -87,7 +87,7 @@ namespace Bubble
 							// Start camera params for this model
 							mCamera.Center = mSelectedModel->mBoundingBox.getCenter();
 							mCamera.Radius = mSelectedModel->mBoundingBox.getLongestEdge() * 1.5f;
-							mCamera.UpdateCameraAngles(dt);
+							mCamera.Update(dt);
 						}
 					}
 

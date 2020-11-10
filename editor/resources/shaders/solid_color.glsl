@@ -1,5 +1,5 @@
 #shader vertex
-#version 330 core
+#version 420 core
 layout (location = 0) in vec3 a_Position;
 
 layout (std140, binding = 0) uniform Matrices
@@ -16,7 +16,7 @@ void main()
 }
 
 #shader fragment
-#version 330 core
+#version 420 core
 out vec4 FragColor;
 
 uniform vec4 u_Color;

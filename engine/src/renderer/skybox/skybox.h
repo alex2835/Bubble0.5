@@ -27,6 +27,6 @@ namespace Bubble
 		void Bind(int slot = 0);
 		
 		// Generate matrix for correct skybox rendering
-		static glm::mat4 GetViewMatrix(glm::mat4 view, float rotation);
+		static glm::mat4 GetViewMatrix(glm::mat4 view, float rotation = 0);
 	};
 }

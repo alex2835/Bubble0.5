@@ -196,7 +196,7 @@ namespace Bubble
 
 		if (IsInFrustum(model->mBoundingBox.transform(transforms)))
 		{
-			model->mShader->SetUniMat4("u_Model", transforms);
+			shader->SetUniMat4("u_Model", transforms);
 			for (const auto& mesh : model->mMeshes)
 			{
 				Renderer::DrawMesh(mesh, shader, draw_type);
@@ -207,21 +207,9 @@ namespace Bubble
 
 	void Renderer::DrawModelA(const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& in_shader, DrawType draw_type)
 	{
-		const Ref<Shader>& shader = in_shader ? in_shader : model->mShader;
-
-		if (IsInFrustum(model->mBoundingBox.transform(transforms)))
-		{
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-			model->mShader->SetUniMat4("u_Model", transforms);
-			for (const auto& mesh : model->mMeshes)
-			{
-				Renderer::DrawMesh(mesh, shader, draw_type);
-			}
-
-			glDisable(GL_BLEND);
-		}
+		AlphaBlending(true);
+		Renderer::DrawModel(model, transforms, in_shader, draw_type);
+		AlphaBlending(false);
 	}
 
 

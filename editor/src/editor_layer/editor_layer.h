@@ -25,10 +25,6 @@ namespace Bubble
 		// Options
 		bool mClearScreanOption = false;
 
-		// Temp:
-		Ref<Skybox> mSkyboxFirst;
-		Ref<Skybox> mSkyboxSecond;
-
 	public:
 		EditorLayer();
 		void OnAttach() override;

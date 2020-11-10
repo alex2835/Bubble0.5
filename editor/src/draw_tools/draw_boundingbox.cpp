@@ -4,13 +4,13 @@
 
 namespace Bubble
 {
-	static Ref<Shader> sBoundingBoxShader;
+	static Ref<Shader> BoundingBoxShader;
 	static Ref<VertexArray> sVertexArray;
 
 
 	static void init_bounding_box_drawing()
 	{
-		sBoundingBoxShader = ShaderLoader::Load("resources/shaders/solid_color.glsl");
+		BoundingBoxShader = ShaderLoader::Load("resources/shaders/solid_color.glsl");
 		sVertexArray = CreateRef<VertexArray>();
 
 		uint32_t indices[] = {4, 0, 0, 2, 2, 7, 7, 4,
@@ -32,12 +32,12 @@ namespace Bubble
 
 	void draw_boundingbox(const AABB& bb)
 	{
-		if (sBoundingBoxShader == nullptr)
+		if (BoundingBoxShader == nullptr)
 		{
 			init_bounding_box_drawing();
 		}
-		sBoundingBoxShader->SetUni4f("u_Color", glm::vec4(1.0f));
-		sBoundingBoxShader->SetUniMat4("u_Model", glm::mat4(1.0f));
+		BoundingBoxShader->SetUni4f("u_Color", glm::vec4(1.0f));
+		BoundingBoxShader->SetUniMat4("u_Model", glm::mat4(1.0f));
 
 		glm::vec3 min = bb.getMin();
 		glm::vec3 max = bb.getMax();

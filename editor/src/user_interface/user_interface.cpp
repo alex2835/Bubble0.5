@@ -16,6 +16,7 @@ namespace Bubble
 		// Main UI
 		DrawMainviewport(*mArgs.mViewport);
 		mModelExplorer.Draw(&mIsOpenModelExplorer, dt);
+		mSkyboxExplorer.Draw(&mIsOpenSkyboxExplorer, dt);
 		mSceneExplorer.Draw(&mIsOpenSceneExplorer, &mIsOpenEntityProperties, mArgs.mScene);
 
 		// Temp

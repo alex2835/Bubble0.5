@@ -13,6 +13,6 @@ namespace Bubble
 		static Ref<Skybox> LoadSeparateFiles(const std::string& dir, const std::string& ext = ".jpg");
 
 		// Single file skybox
-		static Ref<Skybox> Load(const std::string& file);
+		static Ref<Skybox> Load(std::string file);
 	};
 }
