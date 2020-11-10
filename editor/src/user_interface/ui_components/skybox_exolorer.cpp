@@ -8,7 +8,7 @@ namespace Bubble
 		: mViewport(800, 600)
 	{
 		mShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
-		//mCamera.Fov = PI / 3;
+		mCamera.Fov = PI / 3;
 	}
 
 
@@ -33,7 +33,7 @@ namespace Bubble
 	{
 		if (*is_open)
 		{
-			ImGui::Begin("Models explorer", is_open);
+			ImGui::Begin("Skybox explorer", is_open);
 			{
 				ImVec2 window_size = ImGui::GetContentRegionAvail();
 				ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -69,7 +69,6 @@ namespace Bubble
 						std::string name = path.substr(pos);
 
 						ImGui::Selectable(name.c_str(), mSelectedSkybox == skybox);
-						mNames += name + '\0';
 
 						// Switch
 						if (ImGui::IsItemClicked())
@@ -83,22 +82,7 @@ namespace Bubble
 						mSelectedSkybox = nullptr;
 					}
 				}
-				ImGui::EndChild(); ImGui::SameLine();
-
-				ImGui::BeginChild("Active skyboxes", ImVec2(0, window_size.y * 0.2f), true);
-				{
-					if (ImGui::Combo("First skybox", &nSelectedFirts, mNames.data(), SkyboxLoader::LoadedSkyboxes.size()))
-					{
-						Renderer::SkyboxFirst = SkyboxLoader::LoadedSkyboxes[nSelectedFirts].second;
-					}
-
-					if (ImGui::Combo("Second skybox", &nSelectedSecond, mNames.data(), SkyboxLoader::LoadedSkyboxes.size()))
-					{
-						Renderer::SkyboxSecond = SkyboxLoader::LoadedSkyboxes[nSelectedSecond].second;
-					}
-				}
 				ImGui::EndChild();
-				mNames.clear();
 
 
 				// ==================== Buttons ====================

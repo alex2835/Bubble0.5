@@ -11,6 +11,9 @@
 #include "draw_tools/draw_selected_entity.h"
 #include "draw_tools/draw_boundingbox.h"
 
+#include "serialization/serialization.h"
+
+
 
 namespace Bubble
 {

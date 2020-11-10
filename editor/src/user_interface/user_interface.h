@@ -2,13 +2,13 @@
 
 #include "imgui.h"
 #include "imgui_controll/imgui_controll.h"
-#include "serialization/serialization.h"
 
 #include "ui_components/model_explorer.h"
 #include "ui_components/scene_camera_options.h"
-#include "ui_components/scene_explorer.h"
+#include "ui_components/scene_explorer_panel.h"
 #include "ui_components/main_viewport.h"
 #include "ui_components/skybox_exolorer.h"
+#include "ui_components/scene_panel.h"
 
 namespace Bubble
 {
@@ -32,12 +32,15 @@ namespace Bubble
 		// Scene
 		bool mIsOpenSceneExplorer = true;
 		bool mIsOpenEntityProperties = true;
-		SceneExplorer mSceneExplorer;
+		SceneExplorerPanel mSceneExplorerPanel;
+
+		// Scene panel
+		bool mIsOpenScenePanel = true;
+		ScenePanel mScenePanel;
 
 		// Skybox
-		bool mIsOpenSkyboxExplorer = true;
+		bool mIsOpenSkyboxExplorer = false;
 		SkyboxExplorer mSkyboxExplorer;
-
 
 		// Rendering options
 		bool mWireframeOption = false;

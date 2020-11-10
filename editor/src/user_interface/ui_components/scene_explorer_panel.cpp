@@ -1,10 +1,10 @@
 
-#include "scene_explorer.h"
+#include "scene_explorer_panel.h"
 
 
 namespace Bubble
 {
-	void SceneExplorer::Draw(bool* is_open_explorer, bool* is_open_properties,  Scene* scene)
+	void SceneExplorerPanel::Draw(bool* is_open_explorer, bool* is_open_properties,  Scene* scene)
 	{
 		if (*is_open_explorer)
 		{
@@ -50,7 +50,7 @@ namespace Bubble
 	}
 
 
-	void SceneExplorer::DrawComponents(Entity entity)
+	void SceneExplorerPanel::DrawComponents(Entity entity)
 	{
 		// =============== Basic properties =================
 
@@ -120,7 +120,7 @@ namespace Bubble
 
 				case LightType::SpotLight:
 					ImGui::Text("Spotlight");
-					ImGui::DragFloat3("Position", (float*)&light.Position, 0.1f);
+					ImGui::DragFloat3("Position", (float*)&light.Position, 0.05);
 					ImGui::SliderFloat3("Direction", (float*)&light.Direction, -1.0f, 1.0f);
 					ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f);
 					ImGui::SliderFloat("Cutoff", (float*)&light.CutOff, 0.0f, 90.0f);
@@ -132,7 +132,7 @@ namespace Bubble
 
 				case LightType::PointLight:
 					ImGui::Text("PointLight");
-					ImGui::DragFloat3("Position", (float*)&light.Position, 0.01f);
+					ImGui::DragFloat3("Position", (float*)&light.Position, 0.05f);
 					ImGui::SliderFloat("Distance", (float*)&light.Distance, 0.0f, 1.0f);
 					ImGui::ColorEdit3("Color", (float*)&light.Color);
 					ImGui::DragFloat("Brightness", (float*)&light.Brightness, 0.02f);

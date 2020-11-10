@@ -45,6 +45,8 @@ namespace Bubble
 		static float SkyboxBlendFactor;
 		static float SkyboxBrightness;
 		static float SkyboxRotation;
+		static float __SkyboxRotation;
+
 
 		// Optimization
 		static std::vector<GLSL_Light> ActiveLights;

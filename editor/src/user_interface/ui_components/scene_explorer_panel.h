@@ -11,7 +11,7 @@ namespace Bubble
 {
 	typedef void(*FCustumEntityProperties)(Entity);
 
-	class SceneExplorer
+	class SceneExplorerPanel
 	{
 	public:
 		Entity SelectedEntity;

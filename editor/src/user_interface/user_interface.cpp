@@ -1,6 +1,6 @@
 
 #include "user_interface.h"
-
+#include "serialization/serialization.h"
 
 namespace Bubble
 {
@@ -17,7 +17,8 @@ namespace Bubble
 		DrawMainviewport(*mArgs.mViewport);
 		mModelExplorer.Draw(&mIsOpenModelExplorer, dt);
 		mSkyboxExplorer.Draw(&mIsOpenSkyboxExplorer, dt);
-		mSceneExplorer.Draw(&mIsOpenSceneExplorer, &mIsOpenEntityProperties, mArgs.mScene);
+		mSceneExplorerPanel.Draw(&mIsOpenSceneExplorer, &mIsOpenEntityProperties, mArgs.mScene);
+		mScenePanel.Draw(&mIsOpenScenePanel);
 
 		// Temp
 		ImGui::Begin("Info");
@@ -27,7 +28,7 @@ namespace Bubble
 		ImGui::End();
 
 		// DemoWindow
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 
 		mArgs.mImGuiControll->End();
 	}
@@ -45,7 +46,7 @@ namespace Bubble
 					try
 					{
 						std::string path = OpenFileDialog("json");
-						OpenProject(path, mArgs.mScene);
+						OpenProject(path, mArgs.mScene, this);
 					}
 					catch (const std::exception& e)
 					{
@@ -55,7 +56,7 @@ namespace Bubble
 
 				if (ImGui::MenuItem("Save"))
 				{
-					SaveProject("../../../../scene_test.json", mArgs.mScene);
+					SaveProject("../../../../scene_test.json", mArgs.mScene, this);
 				}
 
 				ImGui::EndMenu();
@@ -94,6 +95,7 @@ namespace Bubble
 				ImGui::MenuItem("Scene explorer", "", &mIsOpenSceneExplorer);
 				ImGui::MenuItem("Entity properties", "", &mIsOpenEntityProperties);
 				ImGui::MenuItem("Model explorer", "", &mIsOpenModelExplorer);
+				ImGui::MenuItem("Skybox explorer", "", &mIsOpenSkyboxExplorer);
 				ImGui::EndMenu();
 			}
 

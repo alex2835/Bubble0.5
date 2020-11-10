@@ -14,11 +14,7 @@ namespace Bubble
         mImGuiControll.OnAttach();
 	
 		// Temp: load scene
-		OpenProject("../../../../scene_test.json", &mScene);
-
-		// Temp: skybox
-		Renderer::SkyboxFirst = SkyboxLoader::Load("resources/skybox/skybox1.jpg");
-		Renderer::SkyboxSecond = SkyboxLoader::Load("resources/skybox/skybox6.jpg");
+		OpenProject("../../../../scene_test.json", &mScene, &mUI);
  	}
 
 
@@ -50,11 +46,6 @@ namespace Bubble
 		// ====================== Set scene data ======================
 		Renderer::SetViewport(mViewport);
 		Renderer::SetCamera(mSceneCamera);
-		
-		// Temp: Set skybox data
-		Renderer::SkyboxBrightness = 1.0f;
-		Renderer::SkyboxBlendFactor = 1.0f;
-		Renderer::SkyboxRotation = Timer::GetTime().GetSeconds() * 0.001f;
 
 
 		// ====================== Rendering ======================
@@ -74,7 +65,7 @@ namespace Bubble
 
 		// ====================== Draw editor sruff ======================
 		Renderer::SetCamera(mSceneCamera);
-		Entity selected_entity = mUI.mSceneExplorer.SelectedEntity;
+		Entity selected_entity = mUI.mSceneExplorerPanel.SelectedEntity;
 
 		// Highlight selected entity
 		if (selected_entity)

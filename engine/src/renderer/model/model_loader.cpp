@@ -34,7 +34,6 @@ namespace Bubble
 		ProcessNode(*model, scene->mRootNode, scene);
 
 		model->CreateBoundingBox();
-
 		return model;
 	}
 

@@ -20,6 +20,7 @@ namespace Bubble
 	float Renderer::SkyboxBrightness;
 	float Renderer::SkyboxBlendFactor;
 	float Renderer::SkyboxRotation;
+	float Renderer::__SkyboxRotation;
 
 	// Optimizations
 	std::vector<GLSL_Light> Renderer::ActiveLights;
@@ -254,7 +255,8 @@ namespace Bubble
 
 		// Draw skybox
 		glm::mat4 view = ActiveCamera->GetLookatMat();
-		view = Skybox::GetViewMatrix(view, SkyboxRotation);
+		__SkyboxRotation += Timer::GetTime().GetSeconds() * Renderer::SkyboxRotation * 0.0001f;
+		view = Skybox::GetViewMatrix(view, __SkyboxRotation);
 		Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
 
 		SkyboxShader->SetUni1f("u_Brightness", SkyboxBrightness);

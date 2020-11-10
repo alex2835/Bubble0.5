@@ -15,6 +15,15 @@ namespace Bubble
 			Skybox::InitVertexArray();
 		}
 
+		for (const auto& stored_model : LoadedSkyboxes)
+		{
+			if (stored_model.first.find(path) != std::string::npos ||
+				path.find(stored_model.first) != std::string::npos)
+			{
+				return stored_model.second;
+			}
+		}
+
 		Ref<Skybox> skybox = CreateRef<Skybox>();
 
 		auto [orig_data, orig_spec] = Texture2D::OpenRawImage(path);

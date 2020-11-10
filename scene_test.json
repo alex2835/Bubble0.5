@@ -323,5 +323,18 @@
    3,
    3
   ]
+ },
+ "Skybox": {
+  "BlendFactor": 1.0,
+  "Brightness": 1.0,
+  "First": "resources/skybox/skybox1.jpg",
+  "FirstID": 0,
+  "Paths": [
+   "resources/skybox/skybox1.jpg",
+   "resources/skybox/skybox6.jpg"
+  ],
+  "Rotation": 0.035999998450279236,
+  "Second": "resources/skybox/skybox6.jpg",
+  "SecondID": 1
  }
 }
