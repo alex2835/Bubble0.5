@@ -10,6 +10,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd ACboots.jpg
+map_Bump ACboots_n.jpg
 
 newmtl Eyes
 Ns 96.078431
@@ -20,6 +21,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd mata.jpg
+
 
 newmtl Fingers
 Ns 96.078431
@@ -39,6 +41,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd ACgloves.jpg
+map_Bump ACgloves_n.jpg
 
 newmtl Hood
 Ns 96.078431
@@ -49,6 +52,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd AChood.jpg
+map_Bump AChood_n.jpg
 
 newmtl Pants
 Ns 96.078431
@@ -59,6 +63,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd ACRobePants.jpg
+map_Bump ACRobePants_n.jpg
 
 newmtl Shirt
 Ns 96.078431
@@ -69,6 +74,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd ACRobeShirt.jpg
+map_Bump ACRobeShirt_n.jpg
 
 newmtl SmallSword
 Ns 96.078431
@@ -79,6 +85,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd ACshortsword.jpg
+map_Bump ACshortsword_n.jpg
 
 newmtl Sword
 Ns 96.078431
@@ -89,6 +96,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd ACswordsaber.jpg
+map_Bump ACswordsaber_n.jpg
 
 newmtl TorsoDefault
 Ns 96.078431
@@ -108,3 +116,4 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd rai.jpg
+map_Bump rai_NRM.jpg

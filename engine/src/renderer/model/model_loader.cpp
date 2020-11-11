@@ -145,19 +145,25 @@ namespace Bubble
 				}
 			}
 
-			// Necessary maps
-			if (material.Diffuse.GetHeight() == 0)
-				material.Diffuse = Texture2D(Texture2D(glm::vec4(1.0f)));
+			glm::vec4 color(1.0f);
+			if (AI_SUCCESS != aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, (aiColor4D*)&color));
 
-			if (material.Specular.GetHeight() == 0)
-				material.Specular = Texture2D(Texture2D(glm::vec4(1.0f)));
-			
+			float specular;
+			aiGetMaterialFloat(mat, AI_MATKEY_COLOR_SPECULAR, &specular);
+
 			float shininess;
 			if (AI_SUCCESS != aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &shininess))
 			{
 				material.Shininess = shininess;
 			}
 
+			// Necessary maps
+			if (material.Diffuse.GetHeight() == 0)
+				material.Diffuse = Texture2D(Texture2D(color));
+
+			if (material.Specular.GetHeight() == 0)
+				material.Specular = Texture2D(Texture2D(glm::vec4(specular)));
+			
 			return material;
 		}
 	}

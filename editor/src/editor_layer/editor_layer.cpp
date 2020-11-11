@@ -15,6 +15,7 @@ namespace Bubble
 	
 		// Temp: load scene
 		OpenProject("../../../../scene_test.json", &mScene, &mUI);
+
  	}
 
 
