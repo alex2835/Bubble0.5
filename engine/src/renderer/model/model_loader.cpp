@@ -24,10 +24,13 @@ namespace Bubble
 		LoadedModels.push_back(std::make_pair(path, model));
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
+		const aiScene* scene = importer.ReadFile(path, 0);
 		
 		if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) || !scene->mRootNode)
 			throw std::runtime_error("ERROR::ASSIMP\n" + std::string(importer.GetErrorString()));
+
+		importer.ApplyPostProcessing(aiProcess_Triangulate |
+			aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 
 		// Process ASSIMP's root node recursively
 		model->mMeshes.reserve(scene->mNumMeshes);
@@ -67,7 +70,7 @@ namespace Bubble
 			vertices.Bitangents.resize(mesh->mNumVertices);
 		}
 
-		// Texture coords
+		// Texture coordinates
 		if (mesh->mTextureCoords[0])
 		{
 			for (int i = 0; i < mesh->mNumVertices; i++)
@@ -86,10 +89,10 @@ namespace Bubble
 			}
 		}
 
-		memmove(vertices.Positions.data(),  mesh->mVertices,	sizeof(glm::vec3) * vertices.Positions.size());
-		memmove(vertices.Normals.data(),    mesh->mNormals,		sizeof(glm::vec3) * vertices.Normals.size());
-		memmove(vertices.Tangents.data(),   mesh->mTangents,	sizeof(glm::vec3) * vertices.Tangents.size());
-		memmove(vertices.Bitangents.data(), mesh->mBitangents,	sizeof(glm::vec3) * vertices.Bitangents.size());
+		memmove(vertices.Positions.data(),  mesh->mVertices,   sizeof(glm::vec3) * vertices.Positions.size());
+		memmove(vertices.Normals.data(),    mesh->mNormals,	   sizeof(glm::vec3) * vertices.Normals.size());
+		memmove(vertices.Tangents.data(),   mesh->mTangents,   sizeof(glm::vec3) * vertices.Tangents.size());
+		memmove(vertices.Bitangents.data(), mesh->mBitangents, sizeof(glm::vec3) * vertices.Bitangents.size());
 
 		// Process materials
 		aiMaterial* assimp_material = scene->mMaterials[mesh->mMaterialIndex];
@@ -108,8 +111,6 @@ namespace Bubble
 		const std::string& path = LoadedModels.back().first;
 		std::string directory = path.substr(0, path.find_last_of('/') + 1);
 
-
-
 		DefaultMaterial material;
 		for (int i = 0; i < 3; i++)
 		{
@@ -125,15 +126,19 @@ namespace Bubble
 						case aiTextureType_DIFFUSE:
 							material.Diffuse = Texture2D(directory + str.C_Str());
 							break;
+
 						case aiTextureType_SPECULAR:
 							material.Specular = Texture2D(directory + str.C_Str());
 							break;
-						case aiTextureType_NORMALS:
-							material.Normal = Texture2D(directory + str.C_Str());
-							break;
-						//case aiTextureType_HEIGHT:
+
+						//case aiTextureType_NORMALS:
 						//	material.Normal = Texture2D(directory + str.C_Str());
 						//	break;
+
+						case aiTextureType_HEIGHT:
+							material.Normal = Texture2D(directory + str.C_Str());
+							break;
+
 						default:
 							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", LoadedModels.back().first, str.C_Str());
 					}

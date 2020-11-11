@@ -3,6 +3,7 @@
 #include "model.h"
 
 #include "assimp/Importer.hpp"
+#include "assimp/Exporter.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
@@ -11,13 +12,16 @@
 
 namespace Bubble
 {
-
 	class ModelLoader
 	{
 	public:
 		static std::vector<std::pair<std::string, Ref<Model>>> LoadedModels;
 
 		static Ref<Model> StaticModel(std::string path);
+
+		// Raw data
+		//static Ref<ModelData> StaticModelData(std::string path);
+		//static Ref<Model> StaticModel(Ref<ModelData>);
 		
 	private:
 		static void ProcessNode(Model& model, aiNode* node, const aiScene* scene);

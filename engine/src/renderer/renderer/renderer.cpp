@@ -255,7 +255,7 @@ namespace Bubble
 
 		// Draw skybox
 		glm::mat4 view = ActiveCamera->GetLookatMat();
-		__SkyboxRotation += Timer::GetTime().GetSeconds() * Renderer::SkyboxRotation * 0.0001f;
+		__SkyboxRotation += Timer::GetTime().GetSeconds() * Renderer::SkyboxRotation * 0.00005f;
 		view = Skybox::GetViewMatrix(view, __SkyboxRotation);
 		Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
 

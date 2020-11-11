@@ -43,6 +43,7 @@ namespace Bubble
 		Normal.Bind(2);
 
 		shader->SetUni1i("material.shininess", Shininess);
+		shader->SetUni1i("u_NormalMapping", Normal.GetHeight());
 	}
 
 
@@ -79,6 +80,7 @@ namespace Bubble
 		}
 
 		shader->SetUni1i("material.shininess", Shininess);
+		shader->SetUni1i("u_NormalMapping", NormalMaps.size());
 	}
 
 }

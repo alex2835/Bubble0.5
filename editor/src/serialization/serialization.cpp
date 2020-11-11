@@ -23,7 +23,10 @@ namespace Bubble
 		json["Skybox"]["Rotation"] = Renderer::SkyboxRotation;
 
 		// Save models
-		// ...
+		for (const auto& [path, model] : ModelLoader::LoadedModels)
+		{
+			json["Model"]["Paths"].push_back(path);
+		}
 
 		// Save UI state
 		json["Skybox"]["FirstID"] = ui->mScenePanel.nSelectedFirts;
@@ -46,9 +49,6 @@ namespace Bubble
 		ifstream >> json;
 		ifstream.close();
 
-		// Load scene
-		DeserializeScene(scene->Registry, json["Scene"]);
-
 		// Load skyboxes
 		for (const auto& path : json["Skybox"]["Paths"])
 		{
@@ -61,7 +61,13 @@ namespace Bubble
 		Renderer::SkyboxRotation = json["Skybox"]["Rotation"];
 
 		// Load models
-		// ...
+		for (const auto& path : json["Model"]["Paths"])
+		{
+			ModelLoader::StaticModel(path);
+		}
+
+		// Load scene
+		DeserializeScene(scene->Registry, json["Scene"]);
 
 		// Load UI state
 		ui->mScenePanel.nSelectedFirts = json["Skybox"]["FirstID"];

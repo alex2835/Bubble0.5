@@ -21,7 +21,7 @@ set_target_properties(
 )
 
 # Defines
-add_definitions(-D"GLM_SWIZZLE")
+add_definitions(-D"GLM_FORCE_SWIZZLE")
 
 
 # Include directories

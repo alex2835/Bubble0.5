@@ -70,7 +70,7 @@ namespace Bubble
 		// Highlight selected entity
 		if (selected_entity)
 		{
-			draw_selected_model(selected_entity);
+			//draw_selected_model(selected_entity);
 		}
 		
 		// Draw bounding boxes

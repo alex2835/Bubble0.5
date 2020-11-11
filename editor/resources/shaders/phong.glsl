@@ -1,7 +1,7 @@
 // Vertex shader
 #shader vertex
 #version 420 core
-layout(location = 0) in vec3  a_Pos;
+layout(location = 0) in vec3  a_Position;
 layout(location = 1) in vec3  a_Normal;
 layout(location = 2) in vec2  a_TexCoords;
 layout (location = 3) in vec3 a_Tangent;
@@ -10,7 +10,7 @@ layout (location = 4) in vec3 a_Bitangent;
 out vec3 v_FragPos;
 out vec3 v_Normal;
 out vec2 v_TexCoords;
-
+out mat3 v_TBN;
 
 layout (std140, binding = 0) uniform Matrices
 {
@@ -19,14 +19,31 @@ layout (std140, binding = 0) uniform Matrices
 };
 uniform mat4 u_Model;
 
+uniform int u_NormalMapping;
+
 
 void main()
 {
-    v_FragPos = vec3(u_Model * vec4(a_Pos, 1.0));
-    v_Normal = mat3(transpose(inverse(u_Model))) * a_Normal;
+    mat3 TIModel = mat3(transpose(inverse(u_Model)));
+
+    v_FragPos = vec3(u_Model * vec4(a_Position, 1.0));
+    v_Normal = TIModel * a_Normal;
     v_TexCoords = a_TexCoords;
+  
+    if (u_NormalMapping)
+    {
+        vec3 T = normalize(TIModel * normalize(a_Tangent));
+        vec3 N = normalize(TIModel * normalize(a_Normal));
+        T = normalize(T - dot(T, N) * N);
+        vec3 B = cross(N, T);
+        v_TBN = mat3(T, B, N);
+    }
+
     gl_Position = u_Projection * u_View * vec4(v_FragPos, 1.0);
 }
+
+
+
 
 // Fragment shader
 #shader fragment
@@ -69,6 +86,7 @@ struct Light
 
 // Uniforms
 uniform Material material;
+uniform int u_NormalMapping;
 
 #define MAX_LIGHTS 30
 layout (std140, binding = 1) uniform Lights {
@@ -78,20 +96,25 @@ layout (std140, binding = 1) uniform Lights {
 
 
 layout (std140, binding = 2) uniform  Stuff {
-    vec3 view_pos;
+    vec3 u_ViewPos;
     float __pad0;
 };
 
-// Vertex shader output
 in vec3 v_FragPos;
 in vec3 v_Normal;
 in vec2 v_TexCoords;
+in mat3 v_TBN;
 
+
+in vec3 Normal0;
+in vec3 WorldPos0;
+in vec3 Tangent0;
 
 // Function prototypes
 vec4 CalcDirLight(Light light, vec3 normal, vec3 view_dir);
 vec4 CalcPointLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir);
 vec4 CalcSpotLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir);
+
 
 void main()
 {
@@ -100,9 +123,19 @@ void main()
         discard;
     }
     vec4 specular = texture(material.specular0, v_TexCoords);
-    
-    vec3 norm = normalize(v_Normal);
-    vec3 view_dir = normalize(view_pos - v_FragPos);
+
+    vec3 norm;
+    if (u_NormalMapping)
+    {
+        norm = texture(material.normal0, v_TexCoords).rgb;
+        norm = normalize(norm * 2.0f - 1.0f);
+        norm = normalize(v_TBN * norm);
+    }
+    else {
+        norm = normalize(v_Normal);
+    }
+
+    vec3 view_dir = normalize(u_ViewPos - v_FragPos);
 
     vec4 result = vec4(0.0f);
     vec4 diff_spec = vec4(0.0f);

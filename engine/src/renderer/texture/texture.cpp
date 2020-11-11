@@ -8,6 +8,11 @@ namespace Bubble
 {
 	Texture2D::Texture2D(const glm::vec4& color)
 	{
+		mWidth = 1;
+		mHeight = 1;
+		mInternalFormat = GL_RGBA;
+		mDataFormat = GL_UNSIGNED_BYTE;
+
 		glcall(glGenTextures(1, &mRendererID));
 		glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
 		glcall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &color));
