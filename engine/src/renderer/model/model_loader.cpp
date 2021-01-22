@@ -148,10 +148,10 @@ namespace Bubble
 			glm::vec4 color(1.0f);
 			if (AI_SUCCESS != aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, (aiColor4D*)&color));
 
-			float specular;
-			aiGetMaterialFloat(mat, AI_MATKEY_COLOR_SPECULAR, &specular);
+			ai_real specular[3];
+			aiGetMaterialFloat(mat, AI_MATKEY_COLOR_SPECULAR, specular);
 
-			float shininess;
+			ai_real shininess;
 			if (AI_SUCCESS != aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &shininess))
 			{
 				material.Shininess = shininess;
@@ -162,7 +162,7 @@ namespace Bubble
 				material.Diffuse = Texture2D(Texture2D(color));
 
 			if (material.Specular.GetHeight() == 0)
-				material.Specular = Texture2D(Texture2D(glm::vec4(specular)));
+				material.Specular = Texture2D(Texture2D(glm::vec4(specular[0])));
 			
 			return material;
 		}
