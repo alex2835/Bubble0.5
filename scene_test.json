@@ -4,7 +4,7 @@
    "resources/crysis/nanosuit.obj",
    "resources/grass_plane/grass_plane.obj",
    "resources/Tree/Tree.obj",
-   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/resources/altair/assassins-creed-altair.obj",
+   "resources/altair/assassins-creed-altair.obj",
    "resources/medival_house/medieval-house-2.obj",
    "resources/brick_wall/plane.obj"
   ]
@@ -493,7 +493,7 @@
    },
    {
     "Component": {
-     "Model": "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/resources/altair/assassins-creed-altair.obj"
+      "Model": "resources/altair/assassins-creed-altair.obj"
     },
     "Entity": 6
    },
