@@ -163,7 +163,7 @@ void main()
     float specular_coef = diff_spec.w;
 
     result += diffuse_coef * diffuse;
-    result += vec4(vec3(specular_coef * specular.x), 0);
+    result += diffuse_coef * vec4(vec3(specular_coef * specular.x), 0);
     
     result = min(result, vec4(1.0f));
     FragColor = result;
