@@ -4,7 +4,7 @@
 #include "engine.h"
 #include "entry_point.h"
 
-#include "sdl_window/sdl_window.h"
+#include "core/window.h"
 #include "editor_layer/editor_layer.h"
 
 namespace Bubble
@@ -12,7 +12,7 @@ namespace Bubble
     class EditorApp : public Application
     {
     public:
-        EditorApp() : Application(new SDLWindow())
+        EditorApp() : Application()
         {
             PushLayer(new EditorLayer());
         }

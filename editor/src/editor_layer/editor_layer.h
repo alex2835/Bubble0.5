@@ -1,9 +1,9 @@
 #pragma once
 
 #include "engine.h"
+#include "core/window.h"
 
 #include "imgui_controll/imgui_controll.h"
-#include "sdl_window/sdl_window.h"
 #include "scene_camera/scene_camera.h"
 
 #include "user_interface/user_interface.h"

@@ -18,7 +18,7 @@ namespace Bubble
 		Renderer::SetCamera(mCamera);
 		Renderer::ClearDepth();
 
-		glm::mat4 view = Skybox::GetViewMatrix(Renderer::ActiveCamera->GetLookatMat());
+		glm::mat4 view = Skybox::GetViewMatrix(Renderer::sActiveCamera->GetLookatMat());
 		Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
 
 		mShader->SetUni1f("u_Brightness", 1.0f);
@@ -63,7 +63,7 @@ namespace Bubble
 				// ==================== Model list ====================
 				ImGui::BeginChild("Skybox list", ImVec2(window_size.x * 0.3f, window_size.y * 0.2f), true);
 				{
-					for (const auto& [path, skybox] : SkyboxLoader::LoadedSkyboxes)
+					for (const auto& [path, skybox] : SkyboxLoader::sLoadedSkyboxes)
 					{
 						size_t pos = path.find_last_of("/") + 1;
 						std::string name = path.substr(pos);
@@ -83,7 +83,6 @@ namespace Bubble
 					}
 				}
 				ImGui::EndChild();
-
 
 				// ==================== Buttons ====================
 				if (ImGui::Button("Load", { 100, window_size.y * 0.05f }))

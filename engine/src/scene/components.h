@@ -3,8 +3,8 @@
 #include "nlohmann/json.hpp"
 #include "glm/glm.hpp"
 
-#include "Light/Light.h"
-#include "model/model_loader.h"
+#include "renderer/light.h"
+#include "renderer/model_loader.h"
 
 #include <string>
 #include <algorithm>
@@ -237,27 +237,5 @@ namespace Bubble
 		}
 
 	};
-
-
-	// =================
-	//class ScriptableEntity;
-	//
-	//class NativeScriptComponent
-	//{
-	//public:
-	//	ScriptableEntity* Instance = nullptr;
-	//
-	//	ScriptableEntity* (*InstantiateScript)();
-	//	void (*DestroyInstanceScript)(NativeScriptComponent*);
-	//
-	//	template <typename T>
-	//	void Bind()
-	//	{
-	//		InstantiateScript = []() { return (ScriptableEntity*)new T(); };
-	//		DestroyInstanceScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
-	//	}
-	//
-	//
-	//};
 
 }

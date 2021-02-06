@@ -1,9 +1,9 @@
 #pragma once
 
-#include "sdl_window/sdl_window.h"
+#include "core/window.h"
+#include "core/application.h"
 
 #include "imgui.h"
-#include "application/application.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl.h"
 
@@ -12,7 +12,7 @@ namespace Bubble
 {
     class ImGuiControll
     {
-		SDLWindow* mWindow;
+		Window* mWindow;
 
 		void ImGuiDocking();
 		void ImGuiMultiViewports();

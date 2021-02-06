@@ -4,38 +4,37 @@
 
 namespace Bubble
 {
-	std::vector<Viewport*> EditorViewports;
+	std::vector<Viewport*> sEditorViewports;
 
 	Viewport::Viewport(int width, int height, const std::string& name)
 		: Framebuffer(width, height),
-		Name(name),
-		NewSize(width, height)
+          mName(name),
+          mNewSize(width, height)
 	{
-		Framebuffer::Resize({width, height});
-		EditorViewports.push_back(this);
+		sEditorViewports.push_back(this);
 	}
 
 	Viewport::Viewport(Viewport&& other) noexcept
 		: Framebuffer(std::move(other))
 	{
-		Name = std::move(other.Name);
-		NewSize = other.NewSize;
-		other.NewSize = glm::ivec2(0);
+		mName = std::move(other.mName);
+		mNewSize = other.mNewSize;
+		other.mNewSize = glm::ivec2(0);
 	}
 
 	Viewport::~Viewport()
 	{
-		auto iterator = std::find(EditorViewports.begin(), EditorViewports.end(), this);
-		EditorViewports.erase(iterator);
+		auto iterator = std::ranges::find(sEditorViewports, this);
+		sEditorViewports.erase(iterator);
 	}
 
 	Viewport& Viewport::operator=(Viewport&& other) noexcept
 	{
 		Framebuffer& fb = *this;
 		fb = std::move(other);
-		Name = std::move(other.Name);
-		NewSize = other.NewSize;
-		other.NewSize = glm::ivec2(0);
+		mName = std::move(other.mName);
+		mNewSize = other.mNewSize;
+		other.mNewSize = glm::ivec2(0);
 		return *this;
 	}
 

@@ -16,7 +16,7 @@ target_link_libraries(Bubble nativefiledialog)
 
 set_target_properties(
     Bubble PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
 )
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "input/input.h"
-#include "camera/free_camera.h"
-#include "time/time.h"
+#include "core/input.h"
+#include "core/time.h"
+#include "renderer/camera_free.h"
 
 #include "SDL2/SDL.h"
 

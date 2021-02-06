@@ -1,7 +1,7 @@
 #pragma once
 
-#include "application/application.h"
-#include "log/log.h"
+#include "core/log.h"
+#include "core/application.h"
 
 #include <vector>
 
@@ -16,13 +16,12 @@ int main(int argc, char* argv[])
 	try
 	{
 		Bubble::Application* app = CreateApplication();
-		app->SetCurrentDir(argv[0]);
 		app->Run();
 		delete app;
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception& e)
+	{
 		LOG_CORE_ERROR("Exception has been trigered:\n {}", e.what());
 	}
-
 	return 0;
 }

@@ -1,14 +1,13 @@
 #pragma once
 
-#include "framebuffer/framebuffer.h"
-
+#include "renderer/framebuffer.h"
 #include <string>
 #include <algorithm>
 
 namespace Bubble
 {
 	struct Viewport;
-	extern std::vector<Viewport*> EditorViewports;
+	extern std::vector<Viewport*> sEditorViewports;
 
 	/*
 		Editor framebuffer abstraction
@@ -16,8 +15,8 @@ namespace Bubble
 
 	struct Viewport : Framebuffer
 	{
-		std::string Name;
-		glm::ivec2 NewSize;
+		std::string mName;
+		glm::ivec2  mNewSize;
 
 	public:
 		Viewport() = default;

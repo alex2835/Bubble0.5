@@ -1,8 +1,7 @@
 #pragma once
 
-#include "base.h"
-#include "time/time.h"
-
+#include "core/base.h"
+#include "core/time.h"
 #include "entt/entt.hpp"
 
 
@@ -27,6 +26,6 @@ namespace Bubble
 
 		template <typename ...Args>
 		auto GetView() { return Registry.view<Args...>(); }
-
 	};
+
 }

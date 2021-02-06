@@ -11,7 +11,7 @@ add_library(Engine STATIC ${SRCS} ${HDRS})
 
 set_target_properties(
     Engine PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
 )
 
@@ -27,8 +27,7 @@ target_link_libraries(Engine stb_image)
 # Include directories
 target_include_directories(
     Engine PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/core
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/scene
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/stb_image
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glew/include
@@ -58,7 +57,7 @@ if (WIN32)
 
     target_link_libraries(
         Engine
-        SDL2.dll
+        SDL2.lib
         assimp-vc142-mt.dll
         
         SDL2main.lib

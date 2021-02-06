@@ -86,7 +86,7 @@ namespace Bubble
 		// Quit combination
 		if (Input::IsKeyClick(SDLK_LALT) && Input::IsKeyClick(SDLK_F4))
 		{
-			Application::GetWindow()->Close();
+			Application::GetMainWindow().Close();
 		}
 	}
 
