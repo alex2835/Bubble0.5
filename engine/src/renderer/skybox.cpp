@@ -4,7 +4,7 @@
 
 namespace Bubble
 {
-	VertexArray* Skybox::SkyboxVertexArray = nullptr;
+	VertexArray* Skybox::sSkyboxVertexArray = nullptr;
 
 	// Identity box
 	float SkyboxVertices[] = {
@@ -54,7 +54,7 @@ namespace Bubble
 
 	void Skybox::Bind(int slot)
 	{
-		SkyboxVertexArray->Bind();
+		sSkyboxVertexArray->Bind();
 		mSkybox.Bind(slot);
 	}
 
@@ -67,9 +67,9 @@ namespace Bubble
 	}
 
 
-	void Skybox::InitVertexArray()
+	void Skybox::Init()
 	{
-		SkyboxVertexArray = new VertexArray();
+		sSkyboxVertexArray = new VertexArray();
 		VertexBuffer vb = VertexBuffer(SkyboxVertices, sizeof(SkyboxVertices));
 		
 		BufferLayout layout{
@@ -77,7 +77,7 @@ namespace Bubble
 		};
 
 		vb.SetLayout(layout);
-		SkyboxVertexArray->AddVertexBuffer(std::move(vb));
+		sSkyboxVertexArray->AddVertexBuffer(std::move(vb));
 	}
 
 }

@@ -73,7 +73,7 @@ namespace Bubble
 				// ==================== Model list ====================
 				ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.2f), true);
 				{
-					for (const auto& [path, model] : Loader::sLoadedModels)
+					for (const auto& [path, model] : *Loader::sLoadedModels)
 					{
 						size_t pos = path.find_last_of("/") + 1;
 						std::string name = path.substr(pos);

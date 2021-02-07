@@ -16,7 +16,7 @@ namespace Bubble
 
 		std::string out(raw_path);
 		free(raw_path);
-		return out;
+		return NormalizePath(out);
 	}
 
 	std::string SaveFileDialog(const std::string& filter,
@@ -30,7 +30,7 @@ namespace Bubble
 
 		std::string out(raw_path);
 		free(raw_path);
-		return out;
+		return NormalizePath(out);
 	}
 
 	std::string PickFolderDialog(const std::string& start_folder)
@@ -43,7 +43,7 @@ namespace Bubble
 
 		std::string out(raw_path);
 		free(raw_path);
-		return out;
+		return NormalizePath(out);
 	}
 
 }

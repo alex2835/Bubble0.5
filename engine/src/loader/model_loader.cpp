@@ -4,24 +4,19 @@
 
 namespace Bubble
 {
-	std::vector<std::pair<std::string, Ref<Model>>>  Loader::sLoadedModels;
+	Scope<std::unordered_map<std::string, Ref<Model>>> Loader::sLoadedModels;
 
 
 	Ref<Model> Loader::StaticModel(std::string path)
 	{
-		path = NormalizePath(path);
-
-		for (const auto& stored_model : sLoadedModels)
-		{
-			if (stored_model.first.find(path) != std::string::npos ||
-				path.find(stored_model.first) != std::string::npos)
-			{
-				return stored_model.second;
-			}
-		}
+        if (auto model = sLoadedModels->find(path);
+            model != sLoadedModels->end())
+        {
+            return model->second;
+        }
 
 		auto model = CreateRef<Model>();
-		sLoadedModels.push_back(std::make_pair(path, model));
+		sLoadedModels->emplace(path, model);
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(path, 0);
@@ -34,27 +29,27 @@ namespace Bubble
 
 		// Process ASSIMP's root node recursively
 		model->mMeshes.reserve(scene->mNumMeshes);
-		ProcessNode(*model, scene->mRootNode, scene);
+		ProcessNode(*model, scene->mRootNode, scene, path);
 
 		model->CreateBoundingBox();
 		return model;
 	}
 
 	// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-	void Loader::ProcessNode(Model& model, aiNode* node, const aiScene* scene)
+	void Loader::ProcessNode(Model& model, aiNode* node, const aiScene* scene, const std::string& path)
 	{
 		for (int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			model.mMeshes.emplace_back(ProcessMesh(mesh, scene));
+			model.mMeshes.emplace_back(ProcessMesh(mesh, scene, path));
 		}
 	
 		for (int i = 0; i < node->mNumChildren; i++) {
-			ProcessNode(model, node->mChildren[i], scene);
+			ProcessNode(model, node->mChildren[i], scene, path);
 		}
 	}
 	
-	Mesh Loader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+	Mesh Loader::ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path)
 	{
 		VertexData vertices;
 		std::vector<uint32_t> indices;
@@ -96,19 +91,18 @@ namespace Bubble
 
 		// Process materials
 		aiMaterial* assimp_material = scene->mMaterials[mesh->mMaterialIndex];
-		DefaultMaterial material = LoadMaterialTextures(assimp_material);
+		DefaultMaterial material = LoadMaterialTextures(assimp_material, path);
 
 		return Mesh(std::move(material), std::move(vertices), std::move(indices));
 	}
 	
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.
 	// the required info is returned as a Texture struct.
-	DefaultMaterial Loader::LoadMaterialTextures(aiMaterial* mat)
+	DefaultMaterial Loader::LoadMaterialTextures(aiMaterial* mat, const std::string& path)
 	{
 		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT, aiTextureType_NORMALS };
 		
 		// retrieve the directory path of the filepath
-		const std::string& path = sLoadedModels.back().first;
 		std::string directory = path.substr(0, path.find_last_of('/') + 1);
 
 		DefaultMaterial material;
@@ -140,7 +134,7 @@ namespace Bubble
 							break;
 
 						default:
-							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", sLoadedModels.back().first, str.C_Str());
+							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", path, str.C_Str());
 					}
 				}
 			}

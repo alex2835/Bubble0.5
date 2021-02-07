@@ -11,8 +11,8 @@ namespace Bubble
 {
 	struct Skybox
 	{
-		static VertexArray* SkyboxVertexArray;
-		static void InitVertexArray();
+		static VertexArray* sSkyboxVertexArray;
+		static void Init();
 
 		Cubemap mSkybox;
 

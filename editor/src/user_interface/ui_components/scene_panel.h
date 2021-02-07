@@ -8,9 +8,11 @@ namespace Bubble
 	struct ScenePanel
 	{
 		// Skybox
-		std::string mNames;
-		int nSelectedFirts = 0;
-		int nSelectedSecond = 0;
+        int SelectedSkyboxIDFirst = 0;
+        int SelectedSkyboxIDSecond = 0;
+        std::string SelectedSkyboxNameFirst;
+        std::string SelectedSkyboxNameSecond;
+
 
 		void Draw(bool* is_open);
 	};

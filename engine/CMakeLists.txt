@@ -28,7 +28,6 @@ target_link_libraries(Engine stb_image)
 target_include_directories(
     Engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/scene
     ${CMAKE_CURRENT_SOURCE_DIR}/src/loader
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/stb_image
     ${CMAKE_CURRENT_SOURCE_DIR}/../dependencies/glew/include

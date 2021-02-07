@@ -10,9 +10,9 @@
 #include "buffer.h"
 #include "uniform_buffer.h"
 #include "camera.h"
-#include "components.h"
 #include "light.h"
-#include "scene.h"
+#include "scene/scene.h"
+#include "scene/components.h"
 
 #include "glm/glm.hpp"
 #include "glm-AABB/AABB.hpp"

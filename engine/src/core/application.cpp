@@ -1,6 +1,6 @@
 
+#include "engine.h"
 #include "application.h"
-
 
 namespace Bubble
 {
@@ -9,6 +9,7 @@ namespace Bubble
 
 	Application::Application()
     {
+        InitEngine();
         Application::sMainWindow = &mWindow;
     }
 
@@ -37,11 +38,8 @@ namespace Bubble
         return *sMainWindow;
 	}
 
-
 	void Application::Run()
 	{
-        Renderer::Init();
-
         while (mWindow.IsOpen())
         {
 			Input::NewFrame();

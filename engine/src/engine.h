@@ -26,10 +26,18 @@
 #include "renderer/camera_target.h"
 #include "renderer/camera_third_person.h"
 
-#include "loader.h"
-
-
 // Scene
 #include "scene/scene.h"
 #include "scene/entity.h"
 #include "scene/components.h"
+
+// Loader
+#include "loader.h"
+
+
+inline void InitEngine()
+{
+    Bubble::Skybox::Init();
+    Bubble::Loader::Init();
+    Bubble::Renderer::Init();
+}

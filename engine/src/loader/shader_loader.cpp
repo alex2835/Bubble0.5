@@ -3,18 +3,17 @@
 
 namespace Bubble
 {
-	std::vector<std::pair<std::string, Ref<Shader>>> Loader::sLoadedShaders;
+	Scope<std::unordered_map<std::string, Ref<Shader>>> Loader::sLoadedShaders;
 
-
+	
 	Ref<Shader> Loader::LoadShader(const std::string& path)
 	{
-		for (auto path_shader : sLoadedShaders)
-		{
-			if (path.find(path_shader.first) != std::string::npos)
-			{
-				return path_shader.second;
-			}
-		}
+        if (auto model = sLoadedShaders->find(path);
+            model != sLoadedShaders->end())
+        {
+            return model->second;
+        }
+
 		Ref<Shader> shader = CreateRef<Shader>();
 		std::string vertexSource, fragmentSource, geometry;
 		
@@ -22,7 +21,7 @@ namespace Bubble
 		ParseShaders(path, vertexSource, fragmentSource, geometry);
 		CompileShaders(*shader, vertexSource, fragmentSource, geometry);
 
-		sLoadedShaders.push_back({ path, shader });
+		sLoadedShaders->emplace(path, shader);
 		return shader;
 	}
 
@@ -34,7 +33,7 @@ namespace Bubble
 	{
 		Ref<Shader> shader = CreateRef<Shader>();
 		CompileShaders(*shader, vertex, fragment, geometry);
-		sLoadedShaders.push_back({ name, shader });
+		sLoadedShaders->emplace(name, shader);
 		return shader;
 	}
 

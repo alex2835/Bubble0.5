@@ -63,7 +63,7 @@ namespace Bubble
 				// ==================== Model list ====================
 				ImGui::BeginChild("Skybox list", ImVec2(window_size.x * 0.3f, window_size.y * 0.2f), true);
 				{
-					for (const auto& [path, skybox] : Loader::sLoadedSkyboxes)
+					for (const auto& [path, skybox] : *Loader::sLoadedSkyboxes)
 					{
 						size_t pos = path.find_last_of("/") + 1;
 						std::string name = path.substr(pos);

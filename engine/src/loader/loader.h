@@ -9,6 +9,8 @@
 #include "assimp/Exporter.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
+
+#include <unordered_map>
 #include <exception>
 
 
@@ -17,9 +19,16 @@ namespace Bubble
     class Loader
     {
     public:
-        static std::vector<std::pair<std::string, Ref<Model>>>  sLoadedModels;
-        static std::vector<std::pair<std::string, Ref<Shader>>> sLoadedShaders;
-        static std::vector<std::pair<std::string, Ref<Skybox>>> sLoadedSkyboxes;
+        static Scope<std::unordered_map<std::string, Ref<Model>>>  sLoadedModels;
+        static Scope<std::unordered_map<std::string, Ref<Shader>>> sLoadedShaders;
+        static Scope<std::unordered_map<std::string, Ref<Skybox>>> sLoadedSkyboxes;
+
+        static inline void Init()
+        {
+            sLoadedModels   = CreateScope<std::unordered_map<std::string, Ref<Model>>>();
+            sLoadedShaders  = CreateScope<std::unordered_map<std::string, Ref<Shader>>>();
+            sLoadedSkyboxes = CreateScope<std::unordered_map<std::string, Ref<Skybox>>>();
+        }
 
 
         // ================= Meshes ================= 
@@ -27,9 +36,9 @@ namespace Bubble
         static Ref<Model> StaticModel(std::string path);
 
     private:
-        static void ProcessNode(Model& model, aiNode* node, const aiScene* scene);
-        static Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-        static DefaultMaterial LoadMaterialTextures(aiMaterial* mat);
+        static void ProcessNode(Model& model, aiNode* node, const aiScene* scene, const std::string& path);
+        static Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path);
+        static DefaultMaterial LoadMaterialTextures(aiMaterial* mat, const std::string& path);
 
         // ================= Shaders ================= 
     public:
@@ -59,4 +68,6 @@ namespace Bubble
         // Single file skybox
         static Ref<Skybox> LoadSkybox(std::string file);
     };
+
+
 }

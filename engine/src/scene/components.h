@@ -218,15 +218,14 @@ namespace Bubble
 		nlohmann::json Serialize() const
 		{
 			nlohmann::json j;
-			auto iterator = *(std::find_if(
-				Loader::sLoadedModels.begin(), Loader::sLoadedModels.end(),
+			auto iterator = std::ranges::find_if(*Loader::sLoadedModels,
 				[&](const std::pair<std::string, Ref<Model>>& path_model) 
 				{
 					return path_model.second == *this;
 				}
-			));
+			);
 
-			const std::string& path = iterator.first;
+			const std::string& path = iterator->first;
 			j["Model"] = path;
 			return j;
 		}

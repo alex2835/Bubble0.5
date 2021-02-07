@@ -1,10 +1,6 @@
 #pragma once
 
-#include "core/log.h"
-#include "core/application.h"
-
-#include <vector>
-
+#include "engine.h"
 
 // Implementation on client side
 extern Bubble::Application* CreateApplication();
@@ -15,9 +11,9 @@ int main(int argc, char* argv[])
 	Bubble::Log::init();
 	try
 	{
-		Bubble::Application* app = CreateApplication();
-		app->Run();
-		delete app;
+		auto* application = CreateApplication();
+		application->Run();
+		delete application;
 	}
 	catch (const std::exception& e)
 	{

@@ -4,31 +4,22 @@
 
 namespace Bubble
 {
-	std::vector<std::pair<std::string, Bubble::Ref<Bubble::Skybox>>> Loader::sLoadedSkyboxes;
+	Scope<std::unordered_map<std::string, Ref<Skybox>>> Loader::sLoadedSkyboxes;
 
 
 	Ref<Skybox> Loader::LoadSkybox(std::string path)
 	{
-		path = NormalizePath(path);
-
-		if (Skybox::SkyboxVertexArray == nullptr) {
-			Skybox::InitVertexArray();
-		}
-
-		for (const auto& stored_model : sLoadedSkyboxes)
+		if (auto model = sLoadedSkyboxes->find(path);
+			model != sLoadedSkyboxes->end())
 		{
-			if (stored_model.first.find(path) != std::string::npos ||
-				path.find(stored_model.first) != std::string::npos)
-			{
-				return stored_model.second;
-			}
+			return model->second;
 		}
 
 		Ref<Skybox> skybox = CreateRef<Skybox>();
 
 		auto [orig_data, orig_spec] = Texture2D::OpenRawImage(path);
-
-		if (orig_data == NULL)
+		 
+		if (!orig_data)
 			throw std::runtime_error("Skybox loading failed: " + path);
 
 		Texture2DSpecification spec = orig_spec;
@@ -82,19 +73,15 @@ namespace Bubble
 		for (int i = 0; i < 6; i++) {
 			delete data[i];
 		}
-
-		sLoadedSkyboxes.push_back({ path, skybox });
+		sLoadedSkyboxes->emplace(path, skybox);
 		return skybox;
 	}
 
 	Ref<Skybox> Loader::LoadSkyboxFromDir(const std::string& dir, const std::string& ext)
 	{
-		if (Skybox::SkyboxVertexArray == nullptr) {
-			Skybox::InitVertexArray();
-		}
 		Ref<Skybox> skybox = CreateRef<Skybox>();
 		skybox->mSkybox = Cubemap(dir, ext);
-		sLoadedSkyboxes.push_back({ dir, skybox });
+		sLoadedSkyboxes->emplace(dir, skybox);
 		return skybox;
 	}
 

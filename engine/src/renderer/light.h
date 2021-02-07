@@ -14,13 +14,8 @@ namespace Bubble
 	enum class LightType { DirLight, PointLight, SpotLight };
 
 	/*
-		Variables with __ prefix temporary and
-		stay at padding places, by this trick
-		possible to dump whole array directly
-		to shader by one load
+		std_140 alignment
 	*/
-
-
 	struct GLSL_Light
 	{
 		LightType Type;
