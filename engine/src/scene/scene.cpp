@@ -1,7 +1,6 @@
 
 #include "scene.h"
-#include "entity/entity.h"
-//#include "entity/scriptable_entity.h"
+#include "entity.h"
 #include "components.h"
 
 

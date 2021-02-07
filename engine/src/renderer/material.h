@@ -2,7 +2,8 @@
 
 #include "glm/glm.hpp"
 #include "texture.h"
-#include "shader_loader.h"
+#include "renderer/shader.h"
+#include "renderer/texture.h"
 
 namespace Bubble
 {

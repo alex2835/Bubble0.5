@@ -35,11 +35,11 @@ namespace Bubble
 		// ====================== Update ======================
 		mSceneCamera.Update(dt);
 
-		for (Viewport* viewport : EditorViewports)
+		for (Viewport* viewport : sEditorViewports)
 		{
-			if (viewport->NewSize != viewport->GetSize())
+			if (viewport->mNewSize != viewport->GetSize())
 			{
-				viewport->Resize(viewport->NewSize);
+				viewport->Resize(viewport->mNewSize);
 			}
 		}
 

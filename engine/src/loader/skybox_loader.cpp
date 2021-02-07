@@ -1,13 +1,13 @@
 
-#include "skybox_loader.h"
+#include "loader.h"
 
 
 namespace Bubble
 {
-	std::vector<std::pair<std::string, Bubble::Ref<Bubble::Skybox>>> SkyboxLoader::sLoadedSkyboxes;
+	std::vector<std::pair<std::string, Bubble::Ref<Bubble::Skybox>>> Loader::sLoadedSkyboxes;
 
 
-	Ref<Skybox> SkyboxLoader::Load(std::string path)
+	Ref<Skybox> Loader::LoadSkybox(std::string path)
 	{
 		path = NormalizePath(path);
 
@@ -87,7 +87,7 @@ namespace Bubble
 		return skybox;
 	}
 
-	Ref<Skybox> SkyboxLoader::LoadSeparateFiles(const std::string& dir, const std::string& ext)
+	Ref<Skybox> Loader::LoadSkyboxFromDir(const std::string& dir, const std::string& ext)
 	{
 		if (Skybox::SkyboxVertexArray == nullptr) {
 			Skybox::InitVertexArray();

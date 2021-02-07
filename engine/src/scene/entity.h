@@ -32,13 +32,17 @@ namespace Bubble
 			return *this;
 		}
 
-
-		template<typename... Args>
+		template<typename T>
 		auto& GetComponent() const
 		{
-			return mScene->Registry.get<Args...>(EntityHandle);
+			return mScene->Registry.get<T>(EntityHandle);
 		}
 
+        template<typename... Args>
+        auto GetComponents() const
+        {
+            return mScene->Registry.get<Args...>(EntityHandle);
+        }
 
 		bool Valid()
 		{

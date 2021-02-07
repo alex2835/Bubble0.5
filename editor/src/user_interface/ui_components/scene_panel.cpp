@@ -13,7 +13,7 @@ namespace Bubble
 			{
 				ImVec2 window_size = ImGui::GetContentRegionAvail();
 				
-				for (const auto& [path, skybox] : SkyboxLoader::sLoadedSkyboxes)
+				for (const auto& [path, skybox] : Loader::sLoadedSkyboxes)
 				{
 					size_t pos = path.find_last_of("/") + 1;
 					std::string name = path.substr(pos);
@@ -27,14 +27,14 @@ namespace Bubble
 					ImGui::SliderFloat("Blend factor", &Renderer::sSkyboxBlendFactor, 0.0f, 1.0f);
 					ImGui::SliderFloat("Rotation", &Renderer::sSkyboxRotationSpeed, 0.0001f, 0.5f);
 
-					if (ImGui::Combo("First skybox", &nSelectedFirts, mNames.data(), SkyboxLoader::sLoadedSkyboxes.size()))
+					if (ImGui::Combo("First skybox", &nSelectedFirts, mNames.data(), Loader::sLoadedSkyboxes.size()))
 					{
-						Renderer::sSkyboxFirst = SkyboxLoader::sLoadedSkyboxes[nSelectedFirts].second;
+						Renderer::sSkyboxFirst = Loader::sLoadedSkyboxes[nSelectedFirts].second;
 					}
 
-					if (ImGui::Combo("Second skybox", &nSelectedSecond, mNames.data(), SkyboxLoader::sLoadedSkyboxes.size()))
+					if (ImGui::Combo("Second skybox", &nSelectedSecond, mNames.data(), Loader::sLoadedSkyboxes.size()))
 					{
-						Renderer::sSkyboxSecond = SkyboxLoader::sLoadedSkyboxes[nSelectedSecond].second;
+						Renderer::sSkyboxSecond = Loader::sLoadedSkyboxes[nSelectedSecond].second;
 					}
 				}
 				ImGui::EndChild();

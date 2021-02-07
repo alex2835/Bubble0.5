@@ -52,7 +52,7 @@ namespace Bubble
         InitUBOS();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
-        sSkyboxShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
+        sSkyboxShader = Loader::LoadShader("resources/shaders/skybox.glsl");
     }
 
     // =================== Options ===================
@@ -246,7 +246,7 @@ namespace Bubble
         // Draw scene
         for (auto entity : scene_view)
         {
-            auto& [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
+            auto [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
             if (IsInFrustum(model->mBoundingBox.transform(transforms)))
             {
                 Renderer::DrawModel(model, transforms);

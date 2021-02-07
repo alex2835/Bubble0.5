@@ -1,12 +1,12 @@
 
 #include "model.h"
-
+#include "loader.h"
 
 namespace Bubble
 {
 	Model::Model()
 	{
-		mShader = ShaderLoader::Load("resources/shaders/phong.glsl");
+		mShader = Loader::LoadShader("resources/shaders/phong.glsl");
 	}
 
 	void Model::CreateBoundingBox()

@@ -1,16 +1,17 @@
 
-#include "shader_loader.h"
+#include "loader.h"
 
 namespace Bubble
 {
-	std::vector<std::pair<std::string, Ref<Shader>>> ShaderLoader::LoadedShaders;
+	std::vector<std::pair<std::string, Ref<Shader>>> Loader::sLoadedShaders;
 
 
-	Ref<Shader> ShaderLoader::Load(const std::string& path)
+	Ref<Shader> Loader::LoadShader(const std::string& path)
 	{
-		for (auto path_shader : LoadedShaders)
+		for (auto path_shader : sLoadedShaders)
 		{
-			if (path.find(path_shader.first) != std::string::npos) {
+			if (path.find(path_shader.first) != std::string::npos)
+			{
 				return path_shader.second;
 			}
 		}
@@ -21,27 +22,27 @@ namespace Bubble
 		ParseShaders(path, vertexSource, fragmentSource, geometry);
 		CompileShaders(*shader, vertexSource, fragmentSource, geometry);
 
-		LoadedShaders.push_back({ path, shader });
+		sLoadedShaders.push_back({ path, shader });
 		return shader;
 	}
 
 
-	Ref<Shader> ShaderLoader::Load(const std::string& name,
-								   const std::string& vertex,
-								   const std::string& fragment,
-								   const std::string& geometry)
+	Ref<Shader> Loader::LoadShader(const std::string& name,
+						     const std::string& vertex,
+						     const std::string& fragment,
+						     const std::string& geometry)
 	{
 		Ref<Shader> shader = CreateRef<Shader>();
 		CompileShaders(*shader, vertex, fragment, geometry);
-		LoadedShaders.push_back({ name, shader });
+		sLoadedShaders.push_back({ name, shader });
 		return shader;
 	}
 
 
-	void ShaderLoader::ParseShaders(const std::string& path,
-									std::string& vertex,
-									std::string& fragment,
-									std::string& geometry)
+	void Loader::ParseShaders(const std::string& path,
+							  std::string& vertex,
+							  std::string& fragment,
+							  std::string& geometry)
 	{
 		enum ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2 };
 		ShaderType type = NONE;
@@ -83,7 +84,7 @@ namespace Bubble
 	}
 
 
-	void ShaderLoader::CompileShaders(Shader& shader,
+	void Loader::CompileShaders(Shader& shader,
 		const std::string& vertex_source,
 		const std::string& fragment_source,
 		const std::string& geometry_source)

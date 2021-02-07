@@ -10,7 +10,7 @@ namespace Bubble
 
 	static void init_bounding_box_drawing()
 	{
-		BoundingBoxShader = ShaderLoader::Load("resources/shaders/solid_color.glsl");
+		BoundingBoxShader = Loader::LoadShader("resources/shaders/solid_color.glsl");
 		sVertexArray = CreateRef<VertexArray>();
 
 		uint32_t indices[] = {4, 0, 0, 2, 2, 7, 7, 4,
@@ -64,7 +64,7 @@ namespace Bubble
 
 		for (auto entity : scene_view)
 		{
-			auto& [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
+			auto [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
 			if (IsInFrustum(model->mBoundingBox.transform(transforms)))
 			{
 				draw_boundingbox(model->mBoundingBox.transform(transforms));

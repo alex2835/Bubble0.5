@@ -1,17 +1,17 @@
 
-#include "model_loader.h"
+#include "loader.h"
 
 
 namespace Bubble
 {
-	std::vector<std::pair<std::string, Ref<Model>>>  ModelLoader::LoadedModels;
+	std::vector<std::pair<std::string, Ref<Model>>>  Loader::sLoadedModels;
 
 
-	Ref<Model> ModelLoader::StaticModel(std::string path)
+	Ref<Model> Loader::StaticModel(std::string path)
 	{
 		path = NormalizePath(path);
 
-		for (const auto& stored_model : LoadedModels)
+		for (const auto& stored_model : sLoadedModels)
 		{
 			if (stored_model.first.find(path) != std::string::npos ||
 				path.find(stored_model.first) != std::string::npos)
@@ -21,7 +21,7 @@ namespace Bubble
 		}
 
 		auto model = CreateRef<Model>();
-		LoadedModels.push_back(std::make_pair(path, model));
+		sLoadedModels.push_back(std::make_pair(path, model));
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(path, 0);
@@ -41,7 +41,7 @@ namespace Bubble
 	}
 
 	// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-	void ModelLoader::ProcessNode(Model& model, aiNode* node, const aiScene* scene)
+	void Loader::ProcessNode(Model& model, aiNode* node, const aiScene* scene)
 	{
 		for (int i = 0; i < node->mNumMeshes; i++)
 		{
@@ -54,7 +54,7 @@ namespace Bubble
 		}
 	}
 	
-	Mesh ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+	Mesh Loader::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		VertexData vertices;
 		std::vector<uint32_t> indices;
@@ -103,12 +103,12 @@ namespace Bubble
 	
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.
 	// the required info is returned as a Texture struct.
-	DefaultMaterial ModelLoader::LoadMaterialTextures(aiMaterial* mat)
+	DefaultMaterial Loader::LoadMaterialTextures(aiMaterial* mat)
 	{
 		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT, aiTextureType_NORMALS };
 		
 		// retrieve the directory path of the filepath
-		const std::string& path = LoadedModels.back().first;
+		const std::string& path = sLoadedModels.back().first;
 		std::string directory = path.substr(0, path.find_last_of('/') + 1);
 
 		DefaultMaterial material;
@@ -140,7 +140,7 @@ namespace Bubble
 							break;
 
 						default:
-							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", LoadedModels.back().first, str.C_Str());
+							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", sLoadedModels.back().first, str.C_Str());
 					}
 				}
 			}

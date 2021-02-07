@@ -17,17 +17,17 @@
 #include "renderer/uniform_buffer.h"
 #include "renderer/vertex_array.h"
 #include "renderer/shader.h"
-#include "renderer/shader_loader.h"
 #include "renderer/texture.h"
 #include "renderer/renderer.h"
-#include "renderer/model_loader.h"
 #include "renderer/cubemap.h"
 #include "renderer/skybox.h"
-#include "renderer/skybox_loader.h"
 #include "renderer/camera.h"
 #include "renderer/camera_free.h"
 #include "renderer/camera_target.h"
 #include "renderer/camera_third_person.h"
+
+#include "loader.h"
+
 
 // Scene
 #include "scene/scene.h"

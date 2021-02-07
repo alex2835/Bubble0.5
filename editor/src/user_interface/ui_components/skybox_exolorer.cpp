@@ -7,7 +7,7 @@ namespace Bubble
 	SkyboxExplorer::SkyboxExplorer()
 		: mViewport(800, 600)
 	{
-		mShader = ShaderLoader::Load("resources/shaders/skybox.glsl");
+		mShader = Loader::LoadShader("resources/shaders/skybox.glsl");
 		mCamera.Fov = PI / 3;
 	}
 
@@ -58,12 +58,12 @@ namespace Bubble
 				uint32_t textureId = mViewport.GetColorAttachmentRendererID();
 				ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + window_size.x, pos.y + window_size.y * 0.7f }, ImVec2(1, 1), ImVec2(0, 0));
 
-				mViewport.NewSize = { window_size.x, window_size.y * 0.6f };
+				mViewport.mNewSize = { window_size.x, window_size.y * 0.6f };
 
 				// ==================== Model list ====================
 				ImGui::BeginChild("Skybox list", ImVec2(window_size.x * 0.3f, window_size.y * 0.2f), true);
 				{
-					for (const auto& [path, skybox] : SkyboxLoader::sLoadedSkyboxes)
+					for (const auto& [path, skybox] : Loader::sLoadedSkyboxes)
 					{
 						size_t pos = path.find_last_of("/") + 1;
 						std::string name = path.substr(pos);
@@ -90,7 +90,7 @@ namespace Bubble
 					try
 					{
 						std::string path = OpenFileDialog();
-						SkyboxLoader::Load(path);
+						Loader::LoadSkybox(path);
 					}
 					catch (const std::exception& e)
 					{

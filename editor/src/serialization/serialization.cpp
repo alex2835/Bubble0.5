@@ -12,18 +12,18 @@ namespace Bubble
 		json["Scene"] = SerializeScene(scene->Registry);
 
 		// Save skyboxes
-		for (const auto& [path, skybox] : SkyboxLoader::sLoadedSkyboxes)
+		for (const auto& [path, skybox] : Loader::sLoadedSkyboxes)
 		{
 			json["Skybox"]["Paths"].push_back(path);
 		}
-		json["Skybox"]["First"] = SkyboxLoader::sLoadedSkyboxes[ui->mScenePanel.nSelectedFirts].first;
-		json["Skybox"]["Second"] = SkyboxLoader::sLoadedSkyboxes[ui->mScenePanel.nSelectedSecond].first;
+		json["Skybox"]["First"] = Loader::sLoadedSkyboxes[ui->mScenePanel.nSelectedFirts].first;
+		json["Skybox"]["Second"] = Loader::sLoadedSkyboxes[ui->mScenePanel.nSelectedSecond].first;
 		json["Skybox"]["Brightness"] = Renderer::sSkyboxBrightness;
 		json["Skybox"]["BlendFactor"] = Renderer::sSkyboxBlendFactor;
 		json["Skybox"]["Rotation"] = Renderer::sSkyboxRotation;
 
 		// Save models
-		for (const auto& [path, model] : ModelLoader::LoadedModels)
+		for (const auto& [path, model] : Loader::sLoadedModels)
 		{
 			json["Model"]["Paths"].push_back(path);
 		}
@@ -52,10 +52,10 @@ namespace Bubble
 		// Load skyboxes
 		for (const auto& path : json["Skybox"]["Paths"])
 		{
-			SkyboxLoader::Load(path);
+			Loader::LoadSkybox(path);
 		}
-		Renderer::sSkyboxFirst = SkyboxLoader::Load(json["Skybox"]["First"]);
-		Renderer::sSkyboxSecond = SkyboxLoader::Load(json["Skybox"]["Second"]);
+		Renderer::sSkyboxFirst = Loader::LoadSkybox(json["Skybox"]["First"]);
+		Renderer::sSkyboxSecond = Loader::LoadSkybox(json["Skybox"]["Second"]);
 		Renderer::sSkyboxBrightness = json["Skybox"]["Brightness"];
 		Renderer::sSkyboxBlendFactor = json["Skybox"]["BlendFactor"];
 		Renderer::sSkyboxRotation = json["Skybox"]["Rotation"];
@@ -63,7 +63,7 @@ namespace Bubble
 		// Load models
 		for (const auto& path : json["Model"]["Paths"])
 		{
-			ModelLoader::StaticModel(path);
+			Loader::StaticModel(path);
 		}
 
 		// Load scene

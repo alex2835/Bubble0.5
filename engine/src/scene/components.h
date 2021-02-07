@@ -3,8 +3,8 @@
 #include "nlohmann/json.hpp"
 #include "glm/glm.hpp"
 
+#include "loader.h"
 #include "renderer/light.h"
-#include "renderer/model_loader.h"
 
 #include <string>
 #include <algorithm>
@@ -219,7 +219,7 @@ namespace Bubble
 		{
 			nlohmann::json j;
 			auto iterator = *(std::find_if(
-				ModelLoader::LoadedModels.begin(), ModelLoader::LoadedModels.end(),
+				Loader::sLoadedModels.begin(), Loader::sLoadedModels.end(),
 				[&](const std::pair<std::string, Ref<Model>>& path_model) 
 				{
 					return path_model.second == *this;
@@ -233,7 +233,7 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			*this = ModelLoader::StaticModel(j["Model"]);
+			*this = Loader::StaticModel(j["Model"]);
 		}
 
 	};

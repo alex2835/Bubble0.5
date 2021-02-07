@@ -8,7 +8,7 @@ namespace Bubble
 		: mViewport(800, 600),
 		  mCamera(0)
 	{
-		mShader = ShaderLoader::Load("resources/shaders/phong.glsl");
+		mShader = Loader::LoadShader("resources/shaders/phong.glsl");
 		mLight = Light::CreateDirLight();
 	}
 
@@ -67,13 +67,13 @@ namespace Bubble
 				uint32_t textureId = mViewport.GetColorAttachmentRendererID();
 				ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + window_size.x, pos.y + window_size.y * 0.7f }, ImVec2(1, 1), ImVec2(0, 0));
 				
-				mViewport.NewSize = { window_size.x, window_size.y * 0.6f };
+				mViewport.mNewSize = { window_size.x, window_size.y * 0.6f };
 
 
 				// ==================== Model list ====================
 				ImGui::BeginChild("Models list", ImVec2(0, window_size.y * 0.2f), true);
 				{
-					for (const auto& [path, model] : ModelLoader::LoadedModels)
+					for (const auto& [path, model] : Loader::sLoadedModels)
 					{
 						size_t pos = path.find_last_of("/") + 1;
 						std::string name = path.substr(pos);
@@ -108,7 +108,7 @@ namespace Bubble
 					try
 					{
 						std::string path = OpenFileDialog();
-						ModelLoader::StaticModel(path);
+						Loader::StaticModel(path);
 					}
 					catch (const std::exception& e)
 					{
