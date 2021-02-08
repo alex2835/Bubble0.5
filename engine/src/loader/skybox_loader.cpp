@@ -18,7 +18,7 @@ namespace Bubble
 		Ref<Skybox> skybox = CreateRef<Skybox>();
 
 		auto [orig_data, orig_spec] = Texture2D::OpenRawImage(path);
-		 
+
 		if (!orig_data)
 			throw std::runtime_error("Skybox loading failed: " + path);
 
@@ -41,23 +41,36 @@ namespace Bubble
 		}
 
 		uint8_t* data[6];
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++)
+		{
 			data[i] = new uint8_t[width * height * channels];
 		}
 
+		// Parse 6 textures from single image
 		// 0-left 1-front 2-right 3-back
-		for (int i = 0; i < 4; i++) {
-			for (int y = 0; y < height; y++) {
-				memmove(&data[i][y * width * channels], &orig_data[(y + height) * orig_spec.Width * channels + width * channels * i], width * channels);
+		for (int i = 0; i < 4; i++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				int y_offset = height;
+				int raw_y_coord = (y + y_offset) * orig_spec.Width * channels;
+				int raw_width = width * channels;
+				memmove(&data[i][y * raw_width], &orig_data[raw_y_coord + raw_width * i], raw_width);
 			}
 		}
 		// 4-top
-		for (int y = 0; y < height; y++) {
-			memmove(&data[4][y * width * channels], &orig_data[(y + height * 2) * orig_spec.Width * channels + width * channels], width * channels);
+		for (int y = 0; y < height; y++)
+		{
+			int y_offset = height * 2;
+            int raw_y_coord = (y + y_offset) * orig_spec.Width * channels;
+            int raw_width = width * channels;
+			memmove(&data[4][y * raw_width], &orig_data[raw_y_coord + raw_width], raw_width);
 		}
 		// 5-bottom
 		for (int y = 0; y < height; y++) {
-			memmove(&data[5][y * width * channels], &orig_data[y * orig_spec.Width * channels + width * channels], width * channels);
+            int raw_y_coord = y * orig_spec.Width * channels;
+            int raw_width = width * channels;
+			memmove(&data[5][y * raw_width], &orig_data[raw_y_coord + raw_width], raw_width);
 		}
 
 		// Reorder to: right, left, top, bottom, front, back
@@ -66,11 +79,11 @@ namespace Bubble
 		std::swap(data[2], data[4]);
 		std::swap(data[3], data[5]);
 		std::swap(data[2], data[3]);
-
+		
 		skybox->mSkybox = Cubemap(data, spec);
 
-		free(orig_data);
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++)
+		{
 			delete data[i];
 		}
 		sLoadedSkyboxes->emplace(path, skybox);

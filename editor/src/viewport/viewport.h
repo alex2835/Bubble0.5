@@ -6,13 +6,6 @@
 
 namespace Bubble
 {
-	struct Viewport;
-	extern std::vector<Viewport*> sEditorViewports;
-
-	/*
-		Editor framebuffer abstraction
-	*/
-
 	struct Viewport : Framebuffer
 	{
 		std::string mName;
@@ -27,6 +20,8 @@ namespace Bubble
 		
 		Viewport(Viewport&& other) noexcept;
 		Viewport& operator= (Viewport&& other) noexcept;
+
+		void OnUpdate();
 
 		~Viewport();
 	};

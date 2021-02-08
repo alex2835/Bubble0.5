@@ -1,12 +1,12 @@
 {
  "Model": {
   "Paths": [
+   "resources/brick_wall/plane.obj",
    "resources/crysis/nanosuit.obj",
    "resources/grass_plane/grass_plane.obj",
    "resources/Tree/Tree.obj",
    "resources/altair/assassins-creed-altair.obj",
-   "resources/medival_house/medieval-house-2.obj",
-   "resources/brick_wall/plane.obj"
+   "resources/medival_house/medieval-house-2.obj"
   ]
  },
  "Scene": {
@@ -532,17 +532,17 @@
    6
   ]
  },
- "Skybox": {
-  "BlendFactor": 0.9440000057220459,
-  "Brightness": 1.0,
-  "First": "resources/skybox/skybox1.jpg",
-  "FirstID": 0,
-  "Paths": [
-   "resources/skybox/skybox1.jpg",
-   "resources/skybox/skybox6.jpg"
-  ],
-  "Rotation": 0.0560000017285347,
-  "Second": "resources/skybox/skybox6.jpg",
-  "SecondID": 1
- }
+  "Skybox": {
+    "BlendFactor": 0.0,
+    "Brightness": 1.0,
+    "First": "resources/skybox/skybox6.jpg",
+    "FirstID": 0,
+    "Paths": [
+      "resources/skybox/skybox1.jpg",
+      "resources/skybox/skybox6.jpg"
+    ],
+    "Rotation": 0.12524069845676422,
+    "Second": "resources/skybox/skybox1.jpg",
+    "SecondID": 1
+  }
 }

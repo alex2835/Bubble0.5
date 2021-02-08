@@ -3,10 +3,9 @@
 #include "engine.h"
 #include "core/window.h"
 
-#include "imgui_controll/imgui_controll.h"
 #include "scene_camera/scene_camera.h"
 
-#include "user_interface/user_interface.h"
+#include "ui/ui.h"
 
 #include "draw_tools/draw_selected_entity.h"
 #include "draw_tools/draw_boundingbox.h"
@@ -20,7 +19,6 @@ namespace Bubble
 	class EditorLayer : public Layer
 	{
 		UI mUI;
-		ImGuiControll mImGuiControll;
 		SceneCamera mSceneCamera;
 		Viewport mViewport;
 		Scene mScene;

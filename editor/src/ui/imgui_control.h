@@ -10,20 +10,19 @@
 
 namespace Bubble
 {
-    class ImGuiControll
+    class ImGuiControl
     {
 		Window* mWindow;
 
-		void ImGuiDocking();
 		void ImGuiMultiViewports();
 
     public:
-        ImGuiControll();
+        ImGuiControl(Window* window);
 
         void OnAttach();
         void OnDetach();
 
-        // Imgui scope
+        // ImGui scope
         void Begin();
         void End();
 

@@ -130,7 +130,8 @@ namespace Bubble
 
     void Renderer::SetViewport(const Framebuffer& framebuffer, uint32_t x, uint32_t y, uint32_t width, uint32_t height)
     {
-        if (width * height) {
+        if (width * height)
+        {
             sRenderPos = { x, y };
             sRenderSize = { width, height };
         }
@@ -271,14 +272,20 @@ namespace Bubble
 
     void Renderer::InitUBOS()
     {
-        // Init Projection View UBO
+        // ====== Init Projection View UBO ======
         BufferLayout UBOProjectionViewLayout{
             { GLSLDataType::Mat4, "Projection" },
             { GLSLDataType::Mat4, "View" }
         };
         sUBOPrjectionview = CreateScope<UniformBuffer>(0, UBOProjectionViewLayout);
 
-        // Init Lights UBO
+        // ======== Init view position UBO ========
+        BufferLayout UBOViewPosLayout{
+            { GLSLDataType::Float3, "ViewPos" },
+        };
+        sUBOViewPos = CreateScope<UniformBuffer>(2, UBOViewPosLayout);
+
+        // ========== Init Lights UBO ========== 
         BufferLayout layout{
             { GLSLDataType::Int,    "Type"},
             { GLSLDataType::Float,  "Brightness"},
@@ -294,12 +301,6 @@ namespace Bubble
         int nLights = 30;
         int reserved_data = 16; // for nLights
         sUBOLights = CreateScope<UniformBuffer>(1, layout, nLights, reserved_data);
-
-        // Init view position UBO
-        BufferLayout UBOViewPosLayout{
-            { GLSLDataType::Float3, "ViewPos" },
-        };
-        sUBOViewPos = CreateScope<UniformBuffer>(2, UBOViewPosLayout);
     }
 
 }

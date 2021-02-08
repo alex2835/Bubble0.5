@@ -4,14 +4,12 @@
 
 namespace Bubble
 {
-	std::vector<Viewport*> sEditorViewports;
-
-	Viewport::Viewport(int width, int height, const std::string& name)
+    Viewport::Viewport(int width, int height, const std::string& name)
 		: Framebuffer(width, height),
           mName(name),
           mNewSize(width, height)
 	{
-		sEditorViewports.push_back(this);
+
 	}
 
 	Viewport::Viewport(Viewport&& other) noexcept
@@ -22,10 +20,17 @@ namespace Bubble
 		other.mNewSize = glm::ivec2(0);
 	}
 
-	Viewport::~Viewport()
+    void Viewport::OnUpdate()
+    {
+		if (mNewSize != GetSize())
+		{
+			Resize(mNewSize);
+		}
+    }
+
+    Viewport::~Viewport()
 	{
-		auto iterator = std::ranges::find(sEditorViewports, this);
-		sEditorViewports.erase(iterator);
+
 	}
 
 	Viewport& Viewport::operator=(Viewport&& other) noexcept

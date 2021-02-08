@@ -1,210 +1,211 @@
 
 #include "texture.h"
 
-#include "stb_image.h"
-
 
 namespace Bubble
 {
-	Texture2D::Texture2D(const glm::vec4& color)
-	{
-		mWidth = 1;
-		mHeight = 1;
-		mInternalFormat = GL_RGBA;
-		mDataFormat = GL_UNSIGNED_BYTE;
+    Texture2D::Texture2D(const glm::vec4& color)
+    {
+        mSpecification.Width = 1;
+        mSpecification.Height = 1;
+        mSpecification.InternalFormat = GL_RGBA8;
+        mSpecification.DataFormat = GL_RGBA;
+        mSpecification.ChanelFormat = GL_FLOAT;
+        mSpecification.MinFiler = GL_NEAREST;
+        mSpecification.MagFilter = GL_NEAREST;
+        mSpecification.WrapS = GL_REPEAT;
+        mSpecification.WrapT = GL_REPEAT;
+        Invalidate();
+        SetData((void*)&color, 4);
+    }
 
-		glcall(glGenTextures(1, &mRendererID));
-		glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
-		glcall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &color));
+    Texture2D::Texture2D(const Texture2DSpecification& spec)
+        : mSpecification(spec)
+    {
+        Invalidate();
+    }
 
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+    Texture2D::Texture2D(uint32_t width, uint32_t height)
+        : mSpecification({ width, height })
+    {
+        Invalidate();
+    }
 
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-	}
+    Texture2D::Texture2D(const std::string& path, const Texture2DSpecification& spec)
+        : mSpecification(spec)
+    {
+        stbi_uc* data = nullptr;
+        int width, height, channels;
+
+        stbi_set_flip_vertically_on_load(spec.Flip);
+        data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
+        if (data == nullptr)
+            throw std::runtime_error("Failed to load image!\nPath: " + path);
+
+        mSpecification.Width = width;
+        mSpecification.Height = height;
+        SetTextureSpecChanels(mSpecification, channels);
+
+        Invalidate();
+        SetData(data, width * height * channels);
+        stbi_image_free(data);
+    }
+
+    Texture2D::Texture2D(Texture2D&& other) noexcept
+        : mRendererID(other.mRendererID),
+        mSpecification(other.mSpecification)
+    {
+        other.mSpecification.Width = 0;
+        other.mSpecification.Height = 0;
+        other.mRendererID = 0;
+    }
+
+    Texture2D& Texture2D::operator=(Texture2D&& other) noexcept
+    {
+        if (this != &other)
+        {
+            glDeleteTextures(1, &mRendererID);
+            mRendererID = other.mRendererID;
+            mSpecification = other.mSpecification;
+            other.mRendererID = 0;
+            other.mSpecification.Width = 0;
+            other.mSpecification.Height = 0;
+        }
+        return *this;
+    }
+
+    Texture2D::~Texture2D()
+    {
+        glDeleteTextures(1, &mRendererID);
+    }
+
+    void Texture2D::SetData(void* data, uint32_t size)
+    {
+        uint32_t channels = ExtractTextureSpecChannels(mSpecification);
+        BUBBLE_CORE_ASSERT(size == mSpecification.Width * mSpecification.Height * channels, "Data must be entire texture!");
+        glcall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
+            mSpecification.Width, mSpecification.Height, mSpecification.DataFormat, mSpecification.ChanelFormat, data));
+    }
+
+    void Texture2D::GetData(void* data, uint32_t size) const
+    {
+        Bind();
+        uint32_t channels = ExtractTextureSpecChannels(mSpecification);
+        BUBBLE_CORE_ASSERT(size == mSpecification.Width * mSpecification.Height * channels, "Data must be entire texture!");
+        glcall(glGetTexImage(GL_TEXTURE_2D, 0, mSpecification.DataFormat, mSpecification.ChanelFormat, data));
+    }
+
+    void Texture2D::Bind(uint32_t slot) const
+    {
+        glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTexture(GL_TEXTURE_2D, mRendererID);
+    }
+
+    std::tuple<Scope<uint8_t[]>, Texture2DSpecification>
+        Texture2D::OpenRawImage(const std::string& path, Texture2DSpecification spec)
+    {
+        uint8_t* data = nullptr;
+        int width, height, channels;
+
+        stbi_set_flip_vertically_on_load(spec.Flip);
+        data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
+        if (data == nullptr)
+            throw std::runtime_error("Failed to load image!\nPath: " + path);
+
+        spec.Width = width;
+        spec.Height = height;
+        SetTextureSpecChanels(spec, channels);
+
+        return { Scope<uint8_t[]>(data), spec };
+    }
+
+    void Texture2D::Resize(const glm::ivec2& new_size)
+    {
+        mSpecification.Width = new_size.x;
+        mSpecification.Height = new_size.y;
+        Invalidate();
+    }
+
+    void Texture2D::Invalidate()
+    {
+        glDeleteTextures(1, &mRendererID);
+
+        glcall(glGenTextures(1, &mRendererID));
+        glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
+        glcall(glTexImage2D(GL_TEXTURE_2D, 0, mSpecification.InternalFormat,
+            mSpecification.Width, mSpecification.Height, 0, mSpecification.DataFormat, mSpecification.ChanelFormat, nullptr));
+
+        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mSpecification.MinFiler));
+        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mSpecification.MagFilter));
+
+        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, mSpecification.WrapS));
+        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, mSpecification.WrapT));
+
+        if (mSpecification.WrapS == GL_CLAMP_TO_BORDER || mSpecification.WrapT == GL_CLAMP_TO_BORDER)
+        {
+            glcall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, (float*)&mSpecification.BorderColor));
+        }
+
+        if (mSpecification.AnisotropicFiltering)
+        {
+            GLfloat value;
+            glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &value);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, value);
+        }
+
+        if (mSpecification.MinMap && !mSpecification.AnisotropicFiltering)
+        {
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+    }
 
 
-	Texture2D::Texture2D(const Texture2DSpecification& spec)
-		: mWidth(spec.Width),
-		  mHeight(spec.Height)
-	{
-		mInternalFormat = spec.InternalFormat;
-		mDataFormat = spec.DataFormat;
+    void SetTextureSpecChanels(Texture2DSpecification& spec, int channels)
+    {
+        switch (channels)
+        {
+        case 1:
+            spec.InternalFormat = GL_R8;
+            spec.DataFormat = GL_RED;
+            break;
+        case 3:
+            spec.InternalFormat = GL_RGB8;
+            spec.DataFormat = GL_RGB;
+            break;
+        case 4:
+            spec.InternalFormat = GL_RGBA8;
+            spec.DataFormat = GL_RGBA;
+            break;
+        default:
+            BUBBLE_CORE_ASSERT(false, "Format not supported!");
+        }
+    }
 
-		glcall(glGenTextures(1, &mRendererID));
-		glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
-		glcall(glTexImage2D(GL_TEXTURE_2D, 0, spec.InternalFormat, spec.Width, spec.Height, 0, spec.DataFormat, GL_UNSIGNED_BYTE, nullptr));
-		
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, spec.MinFiler));
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, spec.MagFilter));
-		
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, spec.WrapS));
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, spec.WrapT));
+    uint32_t ExtractTextureSpecChannels(const Texture2DSpecification& spec)
+    {
+        uint32_t bpp = 0;
+        switch (spec.DataFormat)
+        {
+        case GL_RGBA:
+            bpp = 4;
+            break;
+        case GL_RGB:
+            bpp = 3;
+            break;
+        case GL_RED:
+            bpp = 1;
+            break;
+        default:
+            BUBBLE_CORE_ASSERT(false, "Format not supported!");
+        }
+        return bpp;
+    }
 
-		if (spec.WrapS == GL_CLAMP_TO_BORDER || spec.WrapT == GL_CLAMP_TO_BORDER)
-		{
-			glcall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, (float*)&spec.BorderColor));
-		}
-
-	}
-
-
-	Texture2D::Texture2D(const std::string& path, const Texture2DSpecification& spec)
-	{
-		stbi_set_flip_vertically_on_load(spec.Flip);
-		int width, height, channels;
-		stbi_uc* data = nullptr;
-		
-		data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		
-		if (data == nullptr)
-			throw std::runtime_error("Failed to load image!\nPath: " + path);
-
-		mWidth = width;
-		mHeight = height;
-
-		GLenum internal_format = 0;
-		GLenum data_format = 0;
-		if (channels == 1)
-		{
-			internal_format = GL_R8;
-			data_format = GL_RED;
-		}
-		else if (channels == 3)
-		{
-			internal_format = GL_RGB8;
-			data_format = GL_RGB;
-		}
-		else if (channels == 4)
-		{
-			internal_format = GL_RGBA8;
-			data_format = GL_RGBA;
-		}
-		
-		mInternalFormat = internal_format;
-		mDataFormat = data_format;
-
-		BUBBLE_CORE_ASSERT(internal_format & data_format, "Format not supported!");
-
-		glcall(glGenTextures(1, &mRendererID));
-		glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
-		glcall(glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0, data_format, GL_UNSIGNED_BYTE, data));
-		
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, spec.MinFiler));
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, spec.MagFilter));
-
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, spec.WrapS));
-		glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, spec.WrapT));
-
-		if (spec.WrapS == GL_CLAMP_TO_BORDER || spec.WrapT == GL_CLAMP_TO_BORDER)
-		{
-			glcall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, (float*)&spec.BorderColor));
-		}
-
-		// Anisotropy filtering
-		GLfloat value;
-		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &value);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, value);
-
-		//glGenerateMipmap(GL_TEXTURE_2D);
-		stbi_image_free(data);
-	}
-
-	Texture2D::Texture2D(Texture2D&& other) noexcept
-		: mWidth(other.mWidth),
-		  mHeight(other.mHeight),
-		  mDataFormat(other.mDataFormat),
-		  mRendererID(other.mRendererID),
-		  mInternalFormat(other.mInternalFormat)
-	{
-		other.mWidth = 0;
-		other.mHeight = 0;
-		other.mRendererID = 0;
-	}
-
-	Texture2D& Texture2D::operator=(Texture2D&& other) noexcept
-	{
-		if (this != &other)
-		{
-			glDeleteTextures(1, &mRendererID);
-			mWidth = other.mWidth;
-			mHeight = other.mHeight;
-			mDataFormat = other.mDataFormat;
-			mRendererID = other.mRendererID;
-			mInternalFormat = other.mInternalFormat;
-			other.mWidth = 0;
-			other.mHeight = 0;
-			other.mRendererID = 0;
-		}
-		return *this;
-	}
-
-	Texture2D::~Texture2D()
-	{
-		glDeleteTextures(1, &mRendererID);
-	}
-
-	void Texture2D::SetData(void* data, uint32_t size)
-	{
-		uint32_t bpp = 0;
-		if (mDataFormat == GL_RGBA) {
-			bpp = 4;
-		}
-		else if (mDataFormat == GL_RGB) {
-			bpp = 3;
-		}
-		else if (mDataFormat == GL_RED) {
-			bpp = 1;
-		}
-
-		BUBBLE_CORE_ASSERT(size == mWidth * mHeight * bpp, "Data must be entire texture!");
-		glTexSubImage2D(mRendererID, 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
-	}
-
-	void Texture2D::Bind(uint32_t slot) const
-	{
-		glActiveTexture(GL_TEXTURE0 + slot);
-		glBindTexture(GL_TEXTURE_2D, mRendererID);
-	}
-
-	std::tuple<uint8_t*, Texture2DSpecification>
-		Texture2D::OpenRawImage(const std::string& path)
-	{
-		//stbi_set_flip_vertically_on_load(spec.Flip);
-		Texture2DSpecification spec;
-
-		int width, height, channels;
-		uint8_t* data = nullptr;
-
-		data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		
-		if (data == nullptr) {
-			throw std::runtime_error("Failed to load image!\nPath: " + path);
-		}
-		spec.Width = width;
-		spec.Height = height;
-
-		if (channels == 1)
-		{
-			spec.InternalFormat = GL_R8;
-			spec.DataFormat = GL_RED;
-		}
-		else if (channels == 3)
-		{
-			spec.InternalFormat = GL_RGB8;
-			spec.DataFormat = GL_RGB;
-		}
-		else if (channels == 4)
-		{
-			spec.InternalFormat = GL_RGBA8;
-			spec.DataFormat = GL_RGBA;
-		}
-		else {
-			BUBBLE_CORE_ASSERT(spec.InternalFormat & spec.DataFormat, "Format not supported!");
-		}
-		
-		return { data, spec };
-	}
+    uint32_t GetTextureSize(const Texture2DSpecification& spec)
+    {
+        return spec.Width * spec.Height * ExtractTextureSpecChannels(spec);
+    }
 
 }

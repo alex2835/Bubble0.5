@@ -1,15 +1,14 @@
 
-#include "imgui_controll.h"
+#include "imgui_control.h"
 
 
 namespace Bubble
 {
-	ImGuiControll::ImGuiControll()
-	{
-        mWindow = (Window*)&Application::GetMainWindow();
-	}
+	ImGuiControl::ImGuiControl(Window* window)
+        : mWindow(window)
+	{}
 
-	void ImGuiControll::OnAttach()
+	void ImGuiControl::OnAttach()
     {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -21,6 +20,7 @@ namespace Bubble
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
         //io.ConfigViewportsNoAutoMerge = true;
         //io.ConfigViewportsNoTaskBarIcon = true;
+        io.ConfigWindowsMoveFromTitleBarOnly = true;
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
@@ -39,7 +39,7 @@ namespace Bubble
         ImGui_ImplOpenGL3_Init(mWindow->GetGLSLVersion());
     }
 
-    void ImGuiControll::OnDetach()
+    void ImGuiControl::OnDetach()
     {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplSDL2_Shutdown();
@@ -47,16 +47,16 @@ namespace Bubble
     }
 
 
-    void ImGuiControll::Begin()
+    void ImGuiControl::Begin()
     {
-		Framebuffer::BindDefault();
+		Framebuffer::BindMainWindow();
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(mWindow->GetWindow());
         ImGui::NewFrame();
     }
 
-    void ImGuiControll::End()
+    void ImGuiControl::End()
     {
         ImGui::EndFrame();
         // Rendering
@@ -67,7 +67,7 @@ namespace Bubble
         ImGuiMultiViewports();
     }
 
-	void ImGuiControll::OnEvent(SDL_Event& event)
+	void ImGuiControl::OnEvent(SDL_Event& event)
     {
         ImGui_ImplSDL2_ProcessEvent(&event);
     }
@@ -75,7 +75,7 @@ namespace Bubble
 
     // ========================= ImGui multi viewports rendering ==========================
 
-    void ImGuiControll::ImGuiMultiViewports()
+    void ImGuiControl::ImGuiMultiViewports()
     {
         ImGuiIO& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -91,7 +91,7 @@ namespace Bubble
 
     // ============================= ImGui docking =================================
     
-	void ImGuiControll::BeginMenuBar()
+	void ImGuiControl::BeginMenuBar()
 	{
 		static bool* p_open = new bool(true);
 		static bool opt_fullscreen_persistant = true;
@@ -141,7 +141,7 @@ namespace Bubble
 
 	}
 
-	void ImGuiControll::EndMenuBar()
+	void ImGuiControl::EndMenuBar()
 	{
 		ImGui::End();
 	}

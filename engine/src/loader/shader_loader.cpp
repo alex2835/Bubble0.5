@@ -27,9 +27,9 @@ namespace Bubble
 
 
 	Ref<Shader> Loader::LoadShader(const std::string& name,
-						     const std::string& vertex,
-						     const std::string& fragment,
-						     const std::string& geometry)
+								   const std::string& vertex,
+								   const std::string& fragment,
+								   const std::string& geometry)
 	{
 		Ref<Shader> shader = CreateRef<Shader>();
 		CompileShaders(*shader, vertex, fragment, geometry);
@@ -77,16 +77,16 @@ namespace Bubble
 				shaders[type] << line << '\n';
 			}
 		}
-		vertex = shaders[VERTEX].str();
+		vertex =   shaders[VERTEX].str();
 		fragment = shaders[FRAGMENT].str();
 		geometry = shaders[GEOMETRY].str();
 	}
 
 
 	void Loader::CompileShaders(Shader& shader,
-		const std::string& vertex_source,
-		const std::string& fragment_source,
-		const std::string& geometry_source)
+								const std::string& vertex_source,
+								const std::string& fragment_source,
+								const std::string& geometry_source)
 	{
 		// Vertex shaders
 		GLint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -132,7 +132,7 @@ namespace Bubble
 				glGetShaderInfoLog(fragment_shader, max_length, &max_length, (GLchar*)log.data());
 				glDeleteShader(fragment_shader);
 
-				// free recourses
+				// free resources
 				glDeleteShader(vertex_shader);
 				glDeleteShader(fragment_shader);
 
@@ -204,8 +204,6 @@ namespace Bubble
 				throw std::runtime_error("Shader compilation failed");
 			}
 		}
-
-		// Now it's a part of shader program
 		glDeleteShader(geometry_shader);
 		glDeleteShader(vertex_shader);
 		glDeleteShader(fragment_shader);

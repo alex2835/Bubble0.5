@@ -1,10 +1,6 @@
 #pragma once
 
-#include "core/input.h"
-#include "core/time.h"
-#include "renderer/camera_free.h"
-
-#include "SDL2/SDL.h"
+#include "engine.h"
 
 namespace Bubble
 {

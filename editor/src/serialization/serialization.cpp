@@ -16,8 +16,8 @@ namespace Bubble
 		{
 			json["Skybox"]["Paths"].push_back(path);
 		}
-		json["Skybox"]["First"] =  ui->mScenePanel.SelectedSkyboxNameFirst;
-		json["Skybox"]["Second"] = ui->mScenePanel.SelectedSkyboxNameSecond;
+		json["Skybox"]["First"] =  ui->mScenePanel->SelectedSkyboxNameFirst;
+		json["Skybox"]["Second"] = ui->mScenePanel->SelectedSkyboxNameSecond;
 		json["Skybox"]["Brightness"] = Renderer::sSkyboxBrightness;
 		json["Skybox"]["BlendFactor"] = Renderer::sSkyboxBlendFactor;
 		json["Skybox"]["Rotation"] = Renderer::sSkyboxRotation;
@@ -28,8 +28,8 @@ namespace Bubble
 			json["Model"]["Paths"].push_back(path);
 		}
 
-		json["Skybox"]["FirstID"] = ui->mScenePanel.SelectedSkyboxIDFirst;
-		json["Skybox"]["SecondID"] = ui->mScenePanel.SelectedSkyboxIDSecond;
+		json["Skybox"]["FirstID"] = ui->mScenePanel->SelectedSkyboxFirstID;
+		json["Skybox"]["SecondID"] = ui->mScenePanel->SelectedSkyboxSecondID;
 
 		// Dump
 		std::ofstream fstream(path);
@@ -69,8 +69,8 @@ namespace Bubble
 		DeserializeScene(scene->Registry, json["Scene"]);
 
 		// Load UI state
-		ui->mScenePanel.SelectedSkyboxIDFirst = json["Skybox"]["FirstID"];
-		ui->mScenePanel.SelectedSkyboxIDSecond = json["Skybox"]["SecondID"];
+		ui->mScenePanel->SelectedSkyboxFirstID = json["Skybox"]["FirstID"];
+		ui->mScenePanel->SelectedSkyboxSecondID = json["Skybox"]["SecondID"];
 	}
 
 }
