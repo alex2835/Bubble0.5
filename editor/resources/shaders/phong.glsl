@@ -125,15 +125,15 @@ void main()
     vec4 specular = texture(material.specular0, v_TexCoords);
 
     vec3 norm;
-    if (u_NormalMapping)
-    {
-        norm = texture(material.normal0, v_TexCoords).rgb;
-        norm = normalize(norm * 2.0f - 1.0f);
-        norm = normalize(v_TBN * norm);
-    }
-    else {
+    //if (u_NormalMapping)
+    //{
+    //    norm = texture(material.normal0, v_TexCoords).rgb;
+    //    norm = normalize(norm * 2.0f - 1.0f);
+    //    norm = normalize(v_TBN * norm);
+    //}
+    //else {
         norm = normalize(v_Normal);
-    }
+    //}
 
     vec3 view_dir = normalize(u_ViewPos - v_FragPos);
 

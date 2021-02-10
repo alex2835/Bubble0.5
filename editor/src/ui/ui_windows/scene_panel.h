@@ -31,15 +31,16 @@ namespace Bubble
                     {
                         SelectedSkyboxNameFirst = path;
                     }
-                    else if (i == SelectedSkyboxSecondID)
+                    if (i == SelectedSkyboxSecondID)
                     {
-                        SelectedSkyboxNameFirst = path;
+                        SelectedSkyboxNameSecond = path;
                     }
 
                     size_t start_pos = path.find_last_of("/") + 1;
                     size_t end_pos = path.find_last_of(".");
                     std::string name = path.substr(start_pos, end_pos - start_pos);
                     names += name + '\0';
+                    i++;
                 }
 
                 // Skyboxes

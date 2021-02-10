@@ -1,8 +1,8 @@
 {
  "Model": {
   "Paths": [
-   "resources/brick_wall/plane.obj",
    "resources/crysis/nanosuit.obj",
+   "resources/brick_wall/plane.obj",
    "resources/grass_plane/grass_plane.obj",
    "resources/Tree/Tree.obj",
    "resources/altair/assassins-creed-altair.obj",
@@ -68,7 +68,7 @@
    {
     "Component": {
      "Position": [
-      -15.5,
+      -13.100000381469727,
       -3.799999952316284,
       -14.899999618530273
      ]
@@ -260,7 +260,7 @@
       0.0,
       1.0,
       0.0,
-      -15.5,
+      -13.100000381469727,
       -3.799999952316284,
       -14.899999618530273,
       1.0
@@ -386,7 +386,7 @@
    {
     "Component": {
      "Light": {
-      "Brightness": 0.0,
+      "Brightness": 1.0399999618530273,
       "Color": [
        1.0,
        1.0,
@@ -395,9 +395,9 @@
       "Constant": 1.0,
       "CutOff": 0.0,
       "Direction": [
+       0.5329999923706055,
        -1.0,
-       -0.6389999985694885,
-       -0.705345630645752
+       -1.0
       ],
       "Distance": 0.5,
       "Linear": 0.057500001043081284,
@@ -429,15 +429,15 @@
        -0.24300000071525574,
        -0.3889999985694885
       ],
-      "Distance": 0.9570000171661377,
-      "Linear": 0.004048797767609358,
+      "Distance": 0.0,
+      "Linear": 0.699999988079071,
       "OuterCutOff": 20.570999145507813,
       "Position": [
        -11.199999809265137,
        48.150001525878906,
        69.44999694824219
       ],
-      "Quadratic": 9.828891779761761e-05,
+      "Quadratic": 1.7999999523162842,
       "Type": 2
      }
     },
@@ -459,15 +459,15 @@
        0.0,
        0.0
       ],
-      "Distance": 0.8809999823570251,
-      "Linear": 0.00916299968957901,
+      "Distance": 0.0,
+      "Linear": 0.699999988079071,
       "OuterCutOff": 0.0,
       "Position": [
        -26.25,
        19.0,
        -20.950000762939453
       ],
-      "Quadratic": 0.0003544999926816672,
+      "Quadratic": 1.7999999523162842,
       "Type": 1
      }
     },
@@ -532,17 +532,17 @@
    6
   ]
  },
-  "Skybox": {
-    "BlendFactor": 0.0,
-    "Brightness": 1.0,
-    "First": "resources/skybox/skybox6.jpg",
-    "FirstID": 0,
-    "Paths": [
-      "resources/skybox/skybox1.jpg",
-      "resources/skybox/skybox6.jpg"
-    ],
-    "Rotation": 0.12524069845676422,
-    "Second": "resources/skybox/skybox1.jpg",
-    "SecondID": 1
-  }
+ "Skybox": {
+  "BlendFactor": 0.0,
+  "Brightness": 1.0,
+  "First": "resources/skybox/skybox1.jpg",
+  "FirstID": 0,
+  "Paths": [
+   "resources/skybox/skybox1.jpg",
+   "resources/skybox/skybox6.jpg"
+  ],
+  "Rotation": 0.13342389464378357,
+  "Second": "resources/skybox/skybox6.jpg",
+  "SecondID": 1
+ }
 }
