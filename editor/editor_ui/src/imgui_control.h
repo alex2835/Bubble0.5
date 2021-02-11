@@ -1,7 +1,6 @@
 #pragma once
 
-#include "core/window.h"
-#include "core/application.h"
+#include "engine.h"
 
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"

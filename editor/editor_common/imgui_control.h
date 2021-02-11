@@ -11,6 +11,7 @@ namespace Bubble
     struct ImGuiControl
     {
 		Window* mWindow;
+        ImGuiContext* mContext;
 
         ImGuiControl(Window* window)
             : mWindow(window)
@@ -20,7 +21,7 @@ namespace Bubble
         {
             // Setup Dear ImGui context
             IMGUI_CHECKVERSION();
-            ImGui::CreateContext();
+            mContext = ImGui::CreateContext();
             ImGuiIO& io = ImGui::GetIO();
             io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
             //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -29,7 +30,7 @@ namespace Bubble
             //io.ConfigViewportsNoAutoMerge = true;
             //io.ConfigViewportsNoTaskBarIcon = true;
             io.ConfigWindowsMoveFromTitleBarOnly = true;
-            io.IniFilename = "../../../../default_imgui.ini";
+            io.IniFilename = "../../../../../default_imgui.ini";
 
             // Setup Dear ImGui style
             ImGui::StyleColorsDark();

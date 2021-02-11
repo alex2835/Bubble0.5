@@ -77,7 +77,7 @@ struct DLLHotReloader
 
         if (mLastUpdateTime != lib_update_time || mLibrary == nullptr)
         {
-            std::this_thread::sleep_for(1ms);
+            std::this_thread::sleep_for(500ms);
 
             delete mLibrary;
             mLibrary = nullptr;

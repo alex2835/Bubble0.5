@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.18)
 project(BubbleEditorApp VERSION 0.0.0)
  
 file(GLOB_RECURSE SRCS *.cpp)
@@ -6,9 +6,10 @@ file(GLOB_RECURSE HDRS *.h)
 
 add_executable(BubbleEditorApp ${SRCS} ${HDRS})
 
-target_link_libraries(BubbleEditorApp Engine)
 target_link_libraries(BubbleEditorApp imgui)
+target_link_libraries(BubbleEditorApp Engine)
 target_link_libraries(BubbleEditorApp nativefiledialog)
+target_link_libraries(BubbleEditorApp BubbleEditorUI)
 
 set_target_properties(
     BubbleEditorApp PROPERTIES
@@ -22,7 +23,7 @@ add_definitions(-D"_NO_DEBUG_HEAP=1")
 
 # Include directories
 target_include_directories(
-    BubbleEditorApp PUBLIC
+    BubbleEditorApp PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../editor_common
     ${CMAKE_SOURCE_DIR}/engine/include
@@ -30,6 +31,8 @@ target_include_directories(
     ${CMAKE_SOURCE_DIR}/dependencies/nativefiledialog/src/include
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include
 )
+
+target_precompile_headers(BubbleEditorApp REUSE_FROM Engine)
 
 # Temp resources
 add_custom_command(TARGET BubbleEditorApp PRE_BUILD

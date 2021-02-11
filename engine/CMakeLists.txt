@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.18)
 
 project(Engine VERSION 0.0.0)
 
@@ -21,7 +21,6 @@ add_definitions(-D"_NO_DEBUG_HEAP=1")
 # Libraries
 target_link_libraries(Engine spdlog)
 target_link_libraries(Engine stb_image)
-
 
 # Include directories
 target_include_directories(
@@ -48,6 +47,16 @@ target_link_directories(
     ${CMAKE_SOURCE_DIR}/dependencies/assimp/lib
 )
 
+target_precompile_headers(
+    Engine PUBLIC
+    ${CMAKE_SOURCE_DIR}/dependencies/spdlog/include/spdlog/spdlog.h
+    ${CMAKE_SOURCE_DIR}/dependencies/spdlog/include/spdlog/sinks/stdout_color_sinks.h
+    ${CMAKE_SOURCE_DIR}/dependencies/entt/include/entt/entt.hpp
+    ${CMAKE_SOURCE_DIR}/dependencies/nlohmann_json/include/nlohmann/json.hpp
+    <string>
+    <vector>
+    <unordered_map>
+ )
 
 if (WIN32)
     
@@ -68,3 +77,4 @@ if (WIN32)
 else()
     message(FATAL, "Platfrom not supported")
 endif()
+

@@ -1,8 +1,17 @@
 
 #include "loader.h"
 
+#include "assimp/Importer.hpp"
+#include "assimp/Exporter.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+
 namespace Bubble
 {
+	void ProcessNode(Model& model, aiNode* node, const aiScene* scene, const std::string& path);
+	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path);
+	DefaultMaterial LoadMaterialTextures(aiMaterial* mat, const std::string& path);
+
 	Ref<Model> Loader::StaticModel(std::string path)
 	{
         if (auto model = mLoadedModels.find(path);
@@ -32,7 +41,7 @@ namespace Bubble
 	}
 
 	// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-	void Loader::ProcessNode(Model& model, aiNode* node, const aiScene* scene, const std::string& path)
+	void ProcessNode(Model& model, aiNode* node, const aiScene* scene, const std::string& path)
 	{
 		for (int i = 0; i < node->mNumMeshes; i++)
 		{
@@ -45,7 +54,7 @@ namespace Bubble
 		}
 	}
 	
-	Mesh Loader::ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path)
+	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path)
 	{
 		VertexData vertices;
 		std::vector<uint32_t> indices;
@@ -94,7 +103,7 @@ namespace Bubble
 	
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.
 	// the required info is returned as a Texture struct.
-	DefaultMaterial Loader::LoadMaterialTextures(aiMaterial* mat, const std::string& path)
+	DefaultMaterial LoadMaterialTextures(aiMaterial* mat, const std::string& path)
 	{
 		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT, aiTextureType_NORMALS };
 		

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.18)
 project(Bubble VERSION 0.0.0)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -13,6 +13,8 @@ else()
 	message(FATAL_ERROR "Please set variable: CMAKE_BUILD_TYPE (Debug or Release)")
 endif()
 
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
+
 add_subdirectory(engine)
 add_subdirectory(editor)
 
@@ -20,4 +22,3 @@ add_subdirectory(dependencies/nativefiledialog)
 add_subdirectory(dependencies/spdlog)
 add_subdirectory(dependencies/imgui)
 add_subdirectory(dependencies/stb_image)
-

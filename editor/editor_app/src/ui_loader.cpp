@@ -5,11 +5,11 @@
 namespace Bubble
 {
 	UILoader::UILoader(Window* window)
-        : mImGuiControl(window)
-		  //mUIDLL("../editor_ui/BubbleEditorUI")
+        : mImGuiControl(window),
+		  mUIDLL("../editor_ui/BubbleEditorUI")
     {
         mImGuiControl.OnAttach();
-		//mUIDLL.Call<void()>("OnInit");
+		mUIDLL.Call<void(ImGuiContext*)>("OnInit", mImGuiControl.mContext);
     }
 
 	UILoader::~UILoader()
@@ -25,18 +25,15 @@ namespace Bubble
 		//mUIDLL.Call<void()>("OnMenuDraw");
 		mImGuiControl.EndMenuBar();
 
-        bool open = true;
-        ImGui::ShowDemoWindow(&open);
-
-		//mUIDLL.Call<void()>("OnDraw");
+		mUIDLL.Call<void()>("OnDraw");
 		mImGuiControl.End();
 		
 		//mUIDLL.Call<void()>("OnUpdate");
-		//
-		//if (mUIDLL.CheckForUpdate())
-		//{
-        //    mUIDLL.Call<void()>("OnInit");
-		//}
+
+		if (mUIDLL.CheckForUpdate())
+		{
+            mUIDLL.Call<void(ImGuiContext*)>("OnInit", mImGuiControl.mContext);
+		}
 	}
 
     void UILoader::OnEvent(SDL_Event& event)

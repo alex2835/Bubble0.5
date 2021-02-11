@@ -5,11 +5,6 @@
 #include "skybox.h"
 #include "shader.h"
 
-#include "assimp/Importer.hpp"
-#include "assimp/Exporter.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-
 #include <unordered_map>
 #include <exception>
 
@@ -27,10 +22,10 @@ namespace Bubble
     public:
         Ref<Model> StaticModel(std::string path);
 
-    private:
-        void ProcessNode(Model& model, aiNode* node, const aiScene* scene, const std::string& path);
-        Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path);
-        DefaultMaterial LoadMaterialTextures(aiMaterial* mat, const std::string& path);
+    //private:
+    //    void ProcessNode(Model& model, aiNode* node, const aiScene* scene, const std::string& path);
+    //    Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path);
+    //    DefaultMaterial LoadMaterialTextures(aiMaterial* mat, const std::string& path);
 
         // ================= Shaders ================= 
     public:

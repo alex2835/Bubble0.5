@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.18)
 project(BubbleEditorUI VERSION 0.0.0)
 
 file(GLOB_RECURSE SRCS *.cpp)
@@ -20,8 +20,18 @@ target_link_libraries(BubbleEditorUI nativefiledialog)
 
 target_include_directories(
     BubbleEditorUI PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../editor_common
     ${CMAKE_SOURCE_DIR}/engine/include
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/include
 )
+
+target_precompile_headers(
+    BubbleEditorUI PRIVATE
+    ${CMAKE_SOURCE_DIR}/engine/include/engine.h
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui.h
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui_impl_opengl3.h
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui_impl_sdl.h
+)
+

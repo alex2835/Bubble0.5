@@ -22,7 +22,7 @@ namespace Bubble
         //static Scope<std::vector<Ref<UIModule>>> sModules;
 
 		ImGuiControl mImGuiControl;
-        //DLLHotReloader mUIDLL;
+        DLLHotReloader mUIDLL;
         UIArgs mArgs;
 		
         // Default modules
