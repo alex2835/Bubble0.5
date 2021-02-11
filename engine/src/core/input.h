@@ -1,32 +1,35 @@
 #pragma once
 
-#include "glm/glm.hpp"
-#include "SDL2/SDL_events.h"
-
 #include "core/window.h"
 #include "core/application.h"
-
+#include "glm/glm.hpp"
 
 namespace Bubble
 {
 	class Input
 	{
-		static short sKeyMap[256];
-		static int sMouseKeyMap[16];
-		static int sMouseWheelOffset;
+		Window* mWindow;
+		int mKeyMap[256];
+		int mMouseKeyMap[16];
+		int mMouseKeyMapLast[16];
+		int mMouseWheelOffset;
 
-		static int sMousePosX;
-		static int sMousePosY;
-		static int sMouseRelPosX;
-		static int sMouseRelPosY;
+		int mMousePosX;
+		int mMousePosY;
+		int mMouseRelPosX;
+		int mMouseRelPosY;
 
 	public:
-		static void OnEvent(SDL_Event& event);
+		Input(Window* window)
+			: mWindow(window)
+		{}
+
+		void OnEvent(SDL_Event& event);
 		
 		// Codes: SDLK_a, SDLK_1, ...
-		static bool IsKeyPressed(SDL_Keycode code);
+		bool IsKeyPressed(SDL_Keycode code);
 		// Codes: SDLK_a, SDLK_1, ...
-		static bool IsKeyClick(SDL_Keycode code);
+		bool IsKeyClick(SDL_Keycode code);
 
 		/*
 		*	Codes:
@@ -36,28 +39,28 @@ namespace Bubble
 			SDL_BUTTON_X1
 			SDL_BUTTON_X2
 		*/
-		static bool IsMouseButtonPressed(int button);
+		bool IsMouseButtonPressed(int button);
 
-		static glm::ivec2 GetMousePosition();
-		static int GetMouseX();
-		static int GetMouseY();
+		glm::ivec2 GetMousePosition();
+		int GetMouseX();
+		int GetMouseY();
 
-		static glm::ivec2 GetMouseRelPosition();
-		static int GetMouseRelX();
-		static int GetMouseRelY();
+		glm::ivec2 GetMouseRelPosition();
+		int GetMouseRelX();
+		int GetMouseRelY();
 
 		// return values between 0.0f and 1.0f
-		static glm::vec2 fGetMousePosition();
-		static float fGetMouseX();
-		static float fGetMouseY();
+		glm::vec2 fGetMousePosition();
+		float fGetMouseX();
+		float fGetMouseY();
 
-		static glm::vec2 fGetMouseRelPosition();
-		static float fGetMouseRelX();
-		static float fGetMouseRelY();
+		glm::vec2 fGetMouseRelPosition();
+		float fGetMouseRelX();
+		float fGetMouseRelY();
 
-		static int GetMouseWheelOffset();
+		int GetMouseWheelOffset();
 
 		// Flush all relative information
-		static void NewFrame();
+		void NewFrame();
 	};
 }

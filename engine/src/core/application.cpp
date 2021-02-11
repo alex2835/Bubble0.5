@@ -1,16 +1,10 @@
 
-#include "engine.h"
 #include "application.h"
 
 namespace Bubble
 {
-    Window* Application::sMainWindow = nullptr;
-
-
 	Application::Application()
     {
-        InitEngine();
-        Application::sMainWindow = &mWindow;
     }
 
 	void Application::PushLayer(Layer* layer)
@@ -33,16 +27,11 @@ namespace Bubble
         mLayerArray.Swap(id_1, id_2);
 	}
 
-	Window& Application::GetMainWindow()
-	{
-        return *sMainWindow;
-	}
-
 	void Application::Run()
 	{
         while (mWindow.IsOpen())
         {
-			Input::NewFrame();
+			//Input::NewFrame();
             mTimer.Update();
 
             // Retrieve and send events
@@ -54,7 +43,7 @@ namespace Bubble
                     layer->OnEvent(event);
                 }
                 mWindow.OnEvent(event);
-                Input::OnEvent(event);
+                //Input::OnEvent(event);
             }
 
             // Update layers

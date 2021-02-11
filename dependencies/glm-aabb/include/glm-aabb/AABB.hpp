@@ -1,7 +1,7 @@
 #pragma once
 
-#include <algorithm>
 #include <glm/glm.hpp>
+#include <algorithm>
 
 /// Standalone axis aligned bounding box implemented built on top of GLM.
 class AABB
@@ -257,7 +257,7 @@ inline AABB AABB::transform(const glm::mat4& transform)
 	AABB new_aabb;
 	for (int i = 0; i < 8; i++)
 	{
-		new_aabb.extend(transform * glm::vec4(pos[i].xyz, 1));
+		new_aabb.extend(transform * glm::vec4(pos[i], 1));
 	}
 	return new_aabb;
 }

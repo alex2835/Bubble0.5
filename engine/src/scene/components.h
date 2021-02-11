@@ -4,7 +4,7 @@
 #include "glm/glm.hpp"
 
 #include "loader.h"
-#include "renderer/light.h"
+#include "light.h"
 
 #include <string>
 #include <algorithm>
@@ -218,21 +218,21 @@ namespace Bubble
 		nlohmann::json Serialize() const
 		{
 			nlohmann::json j;
-			auto iterator = std::ranges::find_if(*Loader::sLoadedModels,
-				[&](const std::pair<std::string, Ref<Model>>& path_model) 
-				{
-					return path_model.second == *this;
-				}
-			);
-
-			const std::string& path = iterator->first;
-			j["Model"] = path;
+			//auto iterator = std::ranges::find_if(*Loader::sLoadedModels,
+			//	[&](const std::pair<std::string, Ref<Model>>& path_model) 
+			//	{
+			//		return path_model.second == *this;
+			//	}
+			//);
+			//
+			//const std::string& path = iterator->first;
+			//j["Model"] = path;
 			return j;
 		}
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			*this = Loader::StaticModel(j["Model"]);
+			//*this = Loader::StaticModel(j["Model"]);
 		}
 
 	};

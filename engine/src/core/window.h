@@ -25,9 +25,9 @@ namespace Bubble
         int GetHeight();
         glm::ivec2 GetSize();
 
-        SDL_Window* GetWindow();
+        SDL_Window*   GetSDLWindow();
         SDL_GLContext GetGLContext();
-        const char* GetGLSLVersion();
+        const char*   GetGLSLVersion();
 
         bool PollEvent(SDL_Event& event);
         void OnEvent(SDL_Event& event);

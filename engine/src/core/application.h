@@ -12,14 +12,12 @@
 
 namespace Bubble
 {
-	class Application
+	struct Application
 	{
-		static Window* sMainWindow;
 		Timer mTimer;
 		Window mWindow;
 		LayerArray mLayerArray;
 		
-	public:
 		Application();
 		virtual ~Application() {}
 
@@ -28,7 +26,5 @@ namespace Bubble
 		void InsertLayer(int id, Layer* layer);
 		void RemoveLayer(int id);
 		void SwapLayers(int id_1, int id_2);
-
-		static Window& GetMainWindow();
 	};
 }

@@ -2,7 +2,6 @@
 
 #include "scene.h"
 
-
 namespace Bubble
 {
 	class Entity

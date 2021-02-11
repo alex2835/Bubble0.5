@@ -1,7 +1,6 @@
 
 #include "window.h"
 
-
 namespace Bubble
 {
     Window::Window()
@@ -69,7 +68,7 @@ namespace Bubble
         return glm::ivec2(width, height);
 	}
 
-	SDL_Window* Window::GetWindow()
+	SDL_Window* Window::GetSDLWindow()
     {
         return mWindow;
     }

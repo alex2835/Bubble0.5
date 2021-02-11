@@ -8,14 +8,13 @@ endif()
 if(CMAKE_BUILD_TYPE MATCHES Debug)
 	SET(GCC_COVERAGE_COMPILE_FLAGS "-O0 -w -MP ")
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
-	set(CMAKE_CXX_FLAGS "-O2 -w -MP -EHsc")
+	set(CMAKE_CXX_FLAGS "-O2 -w -MP")
 else()
 	message(FATAL_ERROR "Please set variable: CMAKE_BUILD_TYPE (Debug or Release)")
 endif()
 
-
-add_subdirectory(editor)
 add_subdirectory(engine)
+add_subdirectory(editor)
 
 add_subdirectory(dependencies/nativefiledialog)
 add_subdirectory(dependencies/spdlog)

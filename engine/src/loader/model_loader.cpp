@@ -1,22 +1,18 @@
 
 #include "loader.h"
 
-
 namespace Bubble
 {
-	Scope<std::unordered_map<std::string, Ref<Model>>> Loader::sLoadedModels;
-
-
 	Ref<Model> Loader::StaticModel(std::string path)
 	{
-        if (auto model = sLoadedModels->find(path);
-            model != sLoadedModels->end())
+        if (auto model = mLoadedModels.find(path);
+            model != mLoadedModels.end())
         {
             return model->second;
         }
 
 		auto model = CreateRef<Model>();
-		sLoadedModels->emplace(path, model);
+		mLoadedModels.emplace(path, model);
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(path, 0);

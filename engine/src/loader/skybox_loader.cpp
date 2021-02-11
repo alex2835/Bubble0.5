@@ -1,16 +1,12 @@
 
 #include "loader.h"
 
-
 namespace Bubble
 {
-	Scope<std::unordered_map<std::string, Ref<Skybox>>> Loader::sLoadedSkyboxes;
-
-
 	Ref<Skybox> Loader::LoadSkybox(std::string path)
 	{
-		if (auto model = sLoadedSkyboxes->find(path);
-			model != sLoadedSkyboxes->end())
+		if (auto model = mLoadedSkyboxes.find(path);
+			model != mLoadedSkyboxes.end())
 		{
 			return model->second;
 		}
@@ -86,7 +82,7 @@ namespace Bubble
 		{
 			delete data[i];
 		}
-		sLoadedSkyboxes->emplace(path, skybox);
+		mLoadedSkyboxes.emplace(path, skybox);
 		return skybox;
 	}
 
@@ -94,7 +90,7 @@ namespace Bubble
 	{
 		Ref<Skybox> skybox = CreateRef<Skybox>();
 		skybox->mSkybox = Cubemap(dir, ext);
-		sLoadedSkyboxes->emplace(dir, skybox);
+		mLoadedSkyboxes.emplace(dir, skybox);
 		return skybox;
 	}
 
