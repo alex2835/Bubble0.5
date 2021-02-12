@@ -32,6 +32,7 @@ target_include_directories(
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include
 )
 
+# PCH
 target_precompile_headers(BubbleEditorApp REUSE_FROM Engine)
 
 # Temp resources

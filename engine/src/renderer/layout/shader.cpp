@@ -1,10 +1,8 @@
 
 #include "shader.h"
 
-
 namespace Bubble
 {
-	
 	Shader::Shader(Shader&& other)
 		: mShaderID(other.mShaderID),
           mName(std::move(other.mName)),

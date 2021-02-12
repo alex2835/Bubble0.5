@@ -1,7 +1,6 @@
 
 #include "log.h"
 
-
 namespace Bubble
 {
 	std::shared_ptr<spdlog::logger> Log::client_logger;

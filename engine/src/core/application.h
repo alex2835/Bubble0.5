@@ -4,8 +4,6 @@
 #include "core/window.h"
 #include "core/layer_array.h"
 #include "core/timer.h"
-#include "core/input.h"
-#include "renderer/renderer.h"
 
 #include "SDL2/SDL_timer.h"
 

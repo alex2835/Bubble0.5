@@ -1,7 +1,6 @@
 
 #include "entity_serialization.h"
 
-
 namespace Bubble
 {
 	// ================= Archives ===================

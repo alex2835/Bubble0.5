@@ -4,7 +4,6 @@
 #include "core/time.h"
 #include "entt/entt.hpp"
 
-
 namespace Bubble
 {
 	class Entity;

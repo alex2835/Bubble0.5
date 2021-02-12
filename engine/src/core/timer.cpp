@@ -1,7 +1,6 @@
 
 #include "timer.h"
 
-
 namespace Bubble
 {
 	high_resolution_clock::time_point Timer::ProgramStartTime = Now();

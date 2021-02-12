@@ -27,6 +27,7 @@ target_include_directories(
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/include
 )
 
+# PCH
 target_precompile_headers(
     BubbleEditorUI PRIVATE
     ${CMAKE_SOURCE_DIR}/engine/include/engine.h

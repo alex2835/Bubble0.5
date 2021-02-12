@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/window.h"
-#include "core/application.h"
 #include "glm/glm.hpp"
 
 namespace Bubble

@@ -9,7 +9,6 @@
 #include <string>
 #include <algorithm>
 
-
 namespace Bubble
 {
 	inline nlohmann::json to_json(const glm::vec3& value)
@@ -21,7 +20,6 @@ namespace Bubble
 	{
 		return glm::vec3(value[0], value[1], value[2]);
 	}
-
 
 	// ================= Tag Component =================
 	struct TagComponent
