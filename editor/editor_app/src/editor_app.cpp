@@ -19,7 +19,6 @@ namespace Bubble
     };
 }
 
-
 // Will be called in main loop
 Bubble::Application* CreateApplication()
 {

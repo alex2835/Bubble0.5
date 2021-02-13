@@ -1,0 +1,30 @@
+
+#define DHR_EXPORT_SYMBOL
+#include "DHR.h"
+#include "ui.h"
+
+Bubble::Scope<Bubble::UI> UI;
+
+DHR_EXPORT void DHR_CALL OnInit(ImGuiContext* context)
+{
+    Bubble::Log::Init();
+    BUBBLE_ASSERT(glewInit() == GLEW_OK, "Glew init failed");
+    ImGui::SetCurrentContext(context);
+    UI = Bubble::CreateScope<Bubble::UI>();
+}
+
+DHR_EXPORT void DHR_CALL OnDraw(Bubble::DeltaTime dt, Bubble::UIArgs args)
+{
+    UI->mArgs = args;
+    UI->OnDraw(dt);
+}
+
+DHR_EXPORT void DHR_CALL OnUpdate(Bubble::DeltaTime dt)
+{
+    UI->OnUpdate(dt);
+}
+
+DHR_EXPORT void DHR_CALL OnMenuDraw()
+{
+    UI->DrawMenuBar();
+}

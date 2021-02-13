@@ -27,7 +27,7 @@ target_include_directories(
     Engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/loader
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer/layout
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer/renderer_core
 
     ${CMAKE_SOURCE_DIR}/dependencies/stb_image
     ${CMAKE_SOURCE_DIR}/dependencies/glew/include

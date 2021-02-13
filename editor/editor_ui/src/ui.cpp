@@ -6,12 +6,9 @@ namespace Bubble
 {
 	Scope<std::vector<Ref<UIModule>>> UI::sModules;
 
-	UI::UI(Window* window)
-        : mImGuiControl(window)
+	UI::UI()
     {
-        mImGuiControl.OnAttach();
 		sModules = CreateScope<std::vector<Ref<UIModule>>>();
-
 		// Create default ui modules
 		mMainViewport   = AddModule<MainViewport>();
 		mModelExploerer = AddModule<ModelExplorer>();
@@ -40,35 +37,34 @@ namespace Bubble
 
 	UI::~UI()
 	{
-		mImGuiControl.OnDetach();
 	}
 
-	void UI::OnUpdate(DeltaTime dt)
+	void UI::OnDraw(DeltaTime dt)
 	{
-		mImGuiControl.Begin();
+        //mImGuiControl.Begin();
+        //
+        //mImGuiControl.BeginMenuBar();
+        //DrawMenuBar();
+        //mImGuiControl.EndMenuBar();
 
-		mImGuiControl.BeginMenuBar();
-		DrawMenuBar();
-		mImGuiControl.EndMenuBar();
+        //for (int i = 0; i < sModules->size(); i++)
+        //{
+        //	auto& ui_module = sModules->at(i);
+        //	if (!ui_module->IsOpen())
+        //	{
+        //		auto iterator = std::ranges::find(*sModules, ui_module);
+        //		sModules->erase(iterator);
+        //	}
+        //}
 
-		//for (int i = 0; i < sModules->size(); i++)
-		//{
-		//	auto& ui_module = sModules->at(i);
-		//	if (!ui_module->IsOpen())
-		//	{
-		//		auto iterator = std::ranges::find(*sModules, ui_module);
-		//		sModules->erase(iterator);
-		//	}
-		//}
-
-		for (int i = 0; i < sModules->size(); i++)
-		{
-			auto& ui_module = sModules->at(i);
-			if (ui_module->IsOpen())
-			{
-				ui_module->Draw(mArgs, dt);
-			}
-		}
+        for (int i = 0; i < sModules->size(); i++)
+        {
+            auto& ui_module = sModules->at(i);
+            if (ui_module->IsOpen())
+            {
+                ui_module->Draw(mArgs, dt);
+            }
+        }
 
         // Temp frame rate info
         ImGui::Begin("Info");
@@ -76,9 +72,11 @@ namespace Bubble
             ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }
         ImGui::End();
-		
-		mImGuiControl.End();
+	}
 
+	void UI::OnUpdate(DeltaTime dt)
+	{
+		
         for (int i = 0; i < sModules->size(); i++)
         {
             sModules->at(i)->OnUpdate(mArgs, dt);
@@ -87,7 +85,6 @@ namespace Bubble
 
     void UI::OnEvent(SDL_Event& event)
     {
-        mImGuiControl.OnEvent(event);
     }
 
 

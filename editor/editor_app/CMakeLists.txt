@@ -6,8 +6,8 @@ file(GLOB_RECURSE HDRS *.h)
 
 add_executable(BubbleEditorApp ${SRCS} ${HDRS})
 
-target_link_libraries(BubbleEditorApp imgui)
 target_link_libraries(BubbleEditorApp Engine)
+target_link_libraries(BubbleEditorApp imgui)
 target_link_libraries(BubbleEditorApp nativefiledialog)
 target_link_libraries(BubbleEditorApp BubbleEditorUI)
 

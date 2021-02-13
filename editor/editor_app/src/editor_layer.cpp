@@ -18,7 +18,6 @@ namespace Bubble
 
  	}
 
-
     void EditorLayer::OnDetach()
     {
     }
@@ -26,7 +25,7 @@ namespace Bubble
     void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// ====================== Update editor ======================
-        mUILoader.mArgs = { &mSceneCamera, &mViewport, &mScene };
+        mUILoader.mArgs = { &mRenderer, &mLoader, &mScene, &mSceneCamera, &mViewport };
         mUILoader.OnUpdate(dt);
 
 		mSceneCamera.Update(dt);
@@ -34,7 +33,6 @@ namespace Bubble
 		// ====================== Set scene data ======================
 		//mRenderer.SetViewport(mViewport);
 		//mRenderer.SetCamera(mSceneCamera);
-
 
 		// ====================== Rendering ======================
 		mClearScreanOption = true;// |= mUILoader.mWireframeOption;

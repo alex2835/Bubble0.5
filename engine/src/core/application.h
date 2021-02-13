@@ -2,23 +2,22 @@
 
 #include "base.h"
 #include "core/window.h"
+#include "core/input.h"
 #include "core/layer_array.h"
 #include "core/timer.h"
-
 #include "SDL2/SDL_timer.h"
-
 
 namespace Bubble
 {
 	struct Application
 	{
-		Timer mTimer;
-		Window mWindow;
+		Window     mWindow;
+        Input	   mInput;
+		Timer      mTimer;
 		LayerArray mLayerArray;
-		
+
 		Application();
 		virtual ~Application() {}
-
 		void Run();
 		void PushLayer(Layer* layer);
 		void InsertLayer(int id, Layer* layer);

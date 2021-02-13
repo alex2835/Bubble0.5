@@ -5,7 +5,6 @@
 namespace Bubble
 {
 	// ==================== Vertex buffer ======================
-
 	VertexBuffer::VertexBuffer(uint32_t size)
 		: mSize(size)
 	{
@@ -76,7 +75,6 @@ namespace Bubble
 
 
 	// ===================== Index buffer ======================== 
-
 	IndexBuffer::IndexBuffer(uint32_t* indices, uint32_t count)
 		: mCount(count)
 	{

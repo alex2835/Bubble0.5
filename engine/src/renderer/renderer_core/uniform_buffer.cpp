@@ -5,7 +5,6 @@
 namespace Bubble
 {
 	// ============================= UniformBuffer ============================= 
-
 	UniformBuffer::UniformBuffer(int index, const BufferLayout& layout, uint32_t size, uint32_t additional_size)
 		: mLayout(std::move(layout)),
 		  mIndex(index),
@@ -74,14 +73,14 @@ namespace Bubble
 
 		for (BufferElement& elemnt : mLayout)
 		{
-			uint32_t std140_pad = Std140DataTypePadding(elemnt.Type);
-			elemnt.Size = Std140DataTypeSize(elemnt.Type);
+			uint32_t std140_pad = Std140DataTypePadding(elemnt.mType);
+			elemnt.mSize = Std140DataTypeSize(elemnt.mType);
 			
 			pad = offset % std140_pad;
 			pad = pad > 0 ? std140_pad - pad : 0;
 
-			elemnt.Offset = offset + pad;
-			offset += elemnt.Size + pad;
+			elemnt.mOffset = offset + pad;
+			offset += elemnt.mSize + pad;
 		}
 		// Align by vec4 size
 		uint32_t vec4_size = Std140DataTypeSize(GLSLDataType::Float4);
@@ -93,7 +92,6 @@ namespace Bubble
 
 
 	// ============================= UniformArrayElemnt ============================= 
-
 	UniformArrayElemnt::UniformArrayElemnt(const UniformBuffer& uniform_buffer, int index)
 		: mLayout(&uniform_buffer.mLayout),
 		  mRendererID(uniform_buffer.mRendererID),
@@ -151,13 +149,12 @@ namespace Bubble
 	}
 
 
-
 	BufferElement* UniformArrayElemnt::FindBufferElement(const std::string& name, GLSLDataType type)
 	{
 		auto elem = std::find_if(mLayout->begin(), mLayout->end(),
 			[&name, &type](const BufferElement& elem)
 			{
-				return elem.Name == name && elem.Type == type;
+				return elem.mName == name && elem.mType == type;
 			}
 		);
 		BUBBLE_CORE_ASSERT(elem != mLayout->end(), "Uniform buffer element not founded: " + name);
@@ -166,9 +163,9 @@ namespace Bubble
 
 	void UniformArrayElemnt::SetRawData(BufferElement* elem, const void* data)
 	{
-		int array_index_offset = mLayout->mStride * mArrayIndex + elem->Offset;
+		int array_index_offset = mLayout->mStride * mArrayIndex + elem->mOffset;
 		glBindBuffer(GL_UNIFORM_BUFFER, mRendererID);
-		glBufferSubData(GL_UNIFORM_BUFFER, array_index_offset, elem->Size, data);
+		glBufferSubData(GL_UNIFORM_BUFFER, array_index_offset, elem->mSize, data);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 

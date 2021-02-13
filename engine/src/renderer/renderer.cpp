@@ -4,59 +4,14 @@
 
 namespace Bubble
 {
-    //Scope<UniformBuffer> Renderer::sUBOLights;
-    //Scope<UniformBuffer> Renderer::sUBOPrjectionview;
-    //Scope<UniformBuffer> Renderer::sUBOViewPos;
-    //
-    //// Scene components
-    //const Camera* Renderer::sActiveCamera;
-    //const Framebuffer* Renderer::sActiveViewport;
-    //glm::ivec2 Renderer::sRenderPos;
-    //glm::ivec2 Renderer::sRenderSize;
-    //
-    //Ref<Skybox> Renderer::sSkyboxFirst;
-    //Ref<Skybox> Renderer::sSkyboxSecond;
-    //Ref<Shader> Renderer::sSkyboxShader;
-    //float Renderer::sSkyboxBrightness;
-    //float Renderer::sSkyboxBlendFactor;
-    //float Renderer::sSkyboxRotation;
-    //float Renderer::sSkyboxRotationSpeed;
-
-    // Optimizations
-    //std::vector<GLSL_Light> Renderer::ActiveLights;
-
-
-    static uint32_t OpenGLDrawType(DrawType draw_type)
-    {
-        uint32_t opengl_draw_type = 0;
-        switch (draw_type)
-        {
-        case DrawType::POINTS:
-            opengl_draw_type = GL_POINT;
-            break;
-        case DrawType::LINES:
-            opengl_draw_type = GL_LINES;
-            break;
-        case DrawType::TRIANGLES:
-            opengl_draw_type = GL_TRIANGLES;
-            break;
-        default:
-            BUBBLE_CORE_ASSERT(false, "Unknown draw type");
-        }
-        return opengl_draw_type;
-    }
-
-
-    void Renderer::Init()
+    Renderer::Renderer()
     {
         InitUBOS();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
-        //mSkyboxShader = Loader::LoadShader("resources/shaders/skybox.glsl");
     }
 
     // =================== Options ===================
-
     void Renderer::Wareframe(bool on)
     {
         if (on) {
@@ -89,26 +44,25 @@ namespace Bubble
     }
 
 
-    // =================== Set active components ===================
-
+    // =================== Set active rendering state ===================
     void Renderer::SetCamera(const Camera& camera)
     {
         BUBBLE_CORE_ASSERT(mActiveViewport, "Set viewport first");
         mActiveCamera = &camera;
 
-        glm::ivec2 window_size = mRenderSize - mRenderPos;
+        glm::ivec2 window_size = mRenderingSize - mRenderingPos;
         glm::mat4 projection = camera.GetPprojectionMat(window_size.x, window_size.y);
         glm::mat4 view = camera.GetLookatMat();
 
         // Set projection-view Uniform Buffer
         glm::mat4 projection_view[2] = { projection, view };
-        mUBOPrjectionview->SetData(projection_view, sizeof(projection_view));
+        mUBOPrjectionView->SetData(projection_view, sizeof(projection_view));
 
         // Set camera frustum
         SetFrustumPlanes(projection * view);
 
         // Set camera position
-        (*mUBOViewPos)[0].SetFloat3("ViewPos", camera.Position);
+        (*mUBOViewPosition)[0].SetFloat3("ViewPos", camera.Position);
     }
 
 
@@ -132,21 +86,20 @@ namespace Bubble
     {
         if (width * height)
         {
-            mRenderPos = { x, y };
-            mRenderSize = { width, height };
+            mRenderingPos  = { x, y };
+            mRenderingSize = { width, height };
         }
         else {
-            mRenderPos = { 0, 0 };
-            mRenderSize = { framebuffer.GetWidth(), framebuffer.GetHeight() };
+            mRenderingPos  = { 0, 0 };
+            mRenderingSize = { framebuffer.GetWidth(), framebuffer.GetHeight() };
         }
         framebuffer.Bind();
         mActiveViewport = &framebuffer;
-        glViewport(mRenderPos.x, mRenderPos.y, mRenderSize.x, mRenderSize.y);
+        glViewport(mRenderingPos.x, mRenderingPos.y, mRenderingSize.x, mRenderingSize.y);
     }
 
 
     // ======================== Clearing ========================
-
     void Renderer::SetClearColor(const glm::vec4& color)
     {
         glClearColor(color.r, color.g, color.b, color.a);
@@ -169,12 +122,11 @@ namespace Bubble
 
 
     // ==================== Rendering ====================
-
     void Renderer::DrawIndices(const Ref<VertexArray>& vertex_array, DrawType draw_type, uint32_t index_count)
     {
         vertex_array->Bind();
         uint32_t count = index_count ? index_count : vertex_array->GetIndexBuffer().GetCount();
-        glcall(glDrawElements(OpenGLDrawType(draw_type), count, GL_UNSIGNED_INT, nullptr));
+        glcall(glDrawElements((int)draw_type, count, GL_UNSIGNED_INT, nullptr));
     }
 
 
@@ -188,7 +140,7 @@ namespace Bubble
     {
         mesh.mVertexArray.Bind();
         mesh.mMaterial.Set(shader);
-        glDrawElements(OpenGLDrawType(draw_type), mesh.mIndices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements((int)draw_type, mesh.mIndices.size(), GL_UNSIGNED_INT, 0);
     }
 
 
@@ -217,34 +169,33 @@ namespace Bubble
 
     void Renderer::DrawSkybox(const Ref<Skybox>* skybox, int size, const Ref<Shader>& shader)
     {
-        //shader->Bind();
-        //for (int i = 0; i < size; i++)
-        //{
-        //    shader->SetUni1i("u_Skybox" + std::to_string(i), i);
-        //    skybox[i]->Bind(i);
-        //}
-        //glDepthFunc(GL_LEQUAL);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
-        //glDepthFunc(GL_LESS);
+        shader->Bind();
+        for (int i = 0; i < size; i++)
+        {
+            shader->SetUni1i("u_Skybox" + std::to_string(i), i);
+            skybox[i]->Bind(mStorage.mSkyboxVertexArray, i);
+        }
+        glDepthFunc(GL_LEQUAL);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDepthFunc(GL_LESS);
     }
 
 
     void Renderer::DrawScene(Scene& scene)
     {
-        auto scene_view = scene.GetView<ModelComponent, TransformComponent>();
-
-        // Temp: Extract all lights
-        ActiveLights.clear();
-        scene.Registry.view<LightComponent>().each(
-            [&](auto& entity, LightComponent& light)
-            {
-                light.Update();
-                ActiveLights.push_back(light);
-            }
-        );
-        SetLights(ActiveLights);
+        // Set lights
+        auto light_view = scene.GetView<LightComponent>();
+        mSceneStage.mActiveLights.clear();
+        for (auto entity : light_view)
+        {
+            auto& light = light_view.get<LightComponent>(entity);
+            light.Update();
+            mSceneStage.mActiveLights.push_back(light);
+        }
+        SetLights(mSceneStage.mActiveLights);
 
         // Draw scene
+        auto scene_view = scene.GetView<ModelComponent, TransformComponent>();
         for (auto entity : scene_view)
         {
             auto [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
@@ -256,20 +207,19 @@ namespace Bubble
 
         // Draw skybox
         glm::mat4 view = mActiveCamera->GetLookatMat();
-        mSkyboxRotation += Timer::GetTime().GetSeconds() * mSkyboxRotationSpeed * 0.00002f;
-        view = Skybox::GetViewMatrix(view, mSkyboxRotation);
+        mSceneStage.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneStage.mSkyboxRotationSpeed * 0.00002f;
+        view = Skybox::GetViewMatrix(view, mSceneStage.mSkyboxRotation);
         Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
 
-        mSkyboxShader->SetUni1f("u_Brightness",  mSkyboxBrightness);
-        mSkyboxShader->SetUni1f("u_BlendFactor", mSkyboxBlendFactor);
+        mStorage.mSkyboxShader->SetUni1f("u_Brightness",  mSceneStage.mSkyboxBrightness);
+        mStorage.mSkyboxShader->SetUni1f("u_BlendFactor", mSceneStage.mSkyboxBlendFactor);
 
-        Ref<Skybox> skyboxes[] = { mSkyboxFirst, mSkyboxSecond };
-        Renderer::DrawSkybox(skyboxes, 2, mSkyboxShader);
+        Ref<Skybox> skyboxes[] = { mSceneStage.mSkyboxFirst, mSceneStage.mSkyboxSecond };
+        Renderer::DrawSkybox(skyboxes, 2, mStorage.mSkyboxShader);
     }
 
 
     // ======================== UBO ======================== 
-
     void Renderer::InitUBOS()
     {
         // ====== Init Projection View UBO ======
@@ -277,13 +227,13 @@ namespace Bubble
             { GLSLDataType::Mat4, "Projection" },
             { GLSLDataType::Mat4, "View" }
         };
-        mUBOPrjectionview = CreateScope<UniformBuffer>(0, UBOProjectionViewLayout);
+        mUBOPrjectionView = CreateRef<UniformBuffer>(0, UBOProjectionViewLayout);
 
         // ======== Init view position UBO ========
         BufferLayout UBOViewPosLayout{
             { GLSLDataType::Float3, "ViewPos" },
         };
-        mUBOViewPos = CreateScope<UniformBuffer>(2, UBOViewPosLayout);
+        mUBOViewPosition = CreateRef<UniformBuffer>(1, UBOViewPosLayout);
 
         // ========== Init Lights UBO ========== 
         BufferLayout layout{
@@ -300,7 +250,7 @@ namespace Bubble
         };
         int nLights = 30;
         int reserved_data = 16; // for nLights
-        mUBOLights = CreateScope<UniformBuffer>(1, layout, nLights, reserved_data);
+        mUBOLights = CreateRef<UniformBuffer>(2, layout, nLights, reserved_data);
     }
 
 }

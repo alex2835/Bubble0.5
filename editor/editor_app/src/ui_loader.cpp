@@ -22,13 +22,14 @@ namespace Bubble
 		mImGuiControl.Begin();
 
 		mImGuiControl.BeginMenuBar();
-		//mUIDLL.Call<void()>("OnMenuDraw");
+		mUIDLL.Call<void()>("OnMenuDraw");
 		mImGuiControl.EndMenuBar();
 
-		mUIDLL.Call<void()>("OnDraw");
+		mUIDLL.Call<void(DeltaTime, UIArgs)>("OnDraw", dt, mArgs);
 		mImGuiControl.End();
 		
-		//mUIDLL.Call<void()>("OnUpdate");
+		// OnUpdate is called out of imgui scope
+        mUIDLL.Call<void(DeltaTime)>("OnUpdate", dt);
 
 		if (mUIDLL.CheckForUpdate())
 		{

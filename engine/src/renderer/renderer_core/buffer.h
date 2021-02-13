@@ -1,11 +1,9 @@
 #pragma once
 
 #include "renderer_base.h"
-
 #include <vector>
 #include <string>
 #include <cassert>
-
 
 namespace Bubble
 {
@@ -37,27 +35,27 @@ namespace Bubble
 
 	struct BufferElement
 	{
-		std::string Name;
-		GLSLDataType Type;
-		uint32_t Size;
-		uint32_t Count;
-		size_t Offset;
-		bool Normalized;
+		std::string  mName;
+		GLSLDataType mType;
+		uint32_t	 mSize;
+		uint32_t	 mCount;
+		size_t		 mOffset;
+		bool		 mNormalized;
 
 		BufferElement() = default;
 
 		BufferElement(GLSLDataType type, const std::string & name, size_t count = 1, bool normalized = false)
-			: Name(name),
-			  Type(type),
-			  Size(GLSLDataTypeSize(type)),
-			  Offset(0),
-			  Count(count),
-			  Normalized(normalized)
+			: mName(name),
+			  mType(type),
+			  mSize(GLSLDataTypeSize(type)),
+			  mOffset(0),
+			  mCount(count),
+			  mNormalized(normalized)
 		{}
 
 		uint32_t GetComponentCount() const
 		{
-			switch (Type)
+			switch (mType)
 			{
 				case GLSLDataType::Float:  return 1;
 				case GLSLDataType::Float2: return 2;
@@ -71,7 +69,6 @@ namespace Bubble
 				case GLSLDataType::Int4:   return 4;
 				case GLSLDataType::Bool:   return 1;
 			}
-
 			BUBBLE_CORE_ASSERT(false, "Unknown GLSLDataType!");
 			return 0;
 		}
@@ -105,14 +102,14 @@ namespace Bubble
 			size_t offset = 0;
 			for (auto& element : mElements)
 			{
-				element.Offset = offset;
-				offset += element.Size * element.Count;
-				mStride += element.Size;
+				element.mOffset = offset;
+				offset  += element.mSize * element.mCount;
+				mStride += element.mSize;
 			}
 			// If count more then one, it means that
 			// attributes goes one after another (1111 2222 3333)
 			// So stride will be the size of each single attribute
-			mStride = mElements[0].Count == 1 ? mStride : 0;
+			mStride = mElements[0].mCount == 1 ? mStride : 0;
 		}
 	};
 
@@ -168,4 +165,5 @@ namespace Bubble
 
 		uint32_t GetCount() const;
 	};
+
 }

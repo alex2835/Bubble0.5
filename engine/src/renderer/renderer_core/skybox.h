@@ -11,9 +11,6 @@ namespace Bubble
 {
 	struct Skybox
 	{
-		//static VertexArray* sSkyboxVertexArray;
-		//static void Init();
-
 		Cubemap mSkybox;
 
 		Skybox() = default;
@@ -24,7 +21,7 @@ namespace Bubble
 		Skybox(Skybox&&) = default;
 		Skybox& operator=(Skybox&&) = default;
 
-		void Bind(VertexArray* vertex_array, int slot = 0);
+		void Bind(const Ref<VertexArray>& vertex_array, int slot = 0);
 		
 		// Generate matrix for correct skybox rendering
 		static glm::mat4 GetViewMatrix(glm::mat4 view, float rotation = 0);

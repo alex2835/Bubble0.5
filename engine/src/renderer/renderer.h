@@ -1,62 +1,44 @@
 #pragma once
 
-#include "core/timer.h"
-#include "renderer_base.h"
-#include "vertex_array.h"
-#include "framebuffer.h"
-#include "shader.h"
-#include "model.h"
-#include "skybox.h"
-#include "buffer.h"
-#include "uniform_buffer.h"
-#include "camera.h"
-#include "light.h"
-#include "scene/scene.h"
-#include "scene/components.h"
-
 #include "glm/glm.hpp"
 #include "glm-AABB/AABB.hpp"
 
-#include "optimizations/frustum_culling .h"
+#include "core/timer.h"
+#include "scene/scene.h"
+#include "scene/components.h"
 
+#include "renderer_scene_state.h"
+#include "renderer_storage/renderer_data_storage.h"
+#include "rendering_optimizations/frustum_culling .h"
 
 namespace Bubble
 {
-    enum class DrawType { POINTS, LINES, TRIANGLES };
+    enum class DrawType { POINTS = GL_POINT, LINES = GL_LINES, TRIANGLES = GL_TRIANGLES };
 
     struct Renderer
     {
-        // Uniform buffer
-        Scope<UniformBuffer> mUBOPrjectionview;
-        Scope<UniformBuffer> mUBOLights;
-        Scope<UniformBuffer> mUBOViewPos;
+        // Uniform buffers
+        Ref<UniformBuffer> mUBOPrjectionView;
+        Ref<UniformBuffer> mUBOViewPosition;
+        Ref<UniformBuffer> mUBOLights;
 
-        // Scene components
-        const Camera* mActiveCamera;
+        // Renderer stage
+        const Camera*      mActiveCamera;
         const Framebuffer* mActiveViewport;
-        glm::ivec2 mRenderPos;
-        glm::ivec2 mRenderSize;
+        glm::ivec2 mRenderingPos;
+        glm::ivec2 mRenderingSize;
 
-        Ref<Skybox> mSkyboxFirst;
-        Ref<Skybox> mSkyboxSecond;
-        Ref<Shader> mSkyboxShader;
-        float mSkyboxBlendFactor;
-        float mSkyboxBrightness;
-        float mSkyboxRotation;
-        float mSkyboxRotationSpeed;
-
-        // Optimization
-        std::vector<GLSL_Light> ActiveLights;
+        // Internal usage data
+        RendererStorage    mStorage;
+        RendererSceneStage mSceneStage;
 
 
-        void Init();
-
+        Renderer();
         // ============ Options ============
         void Wareframe(bool);
         void AlphaBlending(bool, uint32_t sfactor = GL_SRC_ALPHA, uint32_t dfactor = GL_ONE_MINUS_SRC_ALPHA);
         void BackfaceCulling(bool);
         void DepthTest(bool);
-
 
         // ============ Set active components ============
         void SetViewport(const Framebuffer& framebuffer, uint32_t x = 0, uint32_t y = 0, uint32_t width = 0, uint32_t height = 0);
@@ -66,7 +48,7 @@ namespace Bubble
         void SetLights(const GLSL_Light* lights, int size);
 
         // ============ Getters ============
-        UniformBuffer& GetUBOPojectionView() { return *mUBOPrjectionview; }
+        UniformBuffer& GetUBOPojectionView() { return *mUBOPrjectionView; }
 
         // ============ Clearing ============
         void SetClearColor(const glm::vec4& color);
@@ -80,7 +62,7 @@ namespace Bubble
         void DrawMesh(const Mesh& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
         void DrawMesh(const Ref<Mesh>& mesh, const Ref<Shader>& shader, DrawType draw_type = DrawType::TRIANGLES);
 
-        void DrawModel(const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
+        void DrawModel (const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
         void DrawModelA(const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
 
         void DrawSkybox(const Ref<Skybox>* skybox, int size, const Ref<Shader>& shader);

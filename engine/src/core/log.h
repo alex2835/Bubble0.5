@@ -8,16 +8,14 @@ namespace Bubble
 {
 	class Log
 	{
-		static std::shared_ptr<spdlog::logger> client_logger;
-		static std::shared_ptr<spdlog::logger> core_logger;
+        static std::shared_ptr<spdlog::logger> sClientLogger;
+        static std::shared_ptr<spdlog::logger> sCoreLogger;
 
 	public:
 		Log() = delete;
-		
-		static void init();
-		
-		static std::shared_ptr<spdlog::logger>& GetLogger() { return client_logger; }
-		static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return core_logger; }
+		static void Init();
+		static std::shared_ptr<spdlog::logger>& GetLogger()     { return sClientLogger; }
+		static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return sCoreLogger; }
 	};
 }
 

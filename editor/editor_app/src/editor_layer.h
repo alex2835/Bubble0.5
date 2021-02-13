@@ -9,13 +9,13 @@ namespace Bubble
 	class EditorLayer : public Layer
 	{
 		Window*  mWindow;
-		Loader   mLoader;
-		Renderer mRenderer;
+        UILoader mUILoader;
 
-		UILoader mUILoader;
-		SceneCamera mSceneCamera;
-		Viewport mViewport;
-		Scene mScene;
+		Renderer    mRenderer;
+		Loader      mLoader;
+		Scene       mScene;
+        SceneCamera mSceneCamera;
+        Viewport    mViewport;
 
 		// Options
 		bool mClearScreanOption = false;

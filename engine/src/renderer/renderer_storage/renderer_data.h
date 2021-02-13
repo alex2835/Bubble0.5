@@ -1,0 +1,354 @@
+#pragma once
+
+float SkyboxVertices[] = {
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f, 
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        -1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f
+};
+
+//========================== Phong shader ========================== 
+
+const char* PhongVertexShaderSource = R"shader(
+    #version 420 core
+    layout(location = 0) in vec3  a_Position;
+    layout(location = 1) in vec3  a_Normal;
+    layout(location = 2) in vec2  a_TexCoords;
+    layout(location = 3) in vec3 a_Tangent;
+    layout(location = 4) in vec3 a_Bitangent;
+    
+    out vec3 v_FragPos;
+    out vec3 v_Normal;
+    out vec2 v_TexCoords;
+    out mat3 v_TBN;
+    
+    layout(std140, binding = 0) uniform Matrices
+    {
+        mat4 u_Projection;
+        mat4 u_View;
+    };
+    uniform mat4 u_Model;
+    uniform int u_NormalMapping;
+    
+    void main()
+    {
+        mat3 TIModel = mat3(transpose(inverse(u_Model)));
+    
+        v_FragPos = vec3(u_Model * vec4(a_Position, 1.0));
+        v_Normal = TIModel * a_Normal;
+        v_TexCoords = a_TexCoords;
+    
+        if (u_NormalMapping)
+        {
+            vec3 T = normalize(TIModel * normalize(a_Tangent));
+            vec3 N = normalize(TIModel * normalize(a_Normal));
+            T = normalize(T - dot(T, N) * N);
+            vec3 B = cross(N, T);
+            v_TBN = mat3(T, B, N);
+        }
+    
+        gl_Position = u_Projection * u_View * vec4(v_FragPos, 1.0);
+    }
+)shader";
+
+const char* PhongFragmentShaderSource = R"shader(
+    #version 420 core
+    out vec4 FragColor;
+    
+    // Material
+    struct Material {
+        sampler2D diffuse0;
+        sampler2D specular0;
+        sampler2D normal0;
+        int shininess;
+    };
+    
+    // Light type enum
+    const int DirLight = 0;
+    const int PointLight = 1;
+    const int SpotLight = 2;
+    
+    // Light
+    struct Light
+    {
+        int type;
+        float brightness;
+    
+        float constant;
+        float linear;
+        float quadratic;
+    
+        float cutOff;
+        float outerCutOff;
+    
+        vec3 color;
+        float __pad0;
+        vec3 direction;
+        float __pad1;
+        vec3 position;
+        float __pad2;
+    };
+    
+    // Uniforms
+    uniform Material material;
+    uniform int u_NormalMapping;
+    
+    #define MAX_LIGHTS 30
+    layout(std140, binding = 1) uniform Lights {
+        int nLights;
+        Light lights[MAX_LIGHTS];
+    };
+    
+    layout(std140, binding = 2) uniform  Stuff {
+        vec3 u_ViewPos;
+        float __pad0;
+    };
+    
+    in vec3 v_FragPos;
+    in vec3 v_Normal;
+    in vec2 v_TexCoords;
+    in mat3 v_TBN;
+    
+    in vec3 Normal0;
+    in vec3 WorldPos0;
+    in vec3 Tangent0;
+    
+    // Function prototypes
+    vec4 CalcDirLight(Light light, vec3 normal, vec3 view_dir);
+    vec4 CalcPointLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir);
+    vec4 CalcSpotLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir);
+    
+    void main()
+    {
+        vec4 diffuse = texture(material.diffuse0, v_TexCoords);
+        if (diffuse.a < 0.0001f) {
+            discard;
+        }
+        vec4 specular = texture(material.specular0, v_TexCoords);
+    
+        vec3 norm;
+        //if (u_NormalMapping)
+        //{
+        //    norm = texture(material.normal0, v_TexCoords).rgb;
+        //    norm = normalize(norm * 2.0f - 1.0f);
+        //    norm = normalize(v_TBN * norm);
+        //}
+        //else {
+        norm = normalize(v_Normal);
+        //}
+    
+        vec3 view_dir = normalize(u_ViewPos - v_FragPos);
+    
+        vec4 result = vec4(0.0f);
+        vec4 diff_spec = vec4(0.0f);
+    
+        for (int i = 0; i < nLights; i++)
+        {
+            switch (lights[i].type)
+            {
+            case DirLight:
+                diff_spec += CalcDirLight(lights[i], norm, view_dir);
+                break;
+    
+            case PointLight:
+                diff_spec += CalcPointLight(lights[i], norm, v_FragPos, view_dir);
+                break;
+    
+            case SpotLight:
+                diff_spec += CalcSpotLight(lights[i], norm, v_FragPos, view_dir);
+                break;
+            }
+        }
+        // Hard code ambient
+        float ambient = 0.05f;
+        vec4  diffuse_coef = max(vec4(ambient), vec4(diff_spec.xyz, 1.0f));
+        float specular_coef = diff_spec.w;
+    
+        result += diffuse_coef * diffuse;
+        result += diffuse_coef * vec4(vec3(specular_coef * specular.x), 0);
+    
+        result = min(result, vec4(1.0f));
+        FragColor = result;
+    }
+    
+    
+    
+    // calculates the color when using a directional light.
+    vec4 CalcDirLight(Light light, vec3 normal, vec3 view_dir)
+    {
+        vec3 lightDir = normalize(-light.direction);
+    
+        // diffuse shading
+        float diff = max(dot(normal, lightDir), 0.0);
+    
+        // specular shading
+        vec3 halfwayDir = normalize(lightDir + view_dir);
+        float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
+    
+        vec3 diffuse = light.color * diff;
+        return light.brightness * vec4(diffuse, spec);
+    }
+    
+    
+    // calculates the color when using a point light.
+    vec4 CalcPointLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir)
+    {
+        vec3 lightDir = normalize(light.position - frag_pos);
+    
+        // diffuse shading
+        float diff = max(dot(normal, lightDir), 0.0);
+    
+        // specular shading
+        vec3 halfwayDir = normalize(lightDir + view_dir);
+        float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
+    
+        // attenuation
+        float distance = length(light.position - frag_pos);
+        float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+    
+        vec3 diffuse = light.color * diff * attenuation;
+        spec *= attenuation;
+        return light.brightness * vec4(diffuse, spec);
+    }
+    
+    
+    // calculates the color when using a spot light.
+    vec4 CalcSpotLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir)
+    {
+        vec3 lightDir = normalize(light.position - frag_pos);
+    
+        // diffuse shading
+        float diff = max(dot(normal, lightDir), 0.0f);
+    
+        // specular shading
+        vec3 halfwayDir = normalize(-light.direction + view_dir);
+        float spec = pow(max(dot(normal, halfwayDir), 0.0f), material.shininess);
+    
+        // attenuation
+        float distance = length(light.position - frag_pos);
+        float attenuation = 1.0f / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+    
+        // spotlight intensity
+        float theta = dot(lightDir, normalize(-light.direction));
+        float epsilon = light.cutOff - light.outerCutOff;
+        float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0f, 1.0f);
+    
+        vec3 diffuse = light.color * diff * attenuation * intensity;
+        spec *= attenuation * intensity;
+        return light.brightness * vec4(diffuse, spec);
+    }
+)shader";
+
+
+//========================== Skybox shader ========================== 
+
+const char* SkyboxVertexShaderSource = R"shader(
+    #version 330 core
+    layout(location = 0) in vec3 a_Position;
+    
+    out vec3 v_TexCoords;
+    
+    
+    layout(std140, binding = 0) uniform Matrices
+    {
+        mat4 u_Projection;
+        mat4 u_View;
+    };
+    
+    
+    void main()
+    {
+        v_TexCoords = a_Position;
+        vec4 pos = u_Projection * u_View * vec4(a_Position, 1.0f);
+        gl_Position = pos.xyww;
+    
+    }
+)shader";
+
+const char* SkyboxFragmentShaderSource = R"shader(
+    #version 330 core
+    out vec4 FragColor;
+    
+    in vec3 v_TexCoords;
+    
+    uniform samplerCube u_Skybox0;
+    uniform samplerCube u_Skybox1;
+    uniform float u_Brightness;
+    uniform float u_BlendFactor;
+    
+    void main()
+    {
+        vec4 texel0 = texture(u_Skybox0, v_TexCoords);
+        vec4 texel1 = texture(u_Skybox1, v_TexCoords);
+        vec4 result_color = mix(texel0, texel1, u_BlendFactor);
+        FragColor = u_Brightness * result_color;
+    }
+)shader";
+
+//====================== Solid color shader ====================== 
+
+const char* SolidColorVertexShaderSource = R"shader(
+    #version 420 core
+    layout(location = 0) in vec3 a_Position;
+    
+    layout(std140, binding = 0) uniform Matrices
+    {
+        mat4 u_Projection;
+        mat4 u_View;
+    };
+    uniform mat4 u_Model;
+
+    void main()
+    {
+        gl_Position = u_Projection * u_View * u_Model * vec4(a_Position, 1.0);
+    }
+)shader";
+
+const char* SolidColorFragmentShaderSource = R"shader(
+    #version 420 core
+    out vec4 FragColor;
+    
+    uniform vec4 u_Color;
+    
+    void main()
+    {
+        FragColor = u_Color;
+    }
+)shader";

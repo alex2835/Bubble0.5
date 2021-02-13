@@ -3,9 +3,9 @@
 
 namespace Bubble
 {
-	Application::Application()
-    {
-    }
+    Application::Application()
+        : mInput(&mWindow)
+    {}
 
 	void Application::PushLayer(Layer* layer)
 	{
@@ -27,11 +27,11 @@ namespace Bubble
         mLayerArray.Swap(id_1, id_2);
 	}
 
-	void Application::Run()
+    void Application::Run()
 	{
         while (mWindow.IsOpen())
         {
-			//Input::NewFrame();
+			mInput.NewFrame();
             mTimer.Update();
 
             // Retrieve and send events
@@ -42,8 +42,8 @@ namespace Bubble
                 {
                     layer->OnEvent(event);
                 }
+                mInput.OnEvent(event);
                 mWindow.OnEvent(event);
-                //Input::OnEvent(event);
             }
 
             // Update layers

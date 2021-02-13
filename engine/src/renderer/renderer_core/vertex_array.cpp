@@ -3,9 +3,9 @@
 
 namespace Bubble
 {
-	static GLenum GLSLDataTypeToOpenGLBaseType(GLSLDataType type)
+	static GLenum GLSLDataTypeToOpenGLBasemType(GLSLDataType mType)
 	{
-		switch (type)
+		switch (mType)
 		{
 			case GLSLDataType::Float:    return GL_FLOAT;
 			case GLSLDataType::Float2:   return GL_FLOAT;
@@ -78,7 +78,7 @@ namespace Bubble
 		const auto& layout = vertexBuffer.GetLayout();
 		for (const auto& element : layout)
 		{
-			switch (element.Type)
+			switch (element.mType)
 			{
 				case GLSLDataType::Float:
 				case GLSLDataType::Float2:
@@ -93,10 +93,10 @@ namespace Bubble
 					glcall(glEnableVertexAttribArray(mVertexBufferIndex));
 					glcall(glVertexAttribPointer(mVertexBufferIndex,
 												 element.GetComponentCount(),
-												 GLSLDataTypeToOpenGLBaseType(element.Type),
-												 element.Normalized ? GL_TRUE : GL_FALSE,
-												 layout.GetStride() ? layout.GetStride() : element.Size,
-												 (const void*)element.Offset));
+												 GLSLDataTypeToOpenGLBasemType(element.mType),
+												 element.mNormalized ? GL_TRUE : GL_FALSE,
+												 layout.GetStride() ? layout.GetStride() : element.mSize,
+												 (const void*)element.mOffset));
 					VertexBufferIndex(mVertexBufferIndex + 1);
 				}break;
 				case GLSLDataType::Mat3:
@@ -108,9 +108,9 @@ namespace Bubble
 						glcall(glEnableVertexAttribArray(mVertexBufferIndex));
 						glcall(glVertexAttribPointer(mVertexBufferIndex,
 													 count,
-													 GLSLDataTypeToOpenGLBaseType(element.Type),
-													 element.Normalized ? GL_TRUE : GL_FALSE,
-													 layout.GetStride() ? layout.GetStride() : element.Size,
+													 GLSLDataTypeToOpenGLBasemType(element.mType),
+													 element.mNormalized ? GL_TRUE : GL_FALSE,
+													 layout.GetStride() ? layout.GetStride() : element.mSize,
 													 (const void*)(sizeof(float) * count * i)));
 						glcall(glVertexAttribDivisor(mVertexBufferIndex, 1));
 						VertexBufferIndex(mVertexBufferIndex + 1);
