@@ -30,6 +30,7 @@ namespace Bubble
             //io.ConfigViewportsNoAutoMerge = true;
             //io.ConfigViewportsNoTaskBarIcon = true;
             io.ConfigWindowsMoveFromTitleBarOnly = true;
+            // Temp
             io.IniFilename = "../../../../../default_imgui.ini";
 
             // Setup Dear ImGui style
@@ -58,7 +59,6 @@ namespace Bubble
 
         void Begin()
         {
-            Framebuffer::BindWindow(mWindow);
             // Start the Dear ImGui frame
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplSDL2_NewFrame(mWindow->GetSDLWindow());
@@ -69,6 +69,7 @@ namespace Bubble
         {
             ImGui::EndFrame();
             // Rendering
+            Viewport::BindWindow(mWindow);
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

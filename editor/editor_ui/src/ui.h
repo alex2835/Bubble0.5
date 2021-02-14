@@ -1,14 +1,12 @@
 #pragma once
 
 #include "ui_module.h"
-#include "imgui_control.h"
 #include "ui_windows/model_explorer.h"
 #include "ui_windows/entity_explorer.h"
 #include "ui_windows/main_viewport.h"
 #include "ui_windows/skybox_exolorer.h"
 #include "ui_windows/scene_panel.h"
-#include "ui_options/scene_camera_options.h"
-#include <ranges>
+#include "ui_menu_options/scene_camera_options.h"
 
 namespace Bubble
 {
@@ -30,8 +28,8 @@ namespace Bubble
 
         template <typename T, typename ...Args>
         static Ref<T> AddModule(Args&& ...args);
-        static int    AddModule(const Ref<UIModule>& ui_module);
-        static void   RemoveModule(int module_id);
+        static void   AddModule(const Ref<UIModule>& ui_module);
+        static void   RemoveModule(const std::string& name);
 
 		UI();
         ~UI();

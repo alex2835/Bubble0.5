@@ -9,29 +9,33 @@ namespace Bubble
 	UI::UI()
     {
 		sModules = CreateScope<std::vector<Ref<UIModule>>>();
-		// Create default ui modules
+		// Create ui modules
 		mMainViewport   = AddModule<MainViewport>();
 		mModelExploerer = AddModule<ModelExplorer>();
 		mEntityExplorer = AddModule<EntityExplorer>();
 		mSkyboxExplorer = AddModule<SkyboxExplorer>();
 		mScenePanel     = AddModule<ScenePanel>();
-
     }
 
-	int UI::AddModule(const Ref<UIModule>& ui_module)
+	void UI::AddModule(const Ref<UIModule>& ui_module)
 	{
-		auto iterator = std::ranges::find(*sModules, ui_module);
+		auto iterator = std::find_if(sModules->begin(), sModules->end(),
+			[&ui_module](const auto& module_elem) { return module_elem->mName == ui_module->mName; });
+		
 		if (iterator == sModules->end())
 		{
 			sModules->push_back(ui_module);
 		}
-		return sModules->back()->GetID();
+		else {
+			BUBBLE_ASSERT(false, "Module with name {} already exist", ui_module->mName);
+		}
 	}
 
-	void UI::RemoveModule(int module_id)
+	void UI::RemoveModule(const std::string& name)
 	{
 		auto iterator = std::find_if(sModules->begin(), sModules->end(),
-			[module_id](const auto& ui_module) { return ui_module->GetID() == module_id; });
+			[&name](const auto& ui_module) { return ui_module->mName == name; });
+		
 		sModules->erase(iterator);
 	}
 
@@ -41,22 +45,6 @@ namespace Bubble
 
 	void UI::OnDraw(DeltaTime dt)
 	{
-        //mImGuiControl.Begin();
-        //
-        //mImGuiControl.BeginMenuBar();
-        //DrawMenuBar();
-        //mImGuiControl.EndMenuBar();
-
-        //for (int i = 0; i < sModules->size(); i++)
-        //{
-        //	auto& ui_module = sModules->at(i);
-        //	if (!ui_module->IsOpen())
-        //	{
-        //		auto iterator = std::ranges::find(*sModules, ui_module);
-        //		sModules->erase(iterator);
-        //	}
-        //}
-
         for (int i = 0; i < sModules->size(); i++)
         {
             auto& ui_module = sModules->at(i);
@@ -76,7 +64,6 @@ namespace Bubble
 
 	void UI::OnUpdate(DeltaTime dt)
 	{
-		
         for (int i = 0; i < sModules->size(); i++)
         {
             sModules->at(i)->OnUpdate(mArgs, dt);
@@ -86,7 +73,6 @@ namespace Bubble
     void UI::OnEvent(SDL_Event& event)
     {
     }
-
 
 	void UI::DrawMenuBar()
 	{
@@ -143,7 +129,7 @@ namespace Bubble
 				ImGui::EndMenu();
 			}
 
-			// ======================== View ============================
+			// ======================== View ========================
 			if (ImGui::BeginMenu("View"))
 			{
 				ImGui::MenuItem("Scene explorer", "", &mEntityExplorer->mIsOpen);
@@ -152,7 +138,6 @@ namespace Bubble
 				ImGui::MenuItem("Skybox explorer", "", &mSkyboxExplorer->mIsOpen);
 				ImGui::EndMenu();
 			}
-
 			ImGui::EndMenuBar();
 		}
 	}

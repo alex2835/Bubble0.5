@@ -20,14 +20,9 @@ namespace Bubble
 
         // ================= Meshes ================= 
     public:
-        Ref<Model> StaticModel(std::string path);
+        Ref<Model> LoadModel(std::string path);
 
-    //private:
-    //    void ProcessNode(Model& model, aiNode* node, const aiScene* scene, const std::string& path);
-    //    Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path);
-    //    DefaultMaterial LoadMaterialTextures(aiMaterial* mat, const std::string& path);
-
-        // ================= Shaders ================= 
+       // ================= Shaders ================= 
     public:
         Ref<Shader> LoadShader(const std::string& path);
 

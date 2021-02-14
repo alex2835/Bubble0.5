@@ -21,6 +21,7 @@ DHR_EXPORT void DHR_CALL OnDraw(Bubble::DeltaTime dt, Bubble::UIArgs args)
 
 DHR_EXPORT void DHR_CALL OnUpdate(Bubble::DeltaTime dt)
 {
+    // OnUpdate is called out of imgui scope
     UI->OnUpdate(dt);
 }
 

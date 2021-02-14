@@ -6,15 +6,15 @@ namespace Bubble
 {
     struct SceneCamera : public FreeCamera
     {
+        Input* mInput;
         float mBoostSpeed = 5.0f;
 
-
-        SceneCamera(const glm::vec3& position = glm::vec3(0.0f))
-            : FreeCamera(position)
+        SceneCamera(Input* input, const glm::vec3& position = glm::vec3(0.0f))
+            : FreeCamera(position),
+              mInput(input)
         {}
 
-
-        void Update(DeltaTime dt)
+        void OnUpdate(DeltaTime dt)
         {
             //if (Input::IsMouseButtonPressed(SDL_BUTTON_RIGHT))
             //{

@@ -229,12 +229,6 @@ namespace Bubble
         };
         mUBOPrjectionView = CreateRef<UniformBuffer>(0, UBOProjectionViewLayout);
 
-        // ======== Init view position UBO ========
-        BufferLayout UBOViewPosLayout{
-            { GLSLDataType::Float3, "ViewPos" },
-        };
-        mUBOViewPosition = CreateRef<UniformBuffer>(1, UBOViewPosLayout);
-
         // ========== Init Lights UBO ========== 
         BufferLayout layout{
             { GLSLDataType::Int,    "Type"},
@@ -250,7 +244,13 @@ namespace Bubble
         };
         int nLights = 30;
         int reserved_data = 16; // for nLights
-        mUBOLights = CreateRef<UniformBuffer>(2, layout, nLights, reserved_data);
+        mUBOLights = CreateRef<UniformBuffer>(1, layout, nLights, reserved_data);
+
+        // ======== Init view position UBO ========
+        BufferLayout UBOViewPosLayout{
+            { GLSLDataType::Float3, "ViewPos" },
+        };
+        mUBOViewPosition = CreateRef<UniformBuffer>(2, UBOViewPosLayout);
     }
 
 }

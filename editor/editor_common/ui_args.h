@@ -10,6 +10,8 @@ namespace Bubble
     {
         Renderer*    mRenderer;
         Loader*      mLoader;
+        Input*       mInput;
+        
         Scene*       mScene;
         SceneCamera* mSceneCamera;
         Viewport*    mMainViewport;

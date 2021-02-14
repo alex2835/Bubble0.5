@@ -3,11 +3,8 @@
 
 namespace Bubble
 {
-	std::atomic<int> UIModule::sGlobalIDCounter = 0;
-
 	UIModule::UIModule(const std::string& name)
-		: mID(sGlobalIDCounter++),
-		  mIsOpen(true),
+		: mIsOpen(true),
 		  mWindowFlags(0),
 		  mName(name)
 	{}
@@ -15,11 +12,6 @@ namespace Bubble
     bool UIModule::IsOpen()
     {
         return mIsOpen;
-    }
-
-    int UIModule::GetID()
-    {
-        return mID;
     }
 
     UIModule::~UIModule()

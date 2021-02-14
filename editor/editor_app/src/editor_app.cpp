@@ -9,7 +9,7 @@ namespace Bubble
     public:
         EditorApp() : Application()
         {
-            PushLayer(new EditorLayer(&mWindow));
+            PushLayer(new EditorLayer(&mWindow, &mInput));
         }
 
         ~EditorApp()

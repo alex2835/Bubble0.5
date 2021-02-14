@@ -5,90 +5,86 @@
 
 namespace Bubble
 {
-	//typedef void(*FCustumEntityProperties)(Entity);
-
 	struct EntityExplorer : UIModule
 	{
 		Entity SelectedEntity;
 
         inline EntityExplorer()
-            : UIModule("Scene explorer")
+            : UIModule("Entity explorer")
         {}
 
 		inline void Draw(UIArgs args, DeltaTime dt) override 
 		{
-            //ImGui::Begin("Entity explorer", &mIsOpen);
-            //{
-            //    args.mScene->Registry.each([&](auto entityID)
-            //        {
-            //            Entity entity(entityID, args.mScene);
-            //
-            //            auto& tag = entity.GetComponent<TagComponent>().mTag;
-            //            ImGui::Selectable(tag.c_str(), entity == SelectedEntity);
-            //
-            //            if (ImGui::IsItemClicked())
-            //            {
-            //                SelectedEntity = entity;
-            //            }
-            //        });
-            //
-            //    if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered() ||
-            //        Input::IsKeyClick(SDLK_ESCAPE) && ImGui::IsWindowHovered())
-            //    {
-            //        SelectedEntity = {};
-            //    }
-            //}
-            //ImGui::End();
-            //
-            //ImGui::Begin("Properties");
-            //{
-            //    if (SelectedEntity) {
-            //        DrawComponents(SelectedEntity);
-            //    }
-            //
-            //    if (Input::IsKeyClick(SDLK_ESCAPE) && ImGui::IsWindowHovered())
-            //    {
-            //        SelectedEntity = {};
-            //    }
-            //}
-            //ImGui::End();
+            ImGui::Begin(mName.c_str(), &mIsOpen);
+            {
+                args.mScene->Registry.each([&](auto entityID)
+                    {
+                        Entity entity(entityID, args.mScene);
+            
+                        auto& tag = entity.GetComponent<TagComponent>().mTag;
+                        ImGui::Selectable(tag.c_str(), entity == SelectedEntity);
+            
+                        if (ImGui::IsItemClicked())
+                        {
+                            SelectedEntity = entity;
+                        }
+                    });
+            
+                if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered() ||
+                    args.mInput->IsKeyClick(SDLK_ESCAPE) && ImGui::IsWindowHovered())
+                {
+                    SelectedEntity = {};
+                }
+            }
+            ImGui::End();
+            
+            ImGui::Begin("Properties");
+            {
+                if (SelectedEntity) {
+                    DrawComponents(SelectedEntity);
+                }
+            
+                if (args.mInput->IsKeyClick(SDLK_ESCAPE) && ImGui::IsWindowHovered())
+                {
+                    SelectedEntity = {};
+                }
+            }
+            ImGui::End();
         }
 
 		void DrawComponents(Entity entity)
 		{
             auto& tag = entity.GetComponent<TagComponent>().mTag;
 
-            char buffer[256];
-            memset(buffer, 0, sizeof(buffer));
-            strcpy_s(buffer, sizeof(buffer), tag.c_str());
-            if (ImGui::InputText("Name", buffer, sizeof(buffer)))
+            // ==================== Tag component ====================
+            if (ImGui::InputText("Tag", tag.data(), tag.capacity()))
             {
-                tag = std::string(buffer);
             }
             ImGui::Separator();
 
+            // ================= Transform component =================
             if (entity.HasComponent<TransformComponent>())
             {
                 if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
                 {
                     auto& transform = entity.GetComponent<TransformComponent>().mTransform;
-                    auto& position = entity.GetComponent<PositionComponent>().mPosition;
-                    auto& rotation = entity.GetComponent<RotationComponent>().mRotation;
-                    auto& scale = entity.GetComponent<ScaleComponent>().mScale;
+                    auto& position  = entity.GetComponent<PositionComponent>().mPosition;
+                    auto& rotation  = entity.GetComponent<RotationComponent>().mRotation;
+                    auto& scale     = entity.GetComponent<ScaleComponent>().mScale;
             
-                    bool update = false;
-                    float scale_entire = 0.0f;
+                    bool  update = false;
+                    float scale_all = 0.0f;
             
-                    if (ImGui::DragFloat3("Position", (float*)&position, 0.1f)) update = true;
+                    if (ImGui::DragFloat3("Position", (float*)&position, 0.1f))  update = true;
                     if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.05f)) update = true;
-                    if (ImGui::Button("Restore rotation", { 120, 20 })) { update = true; rotation = glm::vec3(); }
-                    if (ImGui::DragFloat3("Scale", (float*)&scale, 0.05f)) update = true;
-                    if (ImGui::DragFloat("ScaleAll", &scale_entire, 0.05f)) update = true;
-                    if (ImGui::Button("Restore scale", { 120, 20 })) { update = true; scale = glm::vec3(1.0f); }
+                    if (ImGui::Button("Restore rotation", { 120, 20 }))        { update = true; rotation = glm::vec3(); }
+                    if (ImGui::DragFloat3("Scale", (float*)&scale, 0.05f))       update = true;
+                    if (ImGui::DragFloat("ScaleAll", &scale_all, 0.05f))         update = true;
+                    if (ImGui::Button("Restore scale", { 120, 20 }))           { update = true; scale = glm::vec3(1.0f); }
             
                     if (update)
                     {
-                        scale = glm::max(scale + scale_entire, 0.01f);
+                        scale     = glm::max(scale + scale_all, 0.01f);
                         transform = glm::mat4(1.0f);
                         transform = glm::translate(transform, position);
                         transform = glm::rotate(transform, rotation.x, glm::vec3(1, 0, 0));
@@ -102,7 +98,7 @@ namespace Bubble
                 ImGui::Separator();
             }
             
-            
+            // ===================== Light component ===================== 
             if (entity.HasComponent<LightComponent>())
             {
                 Light& light = entity.GetComponent<LightComponent>();
@@ -137,6 +133,7 @@ namespace Bubble
                     ImGui::Separator();
                     break;
                 }
+                ImGui::Separator();
 		    }
 
         }

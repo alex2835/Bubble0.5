@@ -5,7 +5,7 @@
 
 namespace Bubble
 {
-	class Input
+	struct Input
 	{
 		Window* mWindow;
 		int mKeyMap[256];
@@ -18,7 +18,6 @@ namespace Bubble
 		int mMouseRelPosX;
 		int mMouseRelPosY;
 
-	public:
 		Input(Window* window)
 			: mWindow(window)
 		{}

@@ -8,11 +8,12 @@ namespace Bubble
 {
 	class EditorLayer : public Layer
 	{
-		Window*  mWindow;
-        UILoader mUILoader;
-
+		Window*		mWindow;
+        Input*		mInput;
+        UILoader	mUILoader;
 		Renderer    mRenderer;
 		Loader      mLoader;
+
 		Scene       mScene;
         SceneCamera mSceneCamera;
         Viewport    mViewport;
@@ -21,7 +22,7 @@ namespace Bubble
 		bool mClearScreanOption = false;
 
 	public:
-		EditorLayer(Window* window);
+		EditorLayer(Window* window, Input* input);
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate(DeltaTime dt) override;

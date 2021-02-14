@@ -12,7 +12,7 @@ namespace Bubble
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& path);
 	DefaultMaterial LoadMaterialTextures(aiMaterial* mat, const std::string& path);
 
-	Ref<Model> Loader::StaticModel(std::string path)
+	Ref<Model> Loader::LoadModel(std::string path)
 	{
         if (auto model = mLoadedModels.find(path);
             model != mLoadedModels.end())

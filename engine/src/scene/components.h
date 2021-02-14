@@ -26,10 +26,13 @@ namespace Bubble
 	{
 		std::string mTag;
 
-		TagComponent() = default;
+        TagComponent() { mTag.reserve(256); }
 		TagComponent(const TagComponent&) = default;
 		TagComponent(const std::string& tag)
-			: mTag(tag) {}
+			: mTag(tag)
+		{
+			mTag.reserve(256);
+		}
 
 		nlohmann::json Serialize() const
 		{
@@ -230,7 +233,7 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j)
 		{
-			//*this = Loader::StaticModel(j["Model"]);
+			//*this = Loader::LoadModel(j["Model"]);
 		}
 
 	};
