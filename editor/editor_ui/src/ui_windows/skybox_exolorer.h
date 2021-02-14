@@ -11,7 +11,6 @@ namespace Bubble
 	struct SkyboxExplorer : UIModule
 	{
 		Ref<Skybox> mSelectedSkybox;
-        Ref<Shader> mShader;
 		FreeCamera  mCamera;
         Viewport    mViewport;
 
@@ -20,102 +19,99 @@ namespace Bubble
               mSelectedSkybox(nullptr),
               mViewport(800, 600)
         {
-            //mShader = Loader::LoadShader("resources/shaders/skybox.glsl");
             mCamera.Fov = PI / 3;
         }
         
 		inline void Draw(UIArgs args, DeltaTime dt) override
 		{
-            //ImGui::Begin("Skybox explorer", &mIsOpen);
-            //{
-            //    ImVec2 window_size = ImGui::GetContentRegionAvail();
-            //    ImVec2 pos = ImGui::GetCursorScreenPos();
-            //
-            //    // ==================== Viewport input ==================== 
-            //    // Invisible drag able area over the viewport
-            //    ImGui::InvisibleButton("##dummy", ImVec2{ window_size.x + 1, window_size.y * 0.7f + 1 });
-            //
-            //    // Moving by dragging
-            //    if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
-            //    {
-            //        mCamera.ProcessMouseMovementShift(Input::fGetMouseRelX(), Input::fGetMouseRelY());
-            //        mCamera.Update(dt);
-            //    }
-            //
-            //    //  ================= Render model =================
-            //    if (mSelectedSkybox && ImGui::IsItemVisible()) {
-            //        RenderSelectedSkybox();
-            //    }
-            //
-            //    // ==================== Draw viewport ==================== 
-            //    uint32_t textureId = mViewport.GetColorAttachmentRendererID();
-            //    ImGui::GetWindowDrawList()->AddImage((void*)textureId, pos, ImVec2{ pos.x + window_size.x, pos.y + window_size.y * 0.7f }, ImVec2(1, 1), ImVec2(0, 0));
-            //
-            //    mViewport.mNewSize = { window_size.x, window_size.y * 0.6f };
-            //
-            //    // ==================== Model list ====================
-            //    ImGui::BeginChild("Skybox list", ImVec2(window_size.x * 0.3f, window_size.y * 0.2f), true);
-            //    {
-            //        for (const auto& [path, skybox] : *Loader::sLoadedSkyboxes)
-            //        {
-            //            size_t pos = path.find_last_of("/") + 1;
-            //            std::string name = path.substr(pos);
-            //
-            //            ImGui::Selectable(name.c_str(), mSelectedSkybox == skybox);
-            //
-            //            // Switch
-            //            if (ImGui::IsItemClicked())
-            //            {
-            //                mSelectedSkybox = skybox;
-            //                mCamera.Update(dt);
-            //            }
-            //        }
-            //
-            //        if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-            //        {
-            //            mSelectedSkybox = nullptr;
-            //        }
-            //    }
-            //    ImGui::EndChild();
-            //
-            //    // ==================== Buttons ====================
-            //    if (ImGui::Button("Load", { 100, window_size.y * 0.05f }))
-            //    {
-            //        try
-            //        {
-            //            std::string path = OpenFileDialog();
-            //            Loader::LoadSkybox(path);
-            //        }
-            //        catch (const std::exception& e)
-            //        {
-            //            LOG_ERROR(e.what());
-            //        }
-            //    }
-            //}
-            //ImGui::End();
+            ImGui::Begin(mName.c_str(), &mIsOpen);
+            {
+                ImVec2 window_pos  = ImGui::GetCursorScreenPos();
+                ImVec2 window_size = ImGui::GetContentRegionAvail();
+
+                // ==================== Viewport input ==================== 
+                {
+                    ImVec2 viewport_size = ImVec2(window_size.x, window_size.y * 0.75f);
+                    // Invisible drag able area over the viewport
+                    ImGui::InvisibleButton("##dummy", viewport_size);
+
+                    // Moving by dragging
+                    if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
+                    {
+                        mCamera.ProcessMouseMovementShift(args.mInput->fGetMouseRelX(), args.mInput->fGetMouseRelY());
+                        mCamera.Update(dt);
+                    }
+                    //  ================= Render model =================
+                    if (mSelectedSkybox && ImGui::IsItemVisible())
+                    {
+                        RenderSelectedSkybox(args.mRenderer);
+                    }
+                    // ==================== Draw viewport ==================== 
+                    uint32_t textureId = mViewport.GetColorAttachmentRendererID();
+                    ImVec2   texture_size = ImVec2(window_pos.x + viewport_size.x, window_pos.y + viewport_size.y);
+                    ImGui::GetWindowDrawList()->AddImage((void*)textureId, window_pos, texture_size, ImVec2(1, 1), ImVec2(0, 0));
+                    mViewport.mNewSize = *(glm::vec2*)&viewport_size;
+                }
+
+                // ==================== Model list ====================
+                ImGui::BeginChild("Skybox list", ImVec2(window_size.x * 0.5f, window_size.y * 0.24f), true);
+                {
+                    for (const auto& [path, skybox] : args.mLoader->mLoadedSkyboxes)
+                    {
+                        size_t pos = path.find_last_of("/") + 1;
+                        std::string name = path.substr(pos);
+
+                        ImGui::Selectable(name.c_str(), mSelectedSkybox == skybox);
+                        if (ImGui::IsItemClicked())
+                        {
+                            mSelectedSkybox = skybox;
+                            mCamera.Update(dt);
+                        }
+                    }
+                    if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+                    {
+                        mSelectedSkybox = nullptr;
+                    }
+                }
+                ImGui::EndChild();
+
+                // ==================== Buttons ====================
+                ImGui::SameLine();
+                if (ImGui::Button("Load", { 100, window_size.y * 0.05f }))
+                {
+                    try
+                    {
+                        std::string path = OpenFileDialog();
+                        args.mLoader->LoadSkybox(path);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR(e.what());
+                    }
+                }
+            }
+            ImGui::End();
 		}
-
-
-        inline void RenderSelectedSkybox()
-        {
-            //Renderer::SetViewport(mViewport);
-            //Renderer::SetCamera(mCamera);
-            //Renderer::ClearDepth();
-            //
-            //glm::mat4 view = Skybox::GetViewMatrix(Renderer::sActiveCamera->GetLookatMat());
-            //Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
-            //
-            //mShader->SetUni1f("u_Brightness", 1.0f);
-            //mShader->SetUni1f("u_BlendFactor", 0.0f);
-            //
-            //Renderer::DrawSkybox(&mSelectedSkybox, 1, mShader);
-            //Viewport::BindMainWindow();
-        }
-
 
         void OnUpdate(UIArgs args, DeltaTime dt) override
         {
             mViewport.OnUpdate();
+        }
+
+    private:
+        inline void RenderSelectedSkybox(Renderer* renderer)
+        {
+            renderer->SetViewport(mViewport);
+            renderer->SetCamera(mCamera);
+            renderer->ClearDepth();
+
+            glm::mat4 view = Skybox::GetViewMatrix(mCamera.GetLookatMat());
+            renderer->GetUBOPojectionView()[0].SetMat4("View", view);
+
+            renderer->mStorage.mSkyboxShader->SetUni1f("u_Brightness",  1.0f);
+            renderer->mStorage.mSkyboxShader->SetUni1f("u_BlendFactor", 0.0f);
+
+            renderer->DrawSkybox(&mSelectedSkybox, 1, renderer->mStorage.mSkyboxShader);
         }
 
     };

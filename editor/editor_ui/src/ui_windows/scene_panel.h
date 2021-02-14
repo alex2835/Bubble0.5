@@ -20,50 +20,55 @@ namespace Bubble
 
 		inline void Draw(UIArgs args, DeltaTime dt) override
 		{
-            //ImGui::Begin("Scene panel", &mIsOpen);
-            //{
-            //    int i = 0;
-            //    std::string names;
-            //
-            //    for (const auto& [path, skybox] : *Loader::sLoadedSkyboxes)
-            //    {
-            //        if (i == SelectedSkyboxFirstID)
-            //        {
-            //            SelectedSkyboxNameFirst = path;
-            //        }
-            //        if (i == SelectedSkyboxSecondID)
-            //        {
-            //            SelectedSkyboxNameSecond = path;
-            //        }
-            //
-            //        size_t start_pos = path.find_last_of("/") + 1;
-            //        size_t end_pos = path.find_last_of(".");
-            //        std::string name = path.substr(start_pos, end_pos - start_pos);
-            //        names += name + '\0';
-            //        i++;
-            //    }
-            //
-            //    // Skyboxes
-            //    ImVec2 window_size = ImGui::GetContentRegionAvail();
-            //    ImGui::BeginChild("Active skyboxes", ImVec2(0, window_size.y * 0.2f), true);
-            //    {
-            //        ImGui::SliderFloat("Brightness", &Renderer::sSkyboxBrightness, 0.0f, 1.0f);
-            //        ImGui::SliderFloat("Blend factor", &Renderer::sSkyboxBlendFactor, 0.0f, 1.0f);
-            //        ImGui::SliderFloat("Rotation", &Renderer::sSkyboxRotationSpeed, 0.0001f, 0.5f);
-            //
-            //        if (ImGui::Combo("First skybox", &SelectedSkyboxFirstID, names.data(), Loader::sLoadedSkyboxes->size()))
-            //        {
-            //            Renderer::sSkyboxFirst = Loader::sLoadedSkyboxes->at(SelectedSkyboxNameFirst);
-            //        }
-            //
-            //        if (ImGui::Combo("Second skybox", &SelectedSkyboxSecondID, names.data(), Loader::sLoadedSkyboxes->size()))
-            //        {
-            //            Renderer::sSkyboxSecond = Loader::sLoadedSkyboxes->at(SelectedSkyboxNameSecond);
-            //        }
-            //    }
-            //    ImGui::EndChild();
-            //}
-            //ImGui::End();
+            RendererSceneStage& scene_stage = args.mRenderer->mSceneStage;
+            Loader& loader = *args.mLoader;
+
+            ImGui::Begin(mName.c_str(), &mIsOpen);
+            {
+                // ====================== Skyboxes ====================== 
+                int i = 0;
+                std::string names;
+                for (const auto& [path, skybox] : args.mLoader->mLoadedSkyboxes)
+                {
+                    if (i == SelectedSkyboxFirstID)
+                    {
+                        SelectedSkyboxNameFirst = path;
+                    }
+                    if (i == SelectedSkyboxSecondID)
+                    {
+                        SelectedSkyboxNameSecond = path;
+                    }
+                    size_t start_pos = path.find_last_of("/") + 1;
+                    size_t end_pos   = path.find_last_of(".");
+                    std::string name = path.substr(start_pos, end_pos - start_pos);
+                    names += name + '\0';
+                    i++;
+                }
+            
+                ImVec2 window_size = ImGui::GetContentRegionAvail();
+                ImGui::BeginChild("Active skyboxes", ImVec2(0, window_size.y * 0.2f), true);
+                {
+                    ImGui::SliderFloat("Brightness",     &scene_stage.mSkyboxBrightness,    0.0f,    1.0f);
+                    ImGui::SliderFloat("Blend factor",   &scene_stage.mSkyboxBlendFactor,   0.0f,    1.0f);
+                    ImGui::SliderFloat("Rotation speed", &scene_stage.mSkyboxRotationSpeed, 0.0001f, 0.5f);
+            
+                    if (ImGui::Combo("First skybox", &SelectedSkyboxFirstID, names.data(), args.mLoader->mLoadedSkyboxes.size()))
+                    {
+                        scene_stage.mSkyboxFirst = loader.mLoadedSkyboxes[SelectedSkyboxNameFirst];
+                    }
+                    if (ImGui::Combo("Second skybox", &SelectedSkyboxSecondID, names.data(), args.mLoader->mLoadedSkyboxes.size()))
+                    {
+                        scene_stage.mSkyboxSecond = loader.mLoadedSkyboxes[SelectedSkyboxNameSecond];
+                    }
+                }
+                ImGui::EndChild();
+
+
+                // ====================== Something ======================
+                // ... 
+
+            }
+            ImGui::End();
 		}
 
     };

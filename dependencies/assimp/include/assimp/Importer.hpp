@@ -59,6 +59,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Public ASSIMP data structures
 #include <assimp/types.h>
 
+#include <exception>
+
 namespace Assimp {
 // =======================================================================
 // Public interface to Assimp
@@ -494,6 +496,15 @@ public:
      * @note The returned function remains valid until one of the
      * following methods is called: #ReadFile(), #FreeScene(). */
     const char *GetErrorString() const;
+
+    // -------------------------------------------------------------------
+    /** Returns an exception if one occurred during import.
+     *
+     * @return The last exception which occurred.
+     *
+     * @note The returned value remains valid until one of the
+     * following methods is called: #ReadFile(), #FreeScene(). */
+    const std::exception_ptr& GetException() const;
 
     // -------------------------------------------------------------------
     /** Returns the scene loaded by the last successful call to ReadFile()

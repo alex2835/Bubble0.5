@@ -4,10 +4,12 @@
 
 namespace Bubble
 {
-	Mesh::Mesh(DefaultMaterial&& material,
+	Mesh::Mesh(const std::string& name,
+			   DefaultMaterial&& material,
 			   VertexData&& vertices,
 			   std::vector<uint32_t>&& indices)
-		: mMaterial(std::move(material)),
+		: mName(name),
+		  mMaterial(std::move(material)),
 		  mVertices(std::move(vertices)),
 		  mIndices(std::move(indices))
 	{

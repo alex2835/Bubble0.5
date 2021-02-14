@@ -30,7 +30,7 @@ namespace Bubble
             //io.ConfigViewportsNoAutoMerge = true;
             //io.ConfigViewportsNoTaskBarIcon = true;
             io.ConfigWindowsMoveFromTitleBarOnly = true;
-            // Temp
+            // Temp: 
             io.IniFilename = "../../../../../default_imgui.ini";
 
             // Setup Dear ImGui style

@@ -98,7 +98,7 @@ namespace Bubble
 		aiMaterial* assimp_material = scene->mMaterials[mesh->mMaterialIndex];
 		DefaultMaterial material = LoadMaterialTextures(assimp_material, path);
 
-		return Mesh(std::move(material), std::move(vertices), std::move(indices));
+		return Mesh(mesh->mName.C_Str(), std::move(material), std::move(vertices), std::move(indices));
 	}
 	
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.

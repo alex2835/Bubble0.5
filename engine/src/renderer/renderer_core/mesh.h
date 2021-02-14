@@ -23,13 +23,15 @@ namespace Bubble
 
 	struct Mesh
 	{
-		VertexArray mVertexArray;
-		DefaultMaterial mMaterial;
-		VertexData mVertices;
+		std::string			  mName;
+		VertexArray           mVertexArray;
+		DefaultMaterial       mMaterial;
+		VertexData            mVertices;
 		std::vector<uint32_t> mIndices;
 		
 		Mesh() = default;
-		Mesh(DefaultMaterial&& Material,
+		Mesh(const std::string& name,
+			 DefaultMaterial&& Material,
 			 VertexData&& vertices,
 			 std::vector<uint32_t>&& indices);
 
