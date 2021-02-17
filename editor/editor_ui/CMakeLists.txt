@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.16)
 project(BubbleEditorUI VERSION 0.0.0)
 
 file(GLOB_RECURSE SRCS *.cpp)
