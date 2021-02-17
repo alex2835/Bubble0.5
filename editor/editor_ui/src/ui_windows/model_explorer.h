@@ -16,12 +16,14 @@ namespace Bubble
 		Ref<Model>        mSelectedModel;
 		Viewport          mViewport;
 		Light             mLight;
+        glm::mat4         mTransforms;
 	
         inline ModelExplorer()
             : UIModule("Model explorer"),
               mSelectedModel(nullptr),
               mViewport(800, 600),
-			  mCamera(0)
+			  mCamera(0),
+              mTransforms(glm::mat4(1.0f))
         {
             mLight  = Light::CreateDirLight();
         }
@@ -45,6 +47,17 @@ namespace Bubble
                         mCamera.ProcessMouseMovementShift(args.mInput->fGetMouseRelX(), -args.mInput->fGetMouseRelY());
                         mCamera.Update(dt);
                     }
+                    if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(1))
+                    {
+                        if (args.mInput->IsKeyPressed(SDLK_LSHIFT))
+                        {
+                            mTransforms = glm::rotate(mTransforms, 3 * args.mInput->fGetMouseRelY(), glm::vec3(1, 0, 0));
+                        }
+                        else {
+                            mTransforms = glm::rotate(mTransforms, 3 * args.mInput->fGetMouseRelX(), glm::vec3(0, 1, 0));
+                        }
+                    }
+
                     // Change radius by mouse wheel scrolling
                     if (ImGui::IsWindowHovered())
                     {
@@ -196,7 +209,7 @@ namespace Bubble
             renderer->SetClearColor(glm::vec4(0.4f));
             renderer->Clear();
             
-            renderer->DrawModel(mSelectedModel, glm::mat4(1.0f), renderer->mStorage.mPhongShader);
+            renderer->DrawModel(mSelectedModel, mTransforms, renderer->mStorage.mPhongShader);
 		}
     
     };

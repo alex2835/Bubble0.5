@@ -8,15 +8,15 @@ namespace Bubble
 	struct Input
 	{
 		Window* mWindow;
-		int mKeyMap[256];
-		int mMouseKeyMap[16];
-		int mMouseKeyMapLast[16];
-		int mMouseWheelOffset;
+		int mKeyMap[256]		 = { 0 };
+		int mMouseKeyMap[16]     = { 0 };
+		int mMouseKeyMapLast[16] = { 0 };
+		int mMouseWheelOffset = 0;
 
-		int mMousePosX;
-		int mMousePosY;
-		int mMouseRelPosX;
-		int mMouseRelPosY;
+		int mMousePosX = 0;
+		int mMousePosY = 0;
+		int mMouseRelPosX = 0;
+		int mMouseRelPosY = 0;
 
 		Input(Window* window)
 			: mWindow(window)

@@ -75,7 +75,7 @@ const char* PhongVertexShaderSource = R"shader(
         v_Normal = TIModel * a_Normal;
         v_TexCoords = a_TexCoords;
     
-        if (u_NormalMapping == 1)
+        if (u_NormalMapping != 0)
         {
             vec3 T = normalize(TIModel * normalize(a_Tangent));
             vec3 N = normalize(TIModel * normalize(a_Normal));
@@ -164,7 +164,7 @@ const char* PhongFragmentShaderSource = R"shader(
         vec4 specular = texture(material.specular0, v_TexCoords);
     
         vec3 norm;
-        if (u_NormalMapping == 1)
+        if (u_NormalMapping != 0)
         {
             norm = texture(material.normal0, v_TexCoords).rgb;
             norm = normalize(norm * 2.0f - 1.0f);
