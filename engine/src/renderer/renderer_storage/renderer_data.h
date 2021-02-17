@@ -47,7 +47,7 @@ float SkyboxVertices[] = {
 //========================== Phong shader ========================== 
 
 const char* PhongVertexShaderSource = R"shader(
-    #version 330 core
+    #version 420 core
     layout(location = 0) in vec3  a_Position;
     layout(location = 1) in vec3  a_Normal;
     layout(location = 2) in vec2  a_TexCoords;
@@ -89,7 +89,7 @@ const char* PhongVertexShaderSource = R"shader(
 )shader";
 
 const char* PhongFragmentShaderSource = R"shader(
-    #version 330 core
+    #version 420 core
     out vec4 FragColor;
     
     // Material
@@ -280,7 +280,7 @@ const char* PhongFragmentShaderSource = R"shader(
 //========================== Skybox shader ========================== 
 
 const char* SkyboxVertexShaderSource = R"shader(
-    #version 330 core
+    #version 420 core
     layout(location = 0) in vec3 a_Position;
     
     out vec3 v_TexCoords;
@@ -303,7 +303,7 @@ const char* SkyboxVertexShaderSource = R"shader(
 )shader";
 
 const char* SkyboxFragmentShaderSource = R"shader(
-    #version 330 core
+    #version 420 core
     out vec4 FragColor;
     
     in vec3 v_TexCoords;
