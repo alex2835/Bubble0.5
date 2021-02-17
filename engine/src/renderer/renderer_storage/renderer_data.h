@@ -47,7 +47,7 @@ float SkyboxVertices[] = {
 //========================== Phong shader ========================== 
 
 const char* PhongVertexShaderSource = R"shader(
-    #version 420 core
+    #version 330 core
     layout(location = 0) in vec3  a_Position;
     layout(location = 1) in vec3  a_Normal;
     layout(location = 2) in vec2  a_TexCoords;
@@ -75,7 +75,7 @@ const char* PhongVertexShaderSource = R"shader(
         v_Normal = TIModel * a_Normal;
         v_TexCoords = a_TexCoords;
     
-        if (u_NormalMapping)
+        if (u_NormalMapping == 1)
         {
             vec3 T = normalize(TIModel * normalize(a_Tangent));
             vec3 N = normalize(TIModel * normalize(a_Normal));
@@ -89,7 +89,7 @@ const char* PhongVertexShaderSource = R"shader(
 )shader";
 
 const char* PhongFragmentShaderSource = R"shader(
-    #version 420 core
+    #version 330 core
     out vec4 FragColor;
     
     // Material
@@ -119,11 +119,11 @@ const char* PhongFragmentShaderSource = R"shader(
         float outerCutOff;
     
         vec3 color;
-        float __pad0;
+        float pad0;
         vec3 direction;
-        float __pad1;
+        float pad1;
         vec3 position;
-        float __pad2;
+        float pad2;
     };
     
     // Uniforms
@@ -138,7 +138,7 @@ const char* PhongFragmentShaderSource = R"shader(
     
     layout(std140, binding = 2) uniform  Stuff {
         vec3 u_ViewPos;
-        float __pad0;
+        float pad0;
     };
     
     in vec3 v_FragPos;
@@ -164,15 +164,15 @@ const char* PhongFragmentShaderSource = R"shader(
         vec4 specular = texture(material.specular0, v_TexCoords);
     
         vec3 norm;
-        //if (u_NormalMapping)
-        //{
-        //    norm = texture(material.normal0, v_TexCoords).rgb;
-        //    norm = normalize(norm * 2.0f - 1.0f);
-        //    norm = normalize(v_TBN * norm);
-        //}
-        //else {
-        norm = normalize(v_Normal);
-        //}
+        if (u_NormalMapping == 1)
+        {
+            norm = texture(material.normal0, v_TexCoords).rgb;
+            norm = normalize(norm * 2.0f - 1.0f);
+            norm = normalize(v_TBN * norm);
+        }
+        else {
+            norm = normalize(v_Normal);
+        }
     
         vec3 view_dir = normalize(u_ViewPos - v_FragPos);
     
