@@ -77,11 +77,10 @@ const char* PhongVertexShaderSource = R"shader(
     
         if (u_NormalMapping != 0)
         {
-            vec3 T = normalize(TIModel * normalize(a_Tangent));
-            vec3 N = normalize(TIModel * normalize(a_Normal));
-            T = normalize(T - dot(T, N) * N);
-            vec3 B = cross(N, T);
-            v_TBN = mat3(T, B, N);
+            vec3 B = normalize(vec3(u_Model * vec4(a_Bitangent, 0.0)));
+            vec3 N = normalize(vec3(u_Model * vec4(a_Normal,    0.0)));
+            vec3 T = normalize(vec3(u_Model * vec4(a_Tangent,   0.0)));
+            v_TBN  = mat3(T, B, N);
         }
     
         gl_Position = u_Projection * u_View * vec4(v_FragPos, 1.0);
