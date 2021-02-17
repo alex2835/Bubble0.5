@@ -167,12 +167,13 @@ const char* PhongFragmentShaderSource = R"shader(
         {
             norm = texture(material.normal0, v_TexCoords).rgb;
             norm = normalize(norm * 2.0f - 1.0f);
+            norm = normalize(norm * vec3(0.1, 0.1, 1));    
             norm = normalize(v_TBN * norm);
         }
         else {
             norm = normalize(v_Normal);
         }
-    
+
         vec3 view_dir = normalize(u_ViewPos - v_FragPos);
     
         vec4 result = vec4(0.0f);
