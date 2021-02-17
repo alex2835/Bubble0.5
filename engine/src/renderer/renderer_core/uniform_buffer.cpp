@@ -8,10 +8,10 @@ namespace Bubble
 	UniformBuffer::UniformBuffer(int index, const BufferLayout& layout, uint32_t size, uint32_t additional_size)
 		: mLayout(std::move(layout)),
 		  mIndex(index),
-		  mSize(size)
+		  mSize(size + additional_size)
 	{
 		CalculateOffsetsAndStride();
-		mBufferSize = mLayout.mStride * size;
+		mBufferSize = mLayout.mStride * mSize;
 
 		glGenBuffers(1, &mRendererID);
 		glBindBuffer(GL_UNIFORM_BUFFER, mRendererID);
