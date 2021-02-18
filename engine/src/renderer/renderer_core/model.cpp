@@ -4,9 +4,9 @@
 
 namespace Bubble
 {
-	Model::Model()
-	{
-	}
+	Model::Model() 
+		: mRootNode("RootNode")
+	{}
 
 	void Model::CreateBoundingBox()
 	{

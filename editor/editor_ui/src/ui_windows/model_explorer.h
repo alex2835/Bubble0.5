@@ -15,7 +15,7 @@ namespace Bubble
 		Viewport          mViewport;
 		Light             mLight;
         glm::mat4         mTransforms;
-	
+	 
         inline ModelExplorer()
             : UIModule("Model explorer"),
               mSelectedModel(nullptr),
@@ -30,9 +30,10 @@ namespace Bubble
 		{
             ImGui::Begin("Models explorer", &mIsOpen);
             {
-                ImVec2 window_size = ImGui::GetContentRegionAvail();
+                ImVec2 window_size   = ImGui::GetContentRegionAvail();
+
                 DrawViewport(window_size, args, dt);
-                DrawModelInfo(window_size, args, dt);
+                DrawSelectedModelInfo(window_size, args, dt);
                 DrawModelsList(window_size, args, dt);
             }
             ImGui::End();
@@ -43,12 +44,14 @@ namespace Bubble
             mViewport.OnUpdate();
         }
 
-
 	private:
+
+        // ======================= Viewport ======================= 
         inline void DrawViewport(ImVec2 window_size, UIArgs args, DeltaTime dt)
         {
             uint32_t texture_id   = mViewport.GetColorAttachmentRendererID();
             ImVec2 viewport_size = ImVec2(window_size.x * 0.7f, window_size.y * 0.75f);
+
             ImGui::Image((void*)texture_id, viewport_size, ImVec2(1, 1), ImVec2(0, 0));
             mViewport.mNewSize = *(glm::vec2*)&viewport_size;
 
@@ -95,136 +98,154 @@ namespace Bubble
             }
         }
 
-
-        inline void DrawModelInfo(ImVec2 window_size, UIArgs args, DeltaTime dt)
+        // ======================= Model info ======================= 
+        inline void DrawSelectedModelInfo(ImVec2 window_size, UIArgs args, DeltaTime dt)
         {
             ImGui::SameLine();
-            ImGui::BeginChild("Model info", ImVec2(0, window_size.y * 0.75f), true);
+            ImGui::BeginChild("Model info", ImVec2(0, window_size.y), false, ImGuiWindowFlags_HorizontalScrollbar);
             {
                 if (mSelectedModel)
                 {
-                    // =================== Model info =================== 
-                    int vertices  = 0;
-                    int triangles = 0;
-                    for (auto& mesh : mSelectedModel->mMeshes)
-                    {
-                        vertices += mesh.mVertices.mPositions.size();
-                        triangles += mesh.mIndices.size() / 3;
-                    }
-                    ImGui::Text("Model info:");
-                    ImGui::Text("Vertices: %d",  vertices);
-                    ImGui::Text("Triangles: %d", triangles);
-
-                    bool  change = false;
-                    float ambient_coef   = mSelectedModel->mMeshes[0].mMaterial.mAmbientCoef;
-                    float specular_coef  = mSelectedModel->mMeshes[0].mMaterial.mSpecularCoef;
-                    int   shininess_coef = mSelectedModel->mMeshes[0].mMaterial.mShininess;
-                    glm::vec4 diffuse_color   = mSelectedModel->mMeshes[0].mMaterial.mDiffuseColor;
-                    float normal_mapping_coef = mSelectedModel->mMeshes[0].mMaterial.mNormalMapStrength;
-
-                    change |= ImGui::ColorEdit4("Diffuse color", (float*)&diffuse_color);
-                    change |= ImGui::SliderFloat("Ambient",  &ambient_coef, 0.0f, 10.0f);
-                    change |= ImGui::SliderFloat("Specular", &specular_coef, 0.0f, 10.0f);
-                    change |= ImGui::SliderInt("Shininess",  &shininess_coef, 4,   1000);
-                    change |= ImGui::SliderFloat("NormalM strength", &normal_mapping_coef, 0.0f, 10.0f);
-
-                    if (change)
-                    {
-                        for (auto& mesh : mSelectedModel->mMeshes)
-                        {
-                            mesh.mMaterial.mAmbientCoef  = ambient_coef;
-                            mesh.mMaterial.mSpecularCoef = specular_coef;
-                            mesh.mMaterial.mDiffuseColor = diffuse_color;
-                            mesh.mMaterial.mShininess    = shininess_coef;
-                            mesh.mMaterial.mNormalMapStrength = normal_mapping_coef;
-                        }
-                    }
-                    ImGui::Separator();
-
-                    // =================== Meshe info =================== 
-                    if (ImGui::TreeNode((void*)0, "Meshes: %d", mSelectedModel->mMeshes.size()))
-                    { 
-                        int i = 0;
-                        for (auto& mesh : mSelectedModel->mMeshes)
-                        {
-                            i++;
-                            if (ImGui::TreeNode((void*)i, mesh.mName.c_str()))
-                            {
-                                ImGui::Text("Vertices:  %d", mesh.mVertices.mPositions.size());
-                                ImGui::Text("Triangles: %d", mesh.mIndices.size() / 3);
-                                
-                                ImGui::ColorEdit4("Diffuse color", (float*)&mesh.mMaterial.mDiffuseColor);
-                                ImGui::SliderFloat("Ambient",  &mesh.mMaterial.mAmbientCoef, 0.0f, 10.0f);
-                                ImGui::SliderFloat("Specular", &mesh.mMaterial.mSpecularCoef, 0.0f, 10.0f);
-                                ImGui::SliderInt("Shininess",  &mesh.mMaterial.mShininess, 4, 256);
-                                ImGui::SliderFloat("NormalM strength", &mesh.mMaterial.mNormalMapStrength, 0.0f, 10.0f);
-
-                                ImVec2 image_size(100, 100);
-                                ImGui::Text("Diffuse "); ImGui::SameLine();
-                                ImGui::Image((ImTextureID)mesh.mMaterial.mDiffuseMap->mRendererID, image_size);
-                                if (ImGui::IsItemClicked())
-                                {
-                                    try {
-                                        std::string path = OpenFileDialog("png,jpg,tga");
-                                        mesh.mMaterial.mDiffuseMap = args.mLoader->LoadTexture2D(path);
-                                    }
-                                    catch (const std::exception& e)
-                                    {
-                                        LOG_ERROR("Diffuse map can't be opened");
-                                    }
-                                }
-
-                                ImGui::Text("Specular"); ImGui::SameLine();
-                                ImGui::Image((ImTextureID)mesh.mMaterial.mSpecularMap->mRendererID, image_size);
-                                if (ImGui::IsItemClicked())
-                                {
-                                    try {
-                                        std::string path = OpenFileDialog("png,jpg,tga");
-                                        mesh.mMaterial.mSpecularMap = args.mLoader->LoadTexture2D(path);
-                                    }
-                                    catch (const std::exception& e)
-                                    {
-                                        LOG_ERROR("Specular map can't be opened");
-                                    }
-                                }
-
-                                ImGui::Text("Normal  "); ImGui::SameLine();
-                                if (mesh.mMaterial.mNormalMap)
-                                {
-                                    ImGui::Image((ImTextureID)mesh.mMaterial.mNormalMap->mRendererID, image_size);
-                                }
-                                else {
-                                    const auto& chess_plane = args.mLoader->LoadTexture2D("resources/images/chess_plane.jpg");
-                                    ImGui::Image((ImTextureID)chess_plane->GetRendererID(), image_size);
-                                }
-
-                                if (ImGui::IsItemClicked())
-                                {
-                                    try {
-                                        std::string path = OpenFileDialog("png,jpg,tga");
-                                        mesh.mMaterial.mNormalMap = args.mLoader->LoadTexture2D(path);
-                                    }
-                                    catch (const std::exception& e)
-                                    {
-                                        LOG_ERROR("Normal map can't be opened");
-                                    }
-                                }
-                                ImGui::TreePop();
-                                ImGui::Separator();
-                            }
-                        }
-                        
-                        ImGui::TreePop();
-                    }
-
+                    DrawModelInfo(mSelectedModel);
+                    DrawModelTree(&mSelectedModel->mRootNode, args);
                 }
             }
             ImGui::EndChild();
         }
 
+        inline void DrawModelInfo(Ref<Model>& model)
+        {
+            int vertices = 0;
+            int triangles = 0;
+            for (auto& mesh : mSelectedModel->mMeshes)
+            {
+                vertices += mesh.mVertices.mPositions.size();
+                triangles += mesh.mIndices.size() / 3;
+            }
+            ImGui::Text("Model info:");
+            ImGui::Text("Vertices: %d", vertices);
+            ImGui::Text("Triangles: %d", triangles);
 
+            bool  change = false;
+            float ambient_coef   = model->mMeshes[0].mMaterial.mAmbientCoef;
+            float specular_coef  = model->mMeshes[0].mMaterial.mSpecularCoef;
+            int   shininess_coef = model->mMeshes[0].mMaterial.mShininess;
+            glm::vec4 diffuse_color   = model->mMeshes[0].mMaterial.mDiffuseColor;
+            float normal_mapping_coef = model->mMeshes[0].mMaterial.mNormalMapStrength;
+
+            change |= ImGui::ColorEdit4("Diffuse color", (float*)&diffuse_color);
+            change |= ImGui::SliderFloat("Ambient",  &ambient_coef, 0.0f, 10.0f);
+            change |= ImGui::SliderFloat("Specular", &specular_coef, 0.0f, 10.0f);
+            change |= ImGui::SliderInt("Shininess",  &shininess_coef, 4, 1000);
+            change |= ImGui::SliderFloat("NormalM strength", &normal_mapping_coef, 0.0f, 10.0f);
+
+            if (change)
+            {
+                for (auto& mesh : model->mMeshes)
+                {
+                    mesh.mMaterial.mAmbientCoef  = ambient_coef;
+                    mesh.mMaterial.mSpecularCoef = specular_coef;
+                    mesh.mMaterial.mDiffuseColor = diffuse_color;
+                    mesh.mMaterial.mShininess    = shininess_coef;
+                    mesh.mMaterial.mNormalMapStrength = normal_mapping_coef;
+                }
+            }
+            ImGui::Separator();
+        }
+
+
+        inline void DrawModelTree(MeshNode* current_node, UIArgs args)
+        {
+            if (ImGui::TreeNode((int*)current_node + (int)current_node->mName.data(), current_node->mName.c_str()))
+            {
+                for (auto mesh : current_node->mMeshes)
+                {
+                    DrawMeshInfo(*mesh, args);
+                }
+
+                for (auto& child : current_node->mChildern)
+                {
+                    DrawModelTree(child.get(), args);
+                }
+
+                ImGui::TreePop();
+            }
+        }
+
+        inline void DrawMeshInfo(Mesh& mesh, UIArgs args)
+        {
+            if (ImGui::TreeNode(mesh.mName.c_str(), mesh.mName.c_str()))
+            {
+                ImGui::Text("Vertices:  %d", mesh.mVertices.mPositions.size());
+                ImGui::Text("Triangles: %d", mesh.mIndices.size() / 3);
+
+                ImGui::ColorEdit4("Diffuse color", (float*)&mesh.mMaterial.mDiffuseColor);
+                ImGui::SliderFloat("Ambient", &mesh.mMaterial.mAmbientCoef, 0.0f, 10.0f);
+                ImGui::SliderFloat("Specular", &mesh.mMaterial.mSpecularCoef, 0.0f, 10.0f);
+                ImGui::SliderInt("Shininess", &mesh.mMaterial.mShininess, 4, 256);
+                ImGui::SliderFloat("NormalM strength", &mesh.mMaterial.mNormalMapStrength, 0.0f, 10.0f);
+
+                ImVec2 image_size(100, 100);
+                ImGui::Text("Diffuse "); ImGui::SameLine();
+                ImGui::Image((ImTextureID)mesh.mMaterial.mDiffuseMap->mRendererID, image_size);
+                if (ImGui::IsItemClicked())
+                {
+                    try {
+                        std::string path = OpenFileDialog("png,jpg,tga");
+                        mesh.mMaterial.mDiffuseMap = args.mLoader->LoadTexture2D(path);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR("Diffuse map can't be opened");
+                    }
+                }
+
+                ImGui::Text("Specular"); ImGui::SameLine();
+                ImGui::Image((ImTextureID)mesh.mMaterial.mSpecularMap->mRendererID, image_size);
+                if (ImGui::IsItemClicked())
+                {
+                    try {
+                        std::string path = OpenFileDialog("png,jpg,tga");
+                        mesh.mMaterial.mSpecularMap = args.mLoader->LoadTexture2D(path);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR("Specular map can't be opened");
+                    }
+                }
+
+                ImGui::Text("Normal  "); ImGui::SameLine();
+                if (mesh.mMaterial.mNormalMap)
+                {
+                    ImGui::Image((ImTextureID)mesh.mMaterial.mNormalMap->mRendererID, image_size);
+                }
+                else {
+                    const auto& chess_plane = args.mLoader->LoadTexture2D("resources/images/chess_plane.jpg");
+                    ImGui::Image((ImTextureID)chess_plane->GetRendererID(), image_size);
+                }
+
+                if (ImGui::IsItemClicked())
+                {
+                    try {
+                        std::string path = OpenFileDialog("png,jpg,tga");
+                        mesh.mMaterial.mNormalMap = args.mLoader->LoadTexture2D(path);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR("Normal map can't be opened");
+                    }
+                }
+                ImGui::TreePop();
+                ImGui::Separator();
+            }
+        }
+
+
+        // ======================= Model list ======================= 
         inline void DrawModelsList(ImVec2 window_size, UIArgs args, DeltaTime dt)
         {
+            ImGui::SetCursorPos(ImVec2(8, window_size.y * 0.75f + 31));
+
             ImGui::BeginChild("Models list", ImVec2(window_size.x * 0.5f, window_size.y * 0.24f), true);
             {
                 const std::string* model_to_delete = nullptr;
@@ -237,7 +258,7 @@ namespace Bubble
 
                     ImGui::Selectable(name.c_str(), mSelectedModel == model);
 
-                    // Switch
+                    // Switch 
                     if (ImGui::IsItemClicked())
                     {
                         mSelectedModel = model;
@@ -272,7 +293,7 @@ namespace Bubble
             ImGui::EndChild();
 
 
-            // ==================== Buttons ====================
+            // Buttons
             ImGui::SameLine();
             if (ImGui::Button("Load", { 100, window_size.y * 0.05f }))
             {

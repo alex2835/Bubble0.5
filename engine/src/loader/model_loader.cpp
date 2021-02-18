@@ -7,7 +7,7 @@
 
 namespace Bubble
 {
-	void ProcessNode(Model& model, aiNode* node, const aiScene* scene, Loader* loader, const std::string& path);
+	void ProcessNode(Model& model, aiNode* node, const aiScene* scene, MeshNode* mesh_node, Loader* loader, const std::string& path);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, Loader* loader, const std::string& path);
 	DefaultMaterial LoadMaterialTextures(aiMaterial* mat, Loader* loader, const std::string& path);
 
@@ -27,33 +27,43 @@ namespace Bubble
 		if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) || !scene->mRootNode)
 			throw std::runtime_error("ERROR::ASSIMP\n" + std::string(importer.GetErrorString()));
 
-		importer.ApplyPostProcessing(aiProcess_Triangulate |
-			aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
+		importer.ApplyPostProcessing(aiProcess_FlipUVs | aiProcessPreset_TargetRealtime_MaxQuality);
 
 		// Process ASSIMP's root node recursively
 		model->mMeshes.reserve(scene->mNumMeshes);
-		ProcessNode(*model, scene->mRootNode, scene, this, path);
+		ProcessNode(*model, scene->mRootNode, scene, &model->mRootNode, this, path);
 
 		model->CreateBoundingBox();
 		model->mShader = LoadShader("Phong shader");
 		return model;
 	}
 
-	// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-	void ProcessNode(Model& model, aiNode* node, const aiScene* scene, Loader* loader, const std::string& path)
+	void ProcessNode(Model& model,
+					 aiNode* node,
+					 const aiScene* scene,
+					 MeshNode* mesh_parent,
+					 Loader* loader,
+					 const std::string& path)
 	{
+		Scope<MeshNode> mesh_node 
+			= CreateScope<MeshNode>(node->mName.C_Str());
+
 		for (int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 			model.mMeshes.emplace_back(ProcessMesh(mesh, scene, loader, path));
+			mesh_node->mMeshes.push_back(&model.mMeshes.back());
 		}
-	
+		
 		for (int i = 0; i < node->mNumChildren; i++)
 		{
-			ProcessNode(model, node->mChildren[i], scene, loader, path);
+			ProcessNode(model, node->mChildren[i], scene, mesh_node.get(), loader, path);
 		}
+		
+		mesh_parent->mChildern.push_back(std::move(mesh_node));
 	}
 	
+
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, Loader* loader, const std::string& path)
 	{
 		VertexData vertices;
@@ -102,8 +112,6 @@ namespace Bubble
 		return Mesh(mesh->mName.C_Str(), std::move(material), std::move(vertices), std::move(indices));
 	}
 	
-	// checks all material textures of a given type and loads the textures if they're not loaded yet.
-	// the required info is returned as a Texture struct.
 	DefaultMaterial LoadMaterialTextures(aiMaterial* mat, Loader* loader, const std::string& path)
 	{
 		const aiTextureType types[] = { aiTextureType_DIFFUSE , aiTextureType_SPECULAR, aiTextureType_HEIGHT, aiTextureType_NORMALS };
@@ -171,8 +179,10 @@ namespace Bubble
 				}
 			}
 
-			// In no textures create 1x1 white one
-			Ref<Texture2D> white_plug = loader->LoadTexture2DSingleColor("white plug", glm::vec4(1.0f));
+			// If no textures create 1x1 white one
+			Ref<Texture2D> white_plug 
+				= loader->LoadTexture2DSingleColor("white plug", glm::vec4(1.0f));
+
 			if (!material.mDiffuseMap)
 			{
 				material.mDiffuseMap = white_plug;
