@@ -131,16 +131,16 @@ namespace Bubble
 							material.mSpecularMap = loader->LoadTexture2D(directory + str.C_Str());
 							break;
 
-						//case aiTextureType_NORMALS:
-						//	material.Normal = Texture2D(directory + str.C_Str());
-						//	break;
+						case aiTextureType_NORMALS:
+							material.mNormalMap = loader->LoadTexture2D(directory + str.C_Str());
+							break;
 
 						case aiTextureType_HEIGHT:
 							material.mNormalMap = loader->LoadTexture2D(directory + str.C_Str());
 							break;
 
 						default:
-							LOG_CORE_WARN("Model: {0} | Does't use texture: {1}", path, str.C_Str());
+							LOG_CORE_WARN("Model: {} | Does't use texture: {}", path, str.C_Str());
 					}
 				}
 			}

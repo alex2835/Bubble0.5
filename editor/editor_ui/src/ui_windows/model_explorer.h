@@ -70,7 +70,11 @@ namespace Bubble
                 {
                     if (args.mInput->IsKeyPressed(SDLK_LSHIFT))
                     {
-                        mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelY(), glm::vec3(1, 0, 0));
+                        mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelX(), glm::vec3(1, 0, 0));
+                    }
+                    else if (args.mInput->IsKeyPressed(SDLK_LCTRL))
+                    {
+                        mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelX(), glm::vec3(0, 0, 1));
                     }
                     else {
                         mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelX(), glm::vec3(0, 1, 0));
@@ -112,15 +116,17 @@ namespace Bubble
                     ImGui::Text("Triangles: %d", triangles);
 
                     bool  change = false;
-                    float ambient_coef  = mSelectedModel->mMeshes[0].mMaterial.mAmbientCoef;
-                    float specular_coef = mSelectedModel->mMeshes[0].mMaterial.mSpecularCoef;
+                    float ambient_coef   = mSelectedModel->mMeshes[0].mMaterial.mAmbientCoef;
+                    float specular_coef  = mSelectedModel->mMeshes[0].mMaterial.mSpecularCoef;
+                    int   shininess_coef = mSelectedModel->mMeshes[0].mMaterial.mShininess;
                     glm::vec4 diffuse_color   = mSelectedModel->mMeshes[0].mMaterial.mDiffuseColor;
                     float normal_mapping_coef = mSelectedModel->mMeshes[0].mMaterial.mNormalMapStrength;
 
                     change |= ImGui::ColorEdit4("Diffuse color", (float*)&diffuse_color);
-                    change |= ImGui::SliderFloat("Ambient", &ambient_coef, 0.0f, 10.0f);
-                    change |= ImGui::SliderFloat("Specular",  &specular_coef, 0.0f, 10.0f);
-                    change |= ImGui::SliderFloat("Normal map strength", &normal_mapping_coef, 0.0f, 10.0f);
+                    change |= ImGui::SliderFloat("Ambient",  &ambient_coef, 0.0f, 10.0f);
+                    change |= ImGui::SliderFloat("Specular", &specular_coef, 0.0f, 10.0f);
+                    change |= ImGui::SliderInt("Shininess",  &shininess_coef, 4,   1000);
+                    change |= ImGui::SliderFloat("NormalM strength", &normal_mapping_coef, 0.0f, 10.0f);
 
                     if (change)
                     {
@@ -129,6 +135,7 @@ namespace Bubble
                             mesh.mMaterial.mAmbientCoef  = ambient_coef;
                             mesh.mMaterial.mSpecularCoef = specular_coef;
                             mesh.mMaterial.mDiffuseColor = diffuse_color;
+                            mesh.mMaterial.mShininess    = shininess_coef;
                             mesh.mMaterial.mNormalMapStrength = normal_mapping_coef;
                         }
                     }
@@ -147,9 +154,10 @@ namespace Bubble
                                 ImGui::Text("Triangles: %d", mesh.mIndices.size() / 3);
                                 
                                 ImGui::ColorEdit4("Diffuse color", (float*)&mesh.mMaterial.mDiffuseColor);
-                                ImGui::SliderFloat("Ambient", &mesh.mMaterial.mAmbientCoef, 0.0f, 10.0f);
+                                ImGui::SliderFloat("Ambient",  &mesh.mMaterial.mAmbientCoef, 0.0f, 10.0f);
                                 ImGui::SliderFloat("Specular", &mesh.mMaterial.mSpecularCoef, 0.0f, 10.0f);
-                                ImGui::SliderFloat("Normal map strength", &mesh.mMaterial.mNormalMapStrength, 0.0f, 10.0f);
+                                ImGui::SliderInt("Shininess",  &mesh.mMaterial.mShininess, 4, 256);
+                                ImGui::SliderFloat("NormalM strength", &mesh.mMaterial.mNormalMapStrength, 0.0f, 10.0f);
 
                                 ImVec2 image_size(100, 100);
                                 ImGui::Text("Diffuse "); ImGui::SameLine();
@@ -219,10 +227,13 @@ namespace Bubble
         {
             ImGui::BeginChild("Models list", ImVec2(window_size.x * 0.5f, window_size.y * 0.24f), true);
             {
+                const std::string* model_to_delete = nullptr;
+
                 for (const auto& [path, model] : args.mLoader->mLoadedModels)
                 {
-                    size_t pos = path.find_last_of("/") + 1;
-                    std::string name = path.substr(pos);
+                    size_t pos  = path.find_last_of("/") + 1;
+                    size_t dpos = path.find_last_of(".");
+                    std::string name = path.substr(pos, dpos - pos);
 
                     ImGui::Selectable(name.c_str(), mSelectedModel == model);
 
@@ -230,16 +241,31 @@ namespace Bubble
                     if (ImGui::IsItemClicked())
                     {
                         mSelectedModel = model;
-
                         mTransforms = glm::mat4(1.0f);
                         // Start camera params for this model
                         mCamera.Center = mSelectedModel->mBoundingBox.getCenter();
                         mCamera.Radius = mSelectedModel->mBoundingBox.getLongestEdge() * 1.5f;
                         mCamera.Update(dt);
                     }
+
+                    // Delete
+                    if (ImGui::IsItemHovered && ImGui::BeginPopupContextWindow(name.c_str(), 1))
+                    {
+                        if (ImGui::Selectable("Delete"))
+                        {
+                            model_to_delete = &path;
+                        }
+                        ImGui::EndPopup();
+                    }
                 }
 
-                if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) {
+                if (model_to_delete)
+                {
+                    args.mLoader->mLoadedModels.erase(*model_to_delete);
+                }
+
+                if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+                {
                     mSelectedModel = nullptr;
                 }
             }
