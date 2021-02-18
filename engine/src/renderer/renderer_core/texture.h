@@ -9,19 +9,19 @@ namespace Bubble
 {
     struct Texture2DSpecification
     {
-        uint32_t Width = 0;
-        uint32_t Height = 0;
-        uint32_t ChanelFormat = GL_UNSIGNED_BYTE; // GL_UNSIGNED_BYTE, GL_FLOAT
-        uint32_t InternalFormat = GL_RGBA8;       // GL_RED8, GL_RGB8, GL_RGBA8, GL_DEPTH_COMPONENT
-        uint32_t DataFormat = GL_RGBA;            // GL_RED, GL_RGB, GL_RGBA , GL_DEPTH_COMPONENT
-        uint32_t MinFiler = GL_LINEAR;            // GL_LINEAR, GL_NEAREST
-        uint32_t MagFilter = GL_LINEAR;           // GL_LINEAR, GL_NEAREST
-        uint32_t WrapS = GL_REPEAT;	              // GL_REPEAT, GL_CLAMP, GL_CLAMP_TO_BORDER, GL_MIRRORED_REPEAT 
-        uint32_t WrapT = GL_REPEAT;	              // GL_REPEAT, GL_CLAMP, GL_CLAMP_TO_BORDER, GL_MIRRORED_REPEAT 
-        glm::vec4 BorderColor = glm::vec4(1.0f);
-        bool Flip = false;
-        bool MinMap = false;
-        bool AnisotropicFiltering = false;
+        uint32_t mWidth  = 0;
+        uint32_t mHeight = 0;
+        uint32_t mChanelFormat   = GL_UNSIGNED_BYTE; // GL_UNSIGNED_BYTE, GL_FLOAT
+        uint32_t mInternalFormat = GL_RGBA8;         // GL_RED8, GL_RGB8, GL_RGBA8, GL_DEPTH_COMPONENT
+        uint32_t mDataFormat = GL_RGBA;              // GL_RED, GL_RGB, GL_RGBA , GL_DEPTH_COMPONENT
+        uint32_t mMinFiler   = GL_LINEAR;            // GL_LINEAR, GL_NEAREST
+        uint32_t mMagFilter  = GL_LINEAR;            // GL_LINEAR, GL_NEAREST
+        uint32_t mWrapS = GL_REPEAT;	             // GL_REPEAT, GL_CLAMP, GL_CLAMP_TO_BORDER, GL_MIRRORED_REPEAT 
+        uint32_t mWrapT = GL_REPEAT;	             // GL_REPEAT, GL_CLAMP, GL_CLAMP_TO_BORDER, GL_MIRRORED_REPEAT 
+        glm::vec4 mBorderColor = glm::vec4(1.0f);
+        bool mFlip = false;
+        bool mMinMap = false;
+        bool mAnisotropicFiltering = false;
 
         auto operator<=>(const Texture2DSpecification&) const = default;
     };
@@ -37,7 +37,6 @@ namespace Bubble
         Texture2D(const glm::vec4& color);
         Texture2D(uint32_t width, uint32_t height);
         Texture2D(const Texture2DSpecification& spec);
-        Texture2D(const std::string& path, const Texture2DSpecification& spec = {});
 
         Texture2D(const Texture2D&) = delete;
         Texture2D& operator= (const Texture2D&) = delete;
@@ -47,8 +46,8 @@ namespace Bubble
 
         ~Texture2D();
 
-        uint32_t GetWidth() const { return mSpecification.Width; }
-        uint32_t GetHeight() const { return mSpecification.Height; }
+        uint32_t GetWidth()  const { return mSpecification.mWidth; }
+        uint32_t GetHeight() const { return mSpecification.mHeight; }
         uint32_t GetRendererID() const { return mRendererID; }
 
         // Size in bytes
@@ -62,10 +61,7 @@ namespace Bubble
         void Invalidate();
 
         bool operator==(const Texture2D& other) const { return mRendererID == other.mRendererID; }
-        static std::tuple<Scope<uint8_t[]>, Texture2DSpecification>
-            OpenRawImage(const std::string& path, Texture2DSpecification spec = {});
     };
-
 
     void SetTextureSpecChanels(Texture2DSpecification& spec, int channels);
     uint32_t ExtractTextureSpecChannels(const Texture2DSpecification& spec);

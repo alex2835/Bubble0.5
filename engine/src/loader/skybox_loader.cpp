@@ -13,26 +13,26 @@ namespace Bubble
 
 		Ref<Skybox> skybox = CreateRef<Skybox>();
 
-		auto [orig_data, orig_spec] = Texture2D::OpenRawImage(path);
+		auto [orig_data, orig_spec] = OpenRawImage(path);
 
 		if (!orig_data)
 			throw std::runtime_error("Skybox loading failed: " + path);
 
 		Texture2DSpecification spec = orig_spec;
-		int width = orig_spec.Width / 4;
-		int height = orig_spec.Height / 3;
+		int width  = orig_spec.mWidth / 4;
+		int height = orig_spec.mHeight / 3;
 
-		spec.Width = width;
-		spec.Height = height;
+		spec.mWidth = width;
+		spec.mHeight = height;
 
 		int channels;
-		if (spec.DataFormat == GL_RED) {
+		if (spec.mDataFormat == GL_RED) {
 			channels = 1;
 		}
-		else if (spec.DataFormat == GL_RGB) {
+		else if (spec.mDataFormat == GL_RGB) {
 			channels = 3;
 		}
-		else if (spec.DataFormat == GL_RGBA) {
+		else if (spec.mDataFormat == GL_RGBA) {
 			channels = 4;
 		}
 
@@ -49,7 +49,7 @@ namespace Bubble
 			for (int y = 0; y < height; y++)
 			{
 				int y_offset = height;
-				int raw_y_coord = (y + y_offset) * orig_spec.Width * channels;
+				int raw_y_coord = (y + y_offset) * orig_spec.mWidth * channels;
 				int raw_width = width * channels;
 				memmove(&data[i][y * raw_width], &orig_data[raw_y_coord + raw_width * i], raw_width);
 			}
@@ -58,13 +58,13 @@ namespace Bubble
 		for (int y = 0; y < height; y++)
 		{
 			int y_offset = height * 2;
-            int raw_y_coord = (y + y_offset) * orig_spec.Width * channels;
+            int raw_y_coord = (y + y_offset) * orig_spec.mWidth * channels;
             int raw_width = width * channels;
 			memmove(&data[4][y * raw_width], &orig_data[raw_y_coord + raw_width], raw_width);
 		}
 		// 5-bottom
 		for (int y = 0; y < height; y++) {
-            int raw_y_coord = y * orig_spec.Width * channels;
+            int raw_y_coord = y * orig_spec.mWidth * channels;
             int raw_width = width * channels;
 			memmove(&data[5][y * raw_width], &orig_data[raw_y_coord + raw_width], raw_width);
 		}

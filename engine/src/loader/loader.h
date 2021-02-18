@@ -1,22 +1,28 @@
 #pragma once
 
-#include "renderer_base.h"
+#include "texture.h"
+#include "shader.h"
 #include "model.h"
 #include "skybox.h"
-#include "shader.h"
-
 #include <unordered_map>
 #include <exception>
 
-
 namespace Bubble
 {
-    class Loader
+    struct Loader
     {
+        std::unordered_map<std::string, Ref<Texture2D>> mLoadedTextures;
+        std::unordered_map<std::string, Ref<Model>>     mLoadedModels;
+        std::unordered_map<std::string, Ref<Shader>>    mLoadedShaders;
+        std::unordered_map<std::string, Ref<Skybox>>    mLoadedSkyboxes;
+
+        // ================ Textures ================
     public:
-        std::unordered_map<std::string, Ref<Model>>  mLoadedModels;
-        std::unordered_map<std::string, Ref<Shader>> mLoadedShaders;
-        std::unordered_map<std::string, Ref<Skybox>> mLoadedSkyboxes;
+        Ref<Texture2D> LoadTexture2DSingleColor(const std::string& name, const glm::vec4& color);
+        Ref<Texture2D> LoadTexture2D(std::string path, const Texture2DSpecification& spec = {});
+
+        std::tuple<Scope<uint8_t[]>, Texture2DSpecification>
+            OpenRawImage(const std::string& path, Texture2DSpecification spec = {});
 
         // ================= Meshes ================= 
     public:

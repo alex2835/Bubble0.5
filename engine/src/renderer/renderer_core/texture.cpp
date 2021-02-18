@@ -1,20 +1,19 @@
 
 #include "texture.h"
 
-
 namespace Bubble
 {
     Texture2D::Texture2D(const glm::vec4& color)
     {
-        mSpecification.Width = 1;
-        mSpecification.Height = 1;
-        mSpecification.InternalFormat = GL_RGBA8;
-        mSpecification.DataFormat = GL_RGBA;
-        mSpecification.ChanelFormat = GL_FLOAT;
-        mSpecification.MinFiler = GL_NEAREST;
-        mSpecification.MagFilter = GL_NEAREST;
-        mSpecification.WrapS = GL_REPEAT;
-        mSpecification.WrapT = GL_REPEAT;
+        mSpecification.mWidth = 1;
+        mSpecification.mHeight = 1;
+        mSpecification.mInternalFormat = GL_RGBA8;
+        mSpecification.mDataFormat = GL_RGBA;
+        mSpecification.mChanelFormat = GL_FLOAT;
+        mSpecification.mMinFiler = GL_NEAREST;
+        mSpecification.mMagFilter = GL_NEAREST;
+        mSpecification.mWrapS = GL_REPEAT;
+        mSpecification.mWrapT = GL_REPEAT;
         Invalidate();
         SetData((void*)&color, 4);
     }
@@ -31,33 +30,12 @@ namespace Bubble
         Invalidate();
     }
 
-    Texture2D::Texture2D(const std::string& path, const Texture2DSpecification& spec)
-        : mSpecification(spec)
-    {
-        stbi_uc* data = nullptr;
-        int width, height, channels;
-
-        stbi_set_flip_vertically_on_load(spec.Flip);
-        data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-
-        if (data == nullptr)
-            throw std::runtime_error("Failed to load image!\nPath: " + path);
-
-        mSpecification.Width = width;
-        mSpecification.Height = height;
-        SetTextureSpecChanels(mSpecification, channels);
-
-        Invalidate();
-        SetData(data, width * height * channels);
-        stbi_image_free(data);
-    }
-
     Texture2D::Texture2D(Texture2D&& other) noexcept
         : mRendererID(other.mRendererID),
-        mSpecification(other.mSpecification)
+          mSpecification(other.mSpecification)
     {
-        other.mSpecification.Width = 0;
-        other.mSpecification.Height = 0;
+        other.mSpecification.mWidth = 0;
+        other.mSpecification.mHeight = 0;
         other.mRendererID = 0;
     }
 
@@ -69,8 +47,8 @@ namespace Bubble
             mRendererID = other.mRendererID;
             mSpecification = other.mSpecification;
             other.mRendererID = 0;
-            other.mSpecification.Width = 0;
-            other.mSpecification.Height = 0;
+            other.mSpecification.mWidth = 0;
+            other.mSpecification.mHeight = 0;
         }
         return *this;
     }
@@ -83,17 +61,17 @@ namespace Bubble
     void Texture2D::SetData(void* data, uint32_t size)
     {
         uint32_t channels = ExtractTextureSpecChannels(mSpecification);
-        BUBBLE_CORE_ASSERT(size == mSpecification.Width * mSpecification.Height * channels, "Data must be entire texture!");
+        BUBBLE_CORE_ASSERT(size == mSpecification.mWidth * mSpecification.mHeight * channels, "Data must be entire texture!");
         glcall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-            mSpecification.Width, mSpecification.Height, mSpecification.DataFormat, mSpecification.ChanelFormat, data));
+            mSpecification.mWidth, mSpecification.mHeight, mSpecification.mDataFormat, mSpecification.mChanelFormat, data));
     }
 
     void Texture2D::GetData(void* data, uint32_t size) const
     {
         Bind();
         uint32_t channels = ExtractTextureSpecChannels(mSpecification);
-        BUBBLE_CORE_ASSERT(size == mSpecification.Width * mSpecification.Height * channels, "Data must be entire texture!");
-        glcall(glGetTexImage(GL_TEXTURE_2D, 0, mSpecification.DataFormat, mSpecification.ChanelFormat, data));
+        BUBBLE_CORE_ASSERT(size == mSpecification.mWidth * mSpecification.mHeight * channels, "Data must be entire texture!");
+        glcall(glGetTexImage(GL_TEXTURE_2D, 0, mSpecification.mDataFormat, mSpecification.mChanelFormat, data));
     }
 
     void Texture2D::Bind(uint32_t slot) const
@@ -102,29 +80,10 @@ namespace Bubble
         glBindTexture(GL_TEXTURE_2D, mRendererID);
     }
 
-    std::tuple<Scope<uint8_t[]>, Texture2DSpecification>
-        Texture2D::OpenRawImage(const std::string& path, Texture2DSpecification spec)
-    {
-        uint8_t* data = nullptr;
-        int width, height, channels;
-
-        stbi_set_flip_vertically_on_load(spec.Flip);
-        data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-
-        if (data == nullptr)
-            throw std::runtime_error("Failed to load image!\nPath: " + path);
-
-        spec.Width = width;
-        spec.Height = height;
-        SetTextureSpecChanels(spec, channels);
-
-        return { Scope<uint8_t[]>(data), spec };
-    }
-
     void Texture2D::Resize(const glm::ivec2& new_size)
     {
-        mSpecification.Width = new_size.x;
-        mSpecification.Height = new_size.y;
+        mSpecification.mWidth  = new_size.x;
+        mSpecification.mHeight = new_size.y;
         Invalidate();
     }
 
@@ -134,28 +93,28 @@ namespace Bubble
 
         glcall(glGenTextures(1, &mRendererID));
         glcall(glBindTexture(GL_TEXTURE_2D, mRendererID));
-        glcall(glTexImage2D(GL_TEXTURE_2D, 0, mSpecification.InternalFormat,
-            mSpecification.Width, mSpecification.Height, 0, mSpecification.DataFormat, mSpecification.ChanelFormat, nullptr));
+        glcall(glTexImage2D(GL_TEXTURE_2D, 0, mSpecification.mInternalFormat,
+            mSpecification.mWidth, mSpecification.mHeight, 0, mSpecification.mDataFormat, mSpecification.mChanelFormat, nullptr));
 
-        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mSpecification.MinFiler));
-        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mSpecification.MagFilter));
+        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mSpecification.mMinFiler));
+        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mSpecification.mMagFilter));
 
-        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, mSpecification.WrapS));
-        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, mSpecification.WrapT));
+        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, mSpecification.mWrapS));
+        glcall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, mSpecification.mWrapS));
 
-        if (mSpecification.WrapS == GL_CLAMP_TO_BORDER || mSpecification.WrapT == GL_CLAMP_TO_BORDER)
+        if (mSpecification.mWrapS == GL_CLAMP_TO_BORDER || mSpecification.mWrapT == GL_CLAMP_TO_BORDER)
         {
-            glcall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, (float*)&mSpecification.BorderColor));
+            glcall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, (float*)&mSpecification.mBorderColor));
         }
 
-        if (mSpecification.AnisotropicFiltering)
+        if (mSpecification.mAnisotropicFiltering)
         {
             GLfloat value;
             glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &value);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, value);
         }
 
-        if (mSpecification.MinMap && !mSpecification.AnisotropicFiltering)
+        if (mSpecification.mMinMap && !mSpecification.mAnisotropicFiltering)
         {
             glGenerateMipmap(GL_TEXTURE_2D);
         }
@@ -167,16 +126,16 @@ namespace Bubble
         switch (channels)
         {
         case 1:
-            spec.InternalFormat = GL_R8;
-            spec.DataFormat = GL_RED;
+            spec.mInternalFormat = GL_R8;
+            spec.mDataFormat = GL_RED;
             break;
         case 3:
-            spec.InternalFormat = GL_RGB8;
-            spec.DataFormat = GL_RGB;
+            spec.mInternalFormat = GL_RGB8;
+            spec.mDataFormat = GL_RGB;
             break;
         case 4:
-            spec.InternalFormat = GL_RGBA8;
-            spec.DataFormat = GL_RGBA;
+            spec.mInternalFormat = GL_RGBA8;
+            spec.mDataFormat = GL_RGBA;
             break;
         default:
             BUBBLE_CORE_ASSERT(false, "Format not supported!");
@@ -186,7 +145,7 @@ namespace Bubble
     uint32_t ExtractTextureSpecChannels(const Texture2DSpecification& spec)
     {
         uint32_t bpp = 0;
-        switch (spec.DataFormat)
+        switch (spec.mDataFormat)
         {
         case GL_RGBA:
             bpp = 4;
@@ -205,7 +164,7 @@ namespace Bubble
 
     uint32_t GetTextureSize(const Texture2DSpecification& spec)
     {
-        return spec.Width * spec.Height * ExtractTextureSpecChannels(spec);
+        return spec.mWidth * spec.mHeight * ExtractTextureSpecChannels(spec);
     }
 
 }

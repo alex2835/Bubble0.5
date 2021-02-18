@@ -9,10 +9,10 @@ namespace Bubble
 {
 	struct BasicMaterial
 	{
-		glm::vec3 Ambient;
-		glm::vec3 Diffuse;
-		glm::vec3 Specular;
-		int Shininess;
+		glm::vec3 mAmbient;
+		glm::vec3 mDiffuse;
+		glm::vec3 mSpecular;
+		int mShininess;
 
 		BasicMaterial(const glm::vec3& ambient,
 					  const glm::vec3& diffuse,
@@ -25,15 +25,18 @@ namespace Bubble
 
 	struct DefaultMaterial
 	{
-		Texture2D Diffuse;
-		Texture2D Specular;
-		Texture2D Normal;
-		int Shininess = 32;
+		Ref<Texture2D> mDiffuseMap;
+		Ref<Texture2D> mSpecularMap;
+		Ref<Texture2D> mNormalMap;
+        glm::vec3 mAmbientCoef  = glm::vec3(1.0f);
+        glm::vec3 mDiffuseCoef  = glm::vec3(1.0f);
+        glm::vec3 mSpecularCoef = glm::vec3(1.0f);
+        int mShininess = 32;
 
 		DefaultMaterial() = default;
-		DefaultMaterial(Texture2D&& diffuse_map,
-						Texture2D&& specular_map,
-						Texture2D&& normal_map,
+		DefaultMaterial(const Ref<Texture2D>& diffuse_map,
+						const Ref<Texture2D>& specular_map,
+						const Ref<Texture2D>& normal_map,
 						int shininess = 32);
 
 		DefaultMaterial(const DefaultMaterial&) = delete;
@@ -48,27 +51,28 @@ namespace Bubble
 
 	struct ExtendedMaterial
 	{
-		std::vector<Texture2D> DiffuseMaps;
-		std::vector<Texture2D> SpecularMaps;
-		std::vector<Texture2D> NormalMaps;
-		int Shininess = 32;
-
+		std::vector<Ref<Texture2D>> mDiffuseMaps;
+		std::vector<Ref<Texture2D>> mSpecularMaps;
+		std::vector<Ref<Texture2D>> mNormalMaps;
+		int mShininess = 32;
+	
 		ExtendedMaterial() = default;
-		ExtendedMaterial(std::vector<Texture2D>&& diffuse_maps,
-						 std::vector<Texture2D>&& specular_maps,
-						 std::vector<Texture2D>&& normal_maps,
+		ExtendedMaterial(std::vector<Ref<Texture2D>>&& diffuse_maps,
+						 std::vector<Ref<Texture2D>>&& specular_maps,
+						 std::vector<Ref<Texture2D>>&& normal_maps,
 						 int shininess = 32);
-
+	
 		ExtendedMaterial(const ExtendedMaterial&) = delete;
 		ExtendedMaterial& operator=(const ExtendedMaterial&) = delete;
-
+	
 		ExtendedMaterial(ExtendedMaterial&&) = default;
 		ExtendedMaterial& operator=(ExtendedMaterial&&) = default;
-
+	
 		void Set(const Ref<Shader>& shader) const;
 	};
 
 
 	// PBR material
+	// ...
 
 }

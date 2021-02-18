@@ -19,7 +19,7 @@ namespace Bubble
 
     Framebuffer::Framebuffer(Texture2D&& color, Texture2D&& depth)
         : mColorAttachment(std::move(color)),
-        mDepthAttachment(std::move(depth))
+          mDepthAttachment(std::move(depth))
     {
         mSpecification = { mColorAttachment.GetWidth(), mColorAttachment.GetHeight() };
         Invalidate();
@@ -27,10 +27,10 @@ namespace Bubble
 
     Framebuffer::Framebuffer(Framebuffer&& other) noexcept
     {
-        mRendererID = other.mRendererID;
+        mRendererID    = other.mRendererID;
+        mSpecification = other.mSpecification;
         mColorAttachment = std::move(other.mColorAttachment);
         mDepthAttachment = std::move(other.mDepthAttachment);
-        mSpecification = other.mSpecification;
         other.mRendererID = 0;
     }
 
@@ -39,15 +39,14 @@ namespace Bubble
         if (this != &other)
         {
             glDeleteFramebuffers(1, &mRendererID);
-            mRendererID = other.mRendererID;
+            mRendererID    = other.mRendererID;
+            mSpecification = other.mSpecification;
             mColorAttachment = std::move(other.mColorAttachment);
             mDepthAttachment = std::move(other.mDepthAttachment);
-            mSpecification = other.mSpecification;
             other.mRendererID = 0;
         }
         return *this;
     }
-
 
     void Framebuffer::Create(const FramebufferSpecification& spec)
     {
@@ -66,12 +65,12 @@ namespace Bubble
         mDepthAttachment = std::move(texture);
     }
 
-    Bubble::Texture2D Framebuffer::GetColorAttachment()
+    Texture2D Framebuffer::GetColorAttachment()
     {
         return std::move(mColorAttachment);
     }
 
-    Bubble::Texture2D Framebuffer::GetDepthAttachment()
+    Texture2D Framebuffer::GetDepthAttachment()
     {
         return std::move(mDepthAttachment);
     }
@@ -87,16 +86,16 @@ namespace Bubble
         glcall(glGenFramebuffers(1, &mRendererID));
         glcall(glBindFramebuffer(GL_FRAMEBUFFER, mRendererID));
 
-        if (mColorAttachment.GetWidth() != mSpecification.Width ||
-            mColorAttachment.GetHeight() != mSpecification.Height)
+        if (mColorAttachment.GetWidth()  != mSpecification.mWidth ||
+            mColorAttachment.GetHeight() != mSpecification.mHeight)
         {
-            mColorAttachment.Resize({ mSpecification.Width, mSpecification.Height });
+            mColorAttachment.Resize({ mSpecification.mWidth, mSpecification.mHeight });
         }
 
-        if  (mDepthAttachment.GetWidth() != mSpecification.Width ||
-             mDepthAttachment.GetHeight() != mSpecification.Height)
+        if  (mDepthAttachment.GetWidth() != mSpecification.mWidth ||
+             mDepthAttachment.GetHeight() != mSpecification.mHeight)
         {
-            mDepthAttachment.Resize({ mSpecification.Width, mSpecification.Height });
+            mDepthAttachment.Resize({ mSpecification.mWidth, mSpecification.mHeight });
         }
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, GetColorAttachmentRendererID(), 0);
@@ -108,12 +107,12 @@ namespace Bubble
 
     int Framebuffer::GetWidth() const
     {
-        return mSpecification.Width;
+        return mSpecification.mWidth;
     }
 
     int Framebuffer::GetHeight() const
     {
-        return mSpecification.Height;
+        return mSpecification.mHeight;
     }
 
     void Framebuffer::Bind() const
@@ -141,9 +140,9 @@ namespace Bubble
 
     void Framebuffer::Resize(glm::ivec2 size)
     {
-        // Prevent frame buffer error
-        mSpecification.Width  = std::max(1, size.x);
-        mSpecification.Height = std::max(1, size.y);
+        // Prevent framebuffer error
+        mSpecification.mWidth  = std::max(1, size.x);
+        mSpecification.mHeight = std::max(1, size.y);
         Invalidate();
     }
 
@@ -154,8 +153,8 @@ namespace Bubble
             LOG_CORE_ERROR("Invalid framebuffer resize params width: {} height: {}", width, height);
             return;
         }
-        mSpecification.Width = width;
-        mSpecification.Height = height;
+        mSpecification.mWidth = width;
+        mSpecification.mHeight = height;
         Invalidate();
     }
 
@@ -177,11 +176,11 @@ namespace Bubble
 
     void Framebuffer::SetDefaultAttachemtSpec()
     {
-        mDepthAttachment.mSpecification.ChanelFormat = GL_FLOAT;
-        mDepthAttachment.mSpecification.DataFormat = GL_DEPTH_COMPONENT;
-        mDepthAttachment.mSpecification.InternalFormat = GL_DEPTH_COMPONENT;
-        mDepthAttachment.mSpecification.WrapS = GL_CLAMP_TO_BORDER;
-        mDepthAttachment.mSpecification.WrapT = GL_CLAMP_TO_BORDER;
+        mDepthAttachment.mSpecification.mChanelFormat = GL_FLOAT;
+        mDepthAttachment.mSpecification.mDataFormat   = GL_DEPTH_COMPONENT;
+        mDepthAttachment.mSpecification.mInternalFormat = GL_DEPTH_COMPONENT;
+        mDepthAttachment.mSpecification.mWrapS = GL_CLAMP_TO_BORDER;
+        mDepthAttachment.mSpecification.mWrapT = GL_CLAMP_TO_BORDER;
     }
 
     

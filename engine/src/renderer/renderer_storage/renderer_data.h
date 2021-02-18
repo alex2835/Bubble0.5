@@ -65,7 +65,7 @@ const char* PhongVertexShaderSource = R"shader(
         mat4 u_View;
     };
     uniform mat4 u_Model;
-    uniform int u_NormalMapping;
+    uniform bool u_NormalMapping;
     
     void main()
     {
@@ -75,7 +75,7 @@ const char* PhongVertexShaderSource = R"shader(
         v_Normal = TIModel * a_Normal;
         v_TexCoords = a_TexCoords;
     
-        if (u_NormalMapping != 0)
+        if (u_NormalMapping)
         {
             vec3 B = normalize(vec3(u_Model * vec4(a_Bitangent, 0.0)));
             vec3 N = normalize(vec3(u_Model * vec4(a_Normal,    0.0)));
@@ -93,9 +93,9 @@ const char* PhongFragmentShaderSource = R"shader(
     
     // Material
     struct Material {
-        sampler2D diffuse0;
-        sampler2D specular0;
-        sampler2D normal0;
+        sampler2D diffuse;
+        sampler2D specular;
+        sampler2D normal;
         int shininess;
     };
     
@@ -127,7 +127,7 @@ const char* PhongFragmentShaderSource = R"shader(
     
     // Uniforms
     uniform Material material;
-    uniform int u_NormalMapping;
+    uniform bool u_NormalMapping;
     
     #define MAX_LIGHTS 30
     layout(std140, binding = 1) uniform Lights {
@@ -145,7 +145,7 @@ const char* PhongFragmentShaderSource = R"shader(
     in vec2 v_TexCoords;
     in mat3 v_TBN;
     
-    in vec3 Normal0;
+    in vec3 normal;
     in vec3 WorldPos0;
     in vec3 Tangent0;
     
@@ -156,16 +156,16 @@ const char* PhongFragmentShaderSource = R"shader(
     
     void main()
     {
-        vec4 diffuse = texture(material.diffuse0, v_TexCoords);
+        vec4 diffuse = texture(material.diffuse, v_TexCoords);
         if (diffuse.a < 0.0001f) {
             discard;
         }
-        vec4 specular = texture(material.specular0, v_TexCoords);
+        vec4 specular = texture(material.specular, v_TexCoords);
     
         vec3 norm;
-        if (u_NormalMapping != 0)
+        if (u_NormalMapping)
         {
-            norm = texture(material.normal0, v_TexCoords).rgb;
+            norm = texture(material.normal, v_TexCoords).rgb;
             norm = normalize(norm * 2.0f - 1.0f);
             norm = normalize(norm * vec3(0.1, 0.1, 1));    
             norm = normalize(v_TBN * norm);

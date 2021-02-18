@@ -13,9 +13,9 @@ namespace Bubble
 {
     struct FramebufferSpecification
     {
-        uint32_t Width;
-        uint32_t Height;
-        int Samples = 1;
+        uint32_t mWidth;
+        uint32_t mHeight;
+        int mSamples = 1;
     };
 
     struct Framebuffer
