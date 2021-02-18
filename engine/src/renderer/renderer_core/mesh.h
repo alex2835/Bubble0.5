@@ -13,11 +13,11 @@ namespace Bubble
 {
 	struct VertexData
 	{
-		std::vector<glm::vec3> Positions;
-		std::vector<glm::vec3> Normals;
-		std::vector<glm::vec2> TexCoords;
-		std::vector<glm::vec3> Tangents;
-		std::vector<glm::vec3> Bitangents;
+		std::vector<glm::vec3> mPositions;
+		std::vector<glm::vec3> mNormals;
+		std::vector<glm::vec2> mTexCoords;
+		std::vector<glm::vec3> mTangents;
+		std::vector<glm::vec3> mBitangents;
 	};
 
 

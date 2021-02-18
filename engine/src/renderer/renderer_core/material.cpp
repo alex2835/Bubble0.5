@@ -33,20 +33,26 @@ namespace Bubble
 
 	void DefaultMaterial::Set(const Ref<Shader>& shader) const
 	{
-		shader->SetUni1i("material.diffuse", 0);
+		shader->SetUni4f("material.diffuse_color", mDiffuseColor);
+		shader->SetUni1f("material.specular_coef", mSpecularCoef);
+		shader->SetUni1f("material.ambient_coef", mAmbientCoef);
+
+		// Maps
+		shader->SetUni1i("material.diffuse_map", 0);
 		mDiffuseMap->Bind(0);
 
-		shader->SetUni1i("material.specular", 1);
+		shader->SetUni1i("material.specular_map", 1);
 		mSpecularMap->Bind(1);
 
 		if (mNormalMap)
 		{
-			shader->SetUni1i("material.normal", 2);
+			shader->SetUni1i("material.normal_map", 2);
 			mNormalMap->Bind(2);
 		}
 
+        shader->SetUni1i("material.shininess", mShininess);
         shader->SetUni1i("u_NormalMapping", (bool)mNormalMap);
-		shader->SetUni1i("material.shininess", mShininess);
+		shader->SetUni1f("u_NormalMappingStrength", mNormalMapStrength);
 	}
 
 

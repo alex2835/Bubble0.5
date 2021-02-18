@@ -4,7 +4,8 @@
 
 namespace Bubble
 {
-    Renderer::Renderer()
+    Renderer::Renderer(Loader* loader)
+        : mStorage(loader)
     {
         InitUBOS();
         glEnable(GL_DEPTH_TEST);

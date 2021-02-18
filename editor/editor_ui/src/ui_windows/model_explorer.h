@@ -45,19 +45,6 @@ namespace Bubble
 
 
 	private:
-		inline void RenderSelectedModel(Renderer* renderer)
-		{
-            renderer->SetViewport(mViewport);
-            renderer->SetCamera(mCamera);
-            renderer->SetLights(&mLight, 1);
-            
-            renderer->SetClearColor(glm::vec4(0.4f));
-            renderer->Clear();
-            
-            renderer->DrawModel(mSelectedModel, mTransforms, renderer->mStorage.mPhongShader);
-		}
-
-
         inline void DrawViewport(ImVec2 window_size, UIArgs args, DeltaTime dt)
         {
             uint32_t texture_id   = mViewport.GetColorAttachmentRendererID();
@@ -65,28 +52,32 @@ namespace Bubble
             ImGui::Image((void*)texture_id, viewport_size, ImVec2(1, 1), ImVec2(0, 0));
             mViewport.mNewSize = *(glm::vec2*)&viewport_size;
 
-            if (mSelectedModel && ImGui::IsItemVisible())
+            if (ImGui::IsItemVisible() && mSelectedModel)
             {
                 RenderSelectedModel(args.mRenderer);
             }
 
-            // Rotate camera
-            if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(0))
+            if (ImGui::IsWindowFocused())
             {
-                mCamera.ProcessMouseMovementShift(args.mInput->fGetMouseRelX(), -args.mInput->fGetMouseRelY());
-                mCamera.Update(dt);
-            }
-            // Rotate model
-            if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(1))
-            {
-                if (args.mInput->IsKeyPressed(SDLK_LSHIFT))
+                // Rotate camera
+                if (ImGui::IsMouseDragging(0))
                 {
-                    mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelY(), glm::vec3(1, 0, 0));
+                    mCamera.ProcessMouseMovementShift(args.mInput->fGetMouseRelX(), -args.mInput->fGetMouseRelY());
+                    mCamera.Update(dt);
                 }
-                else {
-                    mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelX(), glm::vec3(0, 1, 0));
+                // Rotate model
+                if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(1))
+                {
+                    if (args.mInput->IsKeyPressed(SDLK_LSHIFT))
+                    {
+                        mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelY(), glm::vec3(1, 0, 0));
+                    }
+                    else {
+                        mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelX(), glm::vec3(0, 1, 0));
+                    }
                 }
             }
+
             // Change camera radius by mouse wheel scrolling
             if (ImGui::IsWindowHovered())
             {
@@ -108,21 +99,42 @@ namespace Bubble
             {
                 if (mSelectedModel)
                 {
-                    // Model info
+                    // =================== Model info =================== 
                     int vertices  = 0;
                     int triangles = 0;
                     for (auto& mesh : mSelectedModel->mMeshes)
                     {
-                        vertices += mesh.mVertices.Positions.size();
+                        vertices += mesh.mVertices.mPositions.size();
                         triangles += mesh.mIndices.size() / 3;
                     }
                     ImGui::Text("Model info:");
                     ImGui::Text("Vertices: %d",  vertices);
                     ImGui::Text("Triangles: %d", triangles);
+
+                    bool  change = false;
+                    float ambient_coef  = mSelectedModel->mMeshes[0].mMaterial.mAmbientCoef;
+                    float specular_coef = mSelectedModel->mMeshes[0].mMaterial.mSpecularCoef;
+                    glm::vec4 diffuse_color   = mSelectedModel->mMeshes[0].mMaterial.mDiffuseColor;
+                    float normal_mapping_coef = mSelectedModel->mMeshes[0].mMaterial.mNormalMapStrength;
+
+                    change |= ImGui::ColorEdit4("Diffuse color", (float*)&diffuse_color);
+                    change |= ImGui::SliderFloat("Ambient", &ambient_coef, 0.0f, 10.0f);
+                    change |= ImGui::SliderFloat("Specular",  &specular_coef, 0.0f, 10.0f);
+                    change |= ImGui::SliderFloat("Normal map strength", &normal_mapping_coef, 0.0f, 10.0f);
+
+                    if (change)
+                    {
+                        for (auto& mesh : mSelectedModel->mMeshes)
+                        {
+                            mesh.mMaterial.mAmbientCoef  = ambient_coef;
+                            mesh.mMaterial.mSpecularCoef = specular_coef;
+                            mesh.mMaterial.mDiffuseColor = diffuse_color;
+                            mesh.mMaterial.mNormalMapStrength = normal_mapping_coef;
+                        }
+                    }
                     ImGui::Separator();
 
-
-                    // Meshes/Material info
+                    // =================== Meshe info =================== 
                     if (ImGui::TreeNode((void*)0, "Meshes: %d", mSelectedModel->mMeshes.size()))
                     { 
                         int i = 0;
@@ -131,8 +143,13 @@ namespace Bubble
                             i++;
                             if (ImGui::TreeNode((void*)i, mesh.mName.c_str()))
                             {
-                                ImGui::Text("Vertices:  %d", mesh.mVertices.Positions.size());
+                                ImGui::Text("Vertices:  %d", mesh.mVertices.mPositions.size());
                                 ImGui::Text("Triangles: %d", mesh.mIndices.size() / 3);
+                                
+                                ImGui::ColorEdit4("Diffuse color", (float*)&mesh.mMaterial.mDiffuseColor);
+                                ImGui::SliderFloat("Ambient", &mesh.mMaterial.mAmbientCoef, 0.0f, 10.0f);
+                                ImGui::SliderFloat("Specular", &mesh.mMaterial.mSpecularCoef, 0.0f, 10.0f);
+                                ImGui::SliderFloat("Normal map strength", &mesh.mMaterial.mNormalMapStrength, 0.0f, 10.0f);
 
                                 ImVec2 image_size(100, 100);
                                 ImGui::Text("Diffuse "); ImGui::SameLine();
@@ -245,7 +262,18 @@ namespace Bubble
             }
 
         }
-    
+
+        inline void RenderSelectedModel(Renderer* renderer)
+        {
+            renderer->SetViewport(mViewport);
+            renderer->SetCamera(mCamera);
+            renderer->SetLights(&mLight, 1);
+
+            renderer->SetClearColor(glm::vec4(0.4f));
+            renderer->Clear();
+
+            renderer->DrawModel(mSelectedModel, mTransforms, renderer->mStorage.mPhongShader);
+        }
     };
 
 }

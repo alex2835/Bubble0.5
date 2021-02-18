@@ -51,8 +51,8 @@ const char* PhongVertexShaderSource = R"shader(
     layout(location = 0) in vec3  a_Position;
     layout(location = 1) in vec3  a_Normal;
     layout(location = 2) in vec2  a_TexCoords;
-    layout(location = 3) in vec3 a_Tangent;
-    layout(location = 4) in vec3 a_Bitangent;
+    layout(location = 3) in vec3  a_Tangent;
+    layout(location = 4) in vec3  a_Bitangent;
     
     out vec3 v_FragPos;
     out vec3 v_Normal;
@@ -69,10 +69,10 @@ const char* PhongVertexShaderSource = R"shader(
     
     void main()
     {
-        mat3 TIModel = mat3(transpose(inverse(u_Model)));
+        mat3 ITModel = mat3(transpose(inverse(u_Model)));
     
         v_FragPos = vec3(u_Model * vec4(a_Position, 1.0));
-        v_Normal = TIModel * a_Normal;
+        v_Normal  = normalize(ITModel * a_Normal);
         v_TexCoords = a_TexCoords;
     
         if (u_NormalMapping)
@@ -93,16 +93,20 @@ const char* PhongFragmentShaderSource = R"shader(
     
     // Material
     struct Material {
-        sampler2D diffuse;
-        sampler2D specular;
-        sampler2D normal;
+        sampler2D diffuse_map;
+        sampler2D specular_map;
+        sampler2D normal_map;
+
+        vec4 diffuse_color;
+        float specular_coef;
+        float ambient_coef;
         int shininess;
     };
     
     // Light type enum
-    const int DirLight = 0;
+    const int DirLight   = 0;
     const int PointLight = 1;
-    const int SpotLight = 2;
+    const int SpotLight  = 2;
     
     // Light
     struct Light
@@ -125,29 +129,27 @@ const char* PhongFragmentShaderSource = R"shader(
         float pad2;
     };
     
-    // Uniforms
-    uniform Material material;
-    uniform bool u_NormalMapping;
-    
     #define MAX_LIGHTS 30
     layout(std140, binding = 1) uniform Lights {
         int nLights;
         Light lights[MAX_LIGHTS];
     };
     
-    layout(std140, binding = 2) uniform  Stuff {
+    layout(std140, binding = 2) uniform  ViewPos {
         vec3 u_ViewPos;
         float pad0;
     };
-    
+
+    // Fragment shader output
     in vec3 v_FragPos;
     in vec3 v_Normal;
     in vec2 v_TexCoords;
     in mat3 v_TBN;
     
-    in vec3 normal;
-    in vec3 WorldPos0;
-    in vec3 Tangent0;
+    // Uniforms
+    uniform Material material;
+    uniform bool  u_NormalMapping;
+    uniform float u_NormalMappingStrength;
     
     // Function prototypes
     vec4 CalcDirLight(Light light, vec3 normal, vec3 view_dir);
@@ -156,27 +158,26 @@ const char* PhongFragmentShaderSource = R"shader(
     
     void main()
     {
-        vec4 diffuse = texture(material.diffuse, v_TexCoords);
-        if (diffuse.a < 0.0001f) {
+        vec4 diffuse_texel = texture(material.diffuse_map, v_TexCoords);
+        if (diffuse_texel.a < 0.0001f) {
             discard;
         }
-        vec4 specular = texture(material.specular, v_TexCoords);
+        vec4 specular_texel = texture(material.specular_map, v_TexCoords);
     
         vec3 norm;
         if (u_NormalMapping)
         {
-            norm = texture(material.normal, v_TexCoords).rgb;
+            norm = texture(material.normal_map, v_TexCoords).rgb;
             norm = normalize(norm * 2.0f - 1.0f);
-            norm = normalize(norm * vec3(0.1, 0.1, 1));    
+            norm = normalize(norm * vec3(u_NormalMappingStrength, u_NormalMappingStrength, 1));
             norm = normalize(v_TBN * norm);
         }
         else {
-            norm = normalize(v_Normal);
+            norm = v_Normal;
         }
 
         vec3 view_dir = normalize(u_ViewPos - v_FragPos);
-    
-        vec4 result = vec4(0.0f);
+        vec4 result    = vec4(0.0f);
         vec4 diff_spec = vec4(0.0f);
     
         for (int i = 0; i < nLights; i++)
@@ -196,13 +197,14 @@ const char* PhongFragmentShaderSource = R"shader(
                 break;
             }
         }
-        // Hard code ambient
-        float ambient = 0.05f;
-        vec4  diffuse_coef = max(vec4(ambient), vec4(diff_spec.xyz, 1.0f));
-        float specular_coef = diff_spec.w;
+        vec4  diffuse_light_coef  = max(vec4(material.ambient_coef), vec4(diff_spec.xyz, 1.0f));
+        float specular_light_coef = diff_spec.w;
     
-        result += diffuse_coef * diffuse;
-        result += diffuse_coef * vec4(vec3(specular_coef * specular.x), 0);
+        result += material.diffuse_color * diffuse_light_coef * diffuse_texel;
+        result += material.diffuse_color *
+                  diffuse_light_coef     *
+                  material.specular_coef *
+                  vec4(vec3(specular_light_coef * specular_texel.x), 0);
     
         result = min(result, vec4(1.0f));
         FragColor = result;
@@ -210,7 +212,7 @@ const char* PhongFragmentShaderSource = R"shader(
     
     
     
-    // calculates the color when using a directional light.
+    // Directional light
     vec4 CalcDirLight(Light light, vec3 normal, vec3 view_dir)
     {
         vec3 lightDir = normalize(-light.direction);
@@ -227,7 +229,7 @@ const char* PhongFragmentShaderSource = R"shader(
     }
     
     
-    // calculates the color when using a point light.
+    // Point light 
     vec4 CalcPointLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir)
     {
         vec3 lightDir = normalize(light.position - frag_pos);
@@ -249,7 +251,7 @@ const char* PhongFragmentShaderSource = R"shader(
     }
     
     
-    // calculates the color when using a spot light.
+    // Spot light
     vec4 CalcSpotLight(Light light, vec3 normal, vec3 frag_pos, vec3 view_dir)
     {
         vec3 lightDir = normalize(light.position - frag_pos);

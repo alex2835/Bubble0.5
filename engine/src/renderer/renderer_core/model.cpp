@@ -6,7 +6,6 @@ namespace Bubble
 {
 	Model::Model()
 	{
-		//mShader = Loader::LoadShader("resources/shaders/phong.glsl");
 	}
 
 	void Model::CreateBoundingBox()
@@ -14,9 +13,9 @@ namespace Bubble
 		for (const auto& mesh : mMeshes)
 		{
 			const auto& vertices = mesh.mVertices;
-			for (int i = 0; i < vertices.Positions.size(); i++)
+			for (int i = 0; i < vertices.mPositions.size(); i++)
 			{
-				mBoundingBox.extend(vertices.Positions[i]);
+				mBoundingBox.extend(vertices.mPositions[i]);
 			}
 		}
 	}

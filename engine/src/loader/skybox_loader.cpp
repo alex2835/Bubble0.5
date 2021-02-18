@@ -5,10 +5,9 @@ namespace Bubble
 {
 	Ref<Skybox> Loader::LoadSkybox(std::string path)
 	{
-		if (auto model = mLoadedSkyboxes.find(path);
-			model != mLoadedSkyboxes.end())
+		if (mLoadedSkyboxes.count(path))
 		{
-			return model->second;
+			return mLoadedSkyboxes[path];
 		}
 
 		Ref<Skybox> skybox = CreateRef<Skybox>();

@@ -1,7 +1,6 @@
 
 #include "editor_layer.h"
 
-
 namespace Bubble
 {
 	EditorLayer::EditorLayer(Window* window, Input* input)
@@ -9,7 +8,8 @@ namespace Bubble
 		  mViewport(800, 800),
 	      mWindow(window),
 		  mInput(input),
-		  mUILoader(window)
+		  mUILoader(window),
+		  mRenderer(&mLoader)
 	{}
 
 	void EditorLayer::OnAttach()

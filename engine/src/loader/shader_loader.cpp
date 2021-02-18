@@ -7,10 +7,9 @@ namespace Bubble
 {
 	Ref<Shader> Loader::LoadShader(const std::string& path)
 	{
-        if (auto model = mLoadedShaders.find(path);
-            model != mLoadedShaders.end())
+        if (mLoadedShaders.count(path))
         {
-            return model->second;
+            return mLoadedShaders[path];
         }
 
 		Ref<Shader> shader = CreateRef<Shader>();
@@ -31,6 +30,7 @@ namespace Bubble
 								   const std::string& geometry)
 	{
 		Ref<Shader> shader = CreateRef<Shader>();
+        shader->mName = name;
 		CompileShaders(*shader, vertex, fragment, geometry);
 		mLoadedShaders.emplace(name, shader);
 		return shader;

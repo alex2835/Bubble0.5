@@ -11,8 +11,8 @@ namespace Bubble
 		Window*		mWindow;
         Input*		mInput;
         UILoader	mUILoader;
+        Loader      mLoader;
 		Renderer    mRenderer;
-		Loader      mLoader;
 
 		Scene       mScene;
         SceneCamera mSceneCamera;

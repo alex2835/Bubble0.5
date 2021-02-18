@@ -13,6 +13,6 @@ namespace Bubble
         Ref<Shader>      mPhongShader;
         Ref<Shader>      mSkyboxShader;
 
-        RendererStorage();
+        RendererStorage(Loader* loader);
     };
 }

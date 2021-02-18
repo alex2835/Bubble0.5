@@ -4,10 +4,8 @@
 
 namespace Bubble
 {
-	RendererStorage::RendererStorage()
+	RendererStorage::RendererStorage(Loader* loader)
 	{
-		Loader loader;
-
 		// ======= Skybox vertex buffer =======
 		BufferLayout layout{
 			{GLSLDataType::Float3, "Position" }
@@ -18,8 +16,8 @@ namespace Bubble
 		mSkyboxVertexArray->AddVertexBuffer(std::move(vb));
 
 		// ============ Shaders ============
-		mPhongShader  = loader.LoadShader("Phong shader", PhongVertexShaderSource, PhongFragmentShaderSource);
-		mSkyboxShader = loader.LoadShader("Skybox shader", SkyboxVertexShaderSource, SkyboxFragmentShaderSource);
+		mPhongShader  = loader->LoadShader("Phong shader",  PhongVertexShaderSource,  PhongFragmentShaderSource);
+		mSkyboxShader = loader->LoadShader("Skybox shader", SkyboxVertexShaderSource, SkyboxFragmentShaderSource);
 	}
 
 } 

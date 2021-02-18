@@ -28,10 +28,11 @@ namespace Bubble
 		Ref<Texture2D> mDiffuseMap;
 		Ref<Texture2D> mSpecularMap;
 		Ref<Texture2D> mNormalMap;
-        glm::vec3 mAmbientCoef  = glm::vec3(1.0f);
-        glm::vec3 mDiffuseCoef  = glm::vec3(1.0f);
-        glm::vec3 mSpecularCoef = glm::vec3(1.0f);
-        int mShininess = 32;
+        glm::vec4 mDiffuseColor = glm::vec4(1.0f);
+        float mAmbientCoef  = 0.1f;
+        float mSpecularCoef = 0.1f;
+        int   mShininess = 32;
+		float mNormalMapStrength = 0.1f;
 
 		DefaultMaterial() = default;
 		DefaultMaterial(const Ref<Texture2D>& diffuse_map,

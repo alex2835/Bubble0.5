@@ -15,33 +15,33 @@ namespace Bubble
 	{
 		BufferLayout layout
 		{
-			{ GLSLDataType::Float3, "Position",  mVertices.Positions.size()  },
-			{ GLSLDataType::Float3, "Normal",    mVertices.Normals.size()    },
-			{ GLSLDataType::Float2, "TexCoords", mVertices.TexCoords.size()  },
-			{ GLSLDataType::Float3, "Tangent",   mVertices.Tangents.size()   },
-			{ GLSLDataType::Float3, "Bitangent", mVertices.Bitangents.size() }
+			{ GLSLDataType::Float3, "Position",  mVertices.mPositions.size()  },
+			{ GLSLDataType::Float3, "Normal",    mVertices.mNormals.size()    },
+			{ GLSLDataType::Float2, "TexCoords", mVertices.mTexCoords.size()  },
+			{ GLSLDataType::Float3, "Tangent",   mVertices.mTangents.size()   },
+			{ GLSLDataType::Float3, "Bitangent", mVertices.mBitangents.size() }
 		};
 
-		size_t size = sizeof(glm::vec3) * mVertices.Positions.size() + sizeof(glm::vec3) * mVertices.Normals.size() +
-					  sizeof(glm::vec2) * mVertices.TexCoords.size() + sizeof(glm::vec3) * mVertices.Tangents.size() +
-					  sizeof(glm::vec3) * mVertices.Bitangents.size();
+		size_t size = sizeof(glm::vec3) * mVertices.mPositions.size() + sizeof(glm::vec3) * mVertices.mNormals.size()  +
+					  sizeof(glm::vec2) * mVertices.mTexCoords.size() + sizeof(glm::vec3) * mVertices.mTangents.size() +
+					  sizeof(glm::vec3) * mVertices.mBitangents.size();
 
 		char* data = new char[size];
 		size_t offset = 0;
 
-		memmove(data, mVertices.Positions.data(), sizeof(glm::vec3) * mVertices.Positions.size());
-		offset += sizeof(glm::vec3) * mVertices.Positions.size();
+		memmove(data, mVertices.mPositions.data(), sizeof(glm::vec3) * mVertices.mPositions.size());
+		offset += sizeof(glm::vec3) * mVertices.mPositions.size();
 
-		memmove(data + offset, mVertices.Normals.data(),    sizeof(glm::vec3) * mVertices.Normals.size());
-		offset += sizeof(glm::vec3) * mVertices.Normals.size();
+		memmove(data + offset, mVertices.mNormals.data(),    sizeof(glm::vec3) * mVertices.mNormals.size());
+		offset += sizeof(glm::vec3) * mVertices.mNormals.size();
 
-		memmove(data + offset, mVertices.TexCoords.data(),  sizeof(glm::vec2) * mVertices.TexCoords.size());
-		offset += sizeof(glm::vec2) * mVertices.TexCoords.size();
+		memmove(data + offset, mVertices.mTexCoords.data(),  sizeof(glm::vec2) * mVertices.mTexCoords.size());
+		offset += sizeof(glm::vec2) * mVertices.mTexCoords.size();
 
-		memmove(data + offset, mVertices.Tangents.data(),   sizeof(glm::vec3) * mVertices.Tangents.size());
-		offset += sizeof(glm::vec3) * mVertices.Tangents.size();
+		memmove(data + offset, mVertices.mTangents.data(),   sizeof(glm::vec3) * mVertices.mTangents.size());
+		offset += sizeof(glm::vec3) * mVertices.mTangents.size();
 
-		memmove(data + offset, mVertices.Bitangents.data(), sizeof(glm::vec3) * mVertices.Bitangents.size());
+		memmove(data + offset, mVertices.mBitangents.data(), sizeof(glm::vec3) * mVertices.mBitangents.size());
 
 
 		IndexBuffer  index_buffer = IndexBuffer(mIndices.data(), mIndices.size());

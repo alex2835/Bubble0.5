@@ -1,6 +1,5 @@
 
 #include "loader.h"
-
 #include "assimp/Importer.hpp"
 #include "assimp/Exporter.hpp"
 #include "assimp/scene.h"
@@ -14,10 +13,9 @@ namespace Bubble
 
 	Ref<Model> Loader::LoadModel(std::string path)
 	{
-        if (auto model = mLoadedModels.find(path);
-            model != mLoadedModels.end())
+        if (mLoadedModels.count(path))
         {
-            return model->second;
+            return mLoadedModels[path];
         }
 
 		auto model = CreateRef<Model>();
@@ -37,6 +35,7 @@ namespace Bubble
 		ProcessNode(*model, scene->mRootNode, scene, this, path);
 
 		model->CreateBoundingBox();
+		model->mShader = LoadShader("Phong shader");
 		return model;
 	}
 
@@ -60,15 +59,15 @@ namespace Bubble
 		VertexData vertices;
 		std::vector<uint32_t> indices;
 	
-		vertices.Positions.resize(mesh->mNumVertices);
-		vertices.Normals.resize(mesh->mNumVertices);
-		vertices.TexCoords.resize(mesh->mNumVertices);
+		vertices.mPositions.resize(mesh->mNumVertices);
+		vertices.mNormals.resize(mesh->mNumVertices);
+		vertices.mTexCoords.resize(mesh->mNumVertices);
 		indices.reserve(mesh->mNumFaces);
 
 		if (mesh->HasTangentsAndBitangents())
 		{
-			vertices.Tangents.resize(mesh->mNumVertices);
-			vertices.Bitangents.resize(mesh->mNumVertices);
+			vertices.mTangents.resize(mesh->mNumVertices);
+			vertices.mBitangents.resize(mesh->mNumVertices);
 		}
 
 		// Texture coordinates
@@ -76,8 +75,8 @@ namespace Bubble
 		{
 			for (int i = 0; i < mesh->mNumVertices; i++)
 			{
-				vertices.TexCoords[i].x = mesh->mTextureCoords[0][i].x;
-				vertices.TexCoords[i].y = mesh->mTextureCoords[0][i].y;
+				vertices.mTexCoords[i].x = mesh->mTextureCoords[0][i].x;
+				vertices.mTexCoords[i].y = mesh->mTextureCoords[0][i].y;
 			}
 		}
 
@@ -91,10 +90,10 @@ namespace Bubble
 			}
 		}
 
-		memmove(vertices.Positions.data(),  mesh->mVertices,   sizeof(glm::vec3) * vertices.Positions.size());
-		memmove(vertices.Normals.data(),    mesh->mNormals,	   sizeof(glm::vec3) * vertices.Normals.size());
-		memmove(vertices.Tangents.data(),   mesh->mTangents,   sizeof(glm::vec3) * vertices.Tangents.size());
-		memmove(vertices.Bitangents.data(), mesh->mBitangents, sizeof(glm::vec3) * vertices.Bitangents.size());
+		memmove(vertices.mPositions.data(),  mesh->mVertices,   sizeof(glm::vec3) * vertices.mPositions.size());
+		memmove(vertices.mNormals.data(),    mesh->mNormals,	sizeof(glm::vec3) * vertices.mNormals.size());
+		memmove(vertices.mTangents.data(),   mesh->mTangents,   sizeof(glm::vec3) * vertices.mTangents.size());
+		memmove(vertices.mBitangents.data(), mesh->mBitangents, sizeof(glm::vec3) * vertices.mBitangents.size());
 
 		// Process materials
 		aiMaterial* assimp_material = scene->mMaterials[mesh->mMaterialIndex];
@@ -146,19 +145,24 @@ namespace Bubble
 				}
 			}
 
+			// Load material coefficients
 			aiColor4D diffuse;
-			if (AI_SUCCESS == aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, (aiColor4D*)&diffuse))
-			{
-				material.mDiffuseCoef = *(glm::vec3*)&diffuse;
-			}
+            ai_real specular[3];
+            ai_real ambient[3];
+            ai_real shininess;
 
-			ai_real specular[3];
-			if (AI_SUCCESS == aiGetMaterialFloat(mat, AI_MATKEY_COLOR_SPECULAR, (ai_real*)&specular))
+			if (AI_SUCCESS == aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
 			{
-				material.mSpecularCoef = *(glm::vec3*)specular;
+				material.mDiffuseColor = *(glm::vec4*)&diffuse;
 			}
-
-			ai_real shininess;
+			if (AI_SUCCESS == aiGetMaterialFloat(mat, AI_MATKEY_COLOR_SPECULAR, specular))
+			{
+				material.mSpecularCoef = *(float*)specular;
+			}
+            if (AI_SUCCESS == aiGetMaterialFloat(mat, AI_MATKEY_COLOR_AMBIENT, ambient))
+            {
+				material.mAmbientCoef = *(float*)ambient;
+            }
 			if (AI_SUCCESS == aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &shininess))
 			{
 				if (shininess)
@@ -167,6 +171,7 @@ namespace Bubble
 				}
 			}
 
+			// In no textures create 1x1 white one
 			Ref<Texture2D> white_plug = loader->LoadTexture2DSingleColor("white plug", glm::vec4(1.0f));
 			if (!material.mDiffuseMap)
 			{
