@@ -106,7 +106,7 @@ namespace Bubble
             renderer->ClearDepth();
 
             glm::mat4 view = Skybox::GetViewMatrix(mCamera.GetLookatMat());
-            renderer->GetUBOPojectionView()[0].SetMat4("View", view);
+            (*renderer->mUBOProjectionView)[0].SetMat4("View", view);
 
             renderer->mStorage.mSkyboxShader->SetUni1f("u_Brightness",  1.0f);
             renderer->mStorage.mSkyboxShader->SetUni1f("u_BlendFactor", 0.0f);

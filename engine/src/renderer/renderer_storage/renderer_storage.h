@@ -10,8 +10,11 @@ namespace Bubble
     struct RendererStorage
     {
         Ref<VertexArray> mSkyboxVertexArray;
-        Ref<Shader>      mPhongShader;
-        Ref<Shader>      mSkyboxShader;
+        // Internal Shaders
+        Ref<Shader> mPhongShader;
+        Ref<Shader> mSkyboxShader;
+        // Frustum culling planes;
+        glm::vec4   mFrustumPlanes[6];
 
         RendererStorage(Loader* loader);
     };

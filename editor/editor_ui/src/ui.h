@@ -15,10 +15,6 @@ namespace Bubble
         static Scope<std::vector<Ref<UIModule>>> sModules;
 
         UIArgs mArgs;
-		// Rendering options
-		bool mWireframeOption = false;
-		bool mBoundingBoxOption = false;
-
         // Default modules
         Ref<MainViewport>   mMainViewport;
         Ref<ModelExplorer>  mModelExploerer;
@@ -38,7 +34,6 @@ namespace Bubble
 		void OnEvent(SDL_Event& event);
 		void DrawMenuBar();
 	};
-
 
     template <typename T, typename ...Args>
     Ref<T> Bubble::UI::AddModule(Args&& ...args)

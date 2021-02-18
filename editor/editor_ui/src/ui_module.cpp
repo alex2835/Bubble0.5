@@ -16,7 +16,6 @@ namespace Bubble
 
     UIModule::~UIModule()
     {
-
     } 
 
 }

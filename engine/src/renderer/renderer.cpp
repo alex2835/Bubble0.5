@@ -1,7 +1,6 @@
 
 #include "renderer.h"
 
-
 namespace Bubble
 {
     Renderer::Renderer(Loader* loader)
@@ -57,10 +56,10 @@ namespace Bubble
 
         // Set projection-view Uniform Buffer
         glm::mat4 projection_view[2] = { projection, view };
-        mUBOPrjectionView->SetData(projection_view, sizeof(projection_view));
+        mUBOProjectionView->SetData(projection_view, sizeof(projection_view));
 
         // Set camera frustum
-        SetFrustumPlanes(projection * view);
+        SetFrustumPlanes(mStorage.mFrustumPlanes, projection * view);
 
         // Set camera position
         (*mUBOViewPosition)[0].SetFloat3("ViewPos", camera.Position);
@@ -149,7 +148,7 @@ namespace Bubble
     {
         const Ref<Shader>& shader = in_shader ? in_shader : model->mShader;
 
-        if (IsInFrustum(model->mBoundingBox.transform(transforms)))
+        if (IsInFrustum(mStorage.mFrustumPlanes, model->mBoundingBox.transform(transforms)))
         {
             shader->SetUniMat4("u_Model", transforms);
             for (const auto& mesh : model->mMeshes)
@@ -200,7 +199,7 @@ namespace Bubble
         for (auto entity : scene_view)
         {
             auto [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
-            if (IsInFrustum(model->mBoundingBox.transform(transforms)))
+            if (IsInFrustum(mStorage.mFrustumPlanes, model->mBoundingBox.transform(transforms)))
             {
                 Renderer::DrawModel(model, transforms);
             }
@@ -210,7 +209,7 @@ namespace Bubble
         glm::mat4 view = mActiveCamera->GetLookatMat();
         mSceneStage.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneStage.mSkyboxRotationSpeed * 0.00002f;
         view = Skybox::GetViewMatrix(view, mSceneStage.mSkyboxRotation);
-        Renderer::GetUBOPojectionView()[0].SetMat4("View", view);
+        (*mUBOProjectionView)[0].SetMat4("View", view);
 
         mStorage.mSkyboxShader->SetUni1f("u_Brightness",  mSceneStage.mSkyboxBrightness);
         mStorage.mSkyboxShader->SetUni1f("u_BlendFactor", mSceneStage.mSkyboxBlendFactor);
@@ -228,7 +227,7 @@ namespace Bubble
             { GLSLDataType::Mat4, "Projection" },
             { GLSLDataType::Mat4, "View" }
         };
-        mUBOPrjectionView = CreateRef<UniformBuffer>(0, UBOProjectionViewLayout);
+        mUBOProjectionView = CreateRef<UniformBuffer>(0, UBOProjectionViewLayout);
 
         // ========== Init Lights UBO ========== 
         BufferLayout layout{

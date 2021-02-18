@@ -8,7 +8,7 @@
 #include "scene/components.h"
 
 #include "renderer_scene_state.h"
-#include "renderer_storage/renderer_data_storage.h"
+#include "renderer_storage/renderer_storage.h"
 #include "rendering_optimizations/frustum_culling .h"
 
 namespace Bubble
@@ -18,7 +18,7 @@ namespace Bubble
     struct Renderer
     {
         // Uniform buffers
-        Ref<UniformBuffer> mUBOPrjectionView;
+        Ref<UniformBuffer> mUBOProjectionView;
         Ref<UniformBuffer> mUBOViewPosition;
         Ref<UniformBuffer> mUBOLights;
 
@@ -31,6 +31,10 @@ namespace Bubble
         // Internal usage data
         RendererStorage    mStorage;
         RendererSceneStage mSceneStage;
+
+        // Rendering options
+        //bool mWireframeOption   = false;
+        //bool mBoundingBoxOption = false;
 
 
         Renderer(Loader* loader);
@@ -46,9 +50,6 @@ namespace Bubble
         void SetCamera(const Camera& camera);
         void SetLights(const std::vector<GLSL_Light>& lights);
         void SetLights(const GLSL_Light* lights, int size);
-
-        // ============ Getters ============
-        UniformBuffer& GetUBOPojectionView() { return *mUBOPrjectionView; }
 
         // ============ Clearing ============
         void SetClearColor(const glm::vec4& color);

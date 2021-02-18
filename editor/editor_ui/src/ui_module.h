@@ -3,11 +3,9 @@
 #include "imgui.h"
 #include "engine.h"
 #include "ui_args.h"
-#include <atomic>
 
 namespace Bubble
 {
-
 	struct UIModule
 	{
 		std::string mName;
