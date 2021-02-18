@@ -14,7 +14,8 @@ namespace Bubble
 		std::vector<Mesh*> mMeshes;
 		std::vector<Scope<MeshNode>> mChildern;
 
-		inline MeshNode(const std::string& name)
+		MeshNode() = default;
+		MeshNode(const std::string& name)
 			: mName(name)
 		{}
 	};
@@ -24,7 +25,7 @@ namespace Bubble
 		std::vector<Mesh> mMeshes;
 		Ref<Shader> mShader;
 		AABB mBoundingBox;
-		MeshNode mRootNode;
+		Scope<MeshNode> mRootNode;
 
 		Model();
 		Model(const Model&) = delete;

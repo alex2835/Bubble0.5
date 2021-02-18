@@ -107,7 +107,7 @@ namespace Bubble
                 if (mSelectedModel)
                 {
                     DrawModelInfo(mSelectedModel);
-                    DrawModelTree(&mSelectedModel->mRootNode, args);
+                    DrawModelTree(mSelectedModel->mRootNode, args);
                 }
             }
             ImGui::EndChild();
@@ -154,9 +154,9 @@ namespace Bubble
         }
 
 
-        inline void DrawModelTree(MeshNode* current_node, UIArgs args)
+        inline void DrawModelTree(Scope<MeshNode>& current_node, UIArgs args)
         {
-            if (ImGui::TreeNode((int*)current_node + (int)current_node->mName.data(), current_node->mName.c_str()))
+            if (ImGui::TreeNode((int*)current_node.get() + (int)current_node->mName.data(), current_node->mName.c_str()))
             {
                 for (auto mesh : current_node->mMeshes)
                 {
@@ -165,7 +165,7 @@ namespace Bubble
 
                 for (auto& child : current_node->mChildern)
                 {
-                    DrawModelTree(child.get(), args);
+                    DrawModelTree(child, args);
                 }
 
                 ImGui::TreePop();

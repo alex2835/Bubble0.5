@@ -7,7 +7,7 @@
 
 namespace Bubble
 {
-	void ProcessNode(Model& model, aiNode* node, const aiScene* scene, MeshNode* mesh_node, Loader* loader, const std::string& path);
+	Scope<MeshNode> ProcessNode(Model& model, aiNode* node, const aiScene* scene, Loader* loader, const std::string& path);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, Loader* loader, const std::string& path);
 	DefaultMaterial LoadMaterialTextures(aiMaterial* mat, Loader* loader, const std::string& path);
 
@@ -31,22 +31,20 @@ namespace Bubble
 
 		// Process ASSIMP's root node recursively
 		model->mMeshes.reserve(scene->mNumMeshes);
-		ProcessNode(*model, scene->mRootNode, scene, &model->mRootNode, this, path);
+		model->mRootNode = ProcessNode(*model, scene->mRootNode, scene, this, path);
 
 		model->CreateBoundingBox();
 		model->mShader = LoadShader("Phong shader");
 		return model;
 	}
 
-	void ProcessNode(Model& model,
-					 aiNode* node,
-					 const aiScene* scene,
-					 MeshNode* mesh_parent,
-					 Loader* loader,
-					 const std::string& path)
+	Scope<MeshNode> ProcessNode(Model& model,
+						        aiNode* node,
+						        const aiScene* scene,
+						        Loader* loader,
+						        const std::string& path)
 	{
-		Scope<MeshNode> mesh_node 
-			= CreateScope<MeshNode>(node->mName.C_Str());
+		Scope<MeshNode> mesh_node = CreateScope<MeshNode>(node->mName.C_Str());
 
 		for (int i = 0; i < node->mNumMeshes; i++)
 		{
@@ -57,10 +55,10 @@ namespace Bubble
 		
 		for (int i = 0; i < node->mNumChildren; i++)
 		{
-			ProcessNode(model, node->mChildren[i], scene, mesh_node.get(), loader, path);
+			mesh_node->mChildern.push_back(ProcessNode(model, node->mChildren[i], scene, loader, path));
 		}
 		
-		mesh_parent->mChildern.push_back(std::move(mesh_node));
+		return std::move(mesh_node);
 	}
 	
 
@@ -180,8 +178,7 @@ namespace Bubble
 			}
 
 			// If no textures create 1x1 white one
-			Ref<Texture2D> white_plug 
-				= loader->LoadTexture2DSingleColor("white plug", glm::vec4(1.0f));
+			Ref<Texture2D> white_plug = loader->LoadTexture2DSingleColor("white plug", glm::vec4(1.0f));
 
 			if (!material.mDiffuseMap)
 			{
