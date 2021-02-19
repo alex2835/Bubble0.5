@@ -6,7 +6,6 @@
 // Implementation on client side
 extern Bubble::Application* CreateApplication();
 
-
 int main(int argc, char* argv[])
 {
 	Bubble::Log::Init();

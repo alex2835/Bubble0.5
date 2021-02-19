@@ -18,9 +18,6 @@ namespace Bubble
         SceneCamera mSceneCamera;
         Viewport    mViewport;
 
-		// Options
-		bool mClearScreanOption = false;
-
 	public:
 		EditorLayer(Window* window, Input* input);
 		void OnAttach() override;

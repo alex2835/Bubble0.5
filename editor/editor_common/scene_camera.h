@@ -16,68 +16,68 @@ namespace Bubble
 
         void OnUpdate(DeltaTime dt)
         {
-            //if (Input::IsMouseButtonPressed(SDL_BUTTON_RIGHT))
-            //{
-            //	// Catch cursor
-            //	SDL_SetRelativeMouseMode(SDL_TRUE);
-            //
-            //	// Boost
-            //    float boost = Input::IsKeyPressed(SDLK_LSHIFT) ? mBoostSpeed : 1.0f;
-            //
-            //    float max_speed = MaxSpeed * DeltaSpeed;
-            //
-            //    // Speed x
-            //    if (Input::IsKeyPressed(SDLK_w))
-            //    {
-            //        ProcessMovement(CameraMovement::FORWARD, dt);
-            //    }
-            //    else if (Input::IsKeyPressed(SDLK_s))
-            //    {
-            //        ProcessMovement(CameraMovement::BACKWARD, dt);
-            //    }
-            //
-            //    // Speed y
-            //    if (Input::IsKeyPressed(SDLK_d))
-            //    {
-            //        ProcessMovement(CameraMovement::RIGHT, dt);
-            //    }
-            //    else if (Input::IsKeyPressed(SDLK_a))
-            //    {
-            //        ProcessMovement(CameraMovement::LEFT, dt);
-            //    }
-            //
-            //    ProcessMouseMovementShift(-Input::fGetMouseRelX(), -Input::fGetMouseRelY());
-            //    ProcessMouseScroll(-Input::GetMouseWheelOffset());
-            //
-            //    // Process boost
-            //    if (boost > 1.0f)
-            //    {
-            //        float old_speedx = SpeedX;
-            //        float old_speedy = SpeedY;
-            //        float old_maxspeed = MaxSpeed;
-            //
-            //        SpeedX *= boost;
-            //        SpeedY *= boost;
-            //        MaxSpeed *= boost;
-            //
-            //        FreeCamera::Update(dt);
-            //
-            //        SpeedX = old_speedx;
-            //        SpeedY = old_speedy;
-            //        MaxSpeed = old_maxspeed;
-            //    }
-            //    else {
-            //        FreeCamera::Update(dt);
-            //    }
-            //
-            //}
-            //else {
-            //	// Release cursor
-            //	SDL_SetRelativeMouseMode(SDL_FALSE);
-            //
-            //	// Inertia
-            //	FreeCamera::Update(dt);
-            //}
+            if (mInput->IsMouseButtonPressed(SDL_BUTTON_RIGHT))
+            {
+            	// Catch cursor
+            	SDL_SetRelativeMouseMode(SDL_TRUE);
+            
+            	// Boost
+                float boost = mInput->IsKeyPressed(SDLK_LSHIFT) ? mBoostSpeed : 1.0f;
+            
+                float max_speed = MaxSpeed * DeltaSpeed;
+            
+                // Speed x
+                if (mInput->IsKeyPressed(SDLK_w))
+                {
+                    ProcessMovement(CameraMovement::FORWARD, dt);
+                }
+                else if (mInput->IsKeyPressed(SDLK_s))
+                {
+                    ProcessMovement(CameraMovement::BACKWARD, dt);
+                }
+            
+                // Speed y
+                if (mInput->IsKeyPressed(SDLK_d))
+                {
+                    ProcessMovement(CameraMovement::RIGHT, dt);
+                }
+                else if (mInput->IsKeyPressed(SDLK_a))
+                {
+                    ProcessMovement(CameraMovement::LEFT, dt);
+                }
+            
+                ProcessMouseMovementShift(-mInput->fGetMouseRelX(), -mInput->fGetMouseRelY());
+                ProcessMouseScroll(-mInput->GetMouseWheelOffset());
+            
+                // Process boost
+                if (boost > 1.0f)
+                {
+                    float old_speedx = SpeedX;
+                    float old_speedy = SpeedY;
+                    float old_maxspeed = MaxSpeed;
+            
+                    SpeedX *= boost;
+                    SpeedY *= boost;
+                    MaxSpeed *= boost;
+            
+                    FreeCamera::Update(dt);
+            
+                    SpeedX = old_speedx;
+                    SpeedY = old_speedy;
+                    MaxSpeed = old_maxspeed;
+                }
+                else {
+                    FreeCamera::Update(dt);
+                }
+            
+            }
+            else {
+            	// Release cursor
+            	SDL_SetRelativeMouseMode(SDL_FALSE);
+            
+            	// Inertia
+            	FreeCamera::Update(dt);
+            }
         }
     };
 

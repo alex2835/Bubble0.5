@@ -9,7 +9,10 @@ namespace Bubble
 {
     struct RendererStorage
     {
+        // Skies
+        Ref<Model> mSphere;
         Ref<VertexArray> mSkyboxVertexArray;
+
         // Internal Shaders
         Ref<Shader> mPhongShader;
         Ref<Shader> mSkyboxShader;

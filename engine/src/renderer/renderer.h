@@ -14,6 +14,7 @@
 namespace Bubble
 {
     enum class DrawType { POINTS = GL_POINT, LINES = GL_LINES, TRIANGLES = GL_TRIANGLES };
+    enum class BackgroundType { COLOR, SKYBOX, SKYSPHERE };
 
     struct Renderer
     {
@@ -33,6 +34,8 @@ namespace Bubble
         RendererSceneStage mSceneStage;
 
         // Rendering options
+        BackgroundType mBackgroundType;
+        //bool mClearScreanOption = false;
         //bool mWireframeOption   = false;
         //bool mBoundingBoxOption = false;
 

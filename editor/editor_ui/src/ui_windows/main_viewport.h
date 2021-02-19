@@ -14,19 +14,23 @@ namespace Bubble
             mWindowFlags |= ImGuiWindowFlags_NoTitleBar;
         }
         
-		void Draw(UIArgs args, DeltaTime time) override
+		void Draw(UIArgs args, DeltaTime dt) override
 		{
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
             ImGui::Begin(mName.c_str(), &mIsOpen, mWindowFlags);
             {
-                ImVec2    imgui_viewport_size = ImGui::GetContentRegionAvail();
-                glm::vec2 viewport_size       = args.mMainViewport->GetSize();
+                glm::vec2 viewport_size = args.mMainViewport->GetSize();
+                ImVec2 imgui_viewport_size = ImGui::GetContentRegionAvail();
 
                 uint32_t textureId    = args.mMainViewport->GetColorAttachmentRendererID();
                 ImVec2   texture_size = ImVec2(args.mMainViewport->GetWidth(), args.mMainViewport->GetHeight());
                 ImGui::Image((void*)textureId, texture_size, ImVec2(1, 1), ImVec2(0, 0));
-
                 args.mMainViewport->mNewSize = *(glm::vec2*)&imgui_viewport_size;
+
+                if (ImGui::IsWindowHovered())
+                {
+                    args.mSceneCamera->OnUpdate(dt);
+                }
             }
             ImGui::End();
             ImGui::PopStyleVar();

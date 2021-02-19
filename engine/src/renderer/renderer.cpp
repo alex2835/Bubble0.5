@@ -9,6 +9,7 @@ namespace Bubble
         InitUBOS();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
+        SetClearColor(glm::vec4(1.0f));
     }
 
     // =================== Options ===================
@@ -183,6 +184,8 @@ namespace Bubble
 
     void Renderer::DrawScene(Scene& scene)
     {
+        ClearDepth();
+
         // Set lights
         auto light_view = scene.GetView<LightComponent>();
         mSceneStage.mActiveLights.clear();
@@ -205,17 +208,43 @@ namespace Bubble
             }
         }
 
-        // Draw skybox
-        glm::mat4 view = mActiveCamera->GetLookatMat();
-        mSceneStage.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneStage.mSkyboxRotationSpeed * 0.00002f;
-        view = Skybox::GetViewMatrix(view, mSceneStage.mSkyboxRotation);
-        (*mUBOProjectionView)[0].SetMat4("View", view);
+        switch (mBackgroundType)
+        {
+            case Bubble::BackgroundType::COLOR:
+            {
+                ClearColor();
+                break;
+            }
+            case Bubble::BackgroundType::SKYBOX:
+            {
+                glm::mat4 view = mActiveCamera->GetLookatMat();
+                mSceneStage.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneStage.mSkyboxRotationSpeed * 0.00002f;
+                view = Skybox::GetViewMatrix(view, mSceneStage.mSkyboxRotation);
+                (*mUBOProjectionView)[0].SetMat4("View", view);
+                
+                mStorage.mSkyboxShader->SetUni1f("u_Brightness",  mSceneStage.mSkyboxBrightness);
+                mStorage.mSkyboxShader->SetUni1f("u_BlendFactor", mSceneStage.mSkyboxBlendFactor);
+                
+                Ref<Skybox> skyboxes[] = { mSceneStage.mSkyboxFirst, mSceneStage.mSkyboxSecond };
+                Renderer::DrawSkybox(skyboxes, 2, mStorage.mSkyboxShader);
+                break;
+            }
+            case Bubble::BackgroundType::SKYSPHERE:
+            {
+                glm::mat4 view = mActiveCamera->GetLookatMat();
+                mSceneStage.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneStage.mSkyboxRotationSpeed * 0.00002f;
+                view = Skybox::GetViewMatrix(view, mSceneStage.mSkyboxRotation);
+                (*mUBOProjectionView)[0].SetMat4("View", view);
 
-        mStorage.mSkyboxShader->SetUni1f("u_Brightness",  mSceneStage.mSkyboxBrightness);
-        mStorage.mSkyboxShader->SetUni1f("u_BlendFactor", mSceneStage.mSkyboxBlendFactor);
+                BackfaceCulling(false);
+                DrawModel(mStorage.mSphere, glm::mat4(1.0f));
+                BackfaceCulling(true);
+                break;
+            }
+            default:
+                BUBBLE_ASSERT(false, "Invalid sky type");
+        }
 
-        Ref<Skybox> skyboxes[] = { mSceneStage.mSkyboxFirst, mSceneStage.mSkyboxSecond };
-        Renderer::DrawSkybox(skyboxes, 2, mStorage.mSkyboxShader);
     }
 
 

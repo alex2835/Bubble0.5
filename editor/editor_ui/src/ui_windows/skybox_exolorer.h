@@ -10,7 +10,8 @@ namespace Bubble
 {
 	struct SkyboxExplorer : UIModule
 	{
-		Ref<Skybox> mSelectedSkybox;
+		Ref<Skybox>    mSelectedSkybox;
+        Ref<Texture2D> mSelectedSkysphere;
 		FreeCamera  mCamera;
         Viewport    mViewport;
 
@@ -26,31 +27,25 @@ namespace Bubble
 		{
             ImGui::Begin(mName.c_str(), &mIsOpen);
             {
-                ImVec2 window_pos  = ImGui::GetCursorScreenPos();
                 ImVec2 window_size = ImGui::GetContentRegionAvail();
-
-                // ==================== Viewport input ==================== 
+                
+                // ==================== Draw viewport ==================== 
+                uint32_t textureId   = mViewport.GetColorAttachmentRendererID();
+                ImVec2 viewport_size = ImVec2(window_size.x, window_size.y * 0.75f);
+                
+                ImGui::Image((void*)textureId, viewport_size, ImVec2(1, 1), ImVec2(0, 0));
+                mViewport.mNewSize = *(glm::vec2*)&viewport_size;
+                
+                //  ================= Render model =================
+                if (mSelectedSkybox && ImGui::IsItemVisible())
                 {
-                    ImVec2 viewport_size = ImVec2(window_size.x, window_size.y * 0.75f);
-                    // Invisible drag able area over the viewport
-                    ImGui::InvisibleButton("##dummy", viewport_size);
-
-                    // Moving by dragging
-                    if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
-                    {
-                        mCamera.ProcessMouseMovementShift(args.mInput->fGetMouseRelX(), args.mInput->fGetMouseRelY());
-                        mCamera.Update(dt);
-                    }
-                    //  ================= Render model =================
-                    if (mSelectedSkybox && ImGui::IsItemVisible())
-                    {
-                        RenderSelectedSkybox(args.mRenderer);
-                    }
-                    // ==================== Draw viewport ==================== 
-                    uint32_t textureId = mViewport.GetColorAttachmentRendererID();
-                    ImVec2   texture_size = ImVec2(window_pos.x + viewport_size.x, window_pos.y + viewport_size.y);
-                    ImGui::GetWindowDrawList()->AddImage((void*)textureId, window_pos, texture_size, ImVec2(1, 1), ImVec2(0, 0));
-                    mViewport.mNewSize = *(glm::vec2*)&viewport_size;
+                    RenderSelectedSkybox(args.mRenderer);
+                }
+                // Moving by dragging
+                if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(0))
+                {
+                    mCamera.ProcessMouseMovementShift(args.mInput->fGetMouseRelX(), args.mInput->fGetMouseRelY());
+                    mCamera.Update(dt);
                 }
 
                 // ==================== Model list ====================

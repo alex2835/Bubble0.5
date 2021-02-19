@@ -33,25 +33,23 @@ namespace Bubble
 		mUILoader.mArgs.mSceneCamera  = &mSceneCamera;
 		mUILoader.mArgs.mMainViewport = &mViewport;
 		mUILoader.OnUpdate(dt);
-		mSceneCamera.OnUpdate(dt);
 
 		// ====================== Set scene data ======================
 		mRenderer.SetViewport(mViewport);
 		mRenderer.SetCamera(mSceneCamera);
 
-		// ====================== Rendering ======================
-		mClearScreanOption = true;// |= mUILoader.mWireframeOption;
+		// ====================== Draw scene ======================
+		if (mRenderer.mSceneStage.mSkyboxFirst &&
+			mRenderer.mSceneStage.mSkyboxSecond)
+		{
+            mRenderer.mBackgroundType = BackgroundType::SKYBOX;
+		}
+		else {
+            mRenderer.mBackgroundType = BackgroundType::COLOR;
+		}
+		mRenderer.mBackgroundType = BackgroundType::SKYSPHERE;
 
-        if (mClearScreanOption)
-        {
-            mRenderer.SetClearColor(glm::vec4(1.0f));
-            mRenderer.ClearColor();
-        }
-        mRenderer.ClearDepth();
-		
-		// ====================== Draw scene ====================== 
-		//mRenderer.DrawScene(mScene);
-
+		mRenderer.DrawScene(mScene);
 
 		// ====================== Draw editor sruff ======================
 		//mRenderer.SetCamera(mSceneCamera);
@@ -70,11 +68,10 @@ namespace Bubble
         //}
 
 		// Temp: Hot keys
-		// Quit combination
-		//if (Input::IsKeyClick(SDLK_LALT) && Input::IsKeyClick(SDLK_F4))
-		//{
-		//	mWindow->Close();
-		//}
+		if (mInput->IsKeyClick(SDLK_LALT) && mInput->IsKeyClick(SDLK_F4))
+		{
+			mWindow->Close();
+		}
 	}
 
 	void EditorLayer::OnEvent(SDL_Event& event)
