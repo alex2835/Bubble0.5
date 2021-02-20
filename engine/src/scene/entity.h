@@ -19,7 +19,7 @@ namespace Bubble
 		T& EmplaceComponent(Args&&... args) const
 		{
 			BUBBLE_CORE_ASSERT(!HasComponent<T>(), "Entity already has component!");
-			return mScene->Registry.emplace<T>(EntityHandle, std::forward<Args>(args)...);
+			return mScene->mRegistry.emplace<T>(EntityHandle, std::forward<Args>(args)...);
 		}
 
 
@@ -27,32 +27,32 @@ namespace Bubble
 		const Entity& AddComponent(Args&&... args) const
 		{
 			BUBBLE_CORE_ASSERT(!HasComponent<T>(), "Entity already has component!");
-			mScene->Registry.emplace<T>(EntityHandle, std::forward<Args>(args)...);
+			mScene->mRegistry.emplace<T>(EntityHandle, std::forward<Args>(args)...);
 			return *this;
 		}
 
 		template<typename T>
 		auto& GetComponent() const
 		{
-			return mScene->Registry.get<T>(EntityHandle);
+			return mScene->mRegistry.get<T>(EntityHandle);
 		}
 
         template<typename... Args>
         auto GetComponents() const
         {
-            return mScene->Registry.get<Args...>(EntityHandle);
+            return mScene->mRegistry.get<Args...>(EntityHandle);
         }
 
 		bool Valid()
 		{
-			return mScene && mScene->Registry.valid(EntityHandle);
+			return mScene && mScene->mRegistry.valid(EntityHandle);
 		}
 
 
 		template<typename... Args>
 		bool HasComponent() const
 		{
-			return mScene->Registry.has<Args...>(EntityHandle);
+			return mScene->mRegistry.has<Args...>(EntityHandle);
 		}
 
 
@@ -60,7 +60,7 @@ namespace Bubble
 		void RemoveComponent() const
 		{
 			BUBBLE_CORE_ASSERT(HasComponent<T>(), "Entity does not have component!");
-			mScene->Registry.remove<T>(EntityHandle);
+			mScene->mRegistry.remove<T>(EntityHandle);
 		}
 
 		operator bool() const { return EntityHandle != entt::null; }

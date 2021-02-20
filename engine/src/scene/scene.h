@@ -11,7 +11,7 @@ namespace Bubble
 	class Scene
 	{
 	public:
-		entt::registry Registry;
+		entt::registry mRegistry;
 		friend class Entity;
 
 	public:
@@ -24,7 +24,7 @@ namespace Bubble
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		template <typename ...Args>
-		auto GetView() { return Registry.view<Args...>(); }
+		auto GetView() { return mRegistry.view<Args...>(); }
 	};
 
 }

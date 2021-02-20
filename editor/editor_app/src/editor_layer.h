@@ -3,6 +3,7 @@
 #include "engine.h"
 #include "ui_loader.h"
 #include "scene_camera.h"
+#include "project_serialization.h"
 
 namespace Bubble
 {

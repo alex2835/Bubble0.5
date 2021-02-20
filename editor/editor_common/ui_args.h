@@ -17,8 +17,22 @@ namespace Bubble
         Viewport*    mMainViewport;
 
         // Rendering options
-        bool mWireframeOption   = false;
-        bool mBoundingBoxOption = false;
+        //bool mWireframeOption   = false;
+        //bool mBoundingBoxOption = false;
+
+        //UIArgs(Renderer& Renderer,
+        //       Loader& Loader,
+        //       Input& Input,
+        //       Scene& Scene,
+        //       SceneCamera& SceneCamera,
+        //       Viewport& MainViewport)
+        //    : mRenderer(Renderer),
+        //    mLoader(Loader),
+        //    mInput(Input),
+        //    mScene(Scene),
+        //    mSceneCamera(SceneCamera),
+        //    mMainViewport(MainViewport)
+        //{}
     };
 
 }

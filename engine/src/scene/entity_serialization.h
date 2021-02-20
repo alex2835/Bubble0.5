@@ -11,9 +11,9 @@ namespace Bubble
     struct OutputArchive
     {
         nlohmann::json mJson;
-        Loader& mLoader;
+        const Loader& mLoader;
 
-        OutputArchive(Loader& loader)
+        OutputArchive(const Loader& loader)
             : mLoader(loader)
         {}
 
@@ -71,23 +71,22 @@ namespace Bubble
 
     };
 
-
     // ==================== Serialization ======================
-    inline nlohmann::json SerializeScene(const entt::registry& scene, Loader& loader)
+    inline nlohmann::json SceneSerialization(const Scene& scene, const Loader& loader)
     {
         OutputArchive output(loader);
-        entt::snapshot{ scene }
+        entt::snapshot(scene.mRegistry)
             .entities(output)
             .component<TagComponent, PositionComponent, RotationComponent, ScaleComponent, TransformComponent, LightComponent, ModelComponent>(output);
         return output.mJson;
     }
 
-    inline void DeserializeScene(const nlohmann::json& json, entt::registry& scene, Loader& loader)
+    inline void SceneDeserialization(const nlohmann::json& json, Scene& scene, Loader& loader)
     {
         InputArchive input(json, loader);
-        scene.clear();
+        scene.mRegistry.clear();
 
-        entt::snapshot_loader{ scene }
+        entt::snapshot_loader(scene.mRegistry)
             .entities(input)
             .component<TagComponent, PositionComponent, RotationComponent, ScaleComponent, TransformComponent, LightComponent, ModelComponent>(input)
             .orphans();

@@ -8,6 +8,8 @@
 #include "ui_windows/scene_panel.h"
 #include "ui_menu_options/scene_camera_options.h"
 
+#include "project_serialization.h"
+
 namespace Bubble
 {
 	struct UI

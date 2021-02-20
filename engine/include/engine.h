@@ -24,6 +24,7 @@
 #include "camera_target.h"
 #include "camera_third_person.h"
 #include "renderer/renderer.h"
+#include "renderer/renderer_serialization.h"
 
 // Scene
 #include "scene/scene.h"
@@ -33,3 +34,4 @@
 
 // Loader
 #include "loader/loader.h"
+#include "loader/loader_serialization.h"

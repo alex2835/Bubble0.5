@@ -1,6 +1,5 @@
 
 #include "ui.h"
-//#include "serialization.h"
 
 namespace Bubble
 {
@@ -81,23 +80,23 @@ namespace Bubble
 			// ========================= File =============================
 			if (ImGui::BeginMenu("File"))
 			{
-				//if (ImGui::MenuItem("Open"))
-				//{
-				//	try
-				//	{
-				//		std::string path = OpenFileDialog("json");
-				//		OpenProject(path, mArgs.mScene, this);
-				//	}
-				//	catch (const std::exception& e)
-				//	{
-				//		LOG_ERROR(e.what());
-				//	}
-				//}
-				//
-				//if (ImGui::MenuItem("Save"))
-				//{
-				//	SaveProject("../../../../scene_test.json", mArgs.mScene, this);
-				//}
+				if (ImGui::MenuItem("Open"))
+				{
+					//try
+					//{
+					//	std::string path = OpenFileDialog("json");
+					//	OpenProject(path, mArgs.mScene, this);
+					//}
+					//catch (const std::exception& e)
+					//{
+					//	LOG_ERROR(e.what());
+					//}
+				}
+				
+				if (ImGui::MenuItem("Save"))
+				{
+					ProjectSerialization("../../../../../scene_test.json", *mArgs.mLoader, *mArgs.mRenderer, *mArgs.mScene);
+				}
 
 				ImGui::EndMenu();
 			}

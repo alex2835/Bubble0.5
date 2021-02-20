@@ -17,7 +17,7 @@ namespace Bubble
 		{
             ImGui::Begin(mName.c_str(), &mIsOpen);
             {
-                args.mScene->Registry.each([&](auto entityID)
+                args.mScene->mRegistry.each([&](auto entityID)
                     {
                         Entity entity(entityID, args.mScene);
             

@@ -11,15 +11,26 @@
 
 namespace Bubble
 {
-	inline nlohmann::json to_json(const glm::vec3& value)
-	{
-		return { value.r, value.g, value.b };
-	}
-
-	inline glm::vec3 from_json(const nlohmann::json& value)
-	{
-		return glm::vec3(value[0], value[1], value[2]);
-	}
+    inline nlohmann::json to_json(const glm::vec3& vec)
+    {
+        return nlohmann::json{ vec.r, vec.g, vec.b };
+    }
+    inline glm::vec3 from_json_vec3(const nlohmann::json& j)
+    {
+        return glm::vec3(j[0], j[1], j[2]);
+    }
+    static inline nlohmann::json to_json(const glm::vec4& vec)
+    {
+        return nlohmann::json{ vec.r, vec.g, vec.b, vec.a };
+    }
+    static inline glm::vec4 from_json_vec4(const nlohmann::json& j)
+    {
+        return glm::vec4(j[0], j[1], j[2], j[3]);
+    }
+    static inline bool json_exists(const nlohmann::json& j, const std::string& key)
+    {
+        return j.find(key) != j.end();
+    }
 
 	// ================= Tag Component =================
 	struct TagComponent
@@ -34,7 +45,7 @@ namespace Bubble
 			mTag.reserve(256);
 		}
 
-		nlohmann::json Serialize(Loader& loader) const
+		nlohmann::json Serialize(const Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Tag"] = mTag;
@@ -58,7 +69,7 @@ namespace Bubble
 			: mPosition(mPosition)
 		{}
 
-		nlohmann::json Serialize(Loader& loader) const
+		nlohmann::json Serialize(const Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Position"] = to_json(mPosition);
@@ -67,7 +78,7 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
-			mPosition = from_json(j["Position"]);
+			mPosition = from_json_vec3(j["Position"]);
 		}
 
 	};
@@ -83,7 +94,7 @@ namespace Bubble
 			: mRotation(rotation)
 		{}
 
-		nlohmann::json Serialize(Loader& loader) const
+		nlohmann::json Serialize(const Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Rotation"] = to_json(mRotation);
@@ -92,7 +103,7 @@ namespace Bubble
 
 		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
-			mRotation = from_json(j["Rotation"]);
+			mRotation = from_json_vec3(j["Rotation"]);
 		}
 
 	};
@@ -108,7 +119,7 @@ namespace Bubble
 			: mScale(scale)
 		{}
 
-		nlohmann::json Serialize(Loader& loader) const
+		nlohmann::json Serialize(const Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Scale"] = to_json(mScale);
@@ -117,7 +128,7 @@ namespace Bubble
 		
 		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
-			mScale = from_json(j["Scale"]);
+			mScale = from_json_vec3(j["Scale"]);
 		}
 	};
 
@@ -135,7 +146,7 @@ namespace Bubble
 		operator glm::mat4& () { return mTransform; }
 		operator const glm::mat4& () const { return mTransform; }
 
-		nlohmann::json Serialize(Loader& loader) const
+		nlohmann::json Serialize(const Loader& loader) const
 		{
 			nlohmann::json j;
 			std::vector<float> temp;
@@ -165,42 +176,42 @@ namespace Bubble
 	// ================= Light Component =================
 	struct LightComponent : Light
 	{
-		nlohmann::json Serialize(Loader& loader) const
+		nlohmann::json Serialize(const Loader& loader) const
 		{
 			nlohmann::json j;
-			j["Light"]["Type"] = Type;
+			j["Light"]["Type"]		 = Type;
 			j["Light"]["Brightness"] = Brightness;
-			j["Light"]["Distance"] = Distance;
+			j["Light"]["Distance"]   = Distance;
 
-			j["Light"]["Constant"] = Constant;
-			j["Light"]["Linear"] = Linear;
+			j["Light"]["Constant"]  = Constant;
+			j["Light"]["Linear"]    = Linear;
 			j["Light"]["Quadratic"] = Quadratic;
 
-			j["Light"]["CutOff"] = CutOff;
+			j["Light"]["CutOff"]	  = CutOff;
 			j["Light"]["OuterCutOff"] = OuterCutOff;
 
-			j["Light"]["Position"] = to_json(Position);
-			j["Light"]["Color"] = to_json(Color);
+			j["Light"]["Position"]  = to_json(Position);
+			j["Light"]["Color"]     = to_json(Color);
 			j["Light"]["Direction"] = to_json(Direction);
 			return j;
 		}
 
 		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
-			Type= j["Light"]["Type"];
+			Type	   = j["Light"]["Type"];
 			Brightness = j["Light"]["Brightness"];
-			Distance = j["Light"]["Distance"];
+			Distance   = j["Light"]["Distance"];
 			
-			Constant = j["Light"]["Constant"];
-			Linear = j["Light"]["Linear"];
+			Constant  = j["Light"]["Constant"];
+			Linear    = j["Light"]["Linear"];
 			Quadratic = j["Light"]["Quadratic"];
 
-			CutOff = j["Light"]["CutOff"];
+			CutOff		= j["Light"]["CutOff"];
 			OuterCutOff = j["Light"]["OuterCutOff"];
 
-			Position = from_json(j["Light"]["Position"]);
-			Direction = from_json(j["Light"]["Direction"]);
-			Color = from_json(j["Light"]["Color"]);
+			Position  = from_json_vec3(j["Light"]["Position"]);
+			Direction = from_json_vec3(j["Light"]["Direction"]);
+			Color     = from_json_vec3(j["Light"]["Color"]);
 		}
 
 	};
@@ -216,7 +227,7 @@ namespace Bubble
 		operator Ref<Model>& () { return *this; }
 		operator const Ref<Model>& () const { return *this; }
 
-		nlohmann::json Serialize(Loader& loader) const
+		nlohmann::json Serialize(const Loader& loader) const
 		{
 			nlohmann::json j;
 			auto iterator = std::ranges::find_if(loader.mLoadedModels,

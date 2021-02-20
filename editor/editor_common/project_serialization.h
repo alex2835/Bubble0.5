@@ -5,73 +5,37 @@
 
 namespace Bubble
 {
-    inline void SaveProject(const std::string& path, Loader& loader, Renderer& renderer, Scene& scene)
+    inline void ProjectSerialization(const std::string& path,
+                                     const Loader&      loader,
+                                     const Renderer&    renderer,
+                                     const Scene&       scene)
     {
         nlohmann::json json;
+        json["Scene"]    = SceneSerialization(scene, loader);
+        json["Renderer"] = RendererSerialization(renderer, loader);
+        json["Loader"]   = LoaderSerializetion(loader);
 
-        // Save scene
-        json["Scene"] = SerializeScene(scene.Registry, loader);
-
-        // Save skyboxes
-        //for (const auto& [path, skybox] : *Loader::sLoadedSkyboxes)
-        //{
-        //	json["Skybox"]["Paths"].push_back(path);
-        //}
-        //json["Skybox"]["First"]  = ui->mScenePanel->SelectedSkyboxNameFirst;
-        //json["Skybox"]["Second"] = ui->mScenePanel->SelectedSkyboxNameSecond;
-        //json["Skybox"]["Brightness"] = Renderer::sSkyboxBrightness;
-        //json["Skybox"]["BlendFactor"] = Renderer::sSkyboxBlendFactor;
-        //json["Skybox"]["Rotation"] = Renderer::sSkyboxRotation;
-        //
-        //// Save models
-        //for (const auto& [path, model] : *Loader::sLoadedModels)
-        //{
-        //	json["Model"]["Paths"].push_back(path);
-        //}
-        //
-        //json["Skybox"]["FirstID"]  = ui->mScenePanel->SelectedSkyboxFirstID;
-        //json["Skybox"]["SecondID"] = ui->mScenePanel->SelectedSkyboxSecondID;
-
-        // Dump
         std::ofstream fstream(path);
         fstream << json.dump(1);
         fstream.close();
     }
 
-    inline void OpenProject(const std::string& path, Loader& loader, Renderer& renderer, Scene& scene)
+    inline void ProjectDeserialization(const std::string& path,
+                                       Loader&   loader,
+                                       Renderer& renderer,
+                                       Scene&    scene)
     {
         std::ifstream ifstream(path);
         nlohmann::json json;
 
         if (!ifstream.is_open())
-            throw std::runtime_error("Path to project not valid : " + path);
+            throw std::runtime_error("Invalid path to project: " + path);
 
         ifstream >> json;
         ifstream.close();
-
-        // Load skyboxes
-        //for (const auto& path : json["Skybox"]["Paths"])
-        //{
-        //    Loader::LoadSkybox(path);
-        //}
-        //Renderer::sSkyboxFirst = Loader::LoadSkybox(json["Skybox"]["First"]);
-        //Renderer::sSkyboxSecond = Loader::LoadSkybox(json["Skybox"]["Second"]);
-        //Renderer::sSkyboxBrightness = json["Skybox"]["Brightness"];
-        //Renderer::sSkyboxBlendFactor = json["Skybox"]["BlendFactor"];
-        //Renderer::sSkyboxRotation = json["Skybox"]["Rotation"];
-        //
-        //// Load models
-        //for (const auto& path : json["Model"]["Paths"])
-        //{
-        //    Loader::StaticModel(path);
-        //}
-
-        // Load scene
-        DeserializeScene(json["Scene"], scene.Registry, loader);
-
-        // Load UI state
-        //ui->mScenePanel->SelectedSkyboxFirstID = json["Skybox"]["FirstID"];
-        //ui->mScenePanel->SelectedSkyboxSecondID = json["Skybox"]["SecondID"];
+        LoaderDeserializetion(json["Loader"], loader);
+        RendererDeserialization(json["Renderer"], renderer, loader);
+        SceneDeserialization(json["Scene"], scene, loader);
     }
 
 }
