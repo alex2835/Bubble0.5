@@ -62,4 +62,15 @@ namespace Bubble
 
         return { Scope<uint8_t[]>(data), spec };
     }
+
+    // Skysphere texture
+    Ref<Texture2D> Loader::LoadSkysphere(const std::string& path)
+    {
+        if (mLoadedSkypsheres.count(path))
+        {
+            return mLoadedSkypsheres[path];
+        }
+        mLoadedSkypsheres[path] = LoadTexture2D(path);
+        return mLoadedSkypsheres[path];
+    }
 }

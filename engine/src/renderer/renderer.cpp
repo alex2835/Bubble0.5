@@ -4,7 +4,8 @@
 namespace Bubble
 {
     Renderer::Renderer(Loader* loader)
-        : mStorage(loader)
+        : mStorage(loader),
+          mBackgroundType(BackgroundType::COLOR)
     {
         InitUBOS();
         glEnable(GL_DEPTH_TEST);
@@ -103,11 +104,13 @@ namespace Bubble
     // ======================== Clearing ========================
     void Renderer::SetClearColor(const glm::vec4& color)
     {
-        glClearColor(color.r, color.g, color.b, color.a);
+        mSceneStage.mClearColor = color;
     }
 
     void Renderer::Clear()
     {
+        glm::vec4 color = mSceneStage.mClearColor;
+        glClearColor(color.r, color.g, color.b, color.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
@@ -181,10 +184,23 @@ namespace Bubble
         glDepthFunc(GL_LESS);
     }
 
+    void Renderer::DrawSkysphere(const Ref<Texture2D>& skysphere_texture)
+    {
+        auto& sphere_model = mStorage.mSphere;
+        auto& sphere_mesh  = mStorage.mSphere->mMeshes[0];
+
+        BackfaceCulling(false);
+        sphere_mesh.mVertexArray.Bind();
+        sphere_mesh.mMaterial.mDiffuseMap = skysphere_texture;
+        sphere_mesh.mMaterial.Set(sphere_model->mShader);
+        sphere_model->mShader->SetUniMat4("u_Model", glm::mat4(1.0f));
+        glDrawElements((int)DrawType::TRIANGLES, sphere_mesh.mIndices.size(), GL_UNSIGNED_INT, 0);
+        BackfaceCulling(true);
+    }
 
     void Renderer::DrawScene(Scene& scene)
     {
-        ClearDepth();
+        Clear();
 
         // Set lights
         auto light_view = scene.GetView<LightComponent>();
@@ -208,11 +224,24 @@ namespace Bubble
             }
         }
 
-        switch (mBackgroundType)
+        // Draw background
+        BackgroundType backgound_type_to_draw = mBackgroundType;
+        if (mBackgroundType == BackgroundType::SKYBOX &&
+            (!mSceneStage.mSkyboxFirst ||
+             !mSceneStage.mSkyboxSecond))
+        {
+            backgound_type_to_draw = BackgroundType::COLOR;
+        }
+        if (mBackgroundType == BackgroundType::SKYSPHERE &&
+            !mSceneStage.mSkysphereTexture)
+        {
+            backgound_type_to_draw = BackgroundType::COLOR;
+        }
+
+        switch (backgound_type_to_draw)
         {
             case Bubble::BackgroundType::COLOR:
             {
-                ClearColor();
                 break;
             }
             case Bubble::BackgroundType::SKYBOX:
@@ -236,9 +265,7 @@ namespace Bubble
                 view = Skybox::GetViewMatrix(view, mSceneStage.mSkyboxRotation);
                 (*mUBOProjectionView)[0].SetMat4("View", view);
 
-                BackfaceCulling(false);
-                DrawModel(mStorage.mSphere, glm::mat4(1.0f));
-                BackfaceCulling(true);
+                DrawSkysphere(mSceneStage.mSkysphereTexture);
                 break;
             }
             default:

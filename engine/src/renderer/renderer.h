@@ -70,6 +70,7 @@ namespace Bubble
         void DrawModelA(const Ref<Model>& model, const glm::mat4& transforms, const Ref<Shader>& shader = nullptr, DrawType draw_type = DrawType::TRIANGLES);
 
         void DrawSkybox(const Ref<Skybox>* skybox, int size, const Ref<Shader>& shader);
+        void DrawSkysphere(const Ref<Texture2D>& skysphere_texture);
 
         void DrawScene(Scene& scene);
 

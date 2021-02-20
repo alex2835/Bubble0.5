@@ -39,16 +39,6 @@ namespace Bubble
 		mRenderer.SetCamera(mSceneCamera);
 
 		// ====================== Draw scene ======================
-		if (mRenderer.mSceneStage.mSkyboxFirst &&
-			mRenderer.mSceneStage.mSkyboxSecond)
-		{
-            mRenderer.mBackgroundType = BackgroundType::SKYBOX;
-		}
-		else {
-            mRenderer.mBackgroundType = BackgroundType::COLOR;
-		}
-		mRenderer.mBackgroundType = BackgroundType::SKYSPHERE;
-
 		mRenderer.DrawScene(mScene);
 
 		// ====================== Draw editor sruff ======================

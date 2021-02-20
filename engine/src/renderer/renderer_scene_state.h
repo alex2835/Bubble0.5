@@ -23,6 +23,12 @@ namespace Bubble
         float mSkyboxRotation    = 0.0f;
         float mSkyboxRotationSpeed = 0.0f;
 
+        // Skysphere
+        Ref<Texture2D> mSkysphereTexture;
+
+        // Clear color
+        glm::vec4 mClearColor;
+
         // Lights
         std::vector<GLSL_Light> mActiveLights;
     };

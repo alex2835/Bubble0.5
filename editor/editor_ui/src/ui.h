@@ -4,7 +4,7 @@
 #include "ui_windows/model_explorer.h"
 #include "ui_windows/entity_explorer.h"
 #include "ui_windows/main_viewport.h"
-#include "ui_windows/skybox_exolorer.h"
+#include "ui_windows/skybox_explorer.h"
 #include "ui_windows/scene_panel.h"
 #include "ui_menu_options/scene_camera_options.h"
 

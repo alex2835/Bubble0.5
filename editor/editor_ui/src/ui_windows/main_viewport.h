@@ -27,7 +27,7 @@ namespace Bubble
                 ImGui::Image((void*)textureId, texture_size, ImVec2(1, 1), ImVec2(0, 0));
                 args.mMainViewport->mNewSize = *(glm::vec2*)&imgui_viewport_size;
 
-                if (ImGui::IsWindowHovered())
+                if (ImGui::IsItemHovered())
                 {
                     args.mSceneCamera->OnUpdate(dt);
                 }

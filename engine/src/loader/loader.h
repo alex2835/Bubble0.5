@@ -15,6 +15,7 @@ namespace Bubble
         std::unordered_map<std::string, Ref<Model>>     mLoadedModels;
         std::unordered_map<std::string, Ref<Shader>>    mLoadedShaders;
         std::unordered_map<std::string, Ref<Skybox>>    mLoadedSkyboxes;
+        std::unordered_map<std::string, Ref<Texture2D>> mLoadedSkypsheres;
 
         // ================ Textures ================
     public:
@@ -55,6 +56,10 @@ namespace Bubble
 
         // Single file skybox
         Ref<Skybox> LoadSkybox(std::string file);
+
+        // ================= Skypshere ================= 
+    public:
+        Ref<Texture2D> LoadSkysphere(const std::string& path);
     };
 
 }
