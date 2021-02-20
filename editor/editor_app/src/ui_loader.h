@@ -12,7 +12,7 @@ namespace Bubble
         DLLHotReloader mUIDLL;
 		ImGuiControl mImGuiControl;
 		
-        UILoader(Window* window);
+        UILoader(Window& window);
         ~UILoader();
 		void OnUpdate(DeltaTime dt);
 		void OnEvent(SDL_Event& event);

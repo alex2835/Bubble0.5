@@ -10,10 +10,10 @@ namespace Bubble
 {
     struct ImGuiControl
     {
-		Window* mWindow;
+		Window& mWindow;
         ImGuiContext* mContext;
 
-        ImGuiControl(Window* window)
+        ImGuiControl(Window& window)
             : mWindow(window)
         {}
 
@@ -45,8 +45,8 @@ namespace Bubble
             }
 
             // Setup Platform/Renderer bindings
-            ImGui_ImplSDL2_InitForOpenGL(mWindow->GetSDLWindow(), mWindow->GetGLContext());
-            ImGui_ImplOpenGL3_Init(mWindow->GetGLSLVersion());
+            ImGui_ImplSDL2_InitForOpenGL(mWindow.GetSDLWindow(), mWindow.GetGLContext());
+            ImGui_ImplOpenGL3_Init(mWindow.GetGLSLVersion());
         }
 
         void OnDetach()
@@ -61,7 +61,7 @@ namespace Bubble
         {
             // Start the Dear ImGui frame
             ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplSDL2_NewFrame(mWindow->GetSDLWindow());
+            ImGui_ImplSDL2_NewFrame(mWindow.GetSDLWindow());
             ImGui::NewFrame();
         }
 

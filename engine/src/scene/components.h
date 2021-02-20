@@ -34,14 +34,14 @@ namespace Bubble
 			mTag.reserve(256);
 		}
 
-		nlohmann::json Serialize() const
+		nlohmann::json Serialize(Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Tag"] = mTag;
 			return j;
 		}
 
-		void Deserialize(const nlohmann::json& j)
+		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
 			mTag = j["Tag"];
 		}
@@ -58,14 +58,14 @@ namespace Bubble
 			: mPosition(mPosition)
 		{}
 
-		nlohmann::json Serialize() const
+		nlohmann::json Serialize(Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Position"] = to_json(mPosition);
 			return j;
 		}
 
-		void Deserialize(const nlohmann::json& j)
+		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
 			mPosition = from_json(j["Position"]);
 		}
@@ -83,14 +83,14 @@ namespace Bubble
 			: mRotation(rotation)
 		{}
 
-		nlohmann::json Serialize() const
+		nlohmann::json Serialize(Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Rotation"] = to_json(mRotation);
 			return j;
 		}
 
-		void Deserialize(const nlohmann::json& j)
+		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
 			mRotation = from_json(j["Rotation"]);
 		}
@@ -108,14 +108,14 @@ namespace Bubble
 			: mScale(scale)
 		{}
 
-		nlohmann::json Serialize() const
+		nlohmann::json Serialize(Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Scale"] = to_json(mScale);
 			return j;
 		}
 		
-		void Deserialize(const nlohmann::json& j)
+		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
 			mScale = from_json(j["Scale"]);
 		}
@@ -135,7 +135,7 @@ namespace Bubble
 		operator glm::mat4& () { return mTransform; }
 		operator const glm::mat4& () const { return mTransform; }
 
-		nlohmann::json Serialize() const
+		nlohmann::json Serialize(Loader& loader) const
 		{
 			nlohmann::json j;
 			std::vector<float> temp;
@@ -148,7 +148,7 @@ namespace Bubble
 			return j;
 		}
 
-		void Deserialize(const nlohmann::json& j)
+		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
 			std::vector<float> temp = j["Transform"];
 			for (int i = 0; i < 4; i++) {
@@ -165,7 +165,7 @@ namespace Bubble
 	// ================= Light Component =================
 	struct LightComponent : Light
 	{
-		nlohmann::json Serialize() const
+		nlohmann::json Serialize(Loader& loader) const
 		{
 			nlohmann::json j;
 			j["Light"]["Type"] = Type;
@@ -185,7 +185,7 @@ namespace Bubble
 			return j;
 		}
 
-		void Deserialize(const nlohmann::json& j)
+		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
 			Type= j["Light"]["Type"];
 			Brightness = j["Light"]["Brightness"];
@@ -216,24 +216,20 @@ namespace Bubble
 		operator Ref<Model>& () { return *this; }
 		operator const Ref<Model>& () const { return *this; }
 
-		nlohmann::json Serialize() const
+		nlohmann::json Serialize(Loader& loader) const
 		{
 			nlohmann::json j;
-			//auto iterator = std::ranges::find_if(*Loader::sLoadedModels,
-			//	[&](const std::pair<std::string, Ref<Model>>& path_model) 
-			//	{
-			//		return path_model.second == *this;
-			//	}
-			//);
-			//
-			//const std::string& path = iterator->first;
-			//j["Model"] = path;
+			auto iterator = std::ranges::find_if(loader.mLoadedModels,
+				[&](const auto& path_model) {return path_model.second == *this; });
+			
+			const std::string& path = iterator->first;
+			j["Model"] = path;
 			return j;
 		}
 
-		void Deserialize(const nlohmann::json& j)
+		void Deserialize(const nlohmann::json& j, Loader& loader)
 		{
-			//*this = Loader::LoadModel(j["Model"]);
+			*this = loader.LoadModel(j["Model"]);
 		}
 
 	};

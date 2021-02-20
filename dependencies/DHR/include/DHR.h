@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <type_traits>
 #include <filesystem>
+#include <functional>
 #include <thread>
 
 namespace fs = std::filesystem;
@@ -23,6 +24,7 @@ struct DLLHotReloader
     std::string mInputPath;
     std::string mOutputPath;
     fs::file_time_type mLastUpdateTime;
+    std::function<void()> mOnCloseFunction;
 
     typedef void (*FunctionPointer)(void);
     mutable std::unordered_map<std::string, FunctionPointer> mFunctionCache;
@@ -59,10 +61,15 @@ struct DLLHotReloader
 
     inline ~DLLHotReloader()
     {
+        if (mOnCloseFunction)
+        {
+            mOnCloseFunction();
+        }
         delete mLibrary;
     }
 
     /*
+    *  Possible to specify function at a dll close
     *  @throw If dll can't be reloaded
     */
     inline bool CheckForUpdate()
@@ -77,6 +84,11 @@ struct DLLHotReloader
 
         if (mLastUpdateTime != lib_update_time || mLibrary == nullptr)
         {
+            if (mOnCloseFunction)
+            {
+                mOnCloseFunction();
+            }
+
             std::this_thread::sleep_for(500ms);
 
             delete mLibrary;
@@ -108,6 +120,17 @@ struct DLLHotReloader
             mFunctionCache[name] = reinterpret_cast<FunctionPointer>(func);
             return func(args...);
         }
+    }
+
+
+    /* Will be called at dll detaching and program closing
+    *  @throw If no function with such signature
+    */
+    template <typename FunctionSignature, typename ...Args>
+    auto SetOnCloseFunction(const std::string& name, Args... args)
+    {
+        auto func = mLibrary->get_function<FunctionSignature>(name);
+        mOnCloseFunction = std::function<void()>(std::bind(func, Args...));
     }
 
     /*

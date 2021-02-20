@@ -19,6 +19,6 @@ namespace Bubble
         // Frustum culling planes;
         glm::vec4   mFrustumPlanes[6];
 
-        RendererStorage(Loader* loader);
+        RendererStorage(Loader& loader);
     };
 }

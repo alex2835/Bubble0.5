@@ -3,7 +3,7 @@
 
 namespace Bubble
 {
-    Renderer::Renderer(Loader* loader)
+    Renderer::Renderer(Loader& loader)
         : mStorage(loader),
           mBackgroundType(BackgroundType::COLOR)
     {

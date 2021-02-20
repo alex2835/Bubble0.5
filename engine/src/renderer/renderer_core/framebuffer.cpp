@@ -126,10 +126,10 @@ namespace Bubble
         glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     }
 
-    void Framebuffer::BindWindow(Window* window)
+    void Framebuffer::BindWindow(Window& window)
     {
         glcall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-        glm::ivec2 window_size = window->GetSize();
+        glm::ivec2 window_size = window.GetSize();
         glViewport(0, 0, window_size.x, window_size.y);
     }
 

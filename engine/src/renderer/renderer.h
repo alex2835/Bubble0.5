@@ -40,7 +40,7 @@ namespace Bubble
         //bool mBoundingBoxOption = false;
 
 
-        Renderer(Loader* loader);
+        Renderer(Loader& loader);
         // ============ Options ============
         void Wareframe(bool);
         void AlphaBlending(bool, uint32_t sfactor = GL_SRC_ALPHA, uint32_t dfactor = GL_ONE_MINUS_SRC_ALPHA);

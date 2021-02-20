@@ -46,7 +46,7 @@ namespace Bubble
 
         void Bind() const;
         void Unbind() const;
-        static void BindWindow(Window* window);
+        static void BindWindow(Window& window);
         void Invalidate();
 
         int GetWidth() const;

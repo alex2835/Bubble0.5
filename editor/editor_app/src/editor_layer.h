@@ -8,8 +8,8 @@ namespace Bubble
 {
 	class EditorLayer : public Layer
 	{
-		Window*		mWindow;
-        Input*		mInput;
+		Window&		mWindow;
+        Input&		mInput;
         UILoader	mUILoader;
         Loader      mLoader;
 		Renderer    mRenderer;
@@ -19,7 +19,7 @@ namespace Bubble
         Viewport    mViewport;
 
 	public:
-		EditorLayer(Window* window, Input* input);
+		EditorLayer(Window& window, Input& input);
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate(DeltaTime dt) override;

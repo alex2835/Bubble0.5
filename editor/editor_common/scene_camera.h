@@ -6,48 +6,48 @@ namespace Bubble
 {
     struct SceneCamera : public FreeCamera
     {
-        Input* mInput;
+        Input& mInput;
         float mBoostSpeed = 5.0f;
 
-        SceneCamera(Input* input, const glm::vec3& position = glm::vec3(0.0f))
+        SceneCamera(Input& input, const glm::vec3& position = glm::vec3(0.0f))
             : FreeCamera(position),
               mInput(input)
         {}
 
         void OnUpdate(DeltaTime dt)
         {
-            if (mInput->IsMouseButtonPressed(SDL_BUTTON_RIGHT))
+            if (mInput.IsMouseButtonPressed(SDL_BUTTON_RIGHT))
             {
             	// Catch cursor
             	SDL_SetRelativeMouseMode(SDL_TRUE);
             
             	// Boost
-                float boost = mInput->IsKeyPressed(SDLK_LSHIFT) ? mBoostSpeed : 1.0f;
+                float boost = mInput.IsKeyPressed(SDLK_LSHIFT) ? mBoostSpeed : 1.0f;
             
                 float max_speed = MaxSpeed * DeltaSpeed;
             
                 // Speed x
-                if (mInput->IsKeyPressed(SDLK_w))
+                if (mInput.IsKeyPressed(SDLK_w))
                 {
                     ProcessMovement(CameraMovement::FORWARD, dt);
                 }
-                else if (mInput->IsKeyPressed(SDLK_s))
+                else if (mInput.IsKeyPressed(SDLK_s))
                 {
                     ProcessMovement(CameraMovement::BACKWARD, dt);
                 }
             
                 // Speed y
-                if (mInput->IsKeyPressed(SDLK_d))
+                if (mInput.IsKeyPressed(SDLK_d))
                 {
                     ProcessMovement(CameraMovement::RIGHT, dt);
                 }
-                else if (mInput->IsKeyPressed(SDLK_a))
+                else if (mInput.IsKeyPressed(SDLK_a))
                 {
                     ProcessMovement(CameraMovement::LEFT, dt);
                 }
             
-                ProcessMouseMovementShift(-mInput->fGetMouseRelX(), -mInput->fGetMouseRelY());
-                ProcessMouseScroll(-mInput->GetMouseWheelOffset());
+                ProcessMouseMovementShift(-mInput.fGetMouseRelX(), -mInput.fGetMouseRelY());
+                ProcessMouseScroll(-mInput.GetMouseWheelOffset());
             
                 // Process boost
                 if (boost > 1.0f)

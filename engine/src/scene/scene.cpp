@@ -16,7 +16,7 @@ namespace Bubble
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
-		Entity entity = { Registry.create(), this };
+		Entity entity = Entity(Registry.create(), this);
 		auto& tag = entity.EmplaceComponent<TagComponent>();
 		tag = name.empty() ? "Entity" : name;
 		return entity;
