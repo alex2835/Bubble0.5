@@ -4,8 +4,7 @@
 namespace Bubble
 {
     Renderer::Renderer(Loader& loader)
-        : mStorage(loader),
-          mBackgroundType(BackgroundType::COLOR)
+        : mStorage(loader)
     {
         InitUBOS();
         glEnable(GL_DEPTH_TEST);
@@ -225,14 +224,14 @@ namespace Bubble
         }
 
         // Draw background
-        BackgroundType backgound_type_to_draw = mBackgroundType;
-        if (mBackgroundType == BackgroundType::SKYBOX &&
+        BackgroundType backgound_type_to_draw = mSceneStage.mBackgroundType;
+        if (mSceneStage.mBackgroundType == BackgroundType::SKYBOX &&
             (!mSceneStage.mSkyboxFirst ||
              !mSceneStage.mSkyboxSecond))
         {
             backgound_type_to_draw = BackgroundType::COLOR;
         }
-        if (mBackgroundType == BackgroundType::SKYSPHERE &&
+        if (mSceneStage.mBackgroundType == BackgroundType::SKYSPHERE &&
             !mSceneStage.mSkysphereTexture)
         {
             backgound_type_to_draw = BackgroundType::COLOR;

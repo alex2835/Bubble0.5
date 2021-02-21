@@ -13,6 +13,8 @@ namespace Bubble
     {
         nlohmann::json json;
 
+        json["BackgroundType"] = (int)renderer.mSceneStage.mBackgroundType;
+
         json["ClearColor"] = to_json(renderer.mSceneStage.mClearColor);
 
         json["SkyboxBlendFactor"]   = renderer.mSceneStage.mSkyboxBlendFactor;
@@ -43,6 +45,8 @@ namespace Bubble
 
     inline void RendererDeserialization(const nlohmann::json& json, Renderer& renderer, Loader& loader)
     {
+        renderer.mSceneStage.mBackgroundType = json["BackgroundType"];
+
         renderer.mSceneStage.mClearColor = from_json_vec4(json["ClearColor"]);
 
         renderer.mSceneStage.mSkyboxBlendFactor   = json["SkyboxBlendFactor"];

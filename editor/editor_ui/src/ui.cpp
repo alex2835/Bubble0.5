@@ -82,10 +82,11 @@ namespace Bubble
 			{
 				if (ImGui::MenuItem("Open"))
 				{
+					ProjectDeserialization("../../../../../scene_test.json", *mArgs.mLoader, *mArgs.mRenderer, *mArgs.mScene);
 					//try
 					//{
 					//	std::string path = OpenFileDialog("json");
-					//	OpenProject(path, mArgs.mScene, this);
+					//	ProjectDeserialization(path, *mArgs.mLoader, *mArgs.mRenderer, *mArgs.mScene);
 					//}
 					//catch (const std::exception& e)
 					//{
@@ -120,8 +121,6 @@ namespace Bubble
 					//
 					//// BoundingBox
 					//ImGui::Checkbox("BoundingBox", (bool*)&mBoundingBoxOption);
-
-					
 					ImGui::EndMenu();
 				}
 
@@ -131,9 +130,8 @@ namespace Bubble
 			// ======================== View ========================
 			if (ImGui::BeginMenu("View"))
 			{
-				ImGui::MenuItem("Scene explorer", "", &mEntityExplorer->mIsOpen);
-				//ImGui::MenuItem("Entity properties", "", &mIsOpenEntityProperties);
-				ImGui::MenuItem("Model explorer", "", &mModelExploerer->mIsOpen);
+				ImGui::MenuItem("Scene explorer",  "", &mEntityExplorer->mIsOpen);
+				ImGui::MenuItem("Model explorer",  "", &mModelExploerer->mIsOpen);
 				ImGui::MenuItem("Skybox explorer", "", &mSkyboxExplorer->mIsOpen);
 				ImGui::EndMenu();
 			}

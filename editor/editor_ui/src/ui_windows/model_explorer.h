@@ -270,19 +270,14 @@ namespace Bubble
                     }
 
                     // Delete
-                    if (ImGui::IsItemHovered && ImGui::BeginPopupContextWindow(name.c_str(), 1))
-                    {
-                        if (ImGui::Selectable("Delete"))
-                        {
-                            model_to_delete = &path;
-                        }
-                        ImGui::EndPopup();
-                    }
-                }
-
-                if (model_to_delete)
-                {
-                    args.mLoader->mLoadedModels.erase(*model_to_delete);
+                    //if (ImGui::IsItemHovered && ImGui::BeginPopupContextWindow(name.c_str(), 1))
+                    //{
+                    //    if (ImGui::Selectable("Delete"))
+                    //    {
+                    //        model_to_delete = &path;
+                    //    }
+                    //    ImGui::EndPopup();
+                    //}
                 }
 
                 if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
@@ -295,18 +290,34 @@ namespace Bubble
 
             // Buttons
             ImGui::SameLine();
-            if (ImGui::Button("Load", { 100, window_size.y * 0.05f }))
+            ImGui::BeginChild("Buttons", ImVec2(window_size.x * 0.2f - 7, window_size.y * 0.24f), true);
             {
-                try
+                if (ImGui::Button("Load", ImVec2(window_size.x * 0.2f - 23, window_size.y * 0.05f)))
                 {
-                    std::string path = OpenFileDialog();
-                    args.mLoader->LoadModel(path);
+                    try
+                    {
+                        std::string path = OpenFileDialog();
+                        args.mLoader->LoadModel(path);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        LOG_ERROR(e.what());
+                    }
                 }
-                catch (const std::exception& e)
+                if (ImGui::Button("Delete", ImVec2(window_size.x * 0.2f - 23, window_size.y * 0.05f)))
                 {
-                    LOG_ERROR(e.what());
+                    if (mSelectedModel)
+                    {
+                        auto begin = args.mLoader->mLoadedModels.begin();
+                        auto end = args.mLoader->mLoadedModels.end();
+                        auto selected_model = std::find_if(begin, end,
+                            [this](const auto& pair) { return pair.second == mSelectedModel; });
+                        args.mLoader->mLoadedModels.erase(selected_model);
+                        mSelectedModel = nullptr;
+                    }
                 }
             }
+            ImGui::EndChild();
 
         }
 

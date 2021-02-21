@@ -1,24 +1,48 @@
 {
  "Loader": {
+  "Models": [
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/medieval-house-2.obj",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/Tree.obj"
+  ],
   "Shaders": [
    "Phong shader",
    "Skybox shader"
   ],
+  "Skyspheres": [
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg"
+  ],
   "Textures": [
-   "white plug"
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/WindowBlue1.jpg",
+   "white plug",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/PlasterLarge.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/DoorType1_2.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/Rusted Metal.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/TreeLogEdgeWeathered.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/Wood.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/Stone.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/WindowsBlue2.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/RoofTiles.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/GreyBricks2.jpg",
+   "resources/images/chess_plane.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/DB2X2_L01.png",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/bark_0021.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/DB2X2_L01_Spec.png"
   ]
  },
  "Renderer": {
+  "BackgroundType": 2,
   "ClearColor": [
-   1.0,
-   1.0,
-   1.0,
-   1.0
+   0.4000000059604645,
+   0.4000000059604645,
+   0.4000000059604645,
+   0.4000000059604645
   ],
   "SkyboxBlendFactor": 0.0,
   "SkyboxBrightness": 0.0,
   "SkyboxRotation": 0.0,
-  "SkyboxRotationSpeed": 0.0
+  "SkyboxRotationSpeed": 0.0,
+  "Skysphere": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg"
  },
  "Scene": {
   "Size": [

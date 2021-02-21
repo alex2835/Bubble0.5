@@ -27,8 +27,8 @@ namespace Bubble
                 // Background
                 const char* sky_type_string = "Color\0Skybox\0Skysphere";
 
-                ImGui::Combo("SkyType", (int*)&args.mRenderer->mBackgroundType, sky_type_string, 3);
-                switch (args.mRenderer->mBackgroundType)
+                ImGui::Combo("SkyType", (int*)&args.mRenderer->mSceneStage.mBackgroundType, sky_type_string, 3);
+                switch (args.mRenderer->mSceneStage.mBackgroundType)
                 {
                     case BackgroundType::COLOR:
                         ImGui::ColorEdit4("Background color", (float*)&args.mRenderer->mSceneStage.mClearColor);

@@ -13,8 +13,15 @@
 
 namespace Bubble
 {
+    enum class BackgroundType { COLOR, SKYBOX, SKYSPHERE };
+
     struct RendererSceneStage
     {
+        BackgroundType mBackgroundType = BackgroundType::COLOR;
+
+        // Clear color
+        glm::vec4 mClearColor;
+
         // Skyboxes
         Ref<Skybox> mSkyboxFirst;
         Ref<Skybox> mSkyboxSecond;
@@ -25,9 +32,6 @@ namespace Bubble
 
         // Skysphere
         Ref<Texture2D> mSkysphereTexture;
-
-        // Clear color
-        glm::vec4 mClearColor;
 
         // Lights
         std::vector<GLSL_Light> mActiveLights;
