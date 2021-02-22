@@ -1,6 +1,7 @@
 {
  "Loader": {
   "Models": [
+   "resources/models/sphere.obj",
    "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/medieval-house-2.obj",
    "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/Tree.obj"
   ],
@@ -45,15 +46,85 @@
   "Skysphere": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg"
  },
  "Scene": {
-  "Size": [
-   0,
-   0,
-   0,
-   0,
-   0,
-   0,
-   0,
+  "Components": [
+   {
+    "Component": {
+     "Tag": "MyEntity"
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Position": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Rotation": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Scale": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Transform": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Model": "resources/models/sphere.obj"
+    },
+    "Entity": 0
+   }
+  ],
+  "Entities": [
    0
+  ],
+  "Size": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   0,
+   1
   ]
  }
 }

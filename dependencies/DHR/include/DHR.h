@@ -7,16 +7,21 @@
 #include "dynalo/symbol_helper.hpp"
 #else
 
+#ifndef DHR_DLL_COPIES_DIR
+#define DHR_DLL_COPIES_DIR "./DllCopies/"
+#endif
+#ifndef DHR_RELOAD_DELEY
+#define DHR_RELOAD_DELEY 100ms
+#endif
+
 #include "dynalo/dynalo.hpp"
 #include <unordered_map>
 #include <type_traits>
 #include <filesystem>
-#include <functional>
 #include <thread>
-
 namespace fs = std::filesystem;
 using namespace std::chrono_literals;
-static const char* CACHED_DLL_DIR = "./HotReloadedDLL/";
+
 
 struct DLLHotReloader
 {
@@ -26,20 +31,20 @@ struct DLLHotReloader
     fs::file_time_type mLastUpdateTime;
     std::function<void()> mOnCloseFunction;
 
-    typedef void (*FunctionPointer)(void);
-    mutable std::unordered_map<std::string, FunctionPointer> mFunctionCache;
+    typedef void (*DefFunctionPointer)(void);
+    mutable std::unordered_map<std::string, DefFunctionPointer> mFunctionCache;
 
     /*
     *  Name without extension
     *  @throw If dll can't be loaded
-    */ 
+    */
     inline DLLHotReloader(const std::string& path)
         : mLibrary(nullptr)
     {
         // Directory where dll copies are stored
-        if (!std::filesystem::exists(CACHED_DLL_DIR))
+        if (!std::filesystem::exists(DHR_DLL_COPIES_DIR))
         {
-            fs::create_directory(CACHED_DLL_DIR);
+            fs::create_directory(DHR_DLL_COPIES_DIR);
         }
 
         std::string name;
@@ -54,8 +59,8 @@ struct DLLHotReloader
             name = dynalo::to_native_name(path);
         }
 
-        mInputPath  = input_dir + name;
-        mOutputPath = CACHED_DLL_DIR + name;
+        mInputPath = input_dir + name;
+        mOutputPath = DHR_DLL_COPIES_DIR + name;
         CheckForUpdate();
     }
 
@@ -69,7 +74,6 @@ struct DLLHotReloader
     }
 
     /*
-    *  Possible to specify function at a dll close
     *  @throw If dll can't be reloaded
     */
     inline bool CheckForUpdate()
@@ -88,15 +92,14 @@ struct DLLHotReloader
             {
                 mOnCloseFunction();
             }
-
-            std::this_thread::sleep_for(500ms);
+            std::this_thread::sleep_for(DHR_RELOAD_DELEY);
 
             delete mLibrary;
             mLibrary = nullptr;
             fs::remove(mOutputPath);
             fs::copy(mInputPath, mOutputPath);
             mLibrary = new dynalo::library(mOutputPath);
-            
+
             mLastUpdateTime = lib_update_time;
             mFunctionCache.clear();
             return true;
@@ -117,15 +120,14 @@ struct DLLHotReloader
         }
         else {
             auto func = mLibrary->get_function<FunctionSignature>(name);
-            mFunctionCache[name] = reinterpret_cast<FunctionPointer>(func);
+            mFunctionCache[name] = reinterpret_cast<DefFunctionPointer>(func);
             return func(args...);
         }
     }
 
-
     /* Will be called at dll detaching and program closing
-    *  @throw If no function with such signature
-    */
+*  @throw If no function with such signature
+*/
     template <typename FunctionSignature, typename ...Args>
     auto SetOnCloseFunction(const std::string& name, Args... args)
     {

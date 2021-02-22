@@ -268,16 +268,6 @@ namespace Bubble
                         mCamera.Radius = mSelectedModel->mBoundingBox.getLongestEdge() * 1.5f;
                         mCamera.Update(dt);
                     }
-
-                    // Delete
-                    //if (ImGui::IsItemHovered && ImGui::BeginPopupContextWindow(name.c_str(), 1))
-                    //{
-                    //    if (ImGui::Selectable("Delete"))
-                    //    {
-                    //        model_to_delete = &path;
-                    //    }
-                    //    ImGui::EndPopup();
-                    //}
                 }
 
                 if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
@@ -309,7 +299,7 @@ namespace Bubble
                     if (mSelectedModel)
                     {
                         auto begin = args.mLoader->mLoadedModels.begin();
-                        auto end = args.mLoader->mLoadedModels.end();
+                        auto end   = args.mLoader->mLoadedModels.end();
                         auto selected_model = std::find_if(begin, end,
                             [this](const auto& pair) { return pair.second == mSelectedModel; });
                         args.mLoader->mLoadedModels.erase(selected_model);

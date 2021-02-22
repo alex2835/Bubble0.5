@@ -4,7 +4,7 @@
 namespace Bubble
 {
 	Entity::Entity(entt::entity handle, Scene* scene)
-		: EntityHandle(handle),
+		: mEntityHandle(handle),
 		  mScene(scene)
 	{}
 }

@@ -9,6 +9,7 @@ namespace Bubble
 		// ============ Shaders ============
 		mPhongShader  = loader.LoadShader("Phong shader",  PhongVertexShaderSource,  PhongFragmentShaderSource);
 		mSkyboxShader = loader.LoadShader("Skybox shader", SkyboxVertexShaderSource, SkyboxFragmentShaderSource);
+        mSkysphereShader = loader.LoadShader("Skysphere shader", SkysphereVertexShaderSource, SkysphereFragmentShaderSource);
 
         // ======= Skybox vertex buffer =======
         BufferLayout layout{
@@ -22,7 +23,6 @@ namespace Bubble
         // =========== Sky sphere ===========
         mSphere = loader.LoadModel("resources/models/sphere.obj");
         mSphere->mMeshes[0].mMaterial.mAmbientCoef = 2.0f;
-        loader.mLoadedModels.clear();
 	}
     
 } 

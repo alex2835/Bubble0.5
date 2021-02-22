@@ -19,6 +19,7 @@ namespace Bubble
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = std::string());
+		void DeleteEntity(entt::entity entity);
 
 		void OnUpdate(DeltaTime delta_time);
 		void OnViewportResize(uint32_t width, uint32_t height);

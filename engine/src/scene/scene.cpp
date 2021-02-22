@@ -18,25 +18,17 @@ namespace Bubble
 	{
 		Entity entity = Entity(mRegistry.create(), this);
 		auto& tag = entity.EmplaceComponent<TagComponent>();
-		tag = name.empty() ? "Entity" : name;
+		tag = name.empty() ? "Entity " + std::to_string((uint32_t)entity.mEntityHandle) : name;
 		return entity;
 	}
 
+    void Scene::DeleteEntity(entt::entity entity)
+    {
+		mRegistry.destroy(entity);
+    }
+
 	void Scene::OnUpdate(DeltaTime dt)
 	{
-		// Update native scripts
-		//Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
-		//	{
-		//		if (!nsc.Instance)
-		//		{
-		//			nsc.Instance = nsc.InstantiateScript();
-		//			nsc.Instance->mEntity = Entity{ entity, this };
-		//			nsc.Instance->OnCreate();
-		//		}
-		//
-		//		nsc.Instance->OnUpdate(dt);
-		//	}
-		//);
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

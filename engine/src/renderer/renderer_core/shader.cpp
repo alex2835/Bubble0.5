@@ -87,4 +87,26 @@ namespace Bubble
         glcall(glUniformMatrix4fv(GetUni(mName), 1, GL_FALSE, glm::value_ptr(val)));
     }
 
+    // Texture
+    void Shader::SetTexture2D(const std::string& name, int tex_id, int slot) const
+    {
+        glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTexture(GL_TEXTURE_2D, tex_id);
+        SetUni1i(name, slot);
+    }
+
+    void Shader::SetTexture2D(const std::string& name, const Texture2D& texture, int slot) const
+    {
+        glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTexture(GL_TEXTURE_2D, texture.GetRendererID());
+        SetUni1i(name, slot);
+    }
+
+    void Shader::SetTexture2D(const std::string& name, const Ref<Texture2D>& texture, int slot) const
+    {
+        glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTexture(GL_TEXTURE_2D, texture->GetRendererID());
+        SetUni1i(name, slot);
+    }
+
 }

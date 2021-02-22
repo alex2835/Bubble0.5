@@ -48,5 +48,9 @@ namespace Bubble
         void SetUniMat3(const std::string& name, const glm::mat3& val) const;
         void SetUniMat4(const std::string& name, const glm::mat4& val) const;
 
+        // textures
+        void SetTexture2D(const std::string& name, int tex_id, int slot = 0) const;
+        void SetTexture2D(const std::string& name, const Texture2D& texture, int slot = 0) const;
+        void SetTexture2D(const std::string& name, const Ref<Texture2D>& texture, int slot = 0) const;
     };
 }

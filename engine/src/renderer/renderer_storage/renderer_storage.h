@@ -16,6 +16,7 @@ namespace Bubble
         // Internal Shaders
         Ref<Shader> mPhongShader;
         Ref<Shader> mSkyboxShader;
+        Ref<Shader> mSkysphereShader;
         // Frustum culling planes;
         glm::vec4   mFrustumPlanes[6];
 

@@ -185,22 +185,22 @@ namespace Bubble
 
     void Renderer::DrawSkysphere(const Ref<Texture2D>& skysphere_texture)
     {
-        auto& sphere_model = mStorage.mSphere;
         auto& sphere_mesh  = mStorage.mSphere->mMeshes[0];
 
+        glDepthFunc(GL_LEQUAL);
         BackfaceCulling(false);
+
         sphere_mesh.mVertexArray.Bind();
-        sphere_mesh.mMaterial.mDiffuseMap = skysphere_texture;
-        sphere_mesh.mMaterial.Set(sphere_model->mShader);
-        sphere_model->mShader->SetUniMat4("u_Model", glm::mat4(1.0f));
+        mStorage.mSkysphereShader->SetTexture2D("u_Skysphere", skysphere_texture);
         glDrawElements((int)DrawType::TRIANGLES, sphere_mesh.mIndices.size(), GL_UNSIGNED_INT, 0);
+        
         BackfaceCulling(true);
+        glDepthFunc(GL_LESS);
     }
 
     void Renderer::DrawScene(Scene& scene)
     {
         Clear();
-
         // Set lights
         auto light_view = scene.GetView<LightComponent>();
         mSceneStage.mActiveLights.clear();

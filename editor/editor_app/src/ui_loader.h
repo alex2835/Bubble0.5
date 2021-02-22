@@ -1,5 +1,6 @@
 #pragma once
 
+#define DHR_RELOAD_DELEY 600ms
 #include "DHR.h"
 #include "ui_args.h"
 #include "imgui_control.h"

@@ -136,7 +136,7 @@ namespace Bubble
 	// ================= Transform Component =================
 	struct TransformComponent
 	{
-		glm::mat4 mTransform{ 1.0f };
+		glm::mat4 mTransform = glm::mat4(1.0f);
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
