@@ -22,7 +22,6 @@ namespace Bubble
 
         // =========== Sky sphere ===========
         mSphere = loader.LoadModel("resources/models/sphere.obj");
-        mSphere->mMeshes[0].mMaterial.mAmbientCoef = 2.0f;
 	}
     
 } 

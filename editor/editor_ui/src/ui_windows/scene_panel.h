@@ -25,7 +25,7 @@ namespace Bubble
                 ImVec2 window_size = ImGui::GetContentRegionAvail();
 
                 // Background
-                const char* sky_type_string = "Color\0Skybox\0Skysphere";
+                const char* sky_type_string = "Color\0Skybox\0Skysphere\0";
 
                 ImGui::Combo("SkyType", (int*)&args.mRenderer->mSceneStage.mBackgroundType, sky_type_string, 3);
                 switch (args.mRenderer->mSceneStage.mBackgroundType)
@@ -42,9 +42,7 @@ namespace Bubble
                         DrawSkyspherePanel(args);
                         break;
                 }
-
                 // ...
-
             }
             ImGui::End();
 		}
@@ -80,7 +78,7 @@ namespace Bubble
             
             ImGui::BeginChild("Active skyboxes", ImVec2(0, 130), true);
             {
-                ImGui::SliderFloat("Brightness",   &scene_stage.mSkyboxBrightness, 0.0f, 1.0f);
+                ImGui::SliderFloat("Brightness",   &scene_stage.mSkyboxBrightness, 0.0f, 3.0f);
                 ImGui::SliderFloat("Blend factor", &scene_stage.mSkyboxBlendFactor, 0.0f, 1.0f);
                 ImGui::SliderFloat("Rotation speed", &scene_stage.mSkyboxRotationSpeed, 0.0001f, 0.5f);
 
@@ -142,7 +140,7 @@ namespace Bubble
             ImGui::BeginChild("Active Skysphere", ImVec2(0, 90), true);
             {
                 auto& sphere_mesh = args.mRenderer->mStorage.mSphere->mMeshes[0];
-                ImGui::SliderFloat("Brightness",     &sphere_mesh.mMaterial.mAmbientCoef, 0.0f, 3.0f);
+                ImGui::SliderFloat("Brightness",     &scene_stage.mSkyboxBrightness, 0.0f, 3.0f);
                 ImGui::SliderFloat("Rotation speed", &scene_stage.mSkyboxRotationSpeed, 0.0001f, 0.5f);
 
                 if (ImGui::Combo("Skysphere", &SelectedSkyphereID, names.data(), args.mLoader->mLoadedSkypsheres.size()))

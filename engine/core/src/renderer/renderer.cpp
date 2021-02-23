@@ -192,6 +192,8 @@ namespace Bubble
 
         sphere_mesh.mVertexArray.Bind();
         mStorage.mSkysphereShader->SetTexture2D("u_Skysphere", skysphere_texture);
+        mStorage.mSkysphereShader->SetUni1f("u_Brightness", mSceneStage.mSkyboxBrightness);
+
         glDrawElements((int)DrawType::TRIANGLES, sphere_mesh.mIndices.size(), GL_UNSIGNED_INT, 0);
         
         BackfaceCulling(true);

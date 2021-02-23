@@ -350,12 +350,13 @@ const char* SkysphereFragmentShaderSource = R"shader(
     out vec4 FragColor;
     
     in vec2 v_TexCoords;
+    uniform float u_Brightness;
     
     uniform sampler2D u_Skysphere;
     
     void main()
     {
-        FragColor = texture(u_Skysphere, v_TexCoords);
+        FragColor = u_Brightness * texture(u_Skysphere, v_TexCoords);
     }
 )shader";
 
