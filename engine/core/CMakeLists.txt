@@ -17,6 +17,7 @@ set_target_properties(
 add_definitions(-D"GLEW_STATIC")
 add_definitions(-D"GLM_FORCE_SWIZZLE")
 add_definitions(-D"_NO_DEBUG_HEAP=1")
+add_definitions(-D"ENTT_API_IMPORT")
 
 # Libraries
 target_link_libraries(Engine spdlog)

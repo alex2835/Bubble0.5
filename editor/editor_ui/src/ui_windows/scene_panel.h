@@ -31,7 +31,9 @@ namespace Bubble
                 switch (args.mRenderer->mSceneStage.mBackgroundType)
                 {
                     case BackgroundType::COLOR:
+                        ImGui::BeginChild("Active Color", ImVec2(0, 35), true);
                         ImGui::ColorEdit4("Background color", (float*)&args.mRenderer->mSceneStage.mClearColor);
+                        ImGui::EndChild();
                         break;
                     case BackgroundType::SKYBOX:
                         DrawSkyboxPanel(args);
@@ -137,7 +139,7 @@ namespace Bubble
                 names += name + '\0';
             }
 
-            ImGui::BeginChild("Active skyboxes", ImVec2(0, 130), true);
+            ImGui::BeginChild("Active Skysphere", ImVec2(0, 90), true);
             {
                 auto& sphere_mesh = args.mRenderer->mStorage.mSphere->mMeshes[0];
                 ImGui::SliderFloat("Brightness",     &sphere_mesh.mMaterial.mAmbientCoef, 0.0f, 3.0f);

@@ -40,19 +40,6 @@ namespace Bubble
 		// ====================== Draw scene ======================
 		mRenderer.DrawScene(mScene);
 
-		// ====================== Draw editor sruff ======================
-		//// Highlight selected entity
-		//if (selected_entity)
-		//{
-		//	draw_selected_model(selected_entity);
-		//}
-		
-		// Draw bounding boxes
-        //if (mUILoader.mBoundingBoxOption)
-        //{
-        //    draw_scene_boundingbox(mScene);
-        //}
-
 		// Temp: Hot keys
 		if (mInput.IsKeyClick(SDLK_LALT) && mInput.IsKeyClick(SDLK_F4))
 		{

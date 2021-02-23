@@ -12,6 +12,7 @@ namespace Bubble
 
 	Scene::~Scene()
 	{
+		mRegistry.clear();
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)

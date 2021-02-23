@@ -1,11 +1,12 @@
-#pragma once
-
-#include "glm-aabb/AABB.hpp"
+#include "frustum_culling .h"
 
 
 namespace Bubble
 {
-    inline void SetFrustumPlanes(glm::vec4* FrustumPlanes, const glm::mat4& view_proj)
+    glm::vec4 FrustumPlanes[6];
+
+
+    void SetFrustumPlanes(const glm::mat4& view_proj)
     {
         // Left Frustum Plane
         // Add first column of the matrix to the fourth column
@@ -58,9 +59,11 @@ namespace Bubble
             FrustumPlanes[i].z /= length;
             FrustumPlanes[i].w /= length;
         }
+
     }
 
-    inline bool IsInFrustum(glm::vec4* FrustumPlanes, const AABB& bb)
+
+    bool IsInFrustum(const AABB& bb)
     {
         const glm::vec3& min = bb.getMin();
         const glm::vec3& max = bb.getMax();
@@ -76,6 +79,7 @@ namespace Bubble
             else {
                 axis_vert.x = max.x;
             }
+
             // y-axis
             if (FrustumPlanes[planeID].y < 0.0f) {    // Which AABB vertex is furthest down (plane normals direction) the y axis
                 axis_vert.y = min.y;
@@ -83,6 +87,7 @@ namespace Bubble
             else {
                 axis_vert.y = max.y;
             }
+
             // z-axis
             if (FrustumPlanes[planeID].z < 0.0f) {   // Which AABB vertex is furthest down (plane normals direction) the z axis
                 axis_vert.z = min.z;
@@ -90,6 +95,7 @@ namespace Bubble
             else {
                 axis_vert.z = max.z;
             }
+
 
             glm::vec3 plane_normal = FrustumPlanes[planeID].xyz;
             float plane_Constant = FrustumPlanes[planeID].w;
@@ -103,4 +109,5 @@ namespace Bubble
 
         return true;
     }
+
 }

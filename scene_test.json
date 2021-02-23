@@ -1,34 +1,27 @@
 {
  "Loader": {
   "Models": [
-   "resources/models/sphere.obj",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/medieval-house-2.obj",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/Tree.obj"
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/grass_plane/grass_plane.obj",
+   "resources/models/sphere.obj"
   ],
   "Shaders": [
    "Phong shader",
+   "Skysphere shader",
    "Skybox shader"
   ],
+  "Skyboxes": [
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox5.jpg",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox1.jpg"
+  ],
   "Skyspheres": [
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox2.png",
    "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg"
   ],
   "Textures": [
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/WindowBlue1.jpg",
    "white plug",
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox2.png",
    "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/PlasterLarge.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/DoorType1_2.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/Rusted Metal.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/TreeLogEdgeWeathered.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/Wood.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/Stone.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/WindowsBlue2.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/RoofTiles.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/medival_house/GreyBricks2.jpg",
-   "resources/images/chess_plane.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/DB2X2_L01.png",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/bark_0021.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/Tree/DB2X2_L01_Spec.png"
+   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/grass_plane/10450_Rectangular_Grass_Patch_v1_Diffuse.jpg"
   ]
  },
  "Renderer": {
@@ -40,9 +33,11 @@
    0.4000000059604645
   ],
   "SkyboxBlendFactor": 0.0,
-  "SkyboxBrightness": 0.0,
+  "SkyboxBrightness": 1.0,
+  "SkyboxFirst": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox1.jpg",
   "SkyboxRotation": 0.0,
   "SkyboxRotationSpeed": 0.0,
+  "SkyboxSecond": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox5.jpg",
   "Skysphere": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg"
  },
  "Scene": {
@@ -52,6 +47,18 @@
      "Tag": "MyEntity"
     },
     "Entity": 0
+   },
+   {
+    "Component": {
+     "Tag": "DirLight"
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Tag": "grass pl"
+    },
+    "Entity": 2
    },
    {
     "Component": {
@@ -65,6 +72,16 @@
    },
    {
     "Component": {
+     "Position": [
+      0.0,
+      -34.20000076293945,
+      0.0
+     ]
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
      "Rotation": [
       0.0,
       0.0,
@@ -75,6 +92,16 @@
    },
    {
     "Component": {
+     "Rotation": [
+      4.699999809265137,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
      "Scale": [
       1.0,
       1.0,
@@ -82,6 +109,16 @@
      ]
     },
     "Entity": 0
+   },
+   {
+    "Component": {
+     "Scale": [
+      1.449999451637268,
+      1.449999451637268,
+      1.449999451637268
+     ]
+    },
+    "Entity": 2
    },
    {
     "Component": {
@@ -108,23 +145,85 @@
    },
    {
     "Component": {
+     "Transform": [
+      1.449999451637268,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.017963832244277,
+      -1.4498881101608276,
+      0.0,
+      0.0,
+      1.4498881101608276,
+      -0.017963832244277,
+      0.0,
+      0.0,
+      -34.20000076293945,
+      0.0,
+      1.0
+     ]
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
+     "Light": {
+      "Brightness": 1.6399999856948853,
+      "Color": [
+       1.0,
+       0.9803921580314636,
+       1.0
+      ],
+      "Constant": 1.0,
+      "CutOff": 0.0,
+      "Direction": [
+       -1.0,
+       -1.0,
+       0.0
+      ],
+      "Distance": 0.5040000081062317,
+      "Linear": 0.05639999732375145,
+      "OuterCutOff": 0.0,
+      "Position": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "Quadratic": 0.011831998825073242,
+      "Type": 0
+     }
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
      "Model": "resources/models/sphere.obj"
     },
     "Entity": 0
+   },
+   {
+    "Component": {
+     "Model": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/grass_plane/grass_plane.obj"
+    },
+    "Entity": 2
    }
   ],
   "Entities": [
-   0
+   0,
+   1,
+   2,
+   1048575
   ],
   "Size": [
+   3,
+   3,
+   2,
+   2,
+   2,
+   2,
    1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   0,
-   1
+   2
   ]
  }
 }

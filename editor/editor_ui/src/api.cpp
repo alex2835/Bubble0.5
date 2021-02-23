@@ -4,6 +4,14 @@
 #include "ui.h"
 #include "ui_serialization.h"
 
+//extern "C" BOOL WINAPI DllMain(
+//    HINSTANCE const instance,  // handle to DLL module
+//    DWORD     const reason,    // reason for calling function
+//    LPVOID    const reserved) // reserved
+//{
+//    return TRUE;
+//}
+
 Bubble::Scope<Bubble::UI> UI;
 
 DHR_EXPORT void DHR_CALL OnInit(ImGuiContext* context)

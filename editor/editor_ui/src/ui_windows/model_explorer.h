@@ -248,8 +248,6 @@ namespace Bubble
 
             ImGui::BeginChild("Models list", ImVec2(window_size.x * 0.5f, window_size.y * 0.24f), true);
             {
-                const std::string* model_to_delete = nullptr;
-
                 for (const auto& [path, model] : args.mLoader->mLoadedModels)
                 {
                     size_t pos  = path.find_last_of("/") + 1;

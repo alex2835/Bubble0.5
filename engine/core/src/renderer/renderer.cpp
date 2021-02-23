@@ -60,7 +60,7 @@ namespace Bubble
         mUBOProjectionView->SetData(projection_view, sizeof(projection_view));
 
         // Set camera frustum
-        SetFrustumPlanes(mStorage.mFrustumPlanes, projection * view);
+        SetFrustumPlanes(projection * view);
 
         // Set camera position
         (*mUBOViewPosition)[0].SetFloat3("ViewPos", camera.Position);
@@ -151,7 +151,7 @@ namespace Bubble
     {
         const Ref<Shader>& shader = in_shader ? in_shader : model->mShader;
 
-        if (IsInFrustum(mStorage.mFrustumPlanes, model->mBoundingBox.transform(transforms)))
+        if (IsInFrustum(model->mBoundingBox.transform(transforms)))
         {
             shader->SetUniMat4("u_Model", transforms);
             for (const auto& mesh : model->mMeshes)
@@ -212,15 +212,16 @@ namespace Bubble
         }
         SetLights(mSceneStage.mActiveLights);
 
+
         // Draw scene
         auto scene_view = scene.GetView<ModelComponent, TransformComponent>();
         for (auto entity : scene_view)
         {
             auto [model, transforms] = scene_view.get<ModelComponent, TransformComponent>(entity);
-            if (IsInFrustum(mStorage.mFrustumPlanes, model->mBoundingBox.transform(transforms)))
-            {
-                Renderer::DrawModel(model, transforms);
-            }
+            //if (IsInFrustum(mStorage.mFrustumPlanes, model->mBoundingBox.transform(transforms)))
+            //{
+            Renderer::DrawModel(model, transforms);
+            //}
         }
 
         // Draw background

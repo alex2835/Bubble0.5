@@ -45,10 +45,10 @@ namespace Bubble
 
 	struct Light : GLSL_Light
 	{
-		float CutOff = 0.0f;
-		float OuterCutOff = 0.0f;
-		float Distance = 0.0f;
-		float Brightness = 1.0f;
+        float CutOff = 0.0f;
+        float OuterCutOff = 0.0f;
+        float Distance = 0.0f;
+        float Brightness = 1.0f;
 
 		void SetDistance(float distance);
 		void Update();

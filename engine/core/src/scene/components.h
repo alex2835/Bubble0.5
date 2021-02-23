@@ -141,7 +141,8 @@ namespace Bubble
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(glm::mat4 transform)
-			: mTransform(transform) {}
+			: mTransform(transform)
+		{}
 
 		operator glm::mat4& () { return mTransform; }
 		operator const glm::mat4& () const { return mTransform; }
