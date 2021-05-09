@@ -199,7 +199,7 @@ namespace Bubble
 				glDeleteShader(fragment_shader);
 				glDeleteProgram(shader.mShaderID);
 
-				LOG_CORE_ERROR("LINLING SHADER ERROR: {} \n {}", shader.mName, log);
+				LOG_CORE_ERROR("LINKING SHADER ERROR: {} \n {}", shader.mName, log);
 				throw std::runtime_error("Shader compilation failed");
 			}
 		}

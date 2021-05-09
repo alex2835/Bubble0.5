@@ -1,8 +1,7 @@
 {
  "Loader": {
   "Models": [
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/grass_plane/grass_plane.obj",
-   "resources/models/sphere.obj"
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/nanosuit.obj"
   ],
   "Shaders": [
    "Phong shader",
@@ -10,22 +9,31 @@
    "Skybox shader"
   ],
   "Skyboxes": [
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox5.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox1.jpg"
-  ],
-  "Skyspheres": [
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox2.png",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg"
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/skyboxes/skybox1.jpg"
   ],
   "Textures": [
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/leg_showroom_spec.jpg",
    "white plug",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox2.png",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg",
-   "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/grass_plane/10450_Rectangular_Grass_Patch_v1_Diffuse.jpg"
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/leg_dif.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/glass_dif.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/hand_dif.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/glass_ddn.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/hand_showroom_spec.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/leg_showroom_ddn.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/hand_showroom_ddn.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/arm_dif.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/arm_showroom_spec.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/arm_showroom_ddn.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/helmet_showroom_ddn.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/helmet_diff.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/helmet_showroom_spec.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/body_dif.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/body_showroom_spec.jpg",
+   "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/body_showroom_ddn.jpg"
   ]
  },
  "Renderer": {
-  "BackgroundType": 2,
+  "BackgroundType": 1,
   "ClearColor": [
    0.4000000059604645,
    0.4000000059604645,
@@ -33,35 +41,28 @@
    0.4000000059604645
   ],
   "SkyboxBlendFactor": 0.0,
-  "SkyboxBrightness": 1.0,
-  "SkyboxFirst": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox1.jpg",
+  "SkyboxBrightness": 1.0700000524520874,
+  "SkyboxFirst": "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/skyboxes/skybox1.jpg",
   "SkyboxRotation": 0.0,
   "SkyboxRotationSpeed": 0.0,
-  "SkyboxSecond": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/skyboxes/skybox5.jpg",
-  "Skysphere": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/360/beach360.jpg"
+  "SkyboxSecond": "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/skyboxes/skybox1.jpg"
  },
  "Scene": {
   "Components": [
    {
     "Component": {
-     "Tag": "MyEntity"
+     "Tag": "Entity 0"
     },
     "Entity": 0
    },
    {
     "Component": {
-     "Tag": "DirLight"
+     "Tag": "light\u0000 1"
     },
     "Entity": 1
    },
    {
     "Component": {
-     "Tag": "grass pl"
-    },
-    "Entity": 2
-   },
-   {
-    "Component": {
      "Position": [
       0.0,
       0.0,
@@ -72,40 +73,10 @@
    },
    {
     "Component": {
-     "Position": [
-      0.0,
-      -34.20000076293945,
-      0.0
-     ]
-    },
-    "Entity": 2
-   },
-   {
-    "Component": {
      "Rotation": [
       0.0,
-      0.0,
+      2.4000000953674316,
       0.0
-     ]
-    },
-    "Entity": 0
-   },
-   {
-    "Component": {
-     "Rotation": [
-      4.699999809265137,
-      0.0,
-      0.0
-     ]
-    },
-    "Entity": 2
-   },
-   {
-    "Component": {
-     "Scale": [
-      1.0,
-      1.0,
-      1.0
      ]
     },
     "Entity": 0
@@ -113,27 +84,27 @@
    {
     "Component": {
      "Scale": [
-      1.449999451637268,
-      1.449999451637268,
-      1.449999451637268
+      3.1000001430511475,
+      3.1000001430511475,
+      3.1000001430511475
      ]
     },
-    "Entity": 2
+    "Entity": 0
    },
    {
     "Component": {
      "Transform": [
-      1.0,
+      -2.2859208583831787,
+      0.0,
+      -2.09393572807312,
       0.0,
       0.0,
+      3.1000001430511475,
       0.0,
       0.0,
-      1.0,
+      2.09393572807312,
       0.0,
-      0.0,
-      0.0,
-      0.0,
-      1.0,
+      -2.2859208583831787,
       0.0,
       0.0,
       0.0,
@@ -142,55 +113,32 @@
      ]
     },
     "Entity": 0
-   },
-   {
-    "Component": {
-     "Transform": [
-      1.449999451637268,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      -0.017963832244277,
-      -1.4498881101608276,
-      0.0,
-      0.0,
-      1.4498881101608276,
-      -0.017963832244277,
-      0.0,
-      0.0,
-      -34.20000076293945,
-      0.0,
-      1.0
-     ]
-    },
-    "Entity": 2
    },
    {
     "Component": {
      "Light": {
-      "Brightness": 1.6399999856948853,
+      "Brightness": 1.8600000143051147,
       "Color": [
        1.0,
-       0.9803921580314636,
+       1.0,
        1.0
       ],
       "Constant": 1.0,
       "CutOff": 0.0,
       "Direction": [
+       -0.8619999885559082,
        -1.0,
-       -1.0,
-       0.0
+       1.0
       ],
-      "Distance": 0.5040000081062317,
-      "Linear": 0.05639999732375145,
+      "Distance": 0.5,
+      "Linear": 0.057500001043081284,
       "OuterCutOff": 0.0,
       "Position": [
        0.0,
-       0.0,
+       25.049999237060547,
        0.0
       ],
-      "Quadratic": 0.011831998825073242,
+      "Quadratic": 0.012250000610947609,
       "Type": 0
      }
     },
@@ -198,32 +146,25 @@
    },
    {
     "Component": {
-     "Model": "resources/models/sphere.obj"
+     "Model": "C:/Users/lol/Desktop/bubble/out/build/x64-Debug/editor/editor_app/resources/models/crysis/nanosuit.obj"
     },
     "Entity": 0
-   },
-   {
-    "Component": {
-     "Model": "C:/Users/lol/Desktop/projects/bubble/editor/editor_app/resources/models/grass_plane/grass_plane.obj"
-    },
-    "Entity": 2
    }
   ],
   "Entities": [
    0,
    1,
-   2,
    1048575
   ],
   "Size": [
-   3,
-   3,
-   2,
-   2,
    2,
    2,
    1,
-   2
+   1,
+   1,
+   1,
+   1,
+   1
   ]
  }
 }

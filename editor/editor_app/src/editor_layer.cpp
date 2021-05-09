@@ -15,7 +15,7 @@ namespace Bubble
 	void EditorLayer::OnAttach()
 	{
 		// Temp: load scene
-		ProjectDeserialization("../../../../../scene_test.json", mLoader, mRenderer, mScene);
+		//ProjectDeserialization("../../../../../scene_test.json", mLoader, mRenderer, mScene);
  	}
 
     void EditorLayer::OnDetach()

@@ -77,11 +77,11 @@ if (WIN32)
     target_link_libraries(
         Engine
         SDL2.lib
-        assimp-vc142-mt.dll
-        
         SDL2main.lib
         glew32s.lib
         opengl32.lib
+
+        assimp-vc142-mt.dll
     )
 else()
     message(FATAL, "Platfrom not supported")

@@ -32,11 +32,11 @@ target_include_directories(
 )
 
 # PCH
-target_precompile_headers(
-    BubbleEditorUI PRIVATE
-    ${CMAKE_SOURCE_DIR}/engine/core/include/engine.h
-    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui.h
-    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui_impl_opengl3.h
-    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui_impl_sdl.h
-)
+#target_precompile_headers(
+#    BubbleEditorUI PRIVATE
+#    ${CMAKE_SOURCE_DIR}/engine/core/include/engine.h
+#    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui.h
+#    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui_impl_opengl3.h
+#    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui_impl_sdl.h
+#)
 

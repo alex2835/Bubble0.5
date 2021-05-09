@@ -126,13 +126,13 @@ struct DLLHotReloader
     }
 
     /* Will be called at dll detaching and program closing
-*  @throw If no function with such signature
-*/
+    *  @throw If no function with such signature
+    */
     template <typename FunctionSignature, typename ...Args>
     auto SetOnCloseFunction(const std::string& name, Args... args)
     {
         auto func = mLibrary->get_function<FunctionSignature>(name);
-        mOnCloseFunction = std::function<void()>(std::bind(func, Args...));
+        mOnCloseFunction = std::function<void()>(std::bind(func, args...));
     }
 
     /*
