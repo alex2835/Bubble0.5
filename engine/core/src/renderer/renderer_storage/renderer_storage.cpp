@@ -6,10 +6,12 @@ namespace Bubble
 {
 	RendererStorage::RendererStorage(Loader& loader)
 	{
+        using namespace std::string_literals;
+
 		// ============ Shaders ============
-		mPhongShader  = loader.LoadShader("Phong shader",  PhongVertexShaderSource,  PhongFragmentShaderSource);
-		mSkyboxShader = loader.LoadShader("Skybox shader", SkyboxVertexShaderSource, SkyboxFragmentShaderSource);
-        mSkysphereShader = loader.LoadShader("Skysphere shader", SkysphereVertexShaderSource, SkysphereFragmentShaderSource);
+		mPhongShader  = loader.LoadShader("Phong shader"s,  PhongVertexShaderSource,  PhongFragmentShaderSource);
+		mSkyboxShader = loader.LoadShader("Skybox shader"s, SkyboxVertexShaderSource, SkyboxFragmentShaderSource);
+        mSkysphereShader = loader.LoadShader("Skysphere shader"s, SkysphereVertexShaderSource, SkysphereFragmentShaderSource);
 
         // ======= Skybox vertex buffer =======
         BufferLayout layout{
