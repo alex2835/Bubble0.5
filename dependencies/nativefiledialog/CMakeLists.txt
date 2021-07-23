@@ -24,4 +24,7 @@ endif ()
 
 add_library(nativefiledialog ${SOURCES})
 
+set_target_properties(nativefiledialog PROPERTIES UNITY_BUILD ON)
+set_target_properties(nativefiledialog PROPERTIES UNITY_BUILD_BATCH_SIZE 15)
+
 target_include_directories(nativefiledialog PUBLIC src/include)

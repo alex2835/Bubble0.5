@@ -6,6 +6,9 @@ file(GLOB_RECURSE HDRS *.h)
 
 add_library(imgui STATIC ${SRCS} ${HDRS})
 
+set_target_properties(imgui PROPERTIES UNITY_BUILD ON)
+set_target_properties(imgui PROPERTIES UNITY_BUILD_BATCH_SIZE 15)
+
 target_include_directories(
     imgui
     PRIVATE

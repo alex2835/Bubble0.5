@@ -12,6 +12,9 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
+set_target_properties(BubbleEditorUI PROPERTIES UNITY_BUILD ON)
+set_target_properties(BubbleEditorUI PROPERTIES UNITY_BUILD_BATCH_SIZE 15)
+
 target_link_libraries(BubbleEditorUI entt)
 target_link_libraries(BubbleEditorUI Engine)
 target_link_libraries(BubbleEditorUI imgui)
@@ -30,13 +33,3 @@ target_include_directories(
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/include
 )
-
-# PCH
-#target_precompile_headers(
-#    BubbleEditorUI PRIVATE
-#    ${CMAKE_SOURCE_DIR}/engine/core/include/engine.h
-#    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui.h
-#    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui_impl_opengl3.h
-#    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include/imgui_impl_sdl.h
-#)
-

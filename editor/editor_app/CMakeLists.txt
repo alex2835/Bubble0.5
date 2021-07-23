@@ -12,6 +12,9 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
+set_target_properties(BubbleEditorApp PROPERTIES UNITY_BUILD ON)
+set_target_properties(BubbleEditorApp PROPERTIES UNITY_BUILD_BATCH_SIZE 15)
+
 target_link_libraries(BubbleEditorApp Engine)
 target_link_libraries(BubbleEditorApp nativefiledialog)
 #target_link_libraries(BubbleEditorApp BubbleEditorUI)
@@ -31,9 +34,6 @@ target_include_directories(
     ${CMAKE_SOURCE_DIR}/dependencies/nativefiledialog/src/include
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include
 )
-
-# PCH
-#target_precompile_headers(BubbleEditorApp REUSE_FROM Engine)
 
 # Temp resources
 add_custom_command(

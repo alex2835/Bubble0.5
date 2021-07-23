@@ -2,7 +2,8 @@
 #include "entt/entt.hpp"
 #include "engine.h"
 
-int init()
+// Just create meta information at the compiletime
+void InitComponents()
 {
    entt::registry r;
    auto entity = r.create();

@@ -1,6 +1,6 @@
 # Copyright(c) 2019 spdlog authors Distributed under the MIT License (http://opensource.org/licenses/MIT)
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 # ---------------------------------------------------------------------------------------
 # Start spdlog project
@@ -141,6 +141,8 @@ else()
 endif()
 
 add_library(spdlog::spdlog ALIAS spdlog)
+
+set_target_properties(spdlog PROPERTIES UNITY_BUILD ON)
 
 target_compile_definitions(spdlog PUBLIC SPDLOG_COMPILED_LIB)
 target_include_directories(spdlog PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"

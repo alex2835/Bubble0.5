@@ -13,6 +13,9 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
+set_target_properties(Engine PROPERTIES UNITY_BUILD ON)
+set_target_properties(Engine PROPERTIES UNITY_BUILD_BATCH_SIZE 15)
+
 # Defines
 add_definitions(-D"GLEW_STATIC")
 add_definitions(-D"GLM_FORCE_SWIZZLE")
