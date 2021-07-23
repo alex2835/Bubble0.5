@@ -18,6 +18,7 @@
 #include <unordered_map>
 #include <type_traits>
 #include <filesystem>
+#include <functional>
 #include <thread>
 namespace fs = std::filesystem;
 using namespace std::chrono_literals;

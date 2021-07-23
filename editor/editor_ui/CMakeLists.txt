@@ -12,8 +12,8 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
+target_link_libraries(BubbleEditorUI entt)
 target_link_libraries(BubbleEditorUI Engine)
-target_link_libraries(BubbleEditorUI EnttLib)
 target_link_libraries(BubbleEditorUI imgui)
 target_link_libraries(BubbleEditorUI nativefiledialog)
 
@@ -24,7 +24,7 @@ add_definitions(-D"ENTT_API_IMPORT")
 # Include directories
 target_include_directories(
     BubbleEditorUI PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../editor_common
     ${CMAKE_SOURCE_DIR}/engine/core/include
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include

@@ -22,14 +22,19 @@ add_definitions(-D"ENTT_API_IMPORT")
 # Libraries
 target_link_libraries(Engine spdlog)
 target_link_libraries(Engine stb_image)
+target_link_libraries(Engine imgui)
+
 
 # Include directories
 target_include_directories(
     Engine PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/loader
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/renderer/renderer_core
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/base
+    ${CMAKE_CURRENT_SOURCE_DIR}/loader
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderer/core
 
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include
     ${CMAKE_SOURCE_DIR}/dependencies/stb_image
     ${CMAKE_SOURCE_DIR}/dependencies/glew/include
     ${CMAKE_SOURCE_DIR}/dependencies/glm/include
@@ -49,23 +54,24 @@ target_link_directories(
 )
 
 # PCH
-target_precompile_headers(
-    Engine PUBLIC
-    ${CMAKE_SOURCE_DIR}/dependencies/spdlog/include/spdlog/spdlog.h
-    ${CMAKE_SOURCE_DIR}/dependencies/spdlog/include/spdlog/sinks/stdout_color_sinks.h
-    ${CMAKE_SOURCE_DIR}/dependencies/glm/include/glm/glm.hpp
-    ${CMAKE_SOURCE_DIR}/dependencies/glew/include/GL/glew.h
-    ${CMAKE_SOURCE_DIR}/dependencies/entt/include/entt/entt.hpp
-    ${CMAKE_SOURCE_DIR}/dependencies/nlohmann_json/include/nlohmann/json.hpp
-    ${CMAKE_SOURCE_DIR}/dependencies/SDL2/include/SDL2/SDL.h
-    <string>
-    <vector>
-    <memory>
-    <unordered_map>
-    <exception>
-    <utility>
-    <algorithm>
-)
+# target_precompile_headers(
+#     Engine PUBLIC
+#     ${CMAKE_SOURCE_DIR}/dependencies/spdlog/include/spdlog/spdlog.h
+#     ${CMAKE_SOURCE_DIR}/dependencies/spdlog/include/spdlog/sinks/stdout_color_sinks.h
+#     ${CMAKE_SOURCE_DIR}/dependencies/glm/include/glm/glm.hpp
+#     ${CMAKE_SOURCE_DIR}/dependencies/glew/include/GL/glew.h
+#     ${CMAKE_SOURCE_DIR}/dependencies/entt/include/entt/entt.hpp
+#     ${CMAKE_SOURCE_DIR}/dependencies/nlohmann_json/include/nlohmann/json.hpp
+#     ${CMAKE_SOURCE_DIR}/dependencies/SDL2/include/SDL2/SDL.h
+#     <string>
+#     <vector>
+#     <memory>
+#     <unordered_map>
+#     <exception>
+#     <utility>
+#     <algorithm>
+# )
+
 
 if (WIN32)
     

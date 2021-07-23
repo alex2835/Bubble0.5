@@ -13,10 +13,9 @@ set_target_properties(
 )
 
 target_link_libraries(BubbleEditorApp Engine)
-target_link_libraries(BubbleEditorApp imgui)
 target_link_libraries(BubbleEditorApp nativefiledialog)
 #target_link_libraries(BubbleEditorApp BubbleEditorUI)
-target_link_libraries(BubbleEditorApp EnttLib)
+target_link_libraries(BubbleEditorApp entt)
 
 # Defines
 add_definitions(-D"GLM_FORCE_SWIZZLE")
@@ -29,7 +28,6 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../editor_common
     ${CMAKE_SOURCE_DIR}/engine/core/include
-    ${CMAKE_SOURCE_DIR}/dependencies/imgui/include
     ${CMAKE_SOURCE_DIR}/dependencies/nativefiledialog/src/include
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include
 )
@@ -60,5 +58,5 @@ add_custom_command(
 add_custom_command(
     TARGET BubbleEditorApp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    $<TARGET_FILE_DIR:EnttLib>
+    $<TARGET_FILE_DIR:entt>
     $<TARGET_FILE_DIR:BubbleEditorApp>)

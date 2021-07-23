@@ -1,7 +1,6 @@
 
 #include "entry_point.h"
 #include "editor_layer.h"
-
 namespace Bubble
 {
     class EditorApp : public Application
