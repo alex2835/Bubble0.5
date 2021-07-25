@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine.h"
+#include "bubble.h"
 #include "ui_module.h"
 #include "windows/model_explorer.h"
 #include "windows/entity_explorer.h"

@@ -1,5 +1,5 @@
 
-#include "entry_point.h"
+#include "bubble_entry_point.h"
 #include "editor_layer.h"
 namespace Bubble
 {
@@ -8,7 +8,7 @@ namespace Bubble
     public:
         EditorApp() : Application()
         {
-            PushLayer(new EditorLayer(mWindow, mInput));
+            PushLayer(new EditorLayer(mEngine));
         }
 
         ~EditorApp()

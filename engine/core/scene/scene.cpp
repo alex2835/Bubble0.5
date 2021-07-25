@@ -23,10 +23,10 @@ namespace Bubble
 		return entity;
 	}
 
-    void Scene::DeleteEntity(entt::entity entity)
-    {
+   void Scene::DeleteEntity(entt::entity entity)
+   {
 		mRegistry.destroy(entity);
-    }
+   }
 
 	void Scene::OnUpdate(DeltaTime dt)
 	{

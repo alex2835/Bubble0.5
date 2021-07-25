@@ -3,13 +3,11 @@
 
 namespace Bubble
 {
-	EditorLayer::EditorLayer(Window& window, Input& input)
-		: mSceneCamera(input, glm::vec3(0.0f, 5.0f, 0.0f)),
+	EditorLayer::EditorLayer(Engine& engine)
+		: mSceneCamera(engine.GetInput(), glm::vec3(0.0f, 5.0f, 0.0f)),
 		  mViewport(800, 800),
-	      mWindow(window),
-		  mInput(input),
-		  mUILoader(window),
-		  mRenderer(mLoader)
+		  mUILoader(engine.GetWindow()),
+		  mEngine(engine)
 	{}
 
 	void EditorLayer::OnAttach()
@@ -25,25 +23,25 @@ namespace Bubble
     void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// ====================== Update editor ======================
-		mUILoader.mArgs.mRenderer	  = &mRenderer;
-		mUILoader.mArgs.mLoader		  = &mLoader;
-		mUILoader.mArgs.mInput		  = &mInput;
-		mUILoader.mArgs.mScene		  = &mScene;
+		mUILoader.mArgs.mRenderer	   = &mEngine.GetRenderer();
+		mUILoader.mArgs.mLoader		   = &mEngine.GetLoader();
+		mUILoader.mArgs.mInput		   = &mEngine.GetInput();
+		mUILoader.mArgs.mScene		   = &mEngine.GetScene();
 		mUILoader.mArgs.mSceneCamera  = &mSceneCamera;
 		mUILoader.mArgs.mMainViewport = &mViewport;
 		mUILoader.OnUpdate(dt);
 
 		// ====================== Set scene data ======================
-		mRenderer.SetViewport(mViewport);
-		mRenderer.SetCamera(mSceneCamera);
+		mEngine.GetRenderer().SetViewport(mViewport);
+		mEngine.GetRenderer().SetCamera(mSceneCamera);
 
 		// ====================== Draw scene ======================
-		mRenderer.DrawScene(mScene);
+		mEngine.GetRenderer().DrawScene(mEngine.GetScene());
 
 		// Temp: Hot keys
-		if (mInput.IsKeyClick(SDLK_LALT) && mInput.IsKeyClick(SDLK_F4))
+		if (mEngine.GetInput().IsKeyClick(SDLK_LALT) && mEngine.GetInput().IsKeyClick(SDLK_F4))
 		{
-			mWindow.Close();
+			mEngine.GetWindow().Close();
 		}
 	}
 

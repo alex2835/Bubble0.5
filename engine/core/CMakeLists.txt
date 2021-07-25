@@ -14,7 +14,7 @@ set_target_properties(
 )
 
 set_target_properties(Engine PROPERTIES UNITY_BUILD ON)
-set_target_properties(Engine PROPERTIES UNITY_BUILD_BATCH_SIZE 15)
+set_target_properties(Engine PROPERTIES UNITY_BUILD_BATCH_SIZE 40)
 
 # Defines
 add_definitions(-D"GLEW_STATIC")
@@ -55,26 +55,6 @@ target_link_directories(
     ${CMAKE_SOURCE_DIR}/dependencies/glew/lib
     ${CMAKE_SOURCE_DIR}/dependencies/assimp/lib
 )
-
-# PCH
-# target_precompile_headers(
-#     Engine PUBLIC
-#     ${CMAKE_SOURCE_DIR}/dependencies/spdlog/include/spdlog/spdlog.h
-#     ${CMAKE_SOURCE_DIR}/dependencies/spdlog/include/spdlog/sinks/stdout_color_sinks.h
-#     ${CMAKE_SOURCE_DIR}/dependencies/glm/include/glm/glm.hpp
-#     ${CMAKE_SOURCE_DIR}/dependencies/glew/include/GL/glew.h
-#     ${CMAKE_SOURCE_DIR}/dependencies/entt/include/entt/entt.hpp
-#     ${CMAKE_SOURCE_DIR}/dependencies/nlohmann_json/include/nlohmann/json.hpp
-#     ${CMAKE_SOURCE_DIR}/dependencies/SDL2/include/SDL2/SDL.h
-#     <string>
-#     <vector>
-#     <memory>
-#     <unordered_map>
-#     <exception>
-#     <utility>
-#     <algorithm>
-# )
-
 
 if (WIN32)
     

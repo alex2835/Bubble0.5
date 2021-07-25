@@ -140,8 +140,8 @@ namespace Bubble
 
     void Input::NewFrame()
     {
-        mMouseRelPosX = 0.0f;
-        mMouseRelPosY = 0.0f;
+        mMouseRelPosX	  = 0.0f;
+        mMouseRelPosY	  = 0.0f;
         mMouseWheelOffset = 0.0f;
         memmove(mMouseKeyMapLast, mMouseKeyMap, sizeof(mMouseKeyMap));
     }

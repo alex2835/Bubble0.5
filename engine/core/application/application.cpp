@@ -3,57 +3,54 @@
 
 namespace Bubble
 {
-    Application::Application()
-        : mInput(&mWindow)
-    {}
+    Application::Application(){}
 
 	void Application::PushLayer(Layer* layer)
 	{
-		mLayerArray.Push(layer);
+		mLayers.Push(layer);
 	}
 
 	void Application::InsertLayer(int id, Layer* layer)
 	{
-        mLayerArray.Insert(id, layer);
+        mLayers.Insert(id, layer);
 	}
 
     void Application::RemoveLayer(int id)
     {
-        mLayerArray.Remove(id);
+        mLayers.Remove(id);
     }
 
 	void Application::SwapLayers(int id_1, int id_2)
 	{
-        mLayerArray.Swap(id_1, id_2);
+        mLayers.Swap(id_1, id_2);
 	}
 
     void Application::Run()
 	{
-        while (mWindow.IsOpen())
+        while (mEngine.GetWindow().IsOpen())
         {
-			mInput.NewFrame();
+			mEngine.GetInput().NewFrame();
             mTimer.Update();
 
             // Retrieve and send events
             SDL_Event event;
-            while (mWindow.PollEvent(event))
+            while (mEngine.GetWindow().PollEvent(event))
             {
-                for (auto& layer : mLayerArray)
+                for (auto& layer : mLayers)
                 {
                     layer->OnEvent(event);
                 }
-                mInput.OnEvent(event);
-                mWindow.OnEvent(event);
+                mEngine.OnEvent(event);
             }
 
             // Update layers
-            for (auto& layer : mLayerArray)
+            for (auto& layer : mLayers)
             {
                 layer->OnUpdate(mTimer.GetDeltaTime());
             }
 
             // Swap image
-            mWindow.OnUpdate();
+            mEngine.OnUpdate();
         }
 	}
 

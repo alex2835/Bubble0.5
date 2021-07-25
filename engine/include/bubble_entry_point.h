@@ -1,7 +1,7 @@
 #pragma once
 
 #include "application/application.h"
-#include "engine.h"
+#include "bubble.h"
 
 // Implementation on client side
 extern Bubble::Application* CreateApplication();

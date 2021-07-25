@@ -2,19 +2,17 @@
 
 #include "base/base.h"
 #include "base/timer.h"
-#include "application/window.h"
-#include "application/input.h"
-#include "application/layer_array.h"
+#include "engine/engine.h"
+#include "layer_array.h"
 #include "SDL2/SDL_timer.h"
 
 namespace Bubble
 {
 	struct Application
 	{
-		Window     mWindow;
-        Input	   mInput;
+		Engine 	  mEngine;
 		Timer      mTimer;
-		LayerArray mLayerArray;
+		LayerArray mLayers;
 
 		Application();
 		virtual ~Application() {}

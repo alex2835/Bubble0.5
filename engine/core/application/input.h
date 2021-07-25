@@ -2,19 +2,18 @@
 
 #include "application/window.h"
 #include "glm/glm.hpp"
-
 namespace Bubble
 {
 	struct Input
 	{
-		Window* mWindow;
+		Window* mWindow			 = nullptr;
 		int mKeyMap[256]			 = { 0 };
 		int mMouseKeyMap[16]     = { 0 };
 		int mMouseKeyMapLast[16] = { 0 };
-		int mMouseWheelOffset = 0;
+		int mMouseWheelOffset 	 =   0;
 
-		int mMousePosX = 0;
-		int mMousePosY = 0;
+		int mMousePosX 	= 0;
+		int mMousePosY 	= 0;
 		int mMouseRelPosX = 0;
 		int mMouseRelPosY = 0;
 

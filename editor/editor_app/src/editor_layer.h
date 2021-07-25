@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine.h"
+#include "bubble.h"
 #include "ui_loader.h"
 //#include "project_serialization.h"
 
@@ -8,18 +8,13 @@ namespace Bubble
 {
 	class EditorLayer : public Layer
 	{
-		Window&		mWindow;
-      Input&		mInput;
+		Engine&	   mEngine;
       UILoader		mUILoader;
-      Loader      mLoader;
-		Renderer    mRenderer;
-
-		Scene       mScene;
       SceneCamera mSceneCamera;
       Viewport    mViewport;
 
 	public:
-		EditorLayer(Window& window, Input& input);
+		EditorLayer(Engine& Engine);
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate(DeltaTime dt) override;
