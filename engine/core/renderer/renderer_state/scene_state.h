@@ -15,7 +15,7 @@ namespace Bubble
 {
     enum class BackgroundType { COLOR, SKYBOX, SKYSPHERE };
 
-    struct RendererSceneStage
+    struct RendererSceneState
     {
         BackgroundType mBackgroundType = BackgroundType::COLOR;
 

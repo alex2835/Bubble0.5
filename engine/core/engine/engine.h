@@ -42,24 +42,32 @@ namespace Bubble
 {
    class Engine
    {
-   public:
-      Engine();
+    public:
+        Engine();
 
-      void OnEvent(SDL_Event& event);
-      void OnUpdate();
+        void OnEvent(SDL_Event& event);
+        void OnUpdate();
 
-      Window&   GetWindow(){ return mWindow; };
-      Loader&   GetLoader(){ return mLoader; };
-      Renderer& GetRenderer(){ return mRenderer; };
-      Input&    GetInput(){ return mInput; };
-      Scene&    GetScene(){ return mScene; };
-      Project&  GetProject(){ return mProject; };
-   private:
-       Window   mWindow;
-       Project  mProject;
-       Scene    mScene;
-       Input    mInput;
-       Loader   mLoader;
-       Renderer mRenderer;
+        Window& GetWindow() { return mWindow; };
+        Loader& GetLoader() { return mLoader; };
+        Renderer& GetRenderer() { return mRenderer; };
+        Input& GetInput() { return mInput; };
+        Scene& GetScene() { return mScene; };
+        Project& GetProject() { return mProject; };
+
+        const Window& GetWindow() const { return mWindow; };
+        const Loader& GetLoader() const { return mLoader; };
+        const Renderer& GetRenderer() const { return mRenderer; };
+        const Input& GetInput() const { return mInput; };
+        const Scene& GetScene() const { return mScene; };
+        const Project& GetProject() const { return mProject; };
+   
+    private:
+        Window   mWindow;
+        Project  mProject;
+        Scene    mScene;
+        Input    mInput;
+        Loader   mLoader;
+        Renderer mRenderer;
    };
 }

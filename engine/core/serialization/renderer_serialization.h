@@ -13,23 +13,23 @@ namespace Bubble
     {
         nlohmann::json json;
 
-        json["BackgroundType"] = (int)renderer.mSceneStage.mBackgroundType;
+        json["BackgroundType"] = (int)renderer.mSceneState.mBackgroundType;
 
-        json["ClearColor"] = to_json(renderer.mSceneStage.mClearColor);
+        json["ClearColor"] = to_json(renderer.mSceneState.mClearColor);
 
-        json["SkyboxBlendFactor"]   = renderer.mSceneStage.mSkyboxBlendFactor;
-        json["SkyboxBrightness"]    = renderer.mSceneStage.mSkyboxBrightness;
-        json["SkyboxRotation"]      = renderer.mSceneStage.mSkyboxRotation;
-        json["SkyboxRotationSpeed"] = renderer.mSceneStage.mSkyboxRotationSpeed;
+        json["SkyboxBlendFactor"]   = renderer.mSceneState.mSkyboxBlendFactor;
+        json["SkyboxBrightness"]    = renderer.mSceneState.mSkyboxBrightness;
+        json["SkyboxRotation"]      = renderer.mSceneState.mSkyboxRotation;
+        json["SkyboxRotationSpeed"] = renderer.mSceneState.mSkyboxRotationSpeed;
 
         auto skybox_first = std::find_if(loader.mLoadedSkyboxes.begin(), loader.mLoadedSkyboxes.end(),
-            [&renderer](const auto& pair) { return pair.second == renderer.mSceneStage.mSkyboxFirst; });
+            [&renderer](const auto& pair) { return pair.second == renderer.mSceneState.mSkyboxFirst; });
 
         auto skybox_second= std::find_if(loader.mLoadedSkyboxes.begin(), loader.mLoadedSkyboxes.end(),
-            [&renderer](const auto& pair) { return pair.second == renderer.mSceneStage.mSkyboxSecond; });
+            [&renderer](const auto& pair) { return pair.second == renderer.mSceneState.mSkyboxSecond; });
         
         auto skysphere_texture = std::find_if(loader.mLoadedSkyspheres.begin(), loader.mLoadedSkyspheres.end(),
-            [&renderer](const auto& pair) { return pair.second == renderer.mSceneStage.mSkysphereTexture; });
+            [&renderer](const auto& pair) { return pair.second == renderer.mSceneState.mSkysphereTexture; });
 
         if (skybox_first != loader.mLoadedSkyboxes.end())
             json["SkyboxFirst"] = skybox_first->first;
@@ -45,22 +45,22 @@ namespace Bubble
 
     inline void RendererDeserialization(const nlohmann::json& json, Renderer& renderer, Loader& loader)
     {
-        renderer.mSceneStage.mBackgroundType = json["BackgroundType"];
+        renderer.mSceneState.mBackgroundType = json["BackgroundType"];
 
-        renderer.mSceneStage.mClearColor = from_json_vec4(json["ClearColor"]);
+        renderer.mSceneState.mClearColor = from_json_vec4(json["ClearColor"]);
 
-        renderer.mSceneStage.mSkyboxBlendFactor   = json["SkyboxBlendFactor"];
-        renderer.mSceneStage.mSkyboxBrightness    = json["SkyboxBrightness"];
-        renderer.mSceneStage.mSkyboxRotation      = json["SkyboxRotation"];
-        renderer.mSceneStage.mSkyboxRotationSpeed = json["SkyboxRotationSpeed"];
+        renderer.mSceneState.mSkyboxBlendFactor   = json["SkyboxBlendFactor"];
+        renderer.mSceneState.mSkyboxBrightness    = json["SkyboxBrightness"];
+        renderer.mSceneState.mSkyboxRotation      = json["SkyboxRotation"];
+        renderer.mSceneState.mSkyboxRotationSpeed = json["SkyboxRotationSpeed"];
 
         if (json_exists(json, "SkyboxFirst"))
-            renderer.mSceneStage.mSkyboxFirst = loader.LoadSkybox(json["SkyboxFirst"]);
+            renderer.mSceneState.mSkyboxFirst = loader.LoadSkybox(json["SkyboxFirst"]);
 
         if (json_exists(json, "SkyboxSecond"))
-            renderer.mSceneStage.mSkyboxSecond = loader.LoadSkybox(json["SkyboxSecond"]);
+            renderer.mSceneState.mSkyboxSecond = loader.LoadSkybox(json["SkyboxSecond"]);
 
         if (json_exists(json, "Skysphere"))
-            renderer.mSceneStage.mSkysphereTexture = loader.LoadSkysphere(json["Skysphere"]);
+            renderer.mSceneState.mSkysphereTexture = loader.LoadSkysphere(json["Skysphere"]);
     }
 }

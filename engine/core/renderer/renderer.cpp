@@ -101,12 +101,12 @@ namespace Bubble
     // ======================== Clearing ========================
     void Renderer::SetClearColor(const glm::vec4& color)
     {
-        mSceneStage.mClearColor = color;
+        mSceneState.mClearColor = color;
     }
 
     void Renderer::Clear()
     {
-        glm::vec4 color = mSceneStage.mClearColor;
+        glm::vec4 color = mSceneState.mClearColor;
         glClearColor(color.r, color.g, color.b, color.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
@@ -190,7 +190,7 @@ namespace Bubble
 
         sphere_mesh.mVertexArray.Bind();
         mStorage.mSkysphereShader->SetTexture2D("u_Skysphere", skysphere_texture);
-        mStorage.mSkysphereShader->SetUni1f("u_Brightness", mSceneStage.mSkyboxBrightness);
+        mStorage.mSkysphereShader->SetUni1f("u_Brightness", mSceneState.mSkyboxBrightness);
 
         glDrawElements((int)DrawType::TRIANGLES, sphere_mesh.mIndices.size(), GL_UNSIGNED_INT, 0);
         
@@ -203,14 +203,14 @@ namespace Bubble
         Clear();
         // Set lights
         auto light_view = scene.GetView<LightComponent>();
-        mSceneStage.mActiveLights.clear();
+        mSceneState.mActiveLights.clear();
         for (auto entity : light_view)
         {
             auto& light = light_view.get<LightComponent>(entity);
             light.Update();
-            mSceneStage.mActiveLights.push_back(light);
+            mSceneState.mActiveLights.push_back(light);
         }
-        SetLights(mSceneStage.mActiveLights);
+        SetLights(mSceneState.mActiveLights);
 
 
         // Draw scene
@@ -225,15 +225,15 @@ namespace Bubble
         }
 
         // Draw background
-        BackgroundType backgound_type_to_draw = mSceneStage.mBackgroundType;
-        if (mSceneStage.mBackgroundType == BackgroundType::SKYBOX &&
-            (!mSceneStage.mSkyboxFirst ||
-             !mSceneStage.mSkyboxSecond))
+        BackgroundType backgound_type_to_draw = mSceneState.mBackgroundType;
+        if (mSceneState.mBackgroundType == BackgroundType::SKYBOX &&
+            (!mSceneState.mSkyboxFirst ||
+             !mSceneState.mSkyboxSecond))
         {
             backgound_type_to_draw = BackgroundType::COLOR;
         }
-        if (mSceneStage.mBackgroundType == BackgroundType::SKYSPHERE &&
-            !mSceneStage.mSkysphereTexture)
+        if (mSceneState.mBackgroundType == BackgroundType::SKYSPHERE &&
+            !mSceneState.mSkysphereTexture)
         {
             backgound_type_to_draw = BackgroundType::COLOR;
         }
@@ -247,25 +247,25 @@ namespace Bubble
             case Bubble::BackgroundType::SKYBOX:
             {
                 glm::mat4 view = mActiveCamera->GetLookatMat();
-                mSceneStage.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneStage.mSkyboxRotationSpeed * 0.00002f;
-                view = Skybox::GetViewMatrix(view, mSceneStage.mSkyboxRotation);
+                mSceneState.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneState.mSkyboxRotationSpeed * 0.00002f;
+                view = Skybox::GetViewMatrix(view, mSceneState.mSkyboxRotation);
                 (*mUBOProjectionView)[0].SetMat4("View", view);
                 
-                mStorage.mSkyboxShader->SetUni1f("u_Brightness",  mSceneStage.mSkyboxBrightness);
-                mStorage.mSkyboxShader->SetUni1f("u_BlendFactor", mSceneStage.mSkyboxBlendFactor);
+                mStorage.mSkyboxShader->SetUni1f("u_Brightness",  mSceneState.mSkyboxBrightness);
+                mStorage.mSkyboxShader->SetUni1f("u_BlendFactor", mSceneState.mSkyboxBlendFactor);
                 
-                Ref<Skybox> skyboxes[] = { mSceneStage.mSkyboxFirst, mSceneStage.mSkyboxSecond };
+                Ref<Skybox> skyboxes[] = { mSceneState.mSkyboxFirst, mSceneState.mSkyboxSecond };
                 Renderer::DrawSkybox(skyboxes, 2, mStorage.mSkyboxShader);
                 break;
             }
             case Bubble::BackgroundType::SKYSPHERE:
             {
                 glm::mat4 view = mActiveCamera->GetLookatMat();
-                mSceneStage.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneStage.mSkyboxRotationSpeed * 0.00002f;
-                view = Skybox::GetViewMatrix(view, mSceneStage.mSkyboxRotation);
+                mSceneState.mSkyboxRotation += Timer::GetTime().GetSeconds() * mSceneState.mSkyboxRotationSpeed * 0.00002f;
+                view = Skybox::GetViewMatrix(view, mSceneState.mSkyboxRotation);
                 (*mUBOProjectionView)[0].SetMat4("View", view);
 
-                DrawSkysphere(mSceneStage.mSkysphereTexture);
+                DrawSkysphere(mSceneState.mSkysphereTexture);
                 break;
             }
             default:
@@ -273,7 +273,6 @@ namespace Bubble
         }
 
     }
-
 
     // ======================== UBO ======================== 
     void Renderer::InitUBOS()

@@ -13,24 +13,24 @@ namespace Bubble
       mPath = std::move(path);
    }
 
-   bool Project::Valid()
+   bool Project::Valid() const
    {
        return mPath.empty();
    }
 
-   std::string Project::GetPath()
+   std::string Project::GetPath() const
    {
       size_t pos = mPath.find_last_of("/") + 1;
       return mPath.substr(0, pos);
    }
 
-   std::string Project::GetName()
+   std::string Project::GetName() const
    {
       size_t pos = mPath.find_last_of("/") + 1;
       return mPath.substr(pos);
    }
 
-   std::string Project::GetPathWithName()
+   std::string Project::GetPathWithName() const
    {
       return mPath;
    }

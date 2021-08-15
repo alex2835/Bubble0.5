@@ -30,7 +30,7 @@ namespace Bubble
 
         // Internal usage data
         RendererStorage    mStorage;
-        RendererSceneStage mSceneStage;
+        RendererSceneState mSceneState;
 
         // Rendering options
         //bool mClearScreanOption = false;

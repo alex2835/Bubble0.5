@@ -13,9 +13,9 @@ namespace Bubble
 	void EditorLayer::OnAttach()
 	{
 		// Temp: load scene
-		//ProjectDeserialization("../../../../../scene_test.json", mLoader, mRenderer, mScene);
-		mEngine.GetProject().Open("C:/Users/lol/Desktop/projects/BubbleOld_prj/BubbleOld/test_project/text.bubble");
- 	}
+		//ProjectDeserialization("C:/Users/lol/Desktop/projects/BubbleOld_prj/BubbleOld/test_project/test.bubble", mEngine);
+        mEngine.GetProject().Open("C:/Users/lol/Desktop/projects/BubbleOld_prj/BubbleOld/test_project/test.bubble");
+    }
 
     void EditorLayer::OnDetach()
     {
@@ -24,6 +24,8 @@ namespace Bubble
     void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// ====================== Update editor ======================
+		mUILoader.mArgs.mEngine		  = &mEngine;
+		mUILoader.mArgs.mProject      = &mEngine.GetProject();
 		mUILoader.mArgs.mRenderer	  = &mEngine.GetRenderer();
 		mUILoader.mArgs.mLoader		  = &mEngine.GetLoader();
 		mUILoader.mArgs.mInput		  = &mEngine.GetInput();

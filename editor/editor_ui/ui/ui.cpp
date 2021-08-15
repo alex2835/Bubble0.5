@@ -73,21 +73,20 @@ namespace Bubble
 			{
 				if (ImGui::MenuItem("Open"))
 				{
-					//ProjectDeserialization("../../../../../scene_test.json", *mArgs.mLoader, *mArgs.mRenderer, *mArgs.mScene);
-					//try
-					//{
-					//	std::string path = OpenFileDialog("json");
-					//	ProjectDeserialization(path, *mArgs.mLoader, *mArgs.mRenderer, *mArgs.mScene);
-					//}
-					//catch (const std::exception& e)
-					//{
-					//	LOG_ERROR(e.what());
-					//}
+					try
+					{
+						std::string path = OpenFileDialog("bubble");
+						ProjectDeserialization(path, *mArgs.mEngine);
+					}
+					catch (const std::exception& e)
+					{
+						LOG_ERROR(e.what());
+					}
 				}
 				
 				if (ImGui::MenuItem("Save"))
 				{
-					//ProjectSerialization("../../../../../scene_test.json", *mArgs.mLoader, *mArgs.mRenderer, *mArgs.mScene);
+					ProjectSerialization(*mArgs.mEngine);
 				}
 
 				ImGui::EndMenu();

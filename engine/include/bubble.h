@@ -5,7 +5,6 @@
 #include "../core/base/log.h"
 #include "../core/base/timer.h"
 
-
 #include "../core/application/layer.h"
 #include "../core/application/layer_array.h"
 #include "../core/application/window.h"
@@ -14,7 +13,6 @@
 #include "../high_level/window_ui.h"
 #include "../high_level/viewport.h"
 #include "../high_level/scene_camera.h"
-
 
 // Renderer
 #include "../core/renderer/core/renderer_base.h"
@@ -31,18 +29,17 @@
 #include "../core/renderer/core/camera_target.h"
 #include "../core/renderer/core/camera_third_person.h"
 #include "../core/renderer/renderer.h"
-//#include "../core/renderer/renderer_serialization.h"
 
 // Scene
 #include "../core/scene/scene.h"
 #include "../core/scene/entity.h"
 #include "../core/scene/components.h"
-//#include "../core/scene/entity_serialization.h"
 
 // Loader
 #include "../core/loader/loader.h"
-//#include "../core/loader/loader_serialization.h"
 
+// Serialization
+#include "../core/serialization/serialization.h"
 
-
-#include "../engine/engine.h"
+// Engine
+#include "../core/engine/engine.h"

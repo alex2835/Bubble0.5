@@ -6,6 +6,8 @@ namespace Bubble
 {
     struct UIArgs
     {
+        Engine*      mEngine;
+        Project*     mProject;
         Renderer*    mRenderer;
         Loader*      mLoader;
         Input*       mInput;

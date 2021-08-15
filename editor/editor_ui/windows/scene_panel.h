@@ -27,12 +27,12 @@ namespace Bubble
                 // Background
                 const char* sky_type_string = "Color\0Skybox\0Skysphere\0";
 
-                ImGui::Combo("SkyType", (int*)&args.mRenderer->mSceneStage.mBackgroundType, sky_type_string, 3);
-                switch (args.mRenderer->mSceneStage.mBackgroundType)
+                ImGui::Combo("SkyType", (int*)&args.mRenderer->mSceneState.mBackgroundType, sky_type_string, 3);
+                switch (args.mRenderer->mSceneState.mBackgroundType)
                 {
                     case BackgroundType::COLOR:
                         ImGui::BeginChild("Active Color", ImVec2(0, 35), true);
-                        ImGui::ColorEdit4("Background color", (float*)&args.mRenderer->mSceneStage.mClearColor);
+                        ImGui::ColorEdit4("Background color", (float*)&args.mRenderer->mSceneState.mClearColor);
                         ImGui::EndChild();
                         break;
                     case BackgroundType::SKYBOX:
@@ -51,18 +51,18 @@ namespace Bubble
     private:
         inline void DrawSkyboxPanel(UIArgs args)
         {
-            RendererSceneStage& scene_stage = args.mRenderer->mSceneStage;
+            RendererSceneState& scene_state = args.mRenderer->mSceneState;
             Loader& loader = *args.mLoader;
 
             // Load first skybox automatically
-            if ((!scene_stage.mSkyboxFirst ||
-                !scene_stage.mSkyboxSecond) &&
+            if ((!scene_state.mSkyboxFirst ||
+                !scene_state.mSkyboxSecond) &&
                 args.mLoader->mLoadedSkyboxes.size())
             {
                 for (const auto& [path, skybox] : args.mLoader->mLoadedSkyboxes)
                 {
-                    scene_stage.mSkyboxFirst = skybox;
-                    scene_stage.mSkyboxSecond = skybox;
+                    scene_state.mSkyboxFirst = skybox;
+                    scene_state.mSkyboxSecond = skybox;
                 }
             }
 
@@ -78,9 +78,9 @@ namespace Bubble
             
             ImGui::BeginChild("Active skyboxes", ImVec2(0, 130), true);
             {
-                ImGui::SliderFloat("Brightness",   &scene_stage.mSkyboxBrightness, 0.0f, 3.0f);
-                ImGui::SliderFloat("Blend factor", &scene_stage.mSkyboxBlendFactor, 0.0f, 1.0f);
-                ImGui::SliderFloat("Rotation speed", &scene_stage.mSkyboxRotationSpeed, 0.0001f, 0.5f);
+                ImGui::SliderFloat("Brightness",   &scene_state.mSkyboxBrightness, 0.0f, 3.0f);
+                ImGui::SliderFloat("Blend factor", &scene_state.mSkyboxBlendFactor, 0.0f, 1.0f);
+                ImGui::SliderFloat("Rotation speed", &scene_state.mSkyboxRotationSpeed, 0.0001f, 0.5f);
 
                 if (ImGui::Combo("First skybox", &SelectedSkyboxFirstID, names.data(), args.mLoader->mLoadedSkyboxes.size()))
                 {
@@ -88,9 +88,7 @@ namespace Bubble
                     for (const auto& [path, skybox] : args.mLoader->mLoadedSkyboxes)
                     {
                         if (i == SelectedSkyboxFirstID)
-                        {
-                            scene_stage.mSkyboxFirst = skybox;
-                        }
+                            scene_state.mSkyboxFirst = skybox;
                         i++;
                     }
                 }
@@ -100,9 +98,7 @@ namespace Bubble
                     for (const auto& [path, skybox] : args.mLoader->mLoadedSkyboxes)
                     {
                         if (i == SelectedSkyboxSecondID)
-                        {
-                            scene_stage.mSkyboxSecond = skybox;
-                        }
+                            scene_state.mSkyboxSecond = skybox;
                         i++;
                     }
                 }
@@ -114,17 +110,15 @@ namespace Bubble
 
         inline void DrawSkyspherePanel(UIArgs args)
         {
-            RendererSceneStage& scene_stage = args.mRenderer->mSceneStage;
+            RendererSceneState& scene_state = args.mRenderer->mSceneState;
             Loader& loader = *args.mLoader;
 
             // Load first skysphere automatically
-            if (!scene_stage.mSkysphereTexture &&
+            if (!scene_state.mSkysphereTexture &&
                 args.mLoader->mLoadedSkyspheres.size())
             {
                 for (const auto& [path, skysphere_texture] : args.mLoader->mLoadedSkyspheres)
-                {
-                    scene_stage.mSkysphereTexture = skysphere_texture;
-                }
+                    scene_state.mSkysphereTexture = skysphere_texture;
             }
 
             // Skysphere info
@@ -140,8 +134,8 @@ namespace Bubble
             ImGui::BeginChild("Active Skysphere", ImVec2(0, 90), true);
             {
                 auto& sphere_mesh = args.mRenderer->mStorage.mSphere->mMeshes[0];
-                ImGui::SliderFloat("Brightness",     &scene_stage.mSkyboxBrightness, 0.0f, 3.0f);
-                ImGui::SliderFloat("Rotation speed", &scene_stage.mSkyboxRotationSpeed, 0.0001f, 0.5f);
+                ImGui::SliderFloat("Brightness",     &scene_state.mSkyboxBrightness, 0.0f, 3.0f);
+                ImGui::SliderFloat("Rotation speed", &scene_state.mSkyboxRotationSpeed, 0.0001f, 0.5f);
 
                 if (ImGui::Combo("Skysphere", &SelectedSkyphereID, names.data(), args.mLoader->mLoadedSkyspheres.size()))
                 {
@@ -149,9 +143,7 @@ namespace Bubble
                     for (const auto& [path, skyphere_texture] : args.mLoader->mLoadedSkyspheres)
                     {
                         if (i == SelectedSkyphereID)
-                        {
-                            scene_stage.mSkysphereTexture = skyphere_texture;
-                        }
+                            scene_state.mSkysphereTexture = skyphere_texture;
                         i++;
                     }
                 }

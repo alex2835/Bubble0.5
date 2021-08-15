@@ -37,7 +37,7 @@ namespace Bubble
                 //  ================= Render skies =================
                 if (ImGui::IsItemVisible())
                 {
-                    switch (args.mRenderer->mSceneStage.mBackgroundType)
+                    switch (args.mRenderer->mSceneState.mBackgroundType)
                     {
                         case BackgroundType::COLOR:
                             RenderSelectedColor(args.mRenderer);
@@ -60,7 +60,7 @@ namespace Bubble
                 }
 
                 // ==================== Skies list ====================
-                switch (args.mRenderer->mSceneStage.mBackgroundType)
+                switch (args.mRenderer->mSceneState.mBackgroundType)
                 {
                     case BackgroundType::SKYBOX:
                         DrawSkyboxList(window_size, args, dt);

@@ -21,7 +21,7 @@ namespace Bubble
 		std::string model_name = model_path.substr(start_pos, end_pos - start_pos);
 		std::string model_ext  = model_path.substr(end_pos + 1, model_path.size() - end_pos);
 		std::string full_path = prj_dir + "models/" + model_name;
-		std::string rel_path  = "models/" + model_name;
+		std::string rel_path  = "models/" + model_name + "/" + model_name + "." + model_ext;
 		return { full_path, rel_path, model_name, model_ext };
 	}
 

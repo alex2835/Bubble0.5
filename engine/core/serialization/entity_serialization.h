@@ -30,9 +30,12 @@ namespace Bubble
         template <typename T>
         void operator() (entt::entity entity, const T& component)
         {
+            nlohmann::json component_json;
+            component.Serialize(mLoader, component_json);
+
             nlohmann::json entity_component;
             entity_component["Entity"] = entity;
-            entity_component["Component"] = component.Serialize(mLoader);
+            entity_component["Component"] = component_json;
             mJson["Components"].push_back(entity_component);
         };
 
