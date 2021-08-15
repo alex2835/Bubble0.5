@@ -1,19 +1,16 @@
 
 #include "loader.h"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 namespace Bubble
 {
 	Ref<Skybox> Loader::LoadSkybox(std::string path)
 	{
 		if (mLoadedSkyboxes.count(path))
-		{
 			return mLoadedSkyboxes[path];
-		}
-
-		Ref<Skybox> skybox = CreateRef<Skybox>();
 
 		auto [orig_data, orig_spec] = OpenRawImage(path);
-
 		if (!orig_data)
 			throw std::runtime_error("Skybox loading failed: " + path);
 
@@ -21,25 +18,28 @@ namespace Bubble
 		int width  = orig_spec.mWidth / 4;
 		int height = orig_spec.mHeight / 3;
 
-		spec.mWidth = width;
+		spec.mWidth  = width;
 		spec.mHeight = height;
 
-		int channels;
-		if (spec.mDataFormat == GL_RED) {
-			channels = 1;
-		}
-		else if (spec.mDataFormat == GL_RGB) {
-			channels = 3;
-		}
-		else if (spec.mDataFormat == GL_RGBA) {
-			channels = 4;
+		int channels = 0;
+		switch (spec.mDataFormat)
+		{
+			case GL_RED:
+				channels = 1;
+				break;
+			case GL_RGB:
+				channels = 3;
+				break;
+			case GL_RGBA:
+				channels = 4;
+				break;
+			default:
+				BUBBLE_CORE_ASSERT(false, "invalid channels number {}", spec.mDataFormat);
 		}
 
 		uint8_t* data[6];
 		for (int i = 0; i < 6; i++)
-		{
 			data[i] = new uint8_t[width * height * channels];
-		}
 
 		// Parse 6 textures from single image
 		// 0-left 1-front 2-right 3-back
@@ -57,14 +57,15 @@ namespace Bubble
 		for (int y = 0; y < height; y++)
 		{
 			int y_offset = height * 2;
-            int raw_y_coord = (y + y_offset) * orig_spec.mWidth * channels;
-            int raw_width = width * channels;
+         int raw_y_coord = (y + y_offset) * orig_spec.mWidth * channels;
+         int raw_width = width * channels;
 			memmove(&data[4][y * raw_width], &orig_data[raw_y_coord + raw_width], raw_width);
 		}
 		// 5-bottom
-		for (int y = 0; y < height; y++) {
-            int raw_y_coord = y * orig_spec.mWidth * channels;
-            int raw_width = width * channels;
+		for (int y = 0; y < height; y++)
+		{
+         int raw_y_coord = y * orig_spec.mWidth * channels;
+         int raw_width = width * channels;
 			memmove(&data[5][y * raw_width], &orig_data[raw_y_coord + raw_width], raw_width);
 		}
 
@@ -75,13 +76,13 @@ namespace Bubble
 		std::swap(data[3], data[5]);
 		std::swap(data[2], data[3]);
 		
-		skybox->mSkybox = Cubemap(data, spec);
+		Ref<Skybox> skybox = CreateRef<Skybox>(Cubemap(data, spec));
 
 		for (int i = 0; i < 6; i++)
-		{
 			delete data[i];
-		}
-		mLoadedSkyboxes.emplace(path, skybox);
+
+		std::string path_in_project = CopyToProject(path, "skyboxes");
+		mLoadedSkyboxes.emplace(path_in_project, skybox);
 		return skybox;
 	}
 

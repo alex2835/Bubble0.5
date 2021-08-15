@@ -11,7 +11,6 @@ namespace Bubble
         other.mShaderID = 0;
 	}
 
-
 	Shader& Shader::operator=(Shader&& other)
 	{
 		mShaderID = other.mShaderID;
@@ -21,23 +20,20 @@ namespace Bubble
         return *this;
 	}
 
-
 	void Shader::Bind() const
 	{
         glcall(glUseProgram(mShaderID));
 	}
-
 
 	void Shader::Unbind() const
 	{
         glcall(glUseProgram(0));
 	}
 
-
 	int Shader::GetUni(const std::string& uniformname) const
 	{
 		glcall(glUseProgram(mShaderID));
-        if (mUniformCache.find(uniformname) != mUniformCache.end())
+        if (mUniformCache.count(uniformname))
             return mUniformCache[uniformname];
 
 		int unifromid = glGetUniformLocation(mShaderID, uniformname.c_str());
@@ -47,7 +43,6 @@ namespace Bubble
         mUniformCache[uniformname] = unifromid;
 		return unifromid;
 	}
-
 
 	// lone int 
     void Shader::SetUni1i(const std::string& mName, const int& val) const

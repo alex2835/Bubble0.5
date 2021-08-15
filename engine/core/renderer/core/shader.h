@@ -18,7 +18,7 @@ namespace Bubble
 	struct Shader
 	{
 		std::string mName;
-        uint32_t mShaderID;
+        GLuint  mShaderID;
 		mutable std::unordered_map<std::string, int> mUniformCache;
 
     public:

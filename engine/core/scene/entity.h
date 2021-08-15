@@ -28,23 +28,23 @@ namespace Bubble
 			return *this;
 		}
 
-	   template<typename T>
-	   auto& GetComponent() const
-	   {
-	   	return mScene->mRegistry.get<T>(mEntityHandle);
-	   }
+		template<typename T>
+		auto& GetComponent() const
+		{
+			return mScene->mRegistry.get<T>(mEntityHandle);
+		}
 
-   	template<typename... Args>
-   	auto GetComponents() const
-   	{
-   	    return mScene->mRegistry.get<Args...>(mEntityHandle);
-   	}
+   		template<typename... Args>
+   		auto GetComponents() const
+   		{
+   		    return mScene->mRegistry.get<Args...>(mEntityHandle);
+   		}
 
-   	template<typename T, typename... Args>
-   	T& ReplaceComponent(Args... args) const
-   	{
-   	    return mScene->mRegistry.replace<T>(mEntityHandle, args...);
-   	}
+   		template<typename T, typename... Args>
+   		T& ReplaceComponent(Args... args) const
+   		{
+   		    return mScene->mRegistry.replace<T>(mEntityHandle, args...);
+   		}
 
 		template<typename T>
 		void DeleteComponent() const

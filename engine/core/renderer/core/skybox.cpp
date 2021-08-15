@@ -3,12 +3,15 @@
 
 namespace Bubble
 {
+	Bubble::Skybox::Skybox(Cubemap&& skybox)
+		: mSkybox(std::move(skybox))
+	{}
+
 	void Skybox::Bind(const Ref<VertexArray>& vertex_array, int slot)
 	{
 		vertex_array->Bind();
 		mSkybox.Bind(slot);
 	}
-
 
 	glm::mat4 Skybox::GetViewMatrix(glm::mat4 view, float rotation)
 	{
@@ -18,4 +21,3 @@ namespace Bubble
 	}
 
 }
-

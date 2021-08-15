@@ -74,37 +74,37 @@ namespace Bubble
 
 	glm::vec2 Input::fGetMousePosition()
 	{
-		glm::vec2 window_size = mWindow->GetSize();
+		glm::vec2 window_size = mWindow.GetSize();
 		return glm::vec2((float)mMousePosX / window_size.x, (float)mMousePosY / window_size.y);
 	}
 
 	float Input::fGetMouseX()
 	{
-		int width = mWindow->GetWidth();
+		int width = mWindow.GetWidth();
 		return (float)mMousePosX / width;
 	}
 
 	float Input::fGetMouseY()
 	{
-		int height = mWindow->GetHeight();
+		int height = mWindow.GetHeight();
 		return (float)mMousePosY / height;
 	}
 
 	glm::vec2 Input::fGetMouseRelPosition()
 	{
-		glm::vec2 window_size = mWindow->GetSize();
+		glm::vec2 window_size = mWindow.GetSize();
 		return glm::vec2((float)mMouseRelPosX / window_size.x, (float)mMouseRelPosY / window_size.y);
 	}
 
 	float Input::fGetMouseRelX()
 	{
-		int width = mWindow->GetWidth();
+		int width = mWindow.GetWidth();
 		return (float)mMouseRelPosX / width;
 	}
 
 	float Input::fGetMouseRelY()
 	{
-		int height = mWindow->GetHeight();
+		int height = mWindow.GetHeight();
 		return (float)mMouseRelPosY / height;
 	}
 

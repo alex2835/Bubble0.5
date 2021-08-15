@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	{
 		auto* application = CreateApplication();
 		application->Run();
-		delete application;
+		//delete application;
 	}
 	catch (const std::exception& e)
 	{

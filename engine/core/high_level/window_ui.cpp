@@ -21,7 +21,7 @@ namespace Bubble
             //io.ConfigViewportsNoTaskBarIcon = true;
             io.ConfigWindowsMoveFromTitleBarOnly = true;
             // Temp: 
-            io.IniFilename = "../../../../../default_imgui.ini";
+            //io.IniFilename = "../../../../../default_imgui.ini";
 
             // Setup Dear ImGui style
             ImGui::StyleColorsDark();

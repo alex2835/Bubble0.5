@@ -8,10 +8,10 @@ namespace Bubble
 {
 	class EditorLayer : public Layer
 	{
-		Engine&	   mEngine;
-      UILoader		mUILoader;
-      SceneCamera mSceneCamera;
-      Viewport    mViewport;
+		Engine&		mEngine;
+		UILoader	mUILoader;
+		SceneCamera mSceneCamera;
+		Viewport    mViewport;
 
 	public:
 		EditorLayer(Engine& Engine);

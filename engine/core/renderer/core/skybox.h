@@ -14,6 +14,7 @@ namespace Bubble
 		Cubemap mSkybox;
 
 		Skybox() = default;
+		Skybox(Cubemap&& skybox);
 
 		Skybox(const Skybox&) = delete;
 		Skybox& operator=(const Skybox&) = delete;

@@ -6,7 +6,7 @@ namespace Bubble
 {
 	struct Input
 	{
-		Window* mWindow			 = nullptr;
+		Window& mWindow;
 		int mKeyMap[256]			 = { 0 };
 		int mMouseKeyMap[16]     = { 0 };
 		int mMouseKeyMapLast[16] = { 0 };
@@ -17,7 +17,7 @@ namespace Bubble
 		int mMouseRelPosX = 0;
 		int mMouseRelPosY = 0;
 
-		Input(Window* window)
+		Input(Window& window)
 			: mWindow(window)
 		{}
 

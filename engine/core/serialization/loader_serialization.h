@@ -22,7 +22,7 @@ namespace Bubble
         {
             json["Skyboxes"].push_back(path);
         }
-        for (const auto& [path, someting] : loader.mLoadedSkypsheres)
+        for (const auto& [path, someting] : loader.mLoadedSkyspheres)
         {
             json["Skyspheres"].push_back(path);
         }

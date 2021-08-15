@@ -5,7 +5,7 @@ project(Engine VERSION 0.0.0)
 file(GLOB_RECURSE SRCS *.cpp)
 file(GLOB_RECURSE HDRS *.h)
 
-add_library(Engine STATIC ${SRCS} ${HDRS})
+add_library(Engine STATIC ${SRCS} ${HDRS} )
 
 set_target_properties(
     Engine PROPERTIES
@@ -34,6 +34,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/base
     ${CMAKE_CURRENT_SOURCE_DIR}/loader
+    ${CMAKE_CURRENT_SOURCE_DIR}/project
     ${CMAKE_CURRENT_SOURCE_DIR}/renderer
     ${CMAKE_CURRENT_SOURCE_DIR}/renderer/core
 

@@ -5,37 +5,49 @@
 
 namespace Bubble
 {
+    Ref<Shader> Loader::LoadAndCacheShader(const std::string& path)
+    {
+        if (!mProject.Valid())
+            BUBBLE_CORE_ASSERT(false, "Try to load and cache shader with not valid project");
+
+        if (mLoadedShaders.count(path))
+            return mLoadedShaders[path];
+
+		auto shader = LoadShader(path);
+        std::string path_in_project = CopyToProject(path, "shaders");
+        mLoadedShaders.emplace(path_in_project, shader);
+        return shader;
+    }
+
 	Ref<Shader> Loader::LoadShader(const std::string& path)
 	{
-        if (mLoadedShaders.count(path))
-        {
-            return mLoadedShaders[path];
-        }
-
 		Ref<Shader> shader = CreateRef<Shader>();
 		std::string vertexSource, fragmentSource, geometry;
 		
 		shader->mName = path.substr(path.find_last_of('/') + 1);
 		ParseShaders(path, vertexSource, fragmentSource, geometry);
 		CompileShaders(*shader, vertexSource, fragmentSource, geometry);
-
-		mLoadedShaders.emplace(path, shader);
 		return shader;
 	}
 
-
-	Ref<Shader> Loader::LoadShader(const std::string& name,
-								   const std::string& vertex,
-								   const std::string& fragment,
-								   const std::string& geometry)
-	{
-		Ref<Shader> shader = CreateRef<Shader>();
+    Ref<Shader> Loader::LoadSystemShader(const std::string& name,
+								         const std::string& vertex,
+								         const std::string& fragment,
+								         const std::string& geometry)
+    {
+        Ref<Shader> shader = CreateRef<Shader>();
         shader->mName = name;
-		CompileShaders(*shader, vertex, fragment, geometry);
-		mLoadedShaders.emplace(name, shader);
-		return shader;
-	}
+        CompileShaders(*shader, vertex, fragment, geometry);
+        mSystemShaders.emplace(name, shader);
+        return shader;
+    }
 
+	Ref<Shader> Loader::GetSystemShader(const std::string& name)
+	{
+		if (!mSystemShaders.count(name))
+			BUBBLE_CORE_ASSERT(false, "Invalid system shader name: " + name);
+		return mSystemShaders[name];
+	}
 
 	void Loader::ParseShaders(const std::string& path,
 							  std::string& vertex,
@@ -57,26 +69,18 @@ namespace Bubble
 			if (line.find("#shader") != std::string::npos)
 			{
 				if (line.find("vertex") != std::string::npos)
-				{
 					type = VERTEX;
-				}
 				else if (line.find("fragment") != std::string::npos)
-				{
 					type = FRAGMENT;
-				}
 				else if (line.find("geometry") != std::string::npos)
-				{
 					type = GEOMETRY;
-				}
 			}
-			else if (type == NONE) {
+			else if (type == NONE)
 				continue;
-			}
-			else {
+			else
 				shaders[type] << line << '\n';
-			}
 		}
-		vertex =   shaders[VERTEX].str();
+		vertex   = shaders[VERTEX].str();
 		fragment = shaders[FRAGMENT].str();
 		geometry = shaders[GEOMETRY].str();
 	}
@@ -95,7 +99,7 @@ namespace Bubble
 		{
 			GLint success;
 			glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-			if (!success)
+			if (success != GL_TRUE)
 			{
 				GLint max_length = 0;
 				glGetShaderiv(vertex_shader, GL_INFO_LOG_LENGTH, &max_length);
@@ -121,7 +125,7 @@ namespace Bubble
 		{
 			GLint success;
 			glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-			if (!success)
+			if (success != GL_TRUE)
 			{
 				GLint max_length = 0;
 				std::string log;
@@ -141,60 +145,59 @@ namespace Bubble
 		}
 
 		// Geometry shader
-		GLint geometry_shader = glCreateShader(GL_GEOMETRY_SHADER);
-		if (geometry_source.size())
-		{
-			const char* cgeometry_source = geometry_source.c_str();
-			glcall(glShaderSource(geometry_shader, 1, &cgeometry_source, NULL));
-			glcall(glCompileShader(geometry_shader));
-			{
-				GLint success;
-				glGetShaderiv(geometry_shader, GL_COMPILE_STATUS, &success);
-				if (!success)
-				{
-					GLint max_length = 0;
-					std::string log;
+		//GLint geometry_shader = glCreateShader(GL_GEOMETRY_SHADER);
+		//if (geometry_source.size())
+		//{
+		//	const char* cgeometry_source = geometry_source.c_str();
+		//	glcall(glShaderSource(geometry_shader, 1, &cgeometry_source, NULL));
+		//	glcall(glCompileShader(geometry_shader));
+		//	{
+		//		GLint success;
+		//		glGetShaderiv(geometry_shader, GL_COMPILE_STATUS, &success);
+		//		if (success != GL_TRUE)
+		//		{
+		//			GLint max_length = 0;
+		//			std::string log;
 
-					glGetShaderiv(geometry_shader, GL_INFO_LOG_LENGTH, &max_length);
-					log.resize(max_length);
-					glGetShaderInfoLog(geometry_shader, max_length, &max_length, (GLchar*)log.data());
+		//			glGetShaderiv(geometry_shader, GL_INFO_LOG_LENGTH, &max_length);
+		//			log.resize(max_length);
+		//			glGetShaderInfoLog(geometry_shader, max_length, &max_length, (GLchar*)log.data());
 
-					// free resources
-					glDeleteShader(geometry_shader);
-					glDeleteShader(vertex_shader);
-					glDeleteShader(fragment_shader);
+		//			// free resources
+		//			glDeleteShader(geometry_shader);
+		//			glDeleteShader(vertex_shader);
+		//			glDeleteShader(fragment_shader);
 
-					LOG_CORE_ERROR("GEOMETRY SHADER ERROR: {} \n {}", shader.mName, log);
-					throw std::runtime_error("Shader compilation failed");
-				}
-			}
-		}
+		//			LOG_CORE_ERROR("GEOMETRY SHADER ERROR: {} \n {}", shader.mName, log);
+		//			throw std::runtime_error("Shader compilation failed");
+		//		}
+		//	}
+		//}
+		
 		// Shader program
 		shader.mShaderID = glCreateProgram();
 
 		// Link shaders
 		glcall(glAttachShader(shader.mShaderID, vertex_shader));
 		glcall(glAttachShader(shader.mShaderID, fragment_shader));
-		if (geometry_source.size())
-		{
-			glcall(glAttachShader(shader.mShaderID, geometry_shader));
-		}
+		//if (geometry_source.size())
+		//	glcall(glAttachShader(shader.mShaderID, geometry_shader));
 		glcall(glLinkProgram(shader.mShaderID));
 		
 		{
 			GLint success;
-			glGetProgramiv(shader.mShaderID, GL_COMPILE_STATUS, &success);
-			if (!success)
+			glGetProgramiv(shader.mShaderID, GL_LINK_STATUS, &success);
+			if (success != GL_TRUE)
 			{
 				GLint max_length = 0;
 				std::string log;
 
-				glGetShaderiv(geometry_shader, GL_INFO_LOG_LENGTH, &max_length);
+				glGetShaderiv(shader.mShaderID, GL_INFO_LOG_LENGTH, &max_length);
 				log.resize(max_length);
 				glGetProgramInfoLog(shader.mShaderID, max_length, NULL, (GLchar*)log.data());
 
 				// free resources
-				glDeleteShader(geometry_shader);
+				//glDeleteShader(geometry_shader);
 				glDeleteShader(vertex_shader);
 				glDeleteShader(fragment_shader);
 				glDeleteProgram(shader.mShaderID);
@@ -203,7 +206,7 @@ namespace Bubble
 				throw std::runtime_error("Shader compilation failed");
 			}
 		}
-		glDeleteShader(geometry_shader);
+		//glDeleteShader(geometry_shader);
 		glDeleteShader(vertex_shader);
 		glDeleteShader(fragment_shader);
 	}

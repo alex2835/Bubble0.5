@@ -44,9 +44,7 @@ struct DLLHotReloader
     {
         // Directory where dll copies are stored
         if (!std::filesystem::exists(DHR_DLL_COPIES_DIR))
-        {
             fs::create_directory(DHR_DLL_COPIES_DIR);
-        }
 
         std::string name;
         std::string input_dir;
@@ -90,20 +88,29 @@ struct DLLHotReloader
         if (mLastUpdateTime != lib_update_time || mLibrary == nullptr)
         {
             if (mOnCloseFunction)
-            {
                 mOnCloseFunction();
+
+            for (int i = 0; i < 10; i++)
+            {
+                std::this_thread::sleep_for(DHR_RELOAD_DELEY);
+
+                try {
+                    delete mLibrary;
+                    mLibrary = nullptr;
+                    fs::remove(mOutputPath);
+                    fs::copy(mInputPath, mOutputPath);
+                    mLibrary = new dynalo::library(mOutputPath);
+
+                    mLastUpdateTime = lib_update_time;
+                    mFunctionCache.clear();
+                    return true;
+                }
+                catch(std::exception& exception)
+                {
+                    if (i == 9)
+                        throw exception;
+                }
             }
-            std::this_thread::sleep_for(DHR_RELOAD_DELEY);
-
-            delete mLibrary;
-            mLibrary = nullptr;
-            fs::remove(mOutputPath);
-            fs::copy(mInputPath, mOutputPath);
-            mLibrary = new dynalo::library(mOutputPath);
-
-            mLastUpdateTime = lib_update_time;
-            mFunctionCache.clear();
-            return true;
         }
         return false;
     }

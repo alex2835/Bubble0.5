@@ -156,7 +156,7 @@ namespace Bubble
         {
             ImGui::BeginChild("Skysphere list", ImVec2(window_size.x * 0.5f, window_size.y * 0.24f), true);
             {
-                for (const auto& [path, skysphere] : args.mLoader->mLoadedSkypsheres)
+                for (const auto& [path, skysphere] : args.mLoader->mLoadedSkyspheres)
                 {
                     size_t pos = path.find_last_of("/") + 1;
                     std::string name = path.substr(pos);

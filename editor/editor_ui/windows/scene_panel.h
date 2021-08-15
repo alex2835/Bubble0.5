@@ -119,9 +119,9 @@ namespace Bubble
 
             // Load first skysphere automatically
             if (!scene_stage.mSkysphereTexture &&
-                args.mLoader->mLoadedSkypsheres.size())
+                args.mLoader->mLoadedSkyspheres.size())
             {
-                for (const auto& [path, skysphere_texture] : args.mLoader->mLoadedSkypsheres)
+                for (const auto& [path, skysphere_texture] : args.mLoader->mLoadedSkyspheres)
                 {
                     scene_stage.mSkysphereTexture = skysphere_texture;
                 }
@@ -129,7 +129,7 @@ namespace Bubble
 
             // Skysphere info
             std::string names;
-            for (const auto& [path, skybox] : args.mLoader->mLoadedSkypsheres)
+            for (const auto& [path, skybox] : args.mLoader->mLoadedSkyspheres)
             {
                 size_t start_pos = path.find_last_of("/") + 1;
                 size_t end_pos = path.find_last_of(".");
@@ -143,10 +143,10 @@ namespace Bubble
                 ImGui::SliderFloat("Brightness",     &scene_stage.mSkyboxBrightness, 0.0f, 3.0f);
                 ImGui::SliderFloat("Rotation speed", &scene_stage.mSkyboxRotationSpeed, 0.0001f, 0.5f);
 
-                if (ImGui::Combo("Skysphere", &SelectedSkyphereID, names.data(), args.mLoader->mLoadedSkypsheres.size()))
+                if (ImGui::Combo("Skysphere", &SelectedSkyphereID, names.data(), args.mLoader->mLoadedSkyspheres.size()))
                 {
                     int i = 0;
-                    for (const auto& [path, skyphere_texture] : args.mLoader->mLoadedSkypsheres)
+                    for (const auto& [path, skyphere_texture] : args.mLoader->mLoadedSkyspheres)
                     {
                         if (i == SelectedSkyphereID)
                         {

@@ -1,17 +1,14 @@
 
 #include "resource_storage.h"
-#include "default_resources.h"
 
 namespace Bubble
 {
 	RendererStorage::RendererStorage(Loader& loader)
 	{
-        using namespace std::string_literals;
-
 		// ============ Shaders ============
-		mPhongShader  = loader.LoadShader("Phong shader"s,  PhongVertexShaderSource,  PhongFragmentShaderSource);
-		mSkyboxShader = loader.LoadShader("Skybox shader"s, SkyboxVertexShaderSource, SkyboxFragmentShaderSource);
-        mSkysphereShader = loader.LoadShader("Skysphere shader"s, SkysphereVertexShaderSource, SkysphereFragmentShaderSource);
+		mPhongShader  = loader.GetSystemShader("Phong shader");
+		mSkyboxShader = loader.GetSystemShader("Skybox shader");
+        mSkysphereShader = loader.GetSystemShader("Skysphere shader");
 
         // ======= Skybox vertex buffer =======
         BufferLayout layout{
@@ -23,6 +20,6 @@ namespace Bubble
         mSkyboxVertexArray->AddVertexBuffer(std::move(vb));
 
         // =========== Sky sphere ===========
-        mSphere = loader.LoadModel("resources/models/sphere.obj");
+        mSphere = loader.GetSystemModel("sphere");
 	}
 } 

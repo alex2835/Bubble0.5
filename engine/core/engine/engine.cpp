@@ -1,10 +1,10 @@
 
 #include "engine.h"
-
 namespace Bubble
 {
    Engine::Engine()
-      : mInput(&mWindow),
+      : mInput(mWindow),
+        mLoader(mProject),
         mRenderer(mLoader)
    {}
 

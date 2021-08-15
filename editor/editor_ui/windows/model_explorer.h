@@ -284,7 +284,7 @@ namespace Bubble
                     try
                     {
                         std::string path = OpenFileDialog();
-                        args.mLoader->LoadModel(path);
+                        args.mLoader->LoadAndCacheModel(path);
                     }
                     catch (const std::exception& e)
                     {

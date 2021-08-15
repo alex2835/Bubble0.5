@@ -10,7 +10,7 @@ namespace Bubble
 {
 	struct Application
 	{
-		Engine 	  mEngine;
+		Engine 	   mEngine;
 		Timer      mTimer;
 		LayerArray mLayers;
 

@@ -28,7 +28,7 @@ namespace Bubble
         auto skybox_second= std::find_if(loader.mLoadedSkyboxes.begin(), loader.mLoadedSkyboxes.end(),
             [&renderer](const auto& pair) { return pair.second == renderer.mSceneStage.mSkyboxSecond; });
         
-        auto skysphere_texture = std::find_if(loader.mLoadedSkypsheres.begin(), loader.mLoadedSkypsheres.end(),
+        auto skysphere_texture = std::find_if(loader.mLoadedSkyspheres.begin(), loader.mLoadedSkyspheres.end(),
             [&renderer](const auto& pair) { return pair.second == renderer.mSceneStage.mSkysphereTexture; });
 
         if (skybox_first != loader.mLoadedSkyboxes.end())
@@ -37,7 +37,7 @@ namespace Bubble
         if (skybox_second != loader.mLoadedSkyboxes.end())
             json["SkyboxSecond"] = skybox_second->first;
 
-        if (skysphere_texture != loader.mLoadedSkypsheres.end())
+        if (skysphere_texture != loader.mLoadedSkyspheres.end())
             json["Skysphere"] = skysphere_texture->first;
 
         return json;

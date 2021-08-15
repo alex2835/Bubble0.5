@@ -35,7 +35,7 @@
 
 // Loader
 #include "../core/loader/loader.h"
-#include "../core/loader/loader_serialization.h"
+//#include "../core/loader/loader_serialization.h"
 
 
 namespace Bubble
@@ -53,11 +53,13 @@ namespace Bubble
       Renderer& GetRenderer(){ return mRenderer; };
       Input&    GetInput(){ return mInput; };
       Scene&    GetScene(){ return mScene; };
+      Project&  GetProject(){ return mProject; };
    private:
-   	Window   mWindow;
-      Input    mInput;
-      Loader   mLoader;
-		Renderer mRenderer;
-		Scene    mScene;
+       Window   mWindow;
+       Project  mProject;
+       Scene    mScene;
+       Input    mInput;
+       Loader   mLoader;
+       Renderer mRenderer;
    };
 }

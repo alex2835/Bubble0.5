@@ -22,25 +22,20 @@ namespace Bubble
 			[&ui_module](const auto& module_elem) { return module_elem->mName == ui_module->mName; });
 		
 		if (iterator == sModules->end())
-		{
 			sModules->push_back(ui_module);
-		}
-		else {
+		else
 			BUBBLE_ASSERT(false, "Module with name {} already exist", ui_module->mName);
-		}
 	}
 
 	void UI::RemoveModule(const std::string& name)
 	{
 		auto iterator = std::find_if(sModules->begin(), sModules->end(),
 			[&name](const auto& ui_module) { return ui_module->mName == name; });
-		
 		sModules->erase(iterator);
 	}
 
 	UI::~UI()
-	{
-	}
+	{}
 
 	void UI::OnDraw(DeltaTime dt)
 	{
@@ -48,9 +43,7 @@ namespace Bubble
         {
             auto& ui_module = sModules->at(i);
             if (ui_module->IsOpen())
-            {
                 ui_module->Draw(mArgs, dt);
-            }
         }
 
         // Temp frame rate info
@@ -64,9 +57,7 @@ namespace Bubble
 	void UI::OnUpdate(DeltaTime dt)
 	{
         for (int i = 0; i < sModules->size(); i++)
-        {
             sModules->at(i)->OnUpdate(mArgs, dt);
-        }
 	}
 
     void UI::OnEvent(SDL_Event& event)
