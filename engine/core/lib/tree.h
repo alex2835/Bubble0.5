@@ -14,6 +14,11 @@ namespace Bubble
 			Node(T data) 
 				: mData(std::move(data))
 			{}
+			template <typename ...Args>
+			Node(Args&& ...args)
+				: mData(std::forward<Args>(args)...)
+			{}
+
 			Node(const Node&) = default;
 			Node& operator=(const Node&) = default;
 			Node(Node&&) = default;
@@ -23,6 +28,8 @@ namespace Bubble
 			void GetData(T elem) { mData = std::move(elem); }
 			void Append(const Node& elem) { mChildren.push_back(elem); }
 			void Append(Node&& elem) { mChildren.push_back(std::move(elem)); }
+			template <typename ...Args>
+			void Append(Args&& ...args) { mChildren.emplace_back(std::forward<Args>(args)...); }
 
 			auto begin() { return mChildren.begin(); }
 			auto end() { return mChildren.end(); }

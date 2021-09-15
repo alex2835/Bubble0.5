@@ -6,11 +6,18 @@ namespace fs = std::filesystem;
 
 namespace Bubble
 {
-	enum class DirItemType { Dir, Image, ModelDir };
+	enum class DirItemType { Dir, Image, ModelDir, Unnown };
 	struct DirItem
 	{
 		std::string Path;
 		DirItemType Type;
+
+		DirItem() = default;
+		DirItem(std::string path,
+				DirItemType type)
+			: Path(std::move(path)),
+			  Type(type)
+		{}
 	};
 	using DirNode = Tree<DirItem>::Node;
 	using DirTree = Tree<DirItem>;
@@ -20,6 +27,7 @@ namespace Bubble
 	{
 		Project* mProject = nullptr;
 		DirTree  mDirTree;
+		DirNode* mSelectedDir = nullptr;
 
 		ProjectExplorer()
 			: UIModule("Project explorer")
@@ -27,7 +35,20 @@ namespace Bubble
 
 		inline void Draw(UIArgs args, DeltaTime dt)
 		{
-			DrawProjectTree();
+			mProject = args.mProject;
+
+			ImGui::Begin(mName.c_str(), &mIsOpen);
+			{
+				ImGui::BeginChild("Project tree explorer", ImVec2(300, 300), false);
+				DrawProjectTree();
+				ImGui::EndChild();
+			
+				ImGui::SameLine();
+				ImGui::BeginChild("Files in the directory", ImVec2(300, 300), false);
+				DrawItemsInSelectedDir();
+				ImGui::EndChild();
+			}
+			ImGui::End();
 		}
 
 		void OnUpdate(UIArgs args, DeltaTime dt) override
@@ -41,7 +62,8 @@ namespace Bubble
 			static int i = 0;
 			if (i++ == 0)
 			{
-				mDirTree.SetRoot(DirNode({ "C:/Users/sa007/Desktop"s, DirItemType::Dir }));
+				//mDirTree.SetRoot(DirNode({ mProject->GetPath(), DirItemType::Dir }));
+				mDirTree.SetRoot(DirNode("C:/Users/sa007/Desktop/", DirItemType::Dir));
 				IterateOverDirectory(mDirTree.GetRoot());
 			}
 		}
@@ -52,21 +74,20 @@ namespace Bubble
 			{
 				if (dir_item.is_directory())
 				{
-					DirNode dir = DirNode({ NormalizePath(dir_item.path()), DirItemType::Dir });
+					DirNode dir = DirNode(NormalizePath(dir_item.path()), DirItemType::Dir);
 					IterateOverDirectory(dir);
 					root.Append(std::move(dir));
 				}
+				else
+					root.Append(NormalizePath(dir_item.path()), DirItemType::Unnown);
 			}
-
 		}
+
+		// ============================ Draw ============================
 
 		void DrawProjectTree()
 		{
-			ImGui::Begin(mName.c_str(), &mIsOpen);
-			{
-				DrawDir(mDirTree.GetRoot());
-			}
-			ImGui::End();
+			DrawDir(mDirTree.GetRoot());
 		}
 
 		void DrawDir(DirNode& root)
@@ -80,9 +101,27 @@ namespace Bubble
 
 					if (ImGui::TreeNode(dir_name.c_str(), dir_name.c_str()))
 					{
+						if (ImGui::IsItemToggledOpen() || ImGui::IsItemClicked())
+							mSelectedDir = &child;
+
 						DrawDir(child);
 						ImGui::TreePop();
 					}
+				}
+			}
+		}
+
+		void DrawItemsInSelectedDir()
+		{
+			if (mSelectedDir)
+			{
+				for (DirItem& item : *mSelectedDir)
+				{
+					auto dir_name = item.Path;
+					dir_name = dir_name.substr(dir_name.find_last_of("/") + 1);
+
+					if (item.Type != DirItemType::Dir)
+						ImGui::BulletText(dir_name.c_str());
 				}
 			}
 		}
