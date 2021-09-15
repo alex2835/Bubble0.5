@@ -9,11 +9,12 @@ namespace Bubble
     {
 		sModules = CreateScope<std::vector<Ref<UIModule>>>();
 		// Create ui modules
-		mMainViewport   = AddModule<MainViewport>();
-		mModelExploerer = AddModule<ModelExplorer>();
-		mEntityExplorer = AddModule<EntityExplorer>();
-		mSkyboxExplorer = AddModule<SkyboxExplorer>();
-		mScenePanel     = AddModule<ScenePanel>();
+		mMainViewport    = AddModule<MainViewport>();
+		mModelExploerer  = AddModule<ModelExplorer>();
+		mEntityExplorer  = AddModule<EntityExplorer>();
+		mSkyboxExplorer  = AddModule<SkyboxExplorer>();
+		mScenePanel      = AddModule<ScenePanel>();
+		mProjectExplorer = AddModule<ProjectExplorer>();
     }
 
 	void UI::AddModule(const Ref<UIModule>& ui_module)

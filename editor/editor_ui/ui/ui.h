@@ -7,6 +7,7 @@
 #include "windows/main_viewport.h"
 #include "windows/skybox_explorer.h"
 #include "windows/scene_panel.h"
+#include "windows/project_explorer.h"
 
 //#include "project_serialization.h"
 
@@ -18,11 +19,12 @@ namespace Bubble
 
         UIArgs mArgs;
         // Default modules
-        Ref<MainViewport>   mMainViewport;
-        Ref<ModelExplorer>  mModelExploerer;
-        Ref<EntityExplorer> mEntityExplorer;
-        Ref<SkyboxExplorer> mSkyboxExplorer;
-        Ref<ScenePanel>     mScenePanel;
+        Ref<MainViewport>    mMainViewport;
+        Ref<ModelExplorer>   mModelExploerer;
+        Ref<EntityExplorer>  mEntityExplorer;
+        Ref<SkyboxExplorer>  mSkyboxExplorer;
+        Ref<ScenePanel>      mScenePanel;
+        Ref<ProjectExplorer> mProjectExplorer;
 
         template <typename T, typename ...Args>
         static Ref<T> AddModule(Args&& ...args);

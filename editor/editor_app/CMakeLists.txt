@@ -29,7 +29,7 @@ add_definitions(-D"ENTT_API_IMPORT")
 target_include_directories(
     BubbleEditorApp PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../editor_common
+    ${CMAKE_CURRENT_SOURCE_DIR}/../editor_lib
     ${CMAKE_SOURCE_DIR}/engine/core/include
     ${CMAKE_SOURCE_DIR}/dependencies/nativefiledialog/src/include
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include
@@ -37,23 +37,28 @@ target_include_directories(
 
 # Temp resources
 add_custom_command(
-    TARGET BubbleEditorApp PRE_BUILD
+    TARGET BubbleEditorApp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${PROJECT_SOURCE_DIR}/resources
     $<TARGET_FILE_DIR:BubbleEditorApp>/resources)
 
 # Put dll files to exe
 add_custom_command(
-    TARGET BubbleEditorApp PRE_BUILD
+    TARGET BubbleEditorApp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/dependencies/dll
     $<TARGET_FILE_DIR:BubbleEditorApp>)
 
-#add_custom_command(
-#    TARGET BubbleEditorApp POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory
-#    $<TARGET_FILE_DIR:BubbleEditorUI>
-#    $<TARGET_FILE_DIR:BubbleEditorApp>)
+add_custom_command(
+    TARGET BubbleEditorApp PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E remove
+    $<TARGET_FILE_DIR:BubbleEditorApp>BubbleEditorUI.dll)
+
+add_custom_command(
+    TARGET BubbleEditorApp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    $<TARGET_FILE:BubbleEditorUI>
+    $<TARGET_FILE_DIR:BubbleEditorApp>)
 
 add_custom_command(
     TARGET BubbleEditorApp POST_BUILD

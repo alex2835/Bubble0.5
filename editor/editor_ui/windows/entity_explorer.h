@@ -22,9 +22,8 @@ namespace Bubble
             ImGui::Begin(mName.c_str(), &mIsOpen);
             {
                 if (ImGui::Button("Create Entity", ImVec2(100, 25)))
-                {
                     args.mScene->CreateEntity();
-                }
+                
                 ImGui::SameLine();
                 if (ImGui::Button("Delete Entity", ImVec2(100, 25)))
                 {
@@ -41,9 +40,7 @@ namespace Bubble
                         ImGui::Selectable(tag.c_str(), entity == mSelectedEntity);
             
                         if (ImGui::IsItemClicked())
-                        {
                             mSelectedEntity = entity;
-                        }
                     }
                 );
             
@@ -58,13 +55,10 @@ namespace Bubble
             ImGui::Begin("Properties");
             {
                 if (mSelectedEntity)
-                {
                     DrawComponents(mSelectedEntity, args);
-                }
+			
                 //if (args.mInput->IsKeyClick(SDLK_ESCAPE) && ImGui::IsWindowHovered())
-                //{
-                //    mSelectedEntity = {};
-                //}
+				//	mSelectedEntity = {};
             }
             ImGui::End();
         }
@@ -127,9 +121,8 @@ namespace Bubble
                 for (const auto& [path, model] : args.mLoader->mLoadedModels)
                 {
                     if (model_comp == model)
-                    {
                         model_id = i;
-                    }
+                    
                     size_t pos = path.find_last_of("/") + 1;
                     size_t dpos = path.find_last_of(".");
                     std::string name = path.substr(pos, dpos - pos);
@@ -142,9 +135,7 @@ namespace Bubble
                 for (const auto& [path, model] : args.mLoader->mLoadedModels)
                 {
                     if (model_id == i)
-                    {
                         model_comp = model;
-                    }
                     i++;
                 }
 

@@ -28,9 +28,7 @@ namespace Bubble
                 args.mMainViewport->mNewSize = *(glm::vec2*)&imgui_viewport_size;
 
                 if (ImGui::IsItemHovered())
-                {
                     args.mSceneCamera->OnUpdate(dt);
-                }
             }
             ImGui::End();
             ImGui::PopStyleVar();

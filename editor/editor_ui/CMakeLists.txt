@@ -28,7 +28,7 @@ add_definitions(-D"ENTT_API_IMPORT")
 target_include_directories(
     BubbleEditorUI PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../editor_common
+    ${CMAKE_CURRENT_SOURCE_DIR}/../editor_lib
     ${CMAKE_SOURCE_DIR}/engine/core/include
     ${CMAKE_SOURCE_DIR}/dependencies/DHR/include
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/include

@@ -5,14 +5,15 @@
 #include "../core/base/log.h"
 #include "../core/base/timer.h"
 
+#include "../lib/ref.h"
+#include "../lib/tree.h"
+#include "../lib/str.h"
+
 #include "../core/application/layer.h"
 #include "../core/application/layer_array.h"
-#include "../core/application/window.h"
 #include "../core/application/input.h"
-
-#include "../high_level/window_ui.h"
-#include "../high_level/viewport.h"
-#include "../high_level/scene_camera.h"
+#include "../core/application/window.h"
+#include "../application/window_ui.h"
 
 // Renderer
 #include "../core/renderer/core/renderer_base.h"

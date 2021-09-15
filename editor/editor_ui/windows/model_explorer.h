@@ -29,7 +29,7 @@ namespace Bubble
 		{
             ImGui::Begin("Models explorer", &mIsOpen);
             {
-                ImVec2 window_size   = ImGui::GetContentRegionAvail();
+                ImVec2 window_size = ImGui::GetContentRegionAvail();
 
                 DrawViewport(window_size, args, dt);
                 DrawSelectedModelInfo(window_size, args, dt);
@@ -55,9 +55,7 @@ namespace Bubble
             mViewport.mNewSize = *(glm::vec2*)&viewport_size;
 
             if (ImGui::IsItemVisible() && mSelectedModel)
-            {
                 RenderSelectedModel(args.mRenderer);
-            }
 
             if (ImGui::IsWindowFocused())
             {
@@ -71,16 +69,11 @@ namespace Bubble
                 if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(1))
                 {
                     if (args.mInput->IsKeyPressed(SDLK_LSHIFT))
-                    {
                         mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelX(), glm::vec3(1, 0, 0));
-                    }
                     else if (args.mInput->IsKeyPressed(SDLK_LCTRL))
-                    {
                         mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelX(), glm::vec3(0, 0, 1));
-                    }
-                    else {
+                    else
                         mTransforms = glm::rotate(mTransforms, 5 * args.mInput->fGetMouseRelX(), glm::vec3(0, 1, 0));
-                    }
                 }
             }
 
@@ -158,14 +151,10 @@ namespace Bubble
             if (ImGui::TreeNode((int*)current_node.get() + (int)current_node->mName.data(), current_node->mName.c_str()))
             {
                 for (auto mesh : current_node->mMeshes)
-                {
                     DrawMeshInfo(*mesh, args);
-                }
 
                 for (auto& child : current_node->mChildern)
-                {
                     DrawModelTree(child, args);
-                }
 
                 ImGui::TreePop();
             }

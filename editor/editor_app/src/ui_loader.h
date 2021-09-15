@@ -9,12 +9,12 @@ namespace Bubble
 {
 	struct UILoader
 	{
-      UIArgs mArgs;
-      DLLHotReloader mUIDLL;
+		UIArgs mArgs;
+		DLLHotReloader mUIDLL;
 		ImGuiControl mImGuiControl;
 		
-      UILoader(Window& window);
-      ~UILoader();
+		UILoader(Window& window);
+		~UILoader();
 		void OnUpdate(DeltaTime dt);
 		void OnEvent(SDL_Event& event);
 	};

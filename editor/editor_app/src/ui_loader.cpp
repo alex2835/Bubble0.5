@@ -5,9 +5,9 @@ namespace Bubble
 {
 	UILoader::UILoader(Window& window)
         : mImGuiControl(window),
-		    mUIDLL("../editor_ui/BubbleEditorUI")
+		  mUIDLL("../editor_ui/BubbleEditorUI")
     {
-      mImGuiControl.OnAttach();
+		mImGuiControl.OnAttach();
 		mUIDLL.Call<void(ImGuiContext*)>("OnInit", mImGuiControl.mContext);
 		mUIDLL.SetOnCloseFunction<void()>("OnClose");
     }

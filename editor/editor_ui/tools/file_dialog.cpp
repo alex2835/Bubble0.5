@@ -1,4 +1,5 @@
 
+#include "bubble.h"
 #include "file_dialog.h"
 
 namespace Bubble

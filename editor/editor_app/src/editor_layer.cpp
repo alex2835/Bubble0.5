@@ -24,14 +24,7 @@ namespace Bubble
     void EditorLayer::OnUpdate(DeltaTime dt)
 	{
 		// ====================== Update editor ======================
-		mUILoader.mArgs.mEngine		  = &mEngine;
-		mUILoader.mArgs.mProject      = &mEngine.GetProject();
-		mUILoader.mArgs.mRenderer	  = &mEngine.GetRenderer();
-		mUILoader.mArgs.mLoader		  = &mEngine.GetLoader();
-		mUILoader.mArgs.mInput		  = &mEngine.GetInput();
-		mUILoader.mArgs.mScene		  = &mEngine.GetScene();
-		mUILoader.mArgs.mSceneCamera  = &mSceneCamera;
-		mUILoader.mArgs.mMainViewport = &mViewport;
+		mUILoader.mArgs = GetUIArgs();
 		mUILoader.OnUpdate(dt);
 
 		// ====================== Set scene data ======================
@@ -49,6 +42,20 @@ namespace Bubble
 	void EditorLayer::OnEvent(SDL_Event& event)
 	{
         mUILoader.OnEvent(event);
+	}
+
+	UIArgs EditorLayer::GetUIArgs()
+	{
+		UIArgs args;
+		args.mEngine	   = &mEngine;
+		args.mProject	   = &mEngine.GetProject();
+		args.mRenderer	   = &mEngine.GetRenderer();
+		args.mLoader	   = &mEngine.GetLoader();
+		args.mInput		   = &mEngine.GetInput();
+		args.mScene		   = &mEngine.GetScene();
+		args.mSceneCamera  = &mSceneCamera;
+		args.mMainViewport = &mViewport;
+		return args;
 	}
 
 }
