@@ -12,7 +12,14 @@ namespace Bubble
        LoadSystemShader("Skybox shader", SkyboxVertexShaderSource, SkyboxFragmentShaderSource);
        LoadSystemShader("Skysphere shader", SkysphereVertexShaderSource, SkysphereFragmentShaderSource);
 
-       LoadSystemModel("resources/models/sphere.obj");
+       LoadSystemTexture("resources/textures/chess_plane.jpg");
+
+       LoadSystemTexture("resources/textures/dir_icon.jpg");
+       LoadSystemTexture("resources/textures/texture_icon.jpg");
+       LoadSystemTexture("resources/textures/model_icon.jpg");
+       LoadSystemTexture("resources/textures/file_icon.jpg");
+
+       LoadSystemModel("resources/models/sphere/sphere.obj");
    }
 
    std::string Loader::CopyToProject(std::string file_path, std::string type)

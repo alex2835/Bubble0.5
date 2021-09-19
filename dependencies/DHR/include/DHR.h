@@ -8,7 +8,7 @@
 #else
 
 #ifndef DHR_DLL_COPIES_DIR
-#define DHR_DLL_COPIES_DIR "./DllCopies/"
+#define DHR_DLL_COPIES_DIR "./DHRDllCopies/"
 #endif
 #ifndef DHR_RELOAD_DELEY
 #define DHR_RELOAD_DELEY 100ms
@@ -28,12 +28,20 @@ struct DLLHotReloader
 {
     dynalo::library* mLibrary;
     std::string mInputPath;
-    std::string mOutputPath;
     fs::file_time_type mLastUpdateTime;
     std::function<void()> mOnCloseFunction;
 
+    // output path 
+    int dll_counter = 0;
+    std::string mName;
+
     typedef void (*DefFunctionPointer)(void);
     mutable std::unordered_map<std::string, DefFunctionPointer> mFunctionCache;
+
+    std::string GetOutputPath()
+    {
+		return dynalo::to_native_name(DHR_DLL_COPIES_DIR + mName + std::to_string(dll_counter++));
+    }
 
     /*
     *  Name without extension
@@ -42,33 +50,28 @@ struct DLLHotReloader
     inline DLLHotReloader(const std::string& path)
         : mLibrary(nullptr)
     {
-        // Directory where dll copies are stored
-        if (!std::filesystem::exists(DHR_DLL_COPIES_DIR))
-            fs::create_directory(DHR_DLL_COPIES_DIR);
+        if (fs::exists(DHR_DLL_COPIES_DIR))
+            fs::remove_all(DHR_DLL_COPIES_DIR);
+        fs::create_directory(DHR_DLL_COPIES_DIR);
 
-        std::string name;
         std::string input_dir;
         int pos = path.find_last_of('/') + 1;
         if (pos != std::string::npos)
         {
-            name = dynalo::to_native_name(path.substr(pos));
+			mName = path.substr(pos);
             input_dir = path.substr(0, pos);
         }
-        else {
-            name = dynalo::to_native_name(path);
-        }
+        else
+            mName = path;
 
-        mInputPath = input_dir + name;
-        mOutputPath = DHR_DLL_COPIES_DIR + name;
+        mInputPath = dynalo::to_native_name(input_dir + mName);
         CheckForUpdate();
     }
 
     inline ~DLLHotReloader()
     {
         if (mOnCloseFunction)
-        {
             mOnCloseFunction();
-        }
         delete mLibrary;
     }
 
@@ -97,9 +100,9 @@ struct DLLHotReloader
                 try {
                     delete mLibrary;
                     mLibrary = nullptr;
-                    fs::remove(mOutputPath);
-                    fs::copy(mInputPath, mOutputPath);
-                    mLibrary = new dynalo::library(mOutputPath);
+                    std::string output_path = GetOutputPath();
+                    fs::copy(mInputPath, output_path);
+                    mLibrary = new dynalo::library(output_path);
 
                     mLastUpdateTime = lib_update_time;
                     mFunctionCache.clear();

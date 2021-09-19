@@ -30,16 +30,15 @@ namespace Bubble
 		return shader;
 	}
 
-    Ref<Shader> Loader::LoadSystemShader(const std::string& name,
-								         const std::string& vertex,
-								         const std::string& fragment,
-								         const std::string& geometry)
+    void Loader::LoadSystemShader(const std::string& name,
+								  const std::string& vertex,
+								  const std::string& fragment,
+								  const std::string& geometry)
     {
         Ref<Shader> shader = CreateRef<Shader>();
         shader->mName = name;
         CompileShaders(*shader, vertex, fragment, geometry);
         mSystemShaders.emplace(name, shader);
-        return shader;
     }
 
 	Ref<Shader> Loader::GetSystemShader(const std::string& name)

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Bubble VERSION 0.0.0)
 
 
-add_compile_options(/w /MP)
+add_compile_options(/Z7 /w /MP)
 
 set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
 

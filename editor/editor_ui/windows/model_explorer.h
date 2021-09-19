@@ -208,7 +208,8 @@ namespace Bubble
                     ImGui::Image((ImTextureID)mesh.mMaterial.mNormalMap->mRendererID, image_size);
                 }
                 else {
-                    const auto& chess_plane = args.mLoader->LoadTexture2D("resources/images/chess_plane.jpg");
+                    //const auto& chess_plane = args.mLoader->LoadTexture2D("resources/images/chess_plane.jpg");
+                    const auto& chess_plane = args.mLoader->GetSystemTexture("chess_plane");
                     ImGui::Image((ImTextureID)chess_plane->GetRendererID(), image_size);
                 }
 

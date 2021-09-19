@@ -25,7 +25,8 @@ namespace Bubble
 			Node& operator=(Node&&) = default;
 
 			T& GetData() { return mData; }
-			void GetData(T elem) { mData = std::move(elem); }
+			const T& GetData() const { return mData; }
+			void SetData(T elem) { mData = std::move(elem); }
 			void Append(const Node& elem) { mChildren.push_back(elem); }
 			void Append(Node&& elem) { mChildren.push_back(std::move(elem)); }
 			template <typename ...Args>
@@ -33,6 +34,8 @@ namespace Bubble
 
 			auto begin() { return mChildren.begin(); }
 			auto end() { return mChildren.end(); }
+			const auto begin() const { return mChildren.begin(); }
+			const auto end() const { return mChildren.end(); }
 
 			operator T&() { return mData; }
 

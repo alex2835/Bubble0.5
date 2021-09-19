@@ -6,6 +6,7 @@ namespace Bubble
 	UILoader::UILoader(Window& window)
         : mImGuiControl(window),
 		  mUIDLL("../editor_ui/BubbleEditorUI")
+		  //mUIDLL("BubbleEditorUI")
     {
 		mImGuiControl.OnAttach();
 		mUIDLL.Call<void(ImGuiContext*)>("OnInit", mImGuiControl.mContext);

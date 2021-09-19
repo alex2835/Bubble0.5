@@ -1,5 +1,6 @@
 
 #include "loader.h"
+#include "lib/str.h"
 
 namespace Bubble
 {
@@ -26,6 +27,24 @@ namespace Bubble
         mLoadedTextures.emplace(path_in_project, texture);
         return texture;
     }
+
+    void Loader::LoadSystemTexture(std::string path, Texture2DSpecification spec)
+    {
+        auto name = MidPartLastOf(path, "/", ".");
+		if (mSystemTextures.count(name))
+            BUBBLE_CORE_ASSERTF(false, "System texture already exist {}", path);
+
+		Ref<Texture2D> texture = LoadTexture2D(path, spec);
+        mSystemTextures.emplace(name, texture);
+    }
+
+    Ref<Texture2D> Loader::GetSystemTexture(std::string name)
+    {
+		if (mSystemTextures.count(name))
+			return mSystemTextures[name];
+        BUBBLE_CORE_ASSERTF(false, "No such system texture {}", name);
+    }
+
 
     Ref<Texture2D> Loader::LoadTexture2D(std::string path, const Texture2DSpecification& spec)
     {

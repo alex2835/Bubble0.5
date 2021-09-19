@@ -47,6 +47,8 @@ namespace Bubble
                 ui_module->Draw(mArgs, dt);
         }
 
+		ImGui::ShowDemoWindow();
+
         // Temp frame rate info
         ImGui::Begin("Info");
         {

@@ -1,16 +1,17 @@
 #pragma once
 
 #include "ui_module.h"
+#include "tools/imgui_widgets.h"
 #include <filesystem>
 namespace fs = std::filesystem;
 
 namespace Bubble
 {
-	enum class DirItemType { Dir, Image, ModelDir, Unnown };
+	enum class DirItemType { Dir, Texture, ModelDir, Unnown };
 	struct DirItem
 	{
 		std::string Path;
-		DirItemType Type;
+		DirItemType Type = DirItemType::Unnown;
 
 		DirItem() = default;
 		DirItem(std::string path,
@@ -25,9 +26,11 @@ namespace Bubble
 
 	struct ProjectExplorer : UIModule
 	{
-		Project* mProject = nullptr;
 		DirTree  mDirTree;
 		DirNode* mSelectedDir = nullptr;
+
+		Project* mProject = nullptr;
+		Loader*  mLoader  = nullptr;
 
 		ProjectExplorer()
 			: UIModule("Project explorer")
@@ -36,15 +39,16 @@ namespace Bubble
 		inline void Draw(UIArgs args, DeltaTime dt)
 		{
 			mProject = args.mProject;
+			mLoader  = args.mLoader;
 
 			ImGui::Begin(mName.c_str(), &mIsOpen);
 			{
-				ImGui::BeginChild("Project tree explorer", ImVec2(300, 300), false);
+				ImGui::BeginChild("Project tree explorer", ImVec2(250, 0), false);
 				DrawProjectTree();
 				ImGui::EndChild();
 			
 				ImGui::SameLine();
-				ImGui::BeginChild("Files in the directory", ImVec2(300, 300), false);
+				ImGui::BeginChild("Files in the directory");
 				DrawItemsInSelectedDir();
 				ImGui::EndChild();
 			}
@@ -62,24 +66,35 @@ namespace Bubble
 			static int i = 0;
 			if (i++ == 0)
 			{
-				//mDirTree.SetRoot(DirNode({ mProject->GetPath(), DirItemType::Dir }));
-				mDirTree.SetRoot(DirNode("C:/Users/sa007/Desktop/", DirItemType::Dir));
-				IterateOverDirectory(mDirTree.GetRoot());
+				mDirTree.SetRoot(DirNode(mProject->GetPath(), DirItemType::Dir));
+				//mDirTree.SetRoot(DirNode("C:/Users/sa007/Desktop/", DirItemType::Dir));
+				IterateOverDirectoryAndFillTree(mDirTree.GetRoot());
+				mSelectedDir = &mDirTree.GetRoot();
 			}
 		}
 
-		void IterateOverDirectory(DirNode& root)
+		void IterateOverDirectoryAndFillTree(DirNode& root)
 		{
-			for (auto& dir_item : fs::directory_iterator(root.GetData().Path))
+			for (const auto& dir_item : fs::directory_iterator(root.GetData().Path))
 			{
+				auto norm_path = NormalizePath(dir_item.path());
+				auto file_ext  = RightPartLastOf(norm_path, ".");
+
 				if (dir_item.is_directory())
 				{
-					DirNode dir = DirNode(NormalizePath(dir_item.path()), DirItemType::Dir);
-					IterateOverDirectory(dir);
-					root.Append(std::move(dir));
+					if (IsModelDir(norm_path))
+						root.Append(norm_path, DirItemType::ModelDir);
+					else
+					{
+						DirNode dir = DirNode(norm_path, DirItemType::Dir);
+						IterateOverDirectoryAndFillTree(dir);
+						root.Append(std::move(dir));
+					}
 				}
+				else if(file_ext == "png"s || file_ext == "jpg"s)
+					root.Append(norm_path, DirItemType::Texture);
 				else
-					root.Append(NormalizePath(dir_item.path()), DirItemType::Unnown);
+					root.Append(norm_path, DirItemType::Unnown);
 			}
 		}
 
@@ -96,8 +111,7 @@ namespace Bubble
 			{
 				if (child.GetData().Type == DirItemType::Dir)
 				{
-					auto dir_name = child.GetData().Path;
-					dir_name = dir_name.substr(dir_name.find_last_of("/") + 1);
+					auto dir_name = RightPartLastOf(child.GetData().Path, "/");
 
 					if (ImGui::TreeNode(dir_name.c_str(), dir_name.c_str()))
 					{
@@ -113,16 +127,55 @@ namespace Bubble
 
 		void DrawItemsInSelectedDir()
 		{
-			if (mSelectedDir)
-			{
-				for (DirItem& item : *mSelectedDir)
-				{
-					auto dir_name = item.Path;
-					dir_name = dir_name.substr(dir_name.find_last_of("/") + 1);
+			if (!mSelectedDir)
+				return;
 
-					if (item.Type != DirItemType::Dir)
-						ImGui::BulletText(dir_name.c_str());
-				}
+			int i = 0;
+			for (DirItem& item : *mSelectedDir)
+				DrawDirItem(item, i++);
+		}
+
+		void DrawDirItem(const DirItem& item, int pos)
+		{
+			auto item_name = RightPartLastOf(item.Path, "/");
+			ImVec2 window_size = ImGui::GetWindowSize();
+			auto elem_length = window_size.x / 5.5f;
+			ImVec2 elem_size = ImVec2(elem_length, elem_length);
+			DrawImageWithText(GetTextureByItemType(item), RightPartLastOf(item.Path, "/"), elem_size, 5, pos);
+		}
+
+		// ========================== details ==========================
+
+		bool IsModelDir(const std::string& path)
+		{
+			for (const auto& dir_item : fs::directory_iterator(path))
+			{
+				auto file_ext = RightPartLastOf(NormalizePath(dir_item.path()), ".");
+				if (file_ext == "obj")
+					return true;
+			}
+			return false;
+		}
+
+		Ref<Texture2D> GetTextureByItemType(const DirItem& item)
+		{
+			Ref<Texture2D> texture;
+			switch (item.Type)
+			{
+				case DirItemType::Dir:
+					return mLoader->GetSystemTexture("dir_icon");
+					break;
+				case DirItemType::Texture:
+					return mLoader->GetSystemTexture("texture_icon");
+					break;
+				case DirItemType::ModelDir:
+					return mLoader->GetSystemTexture("model_icon");
+					break;
+				case DirItemType::Unnown:
+					return mLoader->GetSystemTexture("file_icon");
+					break;
+				default:
+					return mLoader->GetSystemTexture("chess_plane");
 			}
 		}
 

@@ -45,12 +45,11 @@ namespace Bubble
 		return model;
 	}
 
-	Ref<Model> Loader::LoadSystemModel(std::string path)
+	void Loader::LoadSystemModel(std::string path)
 	{
         auto [full_path, rel_path, model_name, model_ext] = PathToTheProject(mProject.GetPath(), path);
         auto model = LoadModel(path);
         mSystemModels.emplace(model_name, model);
-        return model;
 	}
 
 	Ref<Model> Loader::GetSystemModel(std::string name)

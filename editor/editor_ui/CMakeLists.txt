@@ -23,6 +23,7 @@ target_link_libraries(BubbleEditorUI nativefiledialog)
 # Defines
 add_definitions(-D"GLM_FORCE_SWIZZLE")
 add_definitions(-D"ENTT_API_IMPORT")
+#add_definitions(-D"IMGUI_DEFINE_MATH_OPERATORS")
 
 # Include directories
 target_include_directories(
