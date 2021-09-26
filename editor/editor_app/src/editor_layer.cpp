@@ -12,9 +12,6 @@ namespace Bubble
 
 	void EditorLayer::OnAttach()
 	{
-		// Temp: load scene
-		//ProjectDeserialization("C:/Users/lol/Desktop/projects/BubbleOld_prj/BubbleOld/test_project/test.bubble", mEngine);
-        mEngine.GetProject().Open("C:/Users/sa007/Desktop/BubbleOld/test_project/test.bubble");
     }
 
     void EditorLayer::OnDetach()

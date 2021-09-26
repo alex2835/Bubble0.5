@@ -51,7 +51,7 @@ namespace Bubble
 
         InputArchive(const nlohmann::json& json, Loader& loader)
             : mJson(json),
-            mLoader(loader)
+              mLoader(loader)
         {}
 
         void operator()(entt::entity& entity)

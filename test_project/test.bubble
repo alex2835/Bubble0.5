@@ -1,0 +1,233 @@
+{
+ "Loader": {
+  "Models": [
+   "resources/models/altair/assassins-creed-altair.obj",
+   "resources/models/brick_wall/plane.obj",
+   "resources/models/Tree/Tree.obj",
+   "resources/models/medival_house/medieval-house-2.obj",
+   "resources/models/crysis/nanosuit.obj",
+   "resources/models/grass_plane/grass_plane.obj"
+  ],
+  "Textures": [
+   "resources/skyboxes/1/left.jpg",
+   "white plug",
+   "resources/skyboxes/1/bottom.jpg",
+   "resources/skyboxes/1/back.jpg",
+   "resources/360/beach360.jpg",
+   "resources/skyboxes/1/top.jpg",
+   "resources/skyboxes/1/front.jpg",
+   "resources/skyboxes/2/front.jpg",
+   "resources/skyboxes/1/right.jpg",
+   "resources/skyboxes/2/back.jpg",
+   "resources/skyboxes/2/bottom.jpg",
+   "resources/skyboxes/2/left.jpg",
+   "resources/skyboxes/2/right.jpg",
+   "resources/skyboxes/2/top.jpg",
+   "resources/skyboxes/skybox1.jpg",
+   "resources/skyboxes/skybox2.png",
+   "resources/skyboxes/skybox3.png",
+   "resources/skyboxes/skybox4.png",
+   "resources/skyboxes/skybox5.jpg",
+   "resources/skyboxes/skybox6.jpg"
+  ]
+ },
+ "Renderer": {
+  "BackgroundType": 0,
+  "ClearColor": [
+   0.4000000059604645,
+   0.4000000059604645,
+   0.4000000059604645,
+   0.4000000059604645
+  ],
+  "SkyboxBlendFactor": 0.0,
+  "SkyboxBrightness": 0.0,
+  "SkyboxRotation": 0.0,
+  "SkyboxRotationSpeed": 0.0
+ },
+ "Scene": {
+  "Components": [
+   {
+    "Component": {
+     "Tag": "Entity 0"
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Tag": "Entity 1"
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Tag": "Entity 2"
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
+     "Position": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Position": [
+      0.0,
+      -8.100000381469727,
+      0.0
+     ]
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Rotation": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Rotation": [
+      -1.5,
+      0.0,
+      0.0
+     ]
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Scale": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Scale": [
+      1.2000000476837158,
+      1.0,
+      1.0
+     ]
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Transform": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Transform": [
+      1.2000000476837158,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.07073719799518585,
+      -0.9974949955940247,
+      0.0,
+      0.0,
+      0.9974949955940247,
+      0.07073719799518585,
+      0.0,
+      0.0,
+      -8.100000381469727,
+      0.0,
+      1.0
+     ]
+    },
+    "Entity": 1
+   },
+   {
+    "Component": {
+     "Light": {
+      "Brightness": 1.0,
+      "Color": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "Constant": 1.0,
+      "CutOff": 0.0,
+      "Direction": [
+       -1.0,
+       -1.0,
+       -1.0
+      ],
+      "Distance": 0.5,
+      "Linear": 0.057500001043081284,
+      "OuterCutOff": 0.0,
+      "Position": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "Quadratic": 0.012250000610947609,
+      "Type": 0
+     }
+    },
+    "Entity": 2
+   },
+   {
+    "Component": {
+     "Model": "resources/models/altair/assassins-creed-altair.obj"
+    },
+    "Entity": 0
+   },
+   {
+    "Component": {
+     "Model": "resources/models/grass_plane/grass_plane.obj"
+    },
+    "Entity": 1
+   }
+  ],
+  "Entities": [
+   0,
+   1,
+   2,
+   1048575
+  ],
+  "Size": [
+   3,
+   3,
+   2,
+   2,
+   2,
+   2,
+   1,
+   2
+  ]
+ }
+}

@@ -11,64 +11,42 @@ namespace Bubble
     {
         nlohmann::json json;
         for (const auto& [path, someting] : loader.mLoadedTextures)
-        {
             json["Textures"].push_back(path);
-        }
+        
         for (const auto& [path, someting] : loader.mLoadedShaders)
-        {
             json["Shaders"].push_back(path);
-        }
+        
         for (const auto& [path, someting] : loader.mLoadedSkyboxes)
-        {
             json["Skyboxes"].push_back(path);
-        }
+        
         for (const auto& [path, someting] : loader.mLoadedSkyspheres)
-        {
             json["Skyspheres"].push_back(path);
-        }
+        
         for (const auto& [path, someting] : loader.mLoadedModels)
-        {
             json["Models"].push_back(path);
-        }
         return json;
     }
 
     inline void LoaderDeserializetion(const nlohmann::json& json, Loader& loader)
     {
         if (json_exists(json, "Textures"))
-        {
-            for (const auto& path : json["Textures"])
-            {
-                loader.LoadTexture2D(path);
-            }
-        }
+            for (const std::string& rel_path : json["Textures"])
+                loader.LoadAndCacheTexture2D(loader.mProject.GetPath() + rel_path);
+        
         if (json_exists(json, "Shaders"))
-        {
-            for (const auto& path : json["Shaders"])
-            {
-                loader.LoadShader(path);
-            }
-        }
+            for (const std::string& rel_path : json["Shaders"])
+                loader.LoadShader(loader.mProject.GetPath() + rel_path);
+        
         if (json_exists(json, "Skyboxes"))
-        {
-            for (const auto& path : json["Skyboxes"])
-            {
-                loader.LoadSkybox(path);
-            }
-        }
+            for (const std::string& rel_path : json["Skyboxes"])
+                loader.LoadSkybox(loader.mProject.GetPath() + rel_path);
+        
         if (json_exists(json, "Skyspheres"))
-        {
-            for (const auto& path : json["Skyspheres"])
-            {
-                loader.LoadSkysphere(path);
-            }
-        }
+            for (const std::string& rel_path : json["Skyspheres"])
+                loader.LoadSkysphere(loader.mProject.GetPath() + rel_path);
+        
         if (json_exists(json, "Models"))
-        {
-            for (const auto& path : json["Models"])
-            {
-                loader.LoadModel(path);
-            }
-        }
+            for (const std::string& rel_path : json["Models"])
+                loader.LoadModel(loader.mProject.GetPath() + rel_path);
     }
 }

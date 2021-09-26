@@ -55,12 +55,12 @@ namespace Bubble
         renderer.mSceneState.mSkyboxRotationSpeed = json["SkyboxRotationSpeed"];
 
         if (json_exists(json, "SkyboxFirst"))
-            renderer.mSceneState.mSkyboxFirst = loader.LoadSkybox(json["SkyboxFirst"]);
+            renderer.mSceneState.mSkyboxFirst = loader.LoadAndCacheSkybox(loader.mProject.GetPath() + std::string(json["SkyboxFirst"]));
 
         if (json_exists(json, "SkyboxSecond"))
-            renderer.mSceneState.mSkyboxSecond = loader.LoadSkybox(json["SkyboxSecond"]);
+            renderer.mSceneState.mSkyboxSecond = loader.LoadAndCacheSkybox(loader.mProject.GetPath() + std::string(json["SkyboxSecond"]));
 
         if (json_exists(json, "Skysphere"))
-            renderer.mSceneState.mSkysphereTexture = loader.LoadSkysphere(json["Skysphere"]);
+            renderer.mSceneState.mSkysphereTexture = loader.LoadAndCacheTexture2D(loader.mProject.GetPath() + std::string(json["Skysphere"]));
     }
 }

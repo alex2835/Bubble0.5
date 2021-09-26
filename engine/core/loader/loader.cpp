@@ -17,11 +17,13 @@ namespace Bubble
 
        LoadSystemTexture("resources/textures/chess_plane.jpg");
 
+       // icons
        LoadSystemTexture("resources/textures/dir_icon.jpg");
        LoadSystemTexture("resources/textures/texture_icon.jpg");
        LoadSystemTexture("resources/textures/model_icon.jpg");
        LoadSystemTexture("resources/textures/file_icon.jpg");
 
+       // models
        LoadSystemModel("resources/models/sphere/sphere.obj");
    }
 

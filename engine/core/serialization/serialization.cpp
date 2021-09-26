@@ -23,6 +23,7 @@ namespace Bubble
 
     void ProjectDeserialization(const std::string& path, Engine& engine)
     {
+        engine.GetProject().Open(path);
         std::ifstream ifstream(path);
         nlohmann::json json;
 

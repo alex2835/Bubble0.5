@@ -184,7 +184,7 @@ namespace Bubble
 
     void ModelComponent::Deserialize(const nlohmann::json& j, Loader& loader)
     {
-        *this = loader.LoadModel(j["Model"]);
+        *this = loader.LoadAndCacheModel(j["Model"]);
     }
 
 }

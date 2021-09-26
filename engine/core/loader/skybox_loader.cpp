@@ -5,12 +5,19 @@ namespace fs = std::filesystem;
 
 namespace Bubble
 {
-	Ref<Skybox> Loader::LoadSkybox(std::string path)
+	Ref<Skybox> Loader::LoadAndCacheSkybox(std::string path)
 	{
 		auto rel_path = CreateRelPath(mProject.GetPath(), path);
 		if (mLoadedSkyboxes.count(rel_path))
 			return mLoadedSkyboxes[rel_path];
 
+		auto skybox = LoadSkybox(path);
+		mLoadedSkyboxes.emplace(rel_path, skybox);
+		return skybox;
+	}
+
+	Ref<Skybox> Loader::LoadSkybox(std::string path)
+	{
 		auto [orig_data, orig_spec] = OpenRawImage(path);
 		if (!orig_data)
 			throw std::runtime_error("Skybox loading failed: " + path);
@@ -82,7 +89,6 @@ namespace Bubble
 		for (int i = 0; i < 6; i++)
 			delete data[i];
 
-		mLoadedSkyboxes.emplace(rel_path, skybox);
 		return skybox;
 	}
 
