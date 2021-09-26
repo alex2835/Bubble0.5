@@ -2,33 +2,12 @@
 
 #include "ui_module.h"
 #include "tools/imgui_widgets.h"
-#include <filesystem>
-namespace fs = std::filesystem;
 
 namespace Bubble
 {
-	enum class DirItemType { Dir, Texture, ModelDir, Unnown };
-	struct DirItem
-	{
-		std::string Path;
-		DirItemType Type = DirItemType::Unnown;
-
-		DirItem() = default;
-		DirItem(std::string path,
-				DirItemType type)
-			: Path(std::move(path)),
-			  Type(type)
-		{}
-	};
-	using DirNode = Tree<DirItem>::Node;
-	using DirTree = Tree<DirItem>;
-
-
 	struct ProjectExplorer : UIModule
 	{
-		DirTree  mDirTree;
 		DirNode* mSelectedDir = nullptr;
-
 		Project* mProject = nullptr;
 		Loader*  mLoader  = nullptr;
 
@@ -44,6 +23,10 @@ namespace Bubble
 			ImGui::Begin(mName.c_str(), &mIsOpen);
 			{
 				ImGui::BeginChild("Project tree explorer", ImVec2(250, 0), false);
+
+				if (ImGui::Button("Update", ImVec2(50, 20)))
+					mProject->UpdateProjectTree();
+
 				DrawProjectTree();
 				ImGui::EndChild();
 			
@@ -57,52 +40,15 @@ namespace Bubble
 
 		void OnUpdate(UIArgs args, DeltaTime dt) override
 		{
-			UpdateProjectFileTree();
 		}
 
 	private:
-		void UpdateProjectFileTree()
-		{
-			static int i = 0;
-			if (i++ == 0)
-			{
-				mDirTree.SetRoot(DirNode(mProject->GetPath(), DirItemType::Dir));
-				//mDirTree.SetRoot(DirNode("C:/Users/sa007/Desktop/", DirItemType::Dir));
-				IterateOverDirectoryAndFillTree(mDirTree.GetRoot());
-				mSelectedDir = &mDirTree.GetRoot();
-			}
-		}
-
-		void IterateOverDirectoryAndFillTree(DirNode& root)
-		{
-			for (const auto& dir_item : fs::directory_iterator(root.GetData().Path))
-			{
-				auto norm_path = NormalizePath(dir_item.path());
-				auto file_ext  = RightPartLastOf(norm_path, ".");
-
-				if (dir_item.is_directory())
-				{
-					if (IsModelDir(norm_path))
-						root.Append(norm_path, DirItemType::ModelDir);
-					else
-					{
-						DirNode dir = DirNode(norm_path, DirItemType::Dir);
-						IterateOverDirectoryAndFillTree(dir);
-						root.Append(std::move(dir));
-					}
-				}
-				else if(file_ext == "png"s || file_ext == "jpg"s)
-					root.Append(norm_path, DirItemType::Texture);
-				else
-					root.Append(norm_path, DirItemType::Unnown);
-			}
-		}
 
 		// ============================ Draw ============================
-
+		
 		void DrawProjectTree()
 		{
-			DrawDir(mDirTree.GetRoot());
+			DrawDir(mProject->GetProjectTreeRoot());
 		}
 
 		void DrawDir(DirNode& root)
@@ -145,17 +91,6 @@ namespace Bubble
 		}
 
 		// ========================== details ==========================
-
-		bool IsModelDir(const std::string& path)
-		{
-			for (const auto& dir_item : fs::directory_iterator(path))
-			{
-				auto file_ext = RightPartLastOf(NormalizePath(dir_item.path()), ".");
-				if (file_ext == "obj")
-					return true;
-			}
-			return false;
-		}
 
 		Ref<Texture2D> GetTextureByItemType(const DirItem& item)
 		{

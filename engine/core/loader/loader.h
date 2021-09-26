@@ -28,8 +28,15 @@ namespace Bubble
 
         Loader(Project& prj);
         void LoadSystemResources();
-        std::string CopyToProject(std::string file_path, std::string type);
 
+		// ================ Project lading ================
+        
+        void LoadProjectResources();
+        void LoadItemsFromDir(DirNode&);
+        void UpdateProject();
+        void CleanProjectCache();
+        
+        // ================ System staff ================
 		void LoadSystemModel(std::string path);
 		Ref<Model> GetSystemModel(std::string name);
 
@@ -37,12 +44,11 @@ namespace Bubble
 		Ref<Texture2D> GetSystemTexture(std::string name);
 
 		void LoadSystemShader(const std::string& name,
-			const std::string& vertex,
-			const std::string& fragment,
-			const std::string& geometry = std::string());
+			                  const std::string& vertex,
+			                  const std::string& fragment,
+			                  const std::string& geometry = std::string());
 
 		Ref<Shader> GetSystemShader(const std::string& name);
-
 
         // ================ Textures ================
         Ref<Texture2D> LoadAndCacheTexture2D(std::string path, const Texture2DSpecification& spec = {});
@@ -54,7 +60,7 @@ namespace Bubble
 
         // ================= Meshes ================= 
         Ref<Model> LoadAndCacheModel(std::string path);
-        Ref<Model> LoadModel(std::string path, std::string path_in_project = {});
+        Ref<Model> LoadModel(std::string path);
 
         // ================= Shaders ================= 
         Ref<Shader> LoadAndCacheShader(const std::string& path);

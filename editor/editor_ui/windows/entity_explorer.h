@@ -212,7 +212,7 @@ namespace Bubble
                         entity.AddComponent<RotationComponent>();
                         entity.AddComponent<ScaleComponent>();
                         entity.AddComponent<TransformComponent>(glm::mat4(1.0f));
-                        entity.AddComponent<ModelComponent>(args.mLoader->LoadModel("resources/models/sphere.obj"));
+                        entity.AddComponent<ModelComponent>(args.mLoader->GetSystemModel("sphere"));
                         break;
                     default:
                         BUBBLE_ASSERT(false, "Incorect component type");

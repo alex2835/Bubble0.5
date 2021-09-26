@@ -7,8 +7,9 @@ namespace Bubble
 {
 	Ref<Skybox> Loader::LoadSkybox(std::string path)
 	{
-		if (mLoadedSkyboxes.count(path))
-			return mLoadedSkyboxes[path];
+		auto rel_path = CreateRelPath(mProject.GetPath(), path);
+		if (mLoadedSkyboxes.count(rel_path))
+			return mLoadedSkyboxes[rel_path];
 
 		auto [orig_data, orig_spec] = OpenRawImage(path);
 		if (!orig_data)
@@ -77,12 +78,11 @@ namespace Bubble
 		std::swap(data[2], data[3]);
 		
 		Ref<Skybox> skybox = CreateRef<Skybox>(Cubemap(data, spec));
-
+		
 		for (int i = 0; i < 6; i++)
 			delete data[i];
 
-		std::string path_in_project = CopyToProject(path, "skyboxes");
-		mLoadedSkyboxes.emplace(path_in_project, skybox);
+		mLoadedSkyboxes.emplace(rel_path, skybox);
 		return skybox;
 	}
 

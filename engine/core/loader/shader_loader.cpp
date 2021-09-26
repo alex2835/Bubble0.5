@@ -10,12 +10,12 @@ namespace Bubble
         if (!mProject.Valid())
             BUBBLE_CORE_ASSERT(false, "Try to load and cache shader with not valid project");
 
-        if (mLoadedShaders.count(path))
-            return mLoadedShaders[path];
+		auto rel_path = CreateRelPath(mProject.GetPath(), path);
+        if (mLoadedShaders.count(rel_path))
+            return mLoadedShaders[rel_path];
 
 		auto shader = LoadShader(path);
-        std::string path_in_project = CopyToProject(path, "shaders");
-        mLoadedShaders.emplace(path_in_project, shader);
+        mLoadedShaders.emplace(rel_path, shader);
         return shader;
     }
 

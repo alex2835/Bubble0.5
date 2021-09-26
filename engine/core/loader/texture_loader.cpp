@@ -19,12 +19,12 @@ namespace Bubble
         if (!mProject.Valid())
             BUBBLE_CORE_ASSERT(false, "Try to load and cache texture with not valid project");
 
-        if (mLoadedTextures.count(path))
-            return mLoadedTextures[path];
+        auto rel_path = CreateRelPath(mProject.GetPath(), path);
+        if (mLoadedTextures.count(rel_path))
+            return mLoadedTextures[rel_path];
     
         Ref<Texture2D> texture = LoadTexture2D(path, spec);
-        std::string path_in_project = CopyToProject(path, "textures");
-        mLoadedTextures.emplace(path_in_project, texture);
+        mLoadedTextures.emplace(rel_path, texture);
         return texture;
     }
 

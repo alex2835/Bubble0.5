@@ -5,6 +5,7 @@ namespace Bubble
    Engine::Engine()
       : mInput(mWindow),
         mLoader(mProject),
+        mProject(mLoader),
         mRenderer(mLoader)
    {}
 
