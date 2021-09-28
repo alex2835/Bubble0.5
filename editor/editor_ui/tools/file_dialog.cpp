@@ -11,7 +11,7 @@ namespace Bubble
 		nfdchar_t* raw_path = NULL;
 		nfdresult_t result = NFD_OpenDialog(filter.c_str(), start_folder.c_str(), &raw_path);
 
-		if (result != NFD_OKAY)
+		if (result != NFD_OKAY || !raw_path)
 			throw std::runtime_error("Can't open this file");
 
 		std::string out(raw_path);

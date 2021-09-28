@@ -67,6 +67,11 @@ namespace Bubble
 		return mMouseKeyMap[button];
 	}
 
+	void Input::SetMousePosition(glm::ivec2 pos)
+	{
+		SDL_WarpMouseInWindow(mWindow.GetSDLWindow(), pos.x, pos.y);
+	}
+
 	glm::ivec2 Input::GetMousePosition()
 	{
 		return glm::ivec2(mMousePosX, mMousePosY);

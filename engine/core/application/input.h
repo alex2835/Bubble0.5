@@ -38,6 +38,7 @@ namespace Bubble
 		*/
 		bool IsMouseButtonPressed(int button);
 
+		void SetMousePosition(glm::ivec2);
 		glm::ivec2 GetMousePosition();
 		int GetMouseX();
 		int GetMouseY();
